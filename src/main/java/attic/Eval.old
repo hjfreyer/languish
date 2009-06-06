@@ -1,0 +1,604 @@
+
+  //
+  // static class Counter {
+  // private int i = 0;
+  //
+  // public int getNext() {
+  // return i++;
+  // }
+  // }
+  //
+  // public static Map<Expression, Integer> getAbsoluteReferenceMap(Expression
+  // exp) {
+  // Counter c = new Counter();
+  // Map<Expression, Integer> result = new HashMap<Expression, Integer>();
+  //
+  // getAbsoluteReferenceMap(exp, c, result);
+  //
+  // return result;
+  // }
+
+  //
+  // static class Counter {
+  // private int i = 0;
+  //
+  // public int getNext() {
+  // return i++;
+  // }
+  // }
+  //
+  // public static Map<Expression, Integer> getAbsoluteReferenceMap(Expression
+  // exp) {
+  // Counter c = new Counter();
+  // Map<Expression, Integer> result = new HashMap<Expression, Integer>();
+  //
+  // getAbsoluteReferenceMap(exp, c, result);
+  //
+  // return result;
+  // }
+
+  /**
+   * Returns a syntactically identical expression such that for all nodes n, v
+   * in exp, !n.equals(v) holds.
+   */
+  // static Expression treeify(Expression exp) {
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // Abstraction abs = (Abstraction) exp;
+  //
+  // return Abstraction.of(treeify(abs.getExpression()));
+  // case APPLICATION:
+  // Application application = (Application) exp;
+  //
+  // return Application.of(treeify(application.getFunction()),
+  // treeify(application.getArgument()));
+  // case LITERAL:
+  // Literal literal = (Literal) exp;
+  //
+  // return Literal.of(literal.getObject());
+  // case REFERENCE:
+  // Reference reference = (Reference) exp;
+  //
+  // return Reference.of(reference.getIndex());
+  // }
+  // throw new AssertionError();
+  // }
+  //
+  // public static void getAbsoluteReferenceMap(Expression exp, Counter c,
+  // Map<Expression, Integer> result) {
+  //
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // Abstraction abs = (Abstraction) exp;
+  //
+  // int label = c.getNext();
+  // result.put(exp, label);
+  // bindToplevelReferencesTo(exp, 0, label, result);
+  //
+  // getAbsoluteReferenceMap(abs.getExpression(), c, result);
+  // break;
+  // case APPLICATION:
+  // Application application = (Application) exp;
+  //
+  // getAbsoluteReferenceMap(application.getFunction(), c, result);
+  // getAbsoluteReferenceMap(application.getArgument(), c, result);
+  //
+  // break;
+  // case LITERAL:
+  // // Do nothing
+  // break;
+  // case REFERENCE:
+  // if (!result.containsKey(exp)) {
+  // throw new IllegalFreeVariableError("reference unbound");
+  // }
+  // break;
+  // default:
+  // throw new AssertionError();
+  // }
+  // }
+  //
+  // public static void bindToplevelReferencesTo(Expression exp, int level,
+  // int label, Map<Expression, Integer> result) {
+  //
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // Abstraction abs = (Abstraction) exp;
+  //
+  // bindToplevelReferencesTo(abs.getExpression(), level + 1, label, result);
+  // break;
+  // case APPLICATION:
+  // Application application = (Application) exp;
+  //
+  // bindToplevelReferencesTo(application.getFunction(), level, label, result);
+  // bindToplevelReferencesTo(application.getArgument(), level, label, result);
+  // break;
+  // case LITERAL:
+  // // Do nothing
+  // break;
+  // case REFERENCE:
+  // Reference ref = (Reference) exp;
+  //
+  // if (ref.getIndex() == level) {
+  // result.put(ref, label);
+  // }
+  // break;
+  // default:
+  // throw new AssertionError();
+  // }
+  // }
+  //
+  // public static Expression simplify(Expression exp) {
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // return exp;
+  //
+  // case APPLICATION:
+  // Application app = (Application) exp;
+  //
+  // Expression function = app.getFunction();
+  // Expression argument = app.getArgument();
+  //
+  // if (!(function instanceof Abstraction)) {
+  // function = simplify(function);
+  // }
+  //
+  // // function should now either be Abstraction or Literal (!pre prim!)
+  //
+  // Expression result;
+  //
+  // if (function instanceof Abstraction) {
+  // Abstraction abs = (Abstraction) function;
+  //
+  // result = replaceAllReferencesToParam(abs.getExpression(), 1, argument);
+  // } else if (function instanceof Literal) {
+  //
+  // } else {
+  // throw new AssertionError("function was neither Abstraction or Literal");
+  // }
+  //
+  // return result;
+  //
+  // case LITERAL:
+  // return exp;
+  //
+  // case REFERENCE:
+  //
+  // }
+  // throw new AssertionError();
+  // }
+  //
+  // public static Abstraction reduceToAbstraction(Expression exp) {
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // return exp;
+  //
+  // case APPLICATION:
+  // Application app = (Application) exp;
+  //
+  // Expression function = app.getFunction();
+  // Expression argument = app.getArgument();
+  //
+  // if (!(function instanceof Abstraction)) {
+  // function = simplify(function);
+  // }
+  //
+  // // function should now either be Abstraction or Literal (!pre prim!)
+  //
+  // Expression result;
+  //
+  // if (function instanceof Abstraction) {
+  // Abstraction abs = (Abstraction) function;
+  //
+  // result = replaceAllReferencesToParam(abs.getExpression(), 1, argument);
+  // } else if (function instanceof Literal) {
+  // throw new IllegalApplicationError(
+  // "Literal cannot be function argument to apply");
+  // } else {
+  // throw new AssertionError("function was neither Abstraction or Literal");
+  // }
+  //
+  // return result;
+  //
+  // case LITERAL:
+  // throw new IllegalApplicationError(
+  // "Literal cannot be function argument to apply");
+  // case REFERENCE:
+  // throw new AssertionError("Reached reference ");
+  // }
+  // }
+  // (abs (apply +1 +1))
+  //
+  // public static Expression replaceTopmostReference(Expression in,
+  // Expression with) {
+  //
+  // if (in instanceof Abstraction) {
+  // Abstraction abs = (Abstraction) in;
+  //      
+  // return new Abstraction(replaceAllReferencesToParam(abs.getExpression(),
+  // 0, with));
+  // } else if (in instanceof Application) {
+  // Application app = (Application) in;
+  //
+  // Expression function =
+  // replaceTopmostAbstraction(app.getFunction(), id, with);
+  // Expression argument =
+  // replaceTopmostAbstraction(app.getArgument(), id, with);
+  //
+  // return new Application(function, argument);
+  // } else if (in instanceof Reference) {
+  // Reference r = (Reference) in;
+  //
+  // if (r.getIndex() == id) {
+  // return with;
+  // } else {
+  // return r;
+  // }
+  //
+  // } else if (in instanceof PrimitiveCall) {
+  // PrimitiveCall prim = (PrimitiveCall) in;
+  //
+  // Expression[] newExps = new Expression[prim.getArgs().length];
+  //
+  // for (int i = 0; i < prim.getArgs().length; i++) {
+  // newExps[i] = replace(prim.getArgs()[i], id, with);
+  // }
+  //
+  // return new PrimitiveCall(prim.getOp(), newExps);
+  // } else if (in instanceof Branch) {
+  // Branch branch = (Branch) in;
+  //
+  // Expression condition = replace(branch.getCondition(), id, with);
+  // Expression then = replace(branch.getThen(), id, with);
+  // Expression els = replace(branch.getElse(), id, with);
+  //
+  // return new Branch(condition, then, els);
+  // } else if (in instanceof Literal) {
+  // return in;
+  // } else {
+  // throw new AssertionError();
+  // }
+  // }
+  //
+  // // TODO: maybe do all this in place for speed.
+  // public static Expression replaceTopmostAbstraction(Expression in,
+  // Expression with) {
+  // if (in instanceof Abstraction) {
+  // Abstraction abs = (Abstraction) in;
+  //
+  // return new Abstraction(replaceTopmostAbstraction(abs.getExpression(),
+  // id + 1, with));
+  // } else if (in instanceof Application) {
+  // Application app = (Application) in;
+  //
+  // Expression function =
+  // replaceTopmostAbstraction(app.getFunction(), id, with);
+  // Expression argument =
+  // replaceTopmostAbstraction(app.getArgument(), id, with);
+  //
+  // return new Application(function, argument);
+  // } else if (in instanceof Reference) {
+  // Reference r = (Reference) in;
+  //
+  // if (r.getIndex() == id) {
+  // return with;
+  // } else {
+  // return r;
+  // }
+  //
+  // } else if (in instanceof PrimitiveCall) {
+  // PrimitiveCall prim = (PrimitiveCall) in;
+  //
+  // Expression[] newExps = new Expression[prim.getArgs().length];
+  //
+  // for (int i = 0; i < prim.getArgs().length; i++) {
+  // newExps[i] = replace(prim.getArgs()[i], id, with);
+  // }
+  //
+  // return new PrimitiveCall(prim.getOp(), newExps);
+  // } else if (in instanceof Branch) {
+  // Branch branch = (Branch) in;
+  //
+  // Expression condition = replace(branch.getCondition(), id, with);
+  // Expression then = replace(branch.getThen(), id, with);
+  // Expression els = replace(branch.getElse(), id, with);
+  //
+  // return new Branch(condition, then, els);
+  // } else if (in instanceof Literal) {
+  // return in;
+  // } else {
+  // throw new AssertionError();
+  // }
+  // }
+  /**
+   * Preconditions:
+   * 
+   * - in has no free parameters
+   * 
+   * @param in
+   * @param id
+   * @param with
+   * @return
+   */
+
+  /**
+   * Returns a syntactically identical expression such that for all nodes n, v
+   * in exp, !n.equals(v) holds.
+   */
+  // static Expression treeify(Expression exp) {
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // Abstraction abs = (Abstraction) exp;
+  //
+  // return Abstraction.of(treeify(abs.getExpression()));
+  // case APPLICATION:
+  // Application application = (Application) exp;
+  //
+  // return Application.of(treeify(application.getFunction()),
+  // treeify(application.getArgument()));
+  // case LITERAL:
+  // Literal literal = (Literal) exp;
+  //
+  // return Literal.of(literal.getObject());
+  // case REFERENCE:
+  // Reference reference = (Reference) exp;
+  //
+  // return Reference.of(reference.getIndex());
+  // }
+  // throw new AssertionError();
+  // }
+  //
+  // public static void getAbsoluteReferenceMap(Expression exp, Counter c,
+  // Map<Expression, Integer> result) {
+  //
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // Abstraction abs = (Abstraction) exp;
+  //
+  // int label = c.getNext();
+  // result.put(exp, label);
+  // bindToplevelReferencesTo(exp, 0, label, result);
+  //
+  // getAbsoluteReferenceMap(abs.getExpression(), c, result);
+  // break;
+  // case APPLICATION:
+  // Application application = (Application) exp;
+  //
+  // getAbsoluteReferenceMap(application.getFunction(), c, result);
+  // getAbsoluteReferenceMap(application.getArgument(), c, result);
+  //
+  // break;
+  // case LITERAL:
+  // // Do nothing
+  // break;
+  // case REFERENCE:
+  // if (!result.containsKey(exp)) {
+  // throw new IllegalFreeVariableError("reference unbound");
+  // }
+  // break;
+  // default:
+  // throw new AssertionError();
+  // }
+  // }
+  //
+  // public static void bindToplevelReferencesTo(Expression exp, int level,
+  // int label, Map<Expression, Integer> result) {
+  //
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // Abstraction abs = (Abstraction) exp;
+  //
+  // bindToplevelReferencesTo(abs.getExpression(), level + 1, label, result);
+  // break;
+  // case APPLICATION:
+  // Application application = (Application) exp;
+  //
+  // bindToplevelReferencesTo(application.getFunction(), level, label, result);
+  // bindToplevelReferencesTo(application.getArgument(), level, label, result);
+  // break;
+  // case LITERAL:
+  // // Do nothing
+  // break;
+  // case REFERENCE:
+  // Reference ref = (Reference) exp;
+  //
+  // if (ref.getIndex() == level) {
+  // result.put(ref, label);
+  // }
+  // break;
+  // default:
+  // throw new AssertionError();
+  // }
+  // }
+  //
+  // public static Expression simplify(Expression exp) {
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // return exp;
+  //
+  // case APPLICATION:
+  // Application app = (Application) exp;
+  //
+  // Expression function = app.getFunction();
+  // Expression argument = app.getArgument();
+  //
+  // if (!(function instanceof Abstraction)) {
+  // function = simplify(function);
+  // }
+  //
+  // // function should now either be Abstraction or Literal (!pre prim!)
+  //
+  // Expression result;
+  //
+  // if (function instanceof Abstraction) {
+  // Abstraction abs = (Abstraction) function;
+  //
+  // result = replaceAllReferencesToParam(abs.getExpression(), 1, argument);
+  // } else if (function instanceof Literal) {
+  //
+  // } else {
+  // throw new AssertionError("function was neither Abstraction or Literal");
+  // }
+  //
+  // return result;
+  //
+  // case LITERAL:
+  // return exp;
+  //
+  // case REFERENCE:
+  //
+  // }
+  // throw new AssertionError();
+  // }
+  //
+  // public static Abstraction reduceToAbstraction(Expression exp) {
+  // switch (exp.getType()) {
+  // case ABSTRACTION:
+  // return exp;
+  //
+  // case APPLICATION:
+  // Application app = (Application) exp;
+  //
+  // Expression function = app.getFunction();
+  // Expression argument = app.getArgument();
+  //
+  // if (!(function instanceof Abstraction)) {
+  // function = simplify(function);
+  // }
+  //
+  // // function should now either be Abstraction or Literal (!pre prim!)
+  //
+  // Expression result;
+  //
+  // if (function instanceof Abstraction) {
+  // Abstraction abs = (Abstraction) function;
+  //
+  // result = replaceAllReferencesToParam(abs.getExpression(), 1, argument);
+  // } else if (function instanceof Literal) {
+  // throw new IllegalApplicationError(
+  // "Literal cannot be function argument to apply");
+  // } else {
+  // throw new AssertionError("function was neither Abstraction or Literal");
+  // }
+  //
+  // return result;
+  //
+  // case LITERAL:
+  // throw new IllegalApplicationError(
+  // "Literal cannot be function argument to apply");
+  // case REFERENCE:
+  // throw new AssertionError("Reached reference ");
+  // }
+  // }
+  // (abs (apply +1 +1))
+  //
+  // public static Expression replaceTopmostReference(Expression in,
+  // Expression with) {
+  //
+  // if (in instanceof Abstraction) {
+  // Abstraction abs = (Abstraction) in;
+  //      
+  // return new Abstraction(replaceAllReferencesToParam(abs.getExpression(),
+  // 0, with));
+  // } else if (in instanceof Application) {
+  // Application app = (Application) in;
+  //
+  // Expression function =
+  // replaceTopmostAbstraction(app.getFunction(), id, with);
+  // Expression argument =
+  // replaceTopmostAbstraction(app.getArgument(), id, with);
+  //
+  // return new Application(function, argument);
+  // } else if (in instanceof Reference) {
+  // Reference r = (Reference) in;
+  //
+  // if (r.getIndex() == id) {
+  // return with;
+  // } else {
+  // return r;
+  // }
+  //
+  // } else if (in instanceof PrimitiveCall) {
+  // PrimitiveCall prim = (PrimitiveCall) in;
+  //
+  // Expression[] newExps = new Expression[prim.getArgs().length];
+  //
+  // for (int i = 0; i < prim.getArgs().length; i++) {
+  // newExps[i] = replace(prim.getArgs()[i], id, with);
+  // }
+  //
+  // return new PrimitiveCall(prim.getOp(), newExps);
+  // } else if (in instanceof Branch) {
+  // Branch branch = (Branch) in;
+  //
+  // Expression condition = replace(branch.getCondition(), id, with);
+  // Expression then = replace(branch.getThen(), id, with);
+  // Expression els = replace(branch.getElse(), id, with);
+  //
+  // return new Branch(condition, then, els);
+  // } else if (in instanceof Literal) {
+  // return in;
+  // } else {
+  // throw new AssertionError();
+  // }
+  // }
+  //
+  // // TODO: maybe do all this in place for speed.
+  // public static Expression replaceTopmostAbstraction(Expression in,
+  // Expression with) {
+  // if (in instanceof Abstraction) {
+  // Abstraction abs = (Abstraction) in;
+  //
+  // return new Abstraction(replaceTopmostAbstraction(abs.getExpression(),
+  // id + 1, with));
+  // } else if (in instanceof Application) {
+  // Application app = (Application) in;
+  //
+  // Expression function =
+  // replaceTopmostAbstraction(app.getFunction(), id, with);
+  // Expression argument =
+  // replaceTopmostAbstraction(app.getArgument(), id, with);
+  //
+  // return new Application(function, argument);
+  // } else if (in instanceof Reference) {
+  // Reference r = (Reference) in;
+  //
+  // if (r.getIndex() == id) {
+  // return with;
+  // } else {
+  // return r;
+  // }
+  //
+  // } else if (in instanceof PrimitiveCall) {
+  // PrimitiveCall prim = (PrimitiveCall) in;
+  //
+  // Expression[] newExps = new Expression[prim.getArgs().length];
+  //
+  // for (int i = 0; i < prim.getArgs().length; i++) {
+  // newExps[i] = replace(prim.getArgs()[i], id, with);
+  // }
+  //
+  // return new PrimitiveCall(prim.getOp(), newExps);
+  // } else if (in instanceof Branch) {
+  // Branch branch = (Branch) in;
+  //
+  // Expression condition = replace(branch.getCondition(), id, with);
+  // Expression then = replace(branch.getThen(), id, with);
+  // Expression els = replace(branch.getElse(), id, with);
+  //
+  // return new Branch(condition, then, els);
+  // } else if (in instanceof Literal) {
+  // return in;
+  // } else {
+  // throw new AssertionError();
+  // }
+  // }
+  /**
+   * Preconditions:
+   * 
+   * - in has no free parameters
+   * 
+   * @param in
+   * @param id
+   * @param with
+   * @return
+   */

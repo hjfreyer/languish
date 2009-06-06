@@ -1,0 +1,12 @@
+
+package languish;
+
+public abstract class Function extends LObject {
+    
+    public abstract Type getReturnType();
+
+    public abstract Type getArgumentType();
+
+    public abstract LObject apply(LObject argument);
+
+}

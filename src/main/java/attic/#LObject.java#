@@ -1,0 +1,10 @@
+
+package languish;
+
+public abstract class LObject {
+    public abstract Type getType();
+    
+    public LObject getValue() {
+	retu
+    }
+}
