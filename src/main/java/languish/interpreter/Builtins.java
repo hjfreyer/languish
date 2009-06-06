@@ -2,6 +2,7 @@ package languish.interpreter;
 
 import languish.lambda.Expression;
 import languish.lambda.Wrapper;
+import languish.prim.data.LComposites;
 import languish.prim.data.LBoolean;
 import languish.prim.functions.BooleanOps;
 import languish.prim.functions.IntegerOps;
@@ -28,8 +29,10 @@ public enum Builtins {
   // MK_REF(ExpressionOps.MK_REF),
   // MK_UNWRAP(ExpressionOps.MK_UNWRAP),
   //
-  // // LComposite
-  // LCOMPOSITE_GET(CompositeOps.GET);
+  // LComposite
+  GET_ELEMENT(LComposites.GET_ELEMENT),
+  WRAP(LComposites.WRAP),  
+  ;
 
   ;
 

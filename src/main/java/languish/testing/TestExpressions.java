@@ -20,17 +20,18 @@ public class TestExpressions {
       Expression reducedOnce = expToTest.getReducedOnce();
       LObject reducedCompletely = expToTest.getReducedCompletely();
 
-      // TOSTRING
-      TestCase.assertEquals("on test " + expToTest.name()
-          + " - toString() does not match code:", code, exp.toString());
+      if (code != null) {
+        // TOSTRING
+        TestCase.assertEquals("on test " + expToTest.name()
+            + " - toString() does not match code:", code, exp.toString());
 
-      // PARSE
-      Expression parsed =
-          parser.parseStatementToExpression("DISP " + code).getSecond();
+        // PARSE
+        Expression parsed =
+            parser.parseStatementToExpression("DISP " + code).getSecond();
 
-      TestCase.assertEquals("on test " + expToTest.name()
-          + " - code does not parse to given expression:", parsed, exp);
-
+        TestCase.assertEquals("on test " + expToTest.name()
+            + " - code does not parse to given expression:", parsed, exp);
+      }
       // REDUCE ONCE
       if (reducedOnce != null) {
         TestCase.assertEquals("on test " + expToTest.name()

@@ -9,8 +9,16 @@ public final class LComposite extends LObject {
     this.array = array;
   }
 
+  public LComposite(int elements) {
+    this(new LObject[elements]);
+  }
+
   public LObject get(int i) {
     return array[i];
+  }
+
+  void set(int i, LObject obj) {
+    array[i] = obj;
   }
 
   @Override

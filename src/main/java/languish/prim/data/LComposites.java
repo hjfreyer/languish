@@ -1,20 +1,36 @@
-package languish.prim.functions;
+package languish.prim.data;
 
 import languish.lambda.Expression;
 import languish.lambda.NativeFunction;
 import languish.lambda.Wrapper;
-import languish.prim.data.LComposite;
-import languish.prim.data.LInteger;
-import languish.prim.data.LObject;
 
-public class CompositeOps {
+public class LComposites {
 
   public static final NativeFunction WRAP = new NativeFunction("WRAP") {
     @Override
     public Expression apply(LObject obj) {
-      return null;
+      final int elements = ((LInteger) obj).intValue();
+
+      final LComposite result = new LComposite(elements);
+
+      return compositePutter(result, 0);
     }
   };
+
+  private static Expression compositePutter(final LComposite result,
+      final int numPutAlready) {
+    return numPutAlready == result.size() ? Wrapper.of(result)
+        : new NativeFunction("WRAP*") {
+          @Override
+          public Expression apply(LObject obj) {
+            result.set(numPutAlready, obj);
+
+            return
+
+            compositePutter(result, numPutAlready + 1);
+          }
+        };
+  }
 
   public static final NativeFunction GET_ELEMENT =
       new NativeFunction("GET_ELEMENT") {
@@ -33,5 +49,5 @@ public class CompositeOps {
         }
       };
 
-  private CompositeOps() {}
+  private LComposites() {}
 }
