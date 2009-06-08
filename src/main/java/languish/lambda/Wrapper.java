@@ -1,8 +1,11 @@
 package languish.lambda;
 
 import languish.prim.data.LObject;
+import languish.prim.data.LUnit;
 
 public class Wrapper extends Expression {
+
+  public static final Wrapper NULL = Wrapper.of(LUnit.UNIT);
 
   private final LObject contents;
 
@@ -33,7 +36,7 @@ public class Wrapper extends Expression {
 
   @Override
   public String toString() {
-    return "(!" + contents + "!)";
+    return contents.toString();
   }
 
   //

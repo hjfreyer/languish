@@ -14,7 +14,7 @@ public class Shell {
 
   private final Interpreter interpreter = new Interpreter();
 
-  private LObject last = LUnit.instance();
+  private LObject last = LUnit.UNIT;
 
   public Shell() {
     this(new InputStreamReader(System.in));

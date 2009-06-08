@@ -1,5 +1,8 @@
 package languish.prim.data;
 
+import languish.lambda.Expression;
+import languish.lambda.Wrapper;
+
 public final class LCharacter extends LObject {
   private final char value;
 
@@ -14,13 +17,18 @@ public final class LCharacter extends LObject {
 
   @Override
   public String toString() {
-    return "" + value;
+    return "(!'" + value + "'!)";
   }
 
   @Override
   public boolean equals(Object obj) {
     return obj != null && obj instanceof LCharacter
         && ((LCharacter) obj).value == value;
+  }
+
+  @Override
+  public Expression getCanonicalForm() {
+    return Wrapper.of(this);
   }
 
   @Override

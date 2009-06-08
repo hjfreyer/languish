@@ -2,6 +2,10 @@ package languish.prim.data;
 
 import java.util.Arrays;
 
+import languish.lambda.Application;
+import languish.lambda.Expression;
+import languish.lambda.Wrapper;
+
 public final class LComposite extends LObject {
   private final LObject[] array;
 
@@ -21,23 +25,52 @@ public final class LComposite extends LObject {
     array[i] = obj;
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    return obj != null && obj instanceof LComposite
-        && Arrays.equals(((LComposite) obj).array, array);
-  }
-
-  @Override
-  public int hashCode() {
-    return Arrays.deepHashCode(new Object[] { getClass(), array });
-  }
-
   public static LComposite of(LObject[] array) {
     return new LComposite(array);
   }
 
   public int size() {
     return array.length;
+  }
+
+  @Override
+  public String toString() {
+    return getCanonicalForm().toString();
+  }
+
+  @Override
+  public Expression getCanonicalForm() {
+    Application result =
+        Application.of(LComposites.WRAP, Wrapper.of(LInteger.of(array.length)));
+
+    for (LObject element : array) {
+      result = Application.of(result, Wrapper.of(element));
+    }
+
+    return result;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + Arrays.hashCode(array);
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    LComposite other = (LComposite) obj;
+    if (!Arrays.equals(array, other.array)) {
+      return false;
+    }
+    return true;
   }
 
   public static LComposite compositeFromString(String input) {

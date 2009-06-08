@@ -6,7 +6,7 @@ import languish.prim.data.exp.LExpression;
 
 public class Interpreter {
 
-  private LObject env = LUnit.instance();
+  private LObject env = LUnit.UNIT;
   private Parser parser = new BuiltinParser();
 
   public Interpreter() {}

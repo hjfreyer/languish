@@ -1,5 +1,8 @@
 package languish.prim.data;
 
+import languish.lambda.Expression;
+import languish.lambda.Wrapper;
+
 public final class LSymbol extends LObject {
   private final String value;
 
@@ -21,6 +24,11 @@ public final class LSymbol extends LObject {
     int result = 0;
     result = prime * result + ((value == null) ? 0 : value.hashCode());
     return result;
+  }
+
+  @Override
+  public Expression getCanonicalForm() {
+    return Wrapper.of(this);
   }
 
   @Override

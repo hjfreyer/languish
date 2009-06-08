@@ -2,6 +2,9 @@ package languish.prim.data;
 
 import java.util.Arrays;
 
+import languish.lambda.Expression;
+import languish.lambda.Wrapper;
+
 public final class LBoolean extends LObject {
 
   private final boolean value;
@@ -30,7 +33,12 @@ public final class LBoolean extends LObject {
 
   @Override
   public String toString() {
-    return value ? "TRUE" : "FALSE";
+    return value ? "(!TRUE!)" : "(!FALSE!)";
+  }
+
+  @Override
+  public Expression getCanonicalForm() {
+    return Wrapper.of(this);
   }
 
   public static LObject of(boolean b) {
