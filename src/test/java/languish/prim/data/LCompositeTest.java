@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 import languish.lambda.Application;
 import languish.lambda.Expression;
 import languish.testing.ExpressionToTest;
-import languish.testing.TestExpressions;
+import languish.testing.ExpressionTester;
 
 public class LCompositeTest extends TestCase {
 
@@ -126,6 +126,6 @@ public class LCompositeTest extends TestCase {
   }
 
   public void test() {
-    TestExpressions.testExpressions(Arrays.asList(Tests.values()));
+    ExpressionTester.testExpressions(Arrays.asList(Tests.values()));
   }
 }

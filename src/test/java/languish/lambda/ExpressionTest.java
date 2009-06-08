@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 import languish.prim.data.LObject;
 import languish.testing.ExpressionToTest;
 import languish.testing.TestConstants;
-import languish.testing.TestExpressions;
+import languish.testing.ExpressionTester;
 
 public class ExpressionTest extends TestCase {
   public enum Tests implements ExpressionToTest {
@@ -60,6 +60,6 @@ public class ExpressionTest extends TestCase {
   }
 
   public void test() {
-    TestExpressions.testExpressions(Arrays.asList(Tests.values()));
+    ExpressionTester.testExpressions(Arrays.asList(Tests.values()));
   }
 }

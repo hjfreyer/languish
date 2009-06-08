@@ -2,11 +2,11 @@ package languish.interpreter;
 
 import languish.lambda.Expression;
 import languish.lambda.Wrapper;
-import languish.prim.data.LIntegers;
-import languish.prim.data.LBooleans;
 import languish.prim.data.LBoolean;
+import languish.prim.data.LBooleans;
 import languish.prim.data.LComposites;
 import languish.prim.data.LExpressionWrappers;
+import languish.prim.data.LIntegers;
 
 public enum Builtins {
   // Starting interpreter
@@ -22,21 +22,17 @@ public enum Builtins {
   TRUE(Wrapper.of(LBoolean.TRUE)),
   FALSE(Wrapper.of(LBoolean.FALSE)),
   BRANCH(LBooleans.BRANCH),
-  //
+
   // Expression constructors
-   MK_ABS(LExpressionWrappers.MK_ABS),
-   MK_APP(LExpressionWrappers.MK_APP),
-   MK_WRAPPER(LExpressionWrappers.MK_WRAPPER),
-   MK_REF(LExpressionWrappers.MK_REF),
-   MK_NAT(LExpressionWrappers.MK_NAT),
-   // MK_LITERAL(ExpressionOps.MK_LITERAL),
-  
-  // MK_UNWRAP(ExpressionOps.MK_UNWRAP),
-  //
+  MK_ABS(LExpressionWrappers.MK_ABS),
+  MK_APP(LExpressionWrappers.MK_APP),
+  MK_WRAPPER(LExpressionWrappers.MK_WRAPPER),
+  MK_REF(LExpressionWrappers.MK_REF),
+  MK_NAT(LExpressionWrappers.MK_NAT),
+
   // LComposite
   GET_ELEMENT(LComposites.GET_ELEMENT),
-  WRAP(LComposites.WRAP),  
-  ;
+  WRAP(LComposites.WRAP),
 
   ;
 

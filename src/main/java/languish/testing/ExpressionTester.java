@@ -8,7 +8,7 @@ import languish.lambda.Expression;
 import languish.prim.data.LExpressionWrapper;
 import languish.prim.data.LObject;
 
-public class TestExpressions {
+public class ExpressionTester {
 
   private static final BuiltinParser parser = new BuiltinParser();
 
@@ -20,6 +20,10 @@ public class TestExpressions {
       String code = expToTest.getCode();
       Expression reducedOnce = expToTest.getReducedOnce();
       LObject reducedCompletely = expToTest.getReducedCompletely();
+
+      Expression canon = LExpressionWrapper.getGeneratingExpressionFor(exp);
+      LExpressionWrapper wrapper =
+          (LExpressionWrapper) canon.reduceCompletely();
 
       if (code != null) {
         // TOSTRING
@@ -45,10 +49,6 @@ public class TestExpressions {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not ultimately reduce to given value:",
             reducedCompletely, exp.reduceCompletely());
-
-        Expression canon = LExpressionWrapper.getGeneratingExpressionFor(exp);
-        LExpressionWrapper wrapper =
-            (LExpressionWrapper) canon.reduceCompletely();
 
         TestCase
             .assertEquals("on test " + expToTest.name()
