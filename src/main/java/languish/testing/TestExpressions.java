@@ -50,10 +50,11 @@ public class TestExpressions {
         LExpressionWrapper wrapper =
             (LExpressionWrapper) canon.reduceCompletely();
 
-        TestCase.assertEquals("on test " + expToTest.name()
-            + " - expression's canonical form does not "
-            + "ultimately reduce to given value:", reducedCompletely, wrapper
-            .getExpression().reduceCompletely());
+        TestCase
+            .assertEquals("on test " + expToTest.name()
+                + " - expression's canonical form does not "
+                + "ultimately reduce to given value:", exp, wrapper
+                .getExpression());
       }
     }
   }

@@ -7,7 +7,6 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 import languish.lambda.Application;
 import languish.lambda.Expression;
-import languish.prim.functions.IntegerOps;
 import languish.testing.ExpressionToTest;
 import languish.testing.TestExpressions;
 
@@ -47,7 +46,7 @@ public class LCompositeTest extends TestCase {
 
     SIMPLE_GET_APPLICATION(Application.of(Application.of(
         LComposites.GET_ELEMENT, w(PAIR)), Application.of(Application.of(
-        IntegerOps.ADD, w(ZERO)), w(ONE))), //
+        LIntegers.ADD, w(ZERO)), w(ONE))), //
         "(APP (APP (~GET_ELEMENT~) "
             + "(APP (APP (APP (~WRAP~) (!2!)) (!4!)) (!5!))) "
             + "(APP (APP (~ADD~) (!0!)) (!1!)))",
@@ -90,7 +89,7 @@ public class LCompositeTest extends TestCase {
 
     WRAP_TEST_FUNCTION(Application.of(Application.of(Application.of(
         LComposites.WRAP, w(TWO)), Application.of(IDENT, w(FOUR))), Application
-        .of(Application.of(IntegerOps.ADD, w(TWO)), w(THREE))), //
+        .of(Application.of(LIntegers.ADD, w(TWO)), w(THREE))), //
         "(APP (APP (APP (~WRAP~) (!2!)) (APP (ABS +1) (!4!))) "
             + "(APP (APP (~ADD~) (!2!)) (!3!)))",
         null,

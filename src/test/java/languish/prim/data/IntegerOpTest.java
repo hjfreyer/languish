@@ -1,18 +1,17 @@
 package languish.prim.data;
 
-import static languish.prim.functions.IntegerOps.ADD;
+import static languish.prim.data.LIntegers.ADD;
 import static languish.testing.TestConstants.*;
 import junit.framework.TestCase;
 import languish.lambda.Abstraction;
 import languish.lambda.Application;
 import languish.lambda.Expression;
 import languish.lambda.Reference;
-import languish.prim.functions.IntegerOps;
 
 public class IntegerOpTest extends TestCase {
 
   private static final Expression DOUBLE_FUNC =
-      Abstraction.of(Application.of(Application.of(IntegerOps.ADD, Reference
+      Abstraction.of(Application.of(Application.of(LIntegers.ADD, Reference
           .to(1)), Reference.to(1)));
 
   public void testBasicAdd() {

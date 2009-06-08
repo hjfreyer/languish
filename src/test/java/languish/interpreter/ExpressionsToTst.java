@@ -3,22 +3,22 @@ package languish.interpreter;
 import static languish.testing.TestConstants.*;
 import languish.lambda.Application;
 import languish.lambda.Expression;
+import languish.prim.data.LIntegers;
+import languish.prim.data.LBooleans;
 import languish.prim.data.LBoolean;
 import languish.prim.data.LObject;
-import languish.prim.functions.BooleanOps;
-import languish.prim.functions.IntegerOps;
 
 public enum ExpressionsToTst {
 
-  SINGLE_ADD(Application.of(Application.of(IntegerOps.ADD, w(FIVE)), w(FOUR)), //
+  SINGLE_ADD(Application.of(Application.of(LIntegers.ADD, w(FIVE)), w(FOUR)), //
       "(APP (APP (~ADD~) (!5!)) (!4!))",
       false,
       null,
       true,
       NINE),
 
-  DOUBLE_ADD(Application.of(Application.of(IntegerOps.ADD, Application.of(
-      Application.of(IntegerOps.ADD, w(FIVE)), w(FOUR))), w(THREE)), //
+  DOUBLE_ADD(Application.of(Application.of(LIntegers.ADD, Application.of(
+      Application.of(LIntegers.ADD, w(FIVE)), w(FOUR))), w(THREE)), //
       "(APP (APP (~ADD~) (APP (APP (~ADD~) (!5!)) (!4!))) (!3!))",
       false,
       null,
@@ -26,19 +26,19 @@ public enum ExpressionsToTst {
       TWELVE),
 
   /** BOOLEAN TESTS **/
-  SIMPLE_BRANCH(Application.of(Application.of(Application.of(BooleanOps.BRANCH,
+  SIMPLE_BRANCH(Application.of(Application.of(Application.of(LBooleans.BRANCH,
       w(LBoolean.TRUE)), w(FOUR)), w(FIVE)), //
       "(APP (APP (APP (~BRANCH~) (!TRUE!)) (!4!)) (!5!))",
       true,
-      Application.of(Application.of(BooleanOps.BRANCH_THEN, w(FOUR)), w(FIVE)),
+      Application.of(Application.of(LBooleans.BRANCH_THEN, w(FOUR)), w(FIVE)),
       true,
       FOUR),
 
   SIMPLE_BRANCH_FALSE(Application.of(Application.of(Application.of(
-      BooleanOps.BRANCH, w(LBoolean.FALSE)), w(FOUR)), w(FIVE)), //
+      LBooleans.BRANCH, w(LBoolean.FALSE)), w(FOUR)), w(FIVE)), //
       "(APP (APP (APP (~BRANCH~) (!FALSE!)) (!4!)) (!5!))",
       true,
-      Application.of(Application.of(BooleanOps.BRANCH_ELSE, w(FOUR)), w(FIVE)),
+      Application.of(Application.of(LBooleans.BRANCH_ELSE, w(FOUR)), w(FIVE)),
       true,
       FIVE),
 
