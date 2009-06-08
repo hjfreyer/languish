@@ -44,7 +44,7 @@ public final class LComposite extends LObject {
         Application.of(LComposites.WRAP, Wrapper.of(LInteger.of(array.length)));
 
     for (LObject element : array) {
-      result = Application.of(result, Wrapper.of(element));
+      result = Application.of(result, element.getCanonicalForm());
     }
 
     return result;

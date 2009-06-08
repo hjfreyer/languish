@@ -11,7 +11,7 @@ import languish.prim.functions.IntegerOps;
 import languish.testing.ExpressionToTest;
 import languish.testing.TestExpressions;
 
-public class CompositeTest extends TestCase {
+public class LCompositeTest extends TestCase {
 
   private static final LComposite PAIR =
       LComposite.of(new LObject[] { FOUR, FIVE });
@@ -31,8 +31,8 @@ public class CompositeTest extends TestCase {
         null,
         null),
 
-    SIMPLE_GET(Application.of(Application.of(LComposites.GET_ELEMENT, PAIR
-        .getCanonicalForm()), w(ZERO)), //
+    SIMPLE_GET(Application.of(Application.of(LComposites.GET_ELEMENT, w(PAIR)),
+        w(ZERO)), //
         "(APP (APP (~GET_ELEMENT~) "
             + "(APP (APP (APP (~WRAP~) (!2!)) (!4!)) (!5!))) (!0!))",
         null,
@@ -40,27 +40,34 @@ public class CompositeTest extends TestCase {
 
     SIMPLE_GET_OTHER(Application.of(Application.of(LComposites.GET_ELEMENT,
         w(PAIR)), w(ONE)), //
-        null,
+        "(APP (APP (~GET_ELEMENT~) "
+            + "(APP (APP (APP (~WRAP~) (!2!)) (!4!)) (!5!))) (!1!))",
         null,
         FIVE),
 
     SIMPLE_GET_APPLICATION(Application.of(Application.of(
         LComposites.GET_ELEMENT, w(PAIR)), Application.of(Application.of(
         IntegerOps.ADD, w(ZERO)), w(ONE))), //
-        null,
+        "(APP (APP (~GET_ELEMENT~) "
+            + "(APP (APP (APP (~WRAP~) (!2!)) (!4!)) (!5!))) "
+            + "(APP (APP (~ADD~) (!0!)) (!1!)))",
         null,
         FIVE),
 
     TWO_DEEP_GET(Application.of(Application.of(LComposites.GET_ELEMENT,
         w(TWO_DEEP)), w(ZERO)), //
-        null,
+        "(APP (APP (~GET_ELEMENT~) (APP (APP (APP (~WRAP~) (!2!)) "
+            + "(APP (APP (APP (~WRAP~) (!2!)) (!4!)) (!5!))) (!6!))) (!0!))",
         null,
         PAIR),
 
     TWO_DEEP_GET_TWICE(Application.of(Application.of(LComposites.GET_ELEMENT,
         Application.of(Application.of(LComposites.GET_ELEMENT, w(TWO_DEEP)),
             w(ZERO))), w(ONE)), //
-        null,
+        "(APP (APP (~GET_ELEMENT~) "
+            + "(APP (APP (~GET_ELEMENT~) (APP (APP (APP (~WRAP~) (!2!)) "
+            + "(APP (APP (APP (~WRAP~) (!2!)) (!4!)) (!5!))) (!6!))) (!0!))) "
+            + "(!1!))",
         null,
         FIVE),
 

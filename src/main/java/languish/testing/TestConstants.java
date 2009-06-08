@@ -4,7 +4,6 @@ import languish.lambda.Abstraction;
 import languish.lambda.Application;
 import languish.lambda.Expression;
 import languish.lambda.Reference;
-import languish.lambda.Wrapper;
 import languish.prim.data.LInteger;
 import languish.prim.data.LObject;
 
@@ -32,7 +31,7 @@ public class TestConstants {
       Abstraction.of(Application.of(Reference.to(1), Reference.to(1)));
   public static final Expression LOOP = Application.of(OMEGA, OMEGA);
 
-  public static Wrapper w(LObject obj) {
-    return Wrapper.of(obj);
+  public static Expression w(LObject obj) {
+    return obj.getCanonicalForm();
   }
 }
