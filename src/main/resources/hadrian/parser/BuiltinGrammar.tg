@@ -1,12 +1,13 @@
 export <statement>;
 
-token word ($PrimIdent) {
-  part: 'A' .. 'Z' | '_';
-  keywords: infer;
-}
 
 token word ($number) {
   part: '0' .. '9';
+}
+
+token word ($PrimIdent) {
+  part: 'A' .. 'Z' | '_';
+  keywords: infer;
 }
 
 token delimiters;
@@ -26,6 +27,7 @@ token delimiters;
 ;
 
 <literal>
+  SYMBOL -> "'"  ($PrimIdent) "'"
   INT -> $number
   BOOL -> <boolean>
 ;

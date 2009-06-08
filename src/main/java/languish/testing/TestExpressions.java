@@ -5,6 +5,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.interpreter.BuiltinParser;
 import languish.lambda.Expression;
+import languish.prim.data.LExpressionWrapper;
 import languish.prim.data.LObject;
 
 public class TestExpressions {
@@ -44,6 +45,15 @@ public class TestExpressions {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not ultimately reduce to given value:",
             reducedCompletely, exp.reduceCompletely());
+
+        Expression canon = LExpressionWrapper.getGeneratingExpressionFor(exp);
+        LExpressionWrapper wrapper =
+            (LExpressionWrapper) canon.reduceCompletely();
+
+        TestCase.assertEquals("on test " + expToTest.name()
+            + " - expression's canonical form does not "
+            + "ultimately reduce to given value:", reducedCompletely, wrapper
+            .getExpression().reduceCompletely());
       }
     }
   }

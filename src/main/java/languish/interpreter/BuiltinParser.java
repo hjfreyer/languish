@@ -8,7 +8,7 @@ import languish.lambda.Wrapper;
 import languish.prim.data.LBoolean;
 import languish.prim.data.LInteger;
 import languish.prim.data.LObject;
-import languish.prim.data.Literals;
+import languish.prim.data.LSymbol;
 
 import org.quenta.tedir.antonius.doc.ITextDocument;
 import org.quenta.tedir.antonius.doc.ResourceDocument;
@@ -21,6 +21,12 @@ import org.quenta.tedir.hadrian.MessageMonitor;
 import com.hjfreyer.util.Pair;
 
 public class BuiltinParser extends Parser {
+
+  public static enum Literal {
+    INT,
+    BOOL,
+    SYMBOL
+  }
 
   private static enum PrimitiveHadrianParser {
     INSTANCE;
@@ -134,10 +140,10 @@ public class BuiltinParser extends Parser {
   private static Wrapper literalFromINode(INode inode) {
     String type = inode.getTag().toString();
 
-    return parseLiteral(Literals.Type.valueOf(type), inode.getChildren().get(0));
+    return parseLiteral(Literal.valueOf(type), inode.getChildren().get(0));
   }
 
-  private static Wrapper parseLiteral(Literals.Type type, INode content) {
+  private static Wrapper parseLiteral(Literal type, INode content) {
     String strVal;
 
     switch (type) {
@@ -145,6 +151,7 @@ public class BuiltinParser extends Parser {
       strVal = content.asString();
 
       return Wrapper.of(LInteger.of(Integer.parseInt(strVal)));
+
     case BOOL:
       strVal = content.getTag().toString();
 
@@ -155,6 +162,9 @@ public class BuiltinParser extends Parser {
       } else {
         throw new AssertionError();
       }
+
+    case SYMBOL:
+      return Wrapper.of(LSymbol.of(content.asString()));
     }
 
     throw new AssertionError();

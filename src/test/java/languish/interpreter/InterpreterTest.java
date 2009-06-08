@@ -1,34 +1,57 @@
 package languish.interpreter;
 
 import junit.framework.TestCase;
+import languish.lambda.Abstraction;
+import languish.lambda.Application;
+import languish.lambda.Expression;
+import languish.lambda.Reference;
+import languish.lambda.Wrapper;
+import languish.prim.data.LComposites;
+import languish.prim.data.LExpressionWrapper;
+import languish.prim.data.LInteger;
+import languish.prim.data.LObject;
+import languish.prim.data.LSymbol;
+import languish.testing.TestConstants;
 
 public class InterpreterTest extends TestCase {
-  //
-  // private final Interpreter i = new Interpreter();
-  //
-  // public void testAdd() {
-  // assertEquals(Wrapper.of(5), i
-  // .processStatement("DISP (~MK_LITERAL (~ADD (!2!) (!3!)~)~)"));
-  // assertEquals(Wrapper.of(11), i.processStatement("DISP "
-  // + "(~MK_LITERAL (~ADD (~ADD (!2!) (!3!)~) (!6!)~)~)"));
-  // }
-  //
-  // public void testMakeAbstraction() {
-  // String ident = "(~MK_ABS (~MK_REF (!1!)~)~)";
-  //
-  // assertEquals(TestConstants.IDENT, i.processStatement("DISP " + ident));
-  // }
-  //
-  // public void testCallIdentity() {
-  // String ident = "(~MK_ABS (~MK_REF (!1!)~)~)";
-  //
-  // String call = "(~MK_APP " + ident + "(~MK_LITERAL (!42!)~)~)";
-  //
-  // assertEquals(Wrapper.of(Application.of(TestConstants.IDENT, Wrapper
-  // .of(42))), i.processStatement("DISP (~MK_LITERAL" + call + "~)"));
-  //
-  // assertEquals(Wrapper.of(42), i.processStatement("DISP " + call));
-  // }
-  public void test() {}
 
+  private final Interpreter i = new Interpreter();
+
+  public void testBasicDisplay() {
+    LObject res = i.processStatement("DISP (!5!)");
+
+    assertEquals(res, TestConstants.FIVE);
+  }
+
+  public void testTrivialParserChange() {
+    LObject res;
+
+    String statementToReturn = "(APP (APP (APP (~WRAP~) (!2!)) (!0!)) (!42!))";
+
+    res =
+        i.processStatement("SET_PARSER (APP (~MK_ABS~) (APP (~MK_ABS~) "
+            + "(APP (~MK_WRAPPER~) " + statementToReturn + ")))");
+
+    res = i.processStatement("THIS IS GARBAGE!!@E#!q34!");
+
+    assertEquals(LInteger.of(42), res);
+  }
+
+  public void testEchoParser() {
+    Expression result =
+        Application.of(Application.of(Application.of(LComposites.WRAP, Wrapper
+            .of(LInteger.of(2))), Wrapper.of(LInteger.of(0))), Reference.to(2));
+
+    Expression echo = Abstraction.of(Abstraction.of(result));
+    Expression genExp = LExpressionWrapper.getGeneratingExpressionFor(echo);
+
+    String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
+
+    LObject res;
+
+    res = i.processStatement("SET_PARSER " + genExp);
+    res = i.processStatement(test);
+
+    assertEquals(LSymbol.of(test), res);
+  }
 }

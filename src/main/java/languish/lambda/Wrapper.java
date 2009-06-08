@@ -36,7 +36,7 @@ public class Wrapper extends Expression {
 
   @Override
   public String toString() {
-    return contents.toString();
+    return "(!" + contents + "!)";
   }
 
   //

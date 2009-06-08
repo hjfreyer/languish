@@ -21,7 +21,7 @@ public final class LInteger extends LObject {
 
   @Override
   public String toString() {
-    return "(!" + value + "!)";
+    return String.valueOf(value);
   }
 
   public int intValue() {
@@ -37,7 +37,7 @@ public final class LInteger extends LObject {
   }
 
   @Override
-  public Expression getCanonicalForm() {
+  public Expression getGeneratingExpression() {
     return Wrapper.of(this);
   }
 

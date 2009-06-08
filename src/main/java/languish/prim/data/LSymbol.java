@@ -14,6 +14,11 @@ public final class LSymbol extends LObject {
     return new LSymbol(string);
   }
 
+  @Override
+  public String toString() {
+    return "'" + value + "'";
+  }
+
   public String stringValue() {
     return value;
   }
@@ -27,7 +32,7 @@ public final class LSymbol extends LObject {
   }
 
   @Override
-  public Expression getCanonicalForm() {
+  public Expression getGeneratingExpression() {
     return Wrapper.of(this);
   }
 

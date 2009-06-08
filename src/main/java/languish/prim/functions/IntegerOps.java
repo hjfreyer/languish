@@ -9,7 +9,7 @@ import languish.prim.data.LObject;
 public class IntegerOps {
   private IntegerOps() {}
 
-  public static final NativeFunction ADD = new NativeFunction("ADD") {
+  public static final NativeFunction ADD = new NativeFunction("ADD", true) {
     @Override
     public Expression apply(LObject obj) {
       final LInteger intVal1 = (LInteger) obj;

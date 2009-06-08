@@ -32,6 +32,6 @@ public class TestConstants {
   public static final Expression LOOP = Application.of(OMEGA, OMEGA);
 
   public static Expression w(LObject obj) {
-    return obj.getCanonicalForm();
+    return obj.getGeneratingExpression();
   }
 }

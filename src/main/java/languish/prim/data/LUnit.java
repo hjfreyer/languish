@@ -20,7 +20,7 @@ public final class LUnit extends LObject {
   }
 
   @Override
-  public Expression getCanonicalForm() {
+  public Expression getGeneratingExpression() {
     return Wrapper.of(this);
   }
 

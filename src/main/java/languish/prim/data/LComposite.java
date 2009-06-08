@@ -35,16 +35,16 @@ public final class LComposite extends LObject {
 
   @Override
   public String toString() {
-    return getCanonicalForm().toString();
+    return getGeneratingExpression().toString();
   }
 
   @Override
-  public Expression getCanonicalForm() {
+  public Expression getGeneratingExpression() {
     Application result =
         Application.of(LComposites.WRAP, Wrapper.of(LInteger.of(array.length)));
 
     for (LObject element : array) {
-      result = Application.of(result, element.getCanonicalForm());
+      result = Application.of(result, element.getGeneratingExpression());
     }
 
     return result;

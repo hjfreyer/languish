@@ -27,7 +27,7 @@ public final class LCharacter extends LObject {
   }
 
   @Override
-  public Expression getCanonicalForm() {
+  public Expression getGeneratingExpression() {
     return Wrapper.of(this);
   }
 

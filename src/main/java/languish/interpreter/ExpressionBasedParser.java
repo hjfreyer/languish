@@ -6,6 +6,7 @@ import languish.lambda.Wrapper;
 import languish.prim.data.LComposite;
 import languish.prim.data.LInteger;
 import languish.prim.data.LObject;
+import languish.prim.data.LSymbol;
 
 public class ExpressionBasedParser extends Parser {
 
@@ -19,8 +20,8 @@ public class ExpressionBasedParser extends Parser {
   public Statement parseStatement(String statement, LObject environment) {
 
     Application parseCall =
-        Application.of(Application.of(expression, Wrapper.of(LComposite
-            .compositeFromString(statement))), Wrapper.of(environment));
+        Application.of(Application.of(expression, Wrapper.of(LSymbol
+            .of(statement))), Wrapper.of(environment));
 
     LComposite result = (LComposite) parseCall.reduceCompletely();
 

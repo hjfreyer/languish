@@ -5,7 +5,7 @@ import languish.lambda.Expression;
 public abstract class LObject {
   // public abstract Type getType();
 
-  public abstract Expression getCanonicalForm();
+  public abstract Expression getGeneratingExpression();
 
   @Override
   public abstract boolean equals(Object obj);

@@ -2,8 +2,9 @@ package languish.interpreter;
 
 import languish.lambda.Expression;
 import languish.lambda.Wrapper;
-import languish.prim.data.LComposites;
 import languish.prim.data.LBoolean;
+import languish.prim.data.LComposites;
+import languish.prim.data.LExpressionWrappers;
 import languish.prim.functions.BooleanOps;
 import languish.prim.functions.IntegerOps;
 
@@ -22,11 +23,14 @@ public enum Builtins {
   FALSE(Wrapper.of(LBoolean.FALSE)),
   BRANCH(BooleanOps.BRANCH),
   //
-  // // Expression constructors
-  // MK_ABS(ExpressionOps.MK_ABS),
-  // MK_APP(ExpressionOps.MK_APP),
-  // MK_LITERAL(ExpressionOps.MK_LITERAL),
-  // MK_REF(ExpressionOps.MK_REF),
+  // Expression constructors
+   MK_ABS(LExpressionWrappers.MK_ABS),
+   MK_APP(LExpressionWrappers.MK_APP),
+   MK_WRAPPER(LExpressionWrappers.MK_WRAPPER),
+   MK_REF(LExpressionWrappers.MK_REF),
+   MK_NAT(LExpressionWrappers.MK_NAT),
+   // MK_LITERAL(ExpressionOps.MK_LITERAL),
+  
   // MK_UNWRAP(ExpressionOps.MK_UNWRAP),
   //
   // LComposite

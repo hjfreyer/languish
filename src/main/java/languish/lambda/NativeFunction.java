@@ -7,9 +7,15 @@ public abstract class NativeFunction extends Expression {
   public abstract Expression apply(LObject obj);
 
   private final String name;
+  private final boolean canonizable;
 
   public NativeFunction(String name) {
+    this(name, false);
+  }
+
+  public NativeFunction(String name, boolean canonizable) {
     this.name = name;
+    this.canonizable = canonizable;
   }
 
   @Override
@@ -23,7 +29,7 @@ public abstract class NativeFunction extends Expression {
   }
 
   @Override
-  public Expression replaceAllReferencesToParam(int id, Expression with) {
+  public final Expression replaceAllReferencesToParam(int id, Expression with) {
     return this;
   }
 
@@ -31,9 +37,12 @@ public abstract class NativeFunction extends Expression {
     return name;
   }
 
+  public final boolean isCanonizable() {
+    return canonizable;
+  }
+
   @Override
   public final String toString() {
     return "(~" + name + "~)";
   }
-
 }

@@ -37,7 +37,7 @@ public final class LBoolean extends LObject {
   }
 
   @Override
-  public Expression getCanonicalForm() {
+  public Expression getGeneratingExpression() {
     return Wrapper.of(this);
   }
 
