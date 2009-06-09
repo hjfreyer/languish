@@ -1,7 +1,5 @@
 package languish.lambda;
 
-import languish.prim.data.LObject;
-
 public abstract class Expression {
 
   public static enum Type {
@@ -9,9 +7,6 @@ public abstract class Expression {
     APPLICATION,
     WRAPPER,
     REFERENCE,
-    // PRIM_CALL,
-    // BRANCH,
-    // EVAL,
     NATIVE_FUNC
   }
 
