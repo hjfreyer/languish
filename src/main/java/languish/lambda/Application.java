@@ -1,7 +1,5 @@
 package languish.lambda;
 
-import languish.lambda.error.IllegalApplicationError;
-import languish.lambda.error.IllegalFreeVariableError;
 
 public final class Application extends Expression {
 
@@ -35,54 +33,55 @@ public final class Application extends Expression {
     return argument;
   }
 
-  @Override
-  public Expression reduceOnce() {
-    switch (function.getType()) {
-    case WRAPPER:
-    case REFERENCE:
-      throw new IllegalApplicationError(function
-          + " cannot be reduced to abstraction");
-
-    case APPLICATION:
-      return Application.of(function.reduceOnce(), argument);
-
-    case ABSTRACTION:
-      Abstraction funcAbs = (Abstraction) function;
-
-      return funcAbs.getExpression().replaceAllReferencesToParam(1, argument);
-
-    case NATIVE_FUNC:
-      NativeFunction natFunc = (NativeFunction) function;
-
-      switch (argument.getType()) {
-      case APPLICATION:
-        return Application.of(natFunc, argument.reduceOnce());
-
-      case NATIVE_FUNC:
-      case REFERENCE:
-      case ABSTRACTION:
-        throw new IllegalFreeVariableError();
-
-      case WRAPPER:
-        Wrapper wrapper = (Wrapper) argument;
-
-        return natFunc.apply(wrapper.getContents());
-      default:
-        throw new AssertionError();
-      }
-    default:
-      throw new AssertionError();
-    }
-  }
-
-  @Override
-  public Expression replaceAllReferencesToParam(int id, Expression with) {
-
-    Expression function = this.function.replaceAllReferencesToParam(id, with);
-    Expression argument = this.argument.replaceAllReferencesToParam(id, with);
-
-    return Application.of(function, argument);
-  }
+  //
+  // @Override
+  // public Expression reduceOnce() {
+  // switch (function.getType()) {
+  // case WRAPPER:
+  // case REFERENCE:
+  // throw new IllegalApplicationError(function
+  // + " cannot be reduced to abstraction");
+  //
+  // case APPLICATION:
+  // return Application.of(function.reduceOnce(), argument);
+  //
+  // case ABSTRACTION:
+  // Abstraction funcAbs = (Abstraction) function;
+  //
+  // return funcAbs.getExpression().replaceAllReferencesToParam(1, argument);
+  //
+  // case NATIVE_FUNC:
+  // NativeFunction natFunc = (NativeFunction) function;
+  //
+  // switch (argument.getType()) {
+  // case APPLICATION:
+  // return Application.of(natFunc, argument.reduceOnce());
+  //
+  // case NATIVE_FUNC:
+  // case REFERENCE:
+  // case ABSTRACTION:
+  // throw new IllegalFreeVariableError();
+  //
+  // case WRAPPER:
+  // Wrapper wrapper = (Wrapper) argument;
+  //
+  // return natFunc.apply(wrapper.getContents());
+  // default:
+  // throw new AssertionError();
+  // }
+  // default:
+  // throw new AssertionError();
+  // }
+  // }
+  //
+  // @Override
+  // public Expression replaceAllReferencesToParam(int id, Expression with) {
+  //
+  // Expression function = this.function.replaceAllReferencesToParam(id, with);
+  // Expression argument = this.argument.replaceAllReferencesToParam(id, with);
+  //
+  // return Application.of(function, argument);
+  // }
 
   @Override
   public int hashCode() {

@@ -5,6 +5,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.interpreter.BuiltinParser;
 import languish.lambda.Expression;
+import languish.lambda.Reducer;
 import languish.prim.data.LExpressionWrapper;
 import languish.prim.data.LObject;
 
@@ -22,8 +23,7 @@ public class ExpressionTester {
       LObject reducedCompletely = expToTest.getReducedCompletely();
 
       Expression canon = LExpressionWrapper.getGeneratingExpressionFor(exp);
-      LExpressionWrapper wrapper =
-          (LExpressionWrapper) canon.reduceCompletely();
+      LExpressionWrapper wrapper = (LExpressionWrapper) Reducer.reduce(canon);
 
       if (code != null) {
         // TOSTRING
@@ -41,14 +41,14 @@ public class ExpressionTester {
       if (reducedOnce != null) {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not reduce once to given value:",
-            reducedOnce, exp.reduceOnce());
+            reducedOnce, Reducer.reduceOnce(exp));
       }
 
       // REDUCE COMPLETELY
       if (reducedCompletely != null) {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not ultimately reduce to given value:",
-            reducedCompletely, exp.reduceCompletely());
+            reducedCompletely, Reducer.reduce(exp));
 
         TestCase
             .assertEquals("on test " + expToTest.name()

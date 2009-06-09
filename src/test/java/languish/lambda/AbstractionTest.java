@@ -17,38 +17,37 @@ public class AbstractionTest extends TestCase {
   private static final Expression LOOP = Application.of(OMEGA, OMEGA);
 
   public void testBlob() {
-    assertEquals(THREE, w(THREE).reduceCompletely());
+    assertEquals(THREE, Reducer.reduce(w(THREE)));
   }
 
   public void testBasicApply() {
     Expression applyFour = Application.of(IDENTITY, w(FOUR));
 
-    assertEquals(w(FOUR), applyFour.reduceOnce());
-    assertEquals(FOUR, applyFour.reduceCompletely());
+    assertEquals(w(FOUR), Reducer.reduceOnce(applyFour));
+    assertEquals(FOUR, Reducer.reduce(applyFour));
   }
 
   public void testArgumentChooser() {
-    assertEquals(FOUR, Application.of(Application.of(FIRST_PICKER, w(FOUR)),
-        w(FIVE)).reduceCompletely());
+    assertEquals(FOUR, Reducer.reduce(Application.of(Application.of(FIRST_PICKER, w(FOUR)),
+    w(FIVE))));
 
-    assertEquals(FIVE, Application.of(Application.of(SECOND_PICKER, w(FOUR)),
-        w(FIVE)).reduceCompletely());
+    assertEquals(FIVE, Reducer.reduce(Application.of(Application.of(SECOND_PICKER, w(FOUR)),
+    w(FIVE))));
   }
 
   public void testIrrelevantNonHalter() {
-    assertEquals(FOUR, Application.of(Application.of(FIRST_PICKER, w(FOUR)),
-        LOOP).reduceCompletely());
+    assertEquals(FOUR, Reducer.reduce(Application.of(Application.of(FIRST_PICKER, w(FOUR)),
+    LOOP)));
   }
 
   public void testRelevantNonHalterFunction() {
     Expression exp =
-        Application.of(Application.of(SECOND_PICKER, w(FOUR)), LOOP)
-            .reduceOnce();
+        Reducer.reduceOnce(Application.of(Application.of(SECOND_PICKER, w(FOUR)), LOOP));
 
-    assertEquals(LOOP, exp.reduceOnce());
+    assertEquals(LOOP, Reducer.reduceOnce(exp));
   }
 
   public void testNonHalter() {
-    assertEquals(LOOP, LOOP.reduceOnce());
+    assertEquals(LOOP, Reducer.reduceOnce(LOOP));
   }
 }

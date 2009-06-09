@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 import languish.lambda.Abstraction;
 import languish.lambda.Application;
 import languish.lambda.Expression;
+import languish.lambda.Reducer;
 import languish.lambda.Reference;
 
 public class IntegerOpTest extends TestCase {
@@ -21,8 +22,8 @@ public class IntegerOpTest extends TestCase {
     Application addition2 =
         Application.of(Application.of(ADD, w(FIVE)), w(FOUR));
 
-    assertEquals(NINE, addition1.reduceCompletely());
-    assertEquals(NINE, addition2.reduceCompletely());
+    assertEquals(NINE, Reducer.reduce(addition1));
+    assertEquals(NINE, Reducer.reduce(addition2));
   }
 
   public void testTripleAdd() {
@@ -32,11 +33,11 @@ public class IntegerOpTest extends TestCase {
     Application tripleAdd =
         Application.of(Application.of(ADD, addition1), w(THREE));
 
-    assertEquals(TWELVE, tripleAdd.reduceCompletely());
+    assertEquals(TWELVE, Reducer.reduce(tripleAdd));
   }
 
   public void testDoubleFunc() {
-    assertEquals(EIGHT, Application.of(DOUBLE_FUNC, w(FOUR)).reduceCompletely());
+    assertEquals(EIGHT, Reducer.reduce(Application.of(DOUBLE_FUNC, w(FOUR))));
 
   }
 }

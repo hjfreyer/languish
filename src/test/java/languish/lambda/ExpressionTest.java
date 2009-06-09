@@ -6,20 +6,20 @@ import java.util.Arrays;
 
 import junit.framework.TestCase;
 import languish.prim.data.LObject;
+import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;
 import languish.testing.TestConstants;
-import languish.testing.ExpressionTester;
 
 public class ExpressionTest extends TestCase {
   public enum Tests implements ExpressionToTest {
     LITERAL_INT(w(FIVE), //
         "(!5!)",
-        w(FIVE),
+        null,
         FIVE),
 
     IDENTITY(Application.of(IDENT, w(FOUR)), //
         "(APP (ABS +1) (!4!))",
-        w(FOUR),
+        null,
         FOUR),
 
     LOOP(TestConstants.LOOP, //

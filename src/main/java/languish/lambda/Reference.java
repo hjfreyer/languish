@@ -26,15 +26,16 @@ public class Reference extends Expression {
     return "+" + index;
   }
 
-  @Override
-  public Expression reduceOnce() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public Expression replaceAllReferencesToParam(int id, Expression with) {
-    return (index == id) ? with : this;
-  }
+  //
+  // @Override
+  // public Expression reduceOnce() {
+  // throw new UnsupportedOperationException();
+  // }
+  //
+  // @Override
+  // public Expression replaceAllReferencesToParam(int id, Expression with) {
+  // return (index == id) ? with : this;
+  // }
 
   @Override
   public int hashCode() {

@@ -23,15 +23,17 @@ public abstract class NativeFunction extends Expression {
     return Type.NATIVE_FUNC;
   }
 
-  @Override
-  public final Expression reduceOnce() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public final Expression replaceAllReferencesToParam(int id, Expression with) {
-    return this;
-  }
+  //
+  // @Override
+  // public final Expression reduceOnce() {
+  // throw new UnsupportedOperationException();
+  // }
+  //
+  // @Override
+  // public final Expression replaceAllReferencesToParam(int id, Expression
+  // with) {
+  // return this;
+  // }
 
   public final String getName() {
     return name;

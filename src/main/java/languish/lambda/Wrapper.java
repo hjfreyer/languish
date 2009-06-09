@@ -44,16 +44,16 @@ public class Wrapper extends Expression {
   // public String repr() {
   // return "(~MK_BLOB " + contents.repr() + "~)";
   // }
-
-  @Override
-  public Expression reduceOnce() {
-    return this;
-  }
-
-  @Override
-  public Expression replaceAllReferencesToParam(int id, Expression with) {
-    return this;
-  }
+  //
+  // @Override
+  // public Expression reduceOnce() {
+  // return this;
+  // }
+  //
+  // @Override
+  // public Expression replaceAllReferencesToParam(int id, Expression with) {
+  // return this;
+  // }
 
   @Override
   public int hashCode() {

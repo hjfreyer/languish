@@ -24,32 +24,56 @@ public class Reducer {
 
   private static class Exp {
     Type type;
+
+    public Exp(Type type) {
+      this.type = type;
+    }
+
+    @Override
+    public String toString() {
+      return convertExpToExpression(this).toString();
+    }
   }
 
   public static class Abs extends Exp {
-    Type type = Type.ABSTRACTION;
     Exp expression;
+
+    public Abs() {
+      super(Type.ABSTRACTION);
+    }
   }
 
   private static class App extends Exp {
-    Type type = Type.ABSTRACTION;
     Exp function;
     Exp argument;
+
+    public App() {
+      super(Type.APPLICATION);
+    }
   }
 
   private static class Nat extends Exp {
-    Type type = Type.NATIVE_FUNC;
     NativeFunction nativeFunction;
+
+    public Nat() {
+      super(Type.NATIVE_FUNC);
+    }
   }
 
   private static class Ref extends Exp {
-    Type type = Type.REFERENCE;
     int id;
+
+    public Ref() {
+      super(Type.REFERENCE);
+    }
   }
 
   private static class Wrap extends Exp {
-    Type type = Type.WRAPPER;
     LObject object;
+
+    public Wrap() {
+      super(Type.WRAPPER);
+    }
   }
 
   private static Exp convertExpressionToExp(Expression exp) {
@@ -95,7 +119,30 @@ public class Reducer {
   }
 
   private static Expression convertExpToExpression(Exp exp) {
-    return null;
+    switch (exp.type) {
+    case ABSTRACTION:
+      Abs abs = (Abs) exp;
+
+      return Abstraction.of(convertExpToExpression(abs.expression));
+    case APPLICATION:
+      App app = (App) exp;
+
+      return Application.of(convertExpToExpression(app.function),
+          convertExpToExpression(app.argument));
+    case NATIVE_FUNC:
+      Nat nat = (Nat) exp;
+
+      return nat.nativeFunction;
+    case REFERENCE:
+      Ref ref = (Ref) exp;
+
+      return Reference.to(ref.id);
+    case WRAPPER:
+      Wrap wrap = (Wrap) exp;
+
+      return Wrapper.of(wrap.object);
+    }
+    throw new AssertionError();
   }
 
   private static LObject reduceCompletely(Exp exp) {

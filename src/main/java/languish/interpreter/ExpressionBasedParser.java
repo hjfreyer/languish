@@ -2,6 +2,7 @@ package languish.interpreter;
 
 import languish.lambda.Application;
 import languish.lambda.Expression;
+import languish.lambda.Reducer;
 import languish.lambda.Wrapper;
 import languish.prim.data.LComposite;
 import languish.prim.data.LInteger;
@@ -23,7 +24,7 @@ public class ExpressionBasedParser extends Parser {
         Application.of(Application.of(expression, Wrapper.of(LSymbol
             .of(statement))), Wrapper.of(environment));
 
-    LComposite result = (LComposite) parseCall.reduceCompletely();
+    LComposite result = (LComposite) Reducer.reduce(parseCall);
 
     int statementType = ((LInteger) result.get(0)).intValue();
     LObject statementObject = result.get(1);

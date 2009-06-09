@@ -3,6 +3,7 @@ package languish.interpreter;
 import languish.lambda.Abstraction;
 import languish.lambda.Application;
 import languish.lambda.Expression;
+import languish.lambda.Reducer;
 import languish.lambda.Reference;
 import languish.lambda.Wrapper;
 import languish.prim.data.LBoolean;
@@ -56,7 +57,7 @@ public class BuiltinParser extends Parser {
     Pair<Statement.Type, Expression> exp =
         parseStatementToExpression(statement);
 
-    return new Statement(exp.getFirst(), exp.getSecond().reduceCompletely());
+    return new Statement(exp.getFirst(), Reducer.reduce(exp.getSecond()));
   }
 
   public Pair<Statement.Type, Expression> parseStatementToExpression(

@@ -21,17 +21,18 @@ public final class Abstraction extends Expression {
     return Type.ABSTRACTION;
   }
 
-  @Override
-  public Expression reduceOnce() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public Expression replaceAllReferencesToParam(int id, Expression with) {
-    Expression child = exp.replaceAllReferencesToParam(id + 1, with);
-
-    return Abstraction.of(child);
-  }
+  //
+  // @Override
+  // public Expression reduceOnce() {
+  // throw new UnsupportedOperationException();
+  // }
+  //
+  // @Override
+  // public Expression replaceAllReferencesToParam(int id, Expression with) {
+  // Expression child = exp.replaceAllReferencesToParam(id + 1, with);
+  //
+  // return Abstraction.of(child);
+  // }
 
   @Override
   public String toString() {
