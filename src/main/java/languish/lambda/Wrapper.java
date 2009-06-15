@@ -21,14 +21,6 @@ public class Wrapper extends Expression {
     return new Wrapper(contents);
   }
 
-  // public static Literal of(Abstraction a) {
-  // return of(Function.of(a));
-  // // }
-  //
-  // public static Wrapper of(int i) {
-  // return of(new LInteger(i));
-  // }
-
   @Override
   public Type getType() {
     return Type.WRAPPER;
@@ -36,24 +28,8 @@ public class Wrapper extends Expression {
 
   @Override
   public String toString() {
-    return "(!" + contents + "!)";
+    return "Wrapper.of(" + contents + ")";
   }
-
-  //
-  // @Override
-  // public String repr() {
-  // return "(~MK_BLOB " + contents.repr() + "~)";
-  // }
-  //
-  // @Override
-  // public Expression reduceOnce() {
-  // return this;
-  // }
-  //
-  // @Override
-  // public Expression replaceAllReferencesToParam(int id, Expression with) {
-  // return this;
-  // }
 
   @Override
   public int hashCode() {
@@ -84,9 +60,4 @@ public class Wrapper extends Expression {
     }
     return true;
   }
-
-  //
-  // public static Wrapper of(boolean b) {
-  // return of(LBoolean.of(b));
-  // }
 }

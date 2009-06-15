@@ -50,7 +50,9 @@ public class InterpreterTest extends TestCase {
 
     LObject res;
 
-    res = i.processStatement("SET_PARSER " + genExp);
+    res =
+        i.processStatement("SET_PARSER "
+            + Canonizer.getCodeForExpression(genExp));
     res = i.processStatement("");
     assertEquals(LSymbol.of(""), res);
 

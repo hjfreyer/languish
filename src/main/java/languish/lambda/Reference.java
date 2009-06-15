@@ -23,7 +23,7 @@ public class Reference extends Expression {
 
   @Override
   public String toString() {
-    return "+" + index;
+    return "Reference.to(" + index + ")";
   }
 
   //

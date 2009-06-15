@@ -21,7 +21,7 @@ public final class Application extends Expression {
 
   @Override
   public String toString() {
-    return "(APP " + function + " " + argument + ")";
+    return "Application.of(" + function + ", " + argument + ")";
   }
 
   public Expression getFunction() {
