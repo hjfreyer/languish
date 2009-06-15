@@ -26,11 +26,10 @@ public class ExpressionBasedParser extends Parser {
 
     LComposite result = (LComposite) Reducer.reduce(parseCall);
 
-    int statementType = ((LInteger) result.get(0)).intValue();
-    LObject statementObject = result.get(1);
+    int statementType = ((LInteger) result.getArray()[0]).intValue();
+    LObject statementObject = result.getArray()[1];
 
     return new Statement(Statement.Type.values()[statementType],
         statementObject);
   }
-
 }

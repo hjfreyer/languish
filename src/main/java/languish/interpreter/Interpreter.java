@@ -1,6 +1,6 @@
 package languish.interpreter;
 
-import languish.prim.data.LExpressionWrapper;
+import languish.lambda.Expression;
 import languish.prim.data.LObject;
 import languish.prim.data.LUnit;
 
@@ -21,9 +21,8 @@ public class Interpreter {
       env = statement.getObject();
       break;
     case SET_PARSER:
-      LExpressionWrapper expression =
-          (LExpressionWrapper) statement.getObject();
-      parser = new ExpressionBasedParser(expression.getExpression());
+      Expression expression = (Expression) statement.getObject();
+      parser = new ExpressionBasedParser(expression);
       break;
     }
     return statement.getObject();

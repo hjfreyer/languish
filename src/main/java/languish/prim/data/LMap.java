@@ -2,8 +2,6 @@ package languish.prim.data;
 
 import java.util.Map;
 
-import languish.lambda.Expression;
-
 public class LMap extends LObject {
 
   private final Map<LSymbol, LObject> map;
@@ -18,11 +16,6 @@ public class LMap extends LObject {
 
   public Map<LSymbol, LObject> getMap() {
     return map;
-  }
-
-  @Override
-  public Expression getGeneratingExpression() {
-    throw new UnsupportedOperationException();
   }
 
   @Override

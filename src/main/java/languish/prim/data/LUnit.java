@@ -1,7 +1,5 @@
 package languish.prim.data;
 
-import languish.lambda.Expression;
-import languish.lambda.Wrapper;
 
 public final class LUnit extends LObject {
 
@@ -17,11 +15,6 @@ public final class LUnit extends LObject {
   @Override
   public boolean equals(Object obj) {
     return obj != null && obj instanceof LUnit;
-  }
-
-  @Override
-  public Expression getGeneratingExpression() {
-    return Wrapper.of(this);
   }
 
   public String repr() {

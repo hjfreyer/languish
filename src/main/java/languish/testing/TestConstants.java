@@ -2,6 +2,7 @@ package languish.testing;
 
 import languish.lambda.Abstraction;
 import languish.lambda.Application;
+import languish.lambda.Canonizer;
 import languish.lambda.Expression;
 import languish.lambda.Reference;
 import languish.prim.data.LInteger;
@@ -32,6 +33,7 @@ public class TestConstants {
   public static final Expression LOOP = Application.of(OMEGA, OMEGA);
 
   public static Expression w(LObject obj) {
-    return obj.getGeneratingExpression();
+    return Canonizer.getGeneratingExpressionFor(obj);
   }
+
 }

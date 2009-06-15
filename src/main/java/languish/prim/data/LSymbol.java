@@ -1,7 +1,5 @@
 package languish.prim.data;
 
-import languish.lambda.Expression;
-import languish.lambda.Wrapper;
 
 public final class LSymbol extends LObject {
   private final String value;
@@ -14,13 +12,13 @@ public final class LSymbol extends LObject {
     return new LSymbol(string);
   }
 
-  @Override
-  public String toString() {
-    return "'" + value + "'";
-  }
-
   public String stringValue() {
     return value;
+  }
+
+  @Override
+  public String toString() {
+    return "\"" + value + "\"";
   }
 
   @Override
@@ -29,11 +27,6 @@ public final class LSymbol extends LObject {
     int result = 0;
     result = prime * result + ((value == null) ? 0 : value.hashCode());
     return result;
-  }
-
-  @Override
-  public Expression getGeneratingExpression() {
-    return Wrapper.of(this);
   }
 
   @Override

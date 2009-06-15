@@ -1,6 +1,8 @@
 package languish.lambda;
 
-public abstract class Expression {
+import languish.prim.data.LObject;
+
+public abstract class Expression extends LObject {
 
   public static enum Type {
     ABSTRACTION,

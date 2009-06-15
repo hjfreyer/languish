@@ -1,16 +1,15 @@
 package languish.prim.data;
 
-import languish.lambda.Expression;
-
 public abstract class LObject {
-  // public abstract Type getType();
-
-  public abstract Expression getGeneratingExpression();
 
   @Override
-  public abstract boolean equals(Object obj);
+  public boolean equals(Object obj) {
+    throw new UnsupportedOperationException();
+  }
 
   @Override
-  public abstract int hashCode();
+  public int hashCode() {
+    throw new UnsupportedOperationException();
+  }
 
 }

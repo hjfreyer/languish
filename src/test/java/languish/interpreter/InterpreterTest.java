@@ -3,11 +3,11 @@ package languish.interpreter;
 import junit.framework.TestCase;
 import languish.lambda.Abstraction;
 import languish.lambda.Application;
+import languish.lambda.Canonizer;
 import languish.lambda.Expression;
 import languish.lambda.Reference;
 import languish.lambda.Wrapper;
 import languish.prim.data.LComposites;
-import languish.prim.data.LExpressionWrapper;
 import languish.prim.data.LInteger;
 import languish.prim.data.LObject;
 import languish.prim.data.LSymbol;
@@ -43,15 +43,21 @@ public class InterpreterTest extends TestCase {
             .of(LInteger.of(2))), Wrapper.of(LInteger.of(0))), Reference.to(2));
 
     Expression echo = Abstraction.of(Abstraction.of(result));
-    Expression genExp = LExpressionWrapper.getGeneratingExpressionFor(echo);
+    Expression genExp = Canonizer.getGeneratingExpressionFor(echo);
 
     String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
+    String test2 = "rock me amadeus!~";
 
     LObject res;
 
     res = i.processStatement("SET_PARSER " + genExp);
-    res = i.processStatement(test);
+    res = i.processStatement("");
+    assertEquals(LSymbol.of(""), res);
 
+    res = i.processStatement(test);
     assertEquals(LSymbol.of(test), res);
+
+    res = i.processStatement(test2);
+    assertEquals(LSymbol.of(test2), res);
   }
 }

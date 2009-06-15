@@ -4,47 +4,53 @@ import languish.prim.data.LObject;
 
 public abstract class NativeFunction extends Expression {
 
-  public abstract Expression apply(LObject obj);
-
   private final String name;
-  private final boolean canonizable;
 
   public NativeFunction(String name) {
-    this(name, false);
+    this.name = name;
   }
 
-  public NativeFunction(String name, boolean canonizable) {
-    this.name = name;
-    this.canonizable = canonizable;
-  }
+  public abstract Expression apply(LObject obj);
 
   @Override
   public final Type getType() {
     return Type.NATIVE_FUNC;
   }
 
-  //
-  // @Override
-  // public final Expression reduceOnce() {
-  // throw new UnsupportedOperationException();
-  // }
-  //
-  // @Override
-  // public final Expression replaceAllReferencesToParam(int id, Expression
-  // with) {
-  // return this;
-  // }
-
   public final String getName() {
     return name;
-  }
-
-  public final boolean isCanonizable() {
-    return canonizable;
   }
 
   @Override
   public final String toString() {
     return "(~" + name + "~)";
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    NativeFunction other = (NativeFunction) obj;
+    if (name == null) {
+      if (other.name != null) {
+        return false;
+      }
+    } else if (!name.equals(other.name)) {
+      return false;
+    }
+    return true;
+  }
+
 }

@@ -6,7 +6,7 @@ import languish.lambda.Wrapper;
 
 public class LComposites {
 
-  public static final NativeFunction WRAP = new NativeFunction("WRAP", true) {
+  public static final NativeFunction WRAP = new NativeFunction("WRAP") {
     @Override
     public Expression apply(LObject obj) {
       final int elements = ((LInteger) obj).intValue();
@@ -18,7 +18,7 @@ public class LComposites {
   };
 
   public static final NativeFunction GET_ELEMENT =
-      new NativeFunction("GET_ELEMENT", true) {
+      new NativeFunction("GET_ELEMENT") {
         @Override
         public Expression apply(LObject arg) {
           final LComposite comp = (LComposite) arg;
@@ -28,7 +28,7 @@ public class LComposites {
             public Expression apply(LObject obj) {
               LInteger index = (LInteger) obj;
 
-              return Wrapper.of(comp.get(index.intValue()));
+              return Wrapper.of(comp.getArray()[index.intValue()]);
             }
           };
         }
@@ -40,7 +40,7 @@ public class LComposites {
         : new NativeFunction("WRAP*") {
           @Override
           public Expression apply(LObject obj) {
-            result.set(numPutAlready, obj);
+            result.getArray()[numPutAlready] = obj;
 
             return
 

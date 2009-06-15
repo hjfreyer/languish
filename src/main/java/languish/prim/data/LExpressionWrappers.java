@@ -11,61 +11,56 @@ import languish.lambda.Wrapper;
 public class LExpressionWrappers {
   private LExpressionWrappers() {}
 
-  public static final NativeFunction MK_APP =
-      new NativeFunction("MK_APP", true) {
+  public static final NativeFunction MK_APP = new NativeFunction("MK_APP") {
+    @Override
+    public Expression apply(LObject obj) {
+      final Expression function = (Expression) obj;
+
+      return new NativeFunction("MK_APP*") {
         @Override
         public Expression apply(LObject obj) {
-          final LExpressionWrapper function = (LExpressionWrapper) obj;
+          Expression argument = (Expression) obj;
 
-          return new NativeFunction("MK_APP*") {
-            @Override
-            public Expression apply(LObject obj) {
-              LExpressionWrapper argument = (LExpressionWrapper) obj;
-
-              return Wrapper.of(new LExpressionWrapper(Application.of(function
-                  .getExpression(), argument.getExpression())));
-            }
-          };
+          return Wrapper.of(Application.of(function, argument));
         }
       };
+    }
+  };
 
-  public static final NativeFunction MK_ABS =
-      new NativeFunction("MK_ABS", true) {
-        @Override
-        public Expression apply(LObject obj) {
-          LExpressionWrapper expression = (LExpressionWrapper) obj;
+  public static final NativeFunction MK_ABS = new NativeFunction("MK_ABS") {
+    @Override
+    public Expression apply(LObject obj) {
+      Expression expression = (Expression) obj;
 
-          return Wrapper.of(new LExpressionWrapper(Abstraction.of(expression
-              .getExpression())));
-        }
-      };
+      return Wrapper.of(Abstraction.of(expression));
+    }
+  };
 
   public static final NativeFunction MK_WRAPPER =
-      new NativeFunction("MK_WRAPPER", true) {
+      new NativeFunction("MK_WRAPPER") {
         @Override
         public Expression apply(LObject obj) {
-          return Wrapper.of(new LExpressionWrapper(Wrapper.of(obj)));
+          return Wrapper.of(Wrapper.of(obj));
         }
       };
 
-  public static final NativeFunction MK_REF =
-      new NativeFunction("MK_REF", true) {
-        @Override
-        public Expression apply(LObject obj) {
-          int index = ((LInteger) obj).intValue();
+  public static final NativeFunction MK_REF = new NativeFunction("MK_REF") {
+    @Override
+    public Expression apply(LObject obj) {
+      int index = ((LInteger) obj).intValue();
 
-          return Wrapper.of(new LExpressionWrapper(Reference.to(index)));
-        }
-      };
+      return Wrapper.of(Reference.to(index));
+    }
+  };
 
-  public static final NativeFunction MK_NAT =
-      new NativeFunction("MK_NAT", true) {
+  public static final NativeFunction MK_BUILTIN_GET =
+      new NativeFunction("MK_BUILTIN_GET") {
         @Override
         public Expression apply(LObject obj) {
           LSymbol nat = (LSymbol) obj;
 
-          return Wrapper.of(new LExpressionWrapper(Builtins.valueOf(
-              nat.stringValue()).getExpression()));
+          return Wrapper
+              .of(Builtins.valueOf(nat.stringValue()).getExpression());
         }
       };
 }

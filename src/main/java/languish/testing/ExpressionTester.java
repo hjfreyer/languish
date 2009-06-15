@@ -4,9 +4,9 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import languish.interpreter.BuiltinParser;
+import languish.lambda.Canonizer;
 import languish.lambda.Expression;
 import languish.lambda.Reducer;
-import languish.prim.data.LExpressionWrapper;
 import languish.prim.data.LObject;
 
 public class ExpressionTester {
@@ -22,13 +22,17 @@ public class ExpressionTester {
       Expression reducedOnce = expToTest.getReducedOnce();
       LObject reducedCompletely = expToTest.getReducedCompletely();
 
-      Expression canon = LExpressionWrapper.getGeneratingExpressionFor(exp);
-      LExpressionWrapper wrapper = (LExpressionWrapper) Reducer.reduce(canon);
+      Expression gen = Canonizer.getGeneratingExpressionFor(exp);
+
+      TestCase.assertEquals("on test " + expToTest.name()
+          + " - expression's generator does not "
+          + "ultimately reduce to expression:", exp, Reducer.reduce(gen));
 
       if (code != null) {
         // TOSTRING
         TestCase.assertEquals("on test " + expToTest.name()
-            + " - toString() does not match code:", code, exp.toString());
+            + " - getCodeForExpression() does not match code:", code, Canonizer
+            .getCodeForExpression(exp));
 
         // PARSE
         Expression parsed =
@@ -49,12 +53,6 @@ public class ExpressionTester {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not ultimately reduce to given value:",
             reducedCompletely, Reducer.reduce(exp));
-
-        TestCase
-            .assertEquals("on test " + expToTest.name()
-                + " - expression's canonical form does not "
-                + "ultimately reduce to given value:", exp, wrapper
-                .getExpression());
       }
     }
   }

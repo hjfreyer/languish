@@ -15,13 +15,12 @@ public class LBooleans {
   public static final Abstraction BRANCH_ELSE =
       Abstraction.of(Abstraction.of(Reference.to(1)));
 
-  public static final NativeFunction BRANCH =
-      new NativeFunction("BRANCH", true) {
-        @Override
-        public Expression apply(LObject obj) {
-          return ((LBoolean) obj).booleanValue() ? BRANCH_THEN : BRANCH_ELSE;
-        }
-      };
+  public static final NativeFunction BRANCH = new NativeFunction("BRANCH") {
+    @Override
+    public Expression apply(LObject obj) {
+      return ((LBoolean) obj).booleanValue() ? BRANCH_THEN : BRANCH_ELSE;
+    }
+  };
 
   //
   // public static final BuiltinFunction MK_BRANCH =

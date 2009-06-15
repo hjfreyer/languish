@@ -27,7 +27,7 @@ token delimiters;
 ;
 
 <literal>
-  SYMBOL -> "'"  ($PrimIdent) "'"
+  SYMBOL -> "\""  ($PrimIdent) "\""
   INT -> $number
   BOOL -> <boolean>
 ;

@@ -2,9 +2,6 @@ package languish.prim.data;
 
 import java.util.Arrays;
 
-import languish.lambda.Expression;
-import languish.lambda.Wrapper;
-
 public final class LBoolean extends LObject {
 
   private final boolean value;
@@ -33,12 +30,7 @@ public final class LBoolean extends LObject {
 
   @Override
   public String toString() {
-    return value ? "(!TRUE!)" : "(!FALSE!)";
-  }
-
-  @Override
-  public Expression getGeneratingExpression() {
-    return Wrapper.of(this);
+    return value ? "TRUE" : "FALSE";
   }
 
   public static LObject of(boolean b) {

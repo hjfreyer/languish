@@ -2,10 +2,6 @@ package languish.prim.data;
 
 import java.util.Arrays;
 
-import languish.lambda.Application;
-import languish.lambda.Expression;
-import languish.lambda.Wrapper;
-
 public final class LComposite extends LObject {
   private final LObject[] array;
 
@@ -17,16 +13,12 @@ public final class LComposite extends LObject {
     this(new LObject[elements]);
   }
 
-  public LObject get(int i) {
-    return array[i];
-  }
-
-  void set(int i, LObject obj) {
-    array[i] = obj;
-  }
-
   public static LComposite of(LObject[] array) {
     return new LComposite(array);
+  }
+
+  public LObject[] getArray() {
+    return array;
   }
 
   public int size() {
@@ -35,19 +27,7 @@ public final class LComposite extends LObject {
 
   @Override
   public String toString() {
-    return getGeneratingExpression().toString();
-  }
-
-  @Override
-  public Expression getGeneratingExpression() {
-    Application result =
-        Application.of(LComposites.WRAP, Wrapper.of(LInteger.of(array.length)));
-
-    for (LObject element : array) {
-      result = Application.of(result, element.getGeneratingExpression());
-    }
-
-    return result;
+    return Arrays.toString(array);
   }
 
   @Override
@@ -90,7 +70,7 @@ public final class LComposite extends LObject {
     char[] chars = new char[input.size()];
 
     for (int i = 0; i < chars.length; i++) {
-      chars[i] = ((LCharacter) input.get(i)).charValue();
+      chars[i] = ((LCharacter) input.array[i]).charValue();
     }
 
     return new String(chars);

@@ -28,7 +28,7 @@ public enum Builtins {
   MK_APP(LExpressionWrappers.MK_APP),
   MK_WRAPPER(LExpressionWrappers.MK_WRAPPER),
   MK_REF(LExpressionWrappers.MK_REF),
-  MK_NAT(LExpressionWrappers.MK_NAT),
+  MK_BUILTIN_GET(LExpressionWrappers.MK_BUILTIN_GET),
 
   // LComposite
   GET_ELEMENT(LComposites.GET_ELEMENT),
