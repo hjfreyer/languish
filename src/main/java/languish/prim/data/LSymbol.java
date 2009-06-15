@@ -1,7 +1,8 @@
 package languish.prim.data;
 
+import languish.lambda.Literalizable;
 
-public final class LSymbol extends LObject {
+public final class LSymbol extends LObject implements Literalizable {
   private final String value;
 
   private LSymbol(String value) {
@@ -16,9 +17,13 @@ public final class LSymbol extends LObject {
     return value;
   }
 
+  public String getLiteral() {
+    return "\"" + value + "\"";
+  }
+
   @Override
   public String toString() {
-    return "\"" + value + "\"";
+    return "LSymbol.of(\"" + value + "\")";
   }
 
   @Override

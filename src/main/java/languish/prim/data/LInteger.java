@@ -1,6 +1,8 @@
 package languish.prim.data;
 
-public final class LInteger extends LObject {
+import languish.lambda.Literalizable;
+
+public final class LInteger extends LObject implements Literalizable {
   private final int value;
 
   public LInteger(int value) {
@@ -15,9 +17,13 @@ public final class LInteger extends LObject {
     return value;
   }
 
+  public String getLiteral() {
+    return "" + value;
+  }
+
   @Override
   public String toString() {
-    return String.valueOf(value);
+    return "LInteger.of(" + value + ")";
   }
 
   @Override

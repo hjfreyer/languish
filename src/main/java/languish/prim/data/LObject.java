@@ -3,13 +3,9 @@ package languish.prim.data;
 public abstract class LObject {
 
   @Override
-  public boolean equals(Object obj) {
-    throw new UnsupportedOperationException();
-  }
+  public abstract boolean equals(Object obj);
 
   @Override
-  public int hashCode() {
-    throw new UnsupportedOperationException();
-  }
+  public abstract int hashCode();
 
 }

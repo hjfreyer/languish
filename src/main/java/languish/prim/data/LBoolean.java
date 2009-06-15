@@ -2,7 +2,9 @@ package languish.prim.data;
 
 import java.util.Arrays;
 
-public final class LBoolean extends LObject {
+import languish.lambda.Literalizable;
+
+public final class LBoolean extends LObject implements Literalizable {
 
   private final boolean value;
 
@@ -28,9 +30,13 @@ public final class LBoolean extends LObject {
     return value;
   }
 
+  public String getLiteral() {
+    return value ? "TRUE" : "FALSE";
+  }
+
   @Override
   public String toString() {
-    return value ? "TRUE" : "FALSE";
+    return "LBoolean." + (value ? "TRUE" : "FALSE");
   }
 
   public static LObject of(boolean b) {

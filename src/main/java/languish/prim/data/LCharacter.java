@@ -1,35 +1,48 @@
 package languish.prim.data;
 
-public final class LCharacter extends LObject {
+import languish.lambda.Literalizable;
+
+public final class LCharacter extends LObject implements Literalizable {
   private final char value;
 
   public LCharacter(char value) {
     this.value = value;
   }
 
-  //
-  // public Type getType() {
-  // return Type.STRING;
-  // }
+  public char charValue() {
+    return value;
+  }
 
-  @Override
-  public String toString() {
+  public String getLiteral() {
     return "'" + value + "'";
   }
 
   @Override
-  public boolean equals(Object obj) {
-    return obj != null && obj instanceof LCharacter
-        && ((LCharacter) obj).value == value;
+  public String toString() {
+    return "LCharacter.of('" + value + "')";
   }
 
   @Override
   public int hashCode() {
-    return value;
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + value;
+    return result;
   }
 
-  public char charValue() {
-    return value;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    LCharacter other = (LCharacter) obj;
+    if (value != other.value) {
+      return false;
+    }
+    return true;
   }
 
 }

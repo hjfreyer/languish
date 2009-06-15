@@ -23,7 +23,7 @@ public abstract class NativeFunction extends Expression {
 
   @Override
   public final String toString() {
-    return "Builtins." + name;
+    return "Builtins." + name + ".getExpression()";
   }
 
   @Override

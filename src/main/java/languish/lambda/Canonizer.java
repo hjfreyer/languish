@@ -40,8 +40,16 @@ public class Canonizer {
 
       Expression gen = getGeneratingExpressionFor(wrap.getContents());
 
-      return gen.getType() != Type.WRAPPER ? getCodeForExpression(gen) : //
-          "(!" + ((Wrapper) gen).getContents().toString() + "!)";
+      if (gen.getType() == Type.WRAPPER) {
+        LObject contents = ((Wrapper) gen).getContents();
+
+        if (!(contents instanceof Literalizable)) {
+          throw new UnsupportedOperationException();
+        }
+
+        return "(!" + ((Literalizable) contents).getLiteral() + "!)";
+      }
+      return getCodeForExpression(gen);
     }
 
     throw new AssertionError();

@@ -5,10 +5,15 @@ import languish.lambda.Application;
 import languish.lambda.Canonizer;
 import languish.lambda.Expression;
 import languish.lambda.Reference;
+import languish.lambda.Wrapper;
 import languish.prim.data.LInteger;
 import languish.prim.data.LObject;
+import languish.prim.data.LUnit;
 
 public class TestConstants {
+  public static final LUnit UNIT = LUnit.UNIT;
+  public static final Expression NULL = Wrapper.of(LUnit.UNIT);
+
   public static final LInteger ZERO = LInteger.of(0);
   public static final LInteger ONE = LInteger.of(1);
   public static final LInteger TWO = LInteger.of(2);
