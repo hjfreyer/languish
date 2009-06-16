@@ -9,6 +9,11 @@ token word ($PrimIdent) {
   keywords: infer;
 }
 
+token delimited ($string): "\"" .. "\"" {
+  escape: "\\";
+  strip-delimiters: true;
+}
+
 token delimiters;
 
 <statement>
@@ -28,6 +33,6 @@ token delimiters;
 ;
 
 <literal>
-  SYMBOL -> "\""  ($PrimIdent) "\""
+  SYMBOL -> $string
   INT -> $number
 ;

@@ -73,6 +73,23 @@ public class InterpreterTest extends TestCase {
 
     res = i.processStatement("DISP (APP (APP (~ADD~) (!2!)) (*THREE*))");
     assertEquals(res, TestConstants.FIVE);
+  }
 
+  public void testMacrosReplace() {
+    Object res;
+
+    res = i.processStatement("MACRO THREE (!2!)");
+
+    res = i.processStatement("DISP (*THREE*)");
+    assertEquals(res, TestConstants.TWO);
+
+    res = i.processStatement("MACRO THREE (!3!)");
+    res = i.processStatement("DISP (*THREE*)");
+    assertEquals(res, TestConstants.THREE);
+
+    res = i.processStatement("MACRO THREE (APP (~ADD~) (*THREE*))");
+
+    res = i.processStatement("DISP (APP (*THREE*) (!2!))");
+    assertEquals(res, TestConstants.FIVE);
   }
 }

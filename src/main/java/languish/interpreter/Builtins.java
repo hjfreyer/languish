@@ -40,6 +40,12 @@ public enum Builtins {
   PUT_MAP(LMaps.PUT_MAP),
 
   // Hadrian
+  EMPTY_GRAMMAR(Wrapper.of(LMaps.EMPTY_MAP)),
+  SET_EXPORT(Wrapper.of(LMaps.EMPTY_MAP)),
+  SET_NONTERMS(Wrapper.of(LMaps.EMPTY_MAP)),
+  TERM(Wrapper.of(LMaps.EMPTY_MAP)),
+  NON_TERM(Wrapper.of(LMaps.EMPTY_MAP)),
+  RENDER_GRAMMAR(Wrapper.of(LMaps.EMPTY_MAP)),
 
   ;
 

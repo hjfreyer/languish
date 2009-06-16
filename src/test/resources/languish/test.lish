@@ -1,1 +1,195 @@
-DISP (APP (APP (~ADD~) (!3!)) (!1!));;
+
+MACRO GRAMMAR (~EMPTY_GRAMMAR~);;
+
+MACRO GRAMMAR (APP (APP (~SET_EXPORT~) (*GRAMMAR*)) (!"statement"!));;
+
+MACRO STATEMENT_MACRO 
+  (APP (APP (APP (APP (~WRAP~) (!3!)) 
+    (APP (~TERM~) (!"MACRO"!)))
+    (APP (~TERM~) (!"ident"!)))
+    (APP (~NON_TERM~) (!"expression"!)))
+;;  
+
+MACRO STATEMENT_MACRO_FUNC 
+  (!2!)
+;;  
+
+MACRO STATEMENT_DISPLAY 
+  (APP (APP (APP (~WRAP~) (!2!)) 
+    (APP (~TERM~) (!"DISP"!)))
+    (APP (~NON_TERM~) (!"expression"!)))
+;;
+
+
+MACRO STATEMENT_DISPLAY_FUNC
+  (!2!)
+;; 
+
+MACRO STATEMENT_SET_ENV
+  (APP (APP (APP (~WRAP~) (!2!)) 
+    (APP (~TERM~) (!"SET_ENV"!)))
+    (APP (~NON_TERM~) (!"expression"!)))
+;;
+
+MACRO STATEMENT_SET_ENV_FUNC
+  (!2!)
+;; 
+
+MACRO STATEMENT_SET_PARSER 
+  (APP (APP (APP (~WRAP~) (!2!)) 
+    (APP (~TERM~) (!"SET_PARSER"!)))
+    (APP (~NON_TERM~) (!"expression"!)))
+;;
+
+MACRO STATEMENT_SET_PARSER_FUNC
+  (!2!)
+;; 
+
+MACRO STATEMENT 
+  (APP (APP (APP (APP (APP (~WRAP~) (!4!))
+  
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*STATEMENT_MACRO*)) (*STATEMENT_MACRO_FUNC*)))
+      
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*STATEMENT_DISPLAY*)) (*STATEMENT_DISPLAY_FUNC*)))
+      
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*STATEMENT_SET_ENV*)) (*STATEMENT_SET_ENV_FUNC*)))
+      
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*STATEMENT_SET_PARSER*)) (*STATEMENT_SET_PARSER_FUNC*)))
+;;
+
+MACRO EXP_ABS
+  (APP (APP (APP (APP (~WRAP~) (!3!))
+    (APP (~TERM~) (!"(ABS"!)))
+    (APP (~NON_TERM~) (!"expression"!)))
+    (APP (~TERM~) (!"\)"!)))
+;;
+
+MACRO EXP_ABS_FUNC
+  (!2!)
+;; 
+
+MACRO EXP_APP
+  (APP (APP (APP (APP (APP (~WRAP~) (!4!))
+    (APP (~TERM~) (!"(APP"!)))
+    (APP (~NON_TERM~) (!"expression"!)))
+    (APP (~NON_TERM~) (!"expression"!)))
+    (APP (~TERM~) (!")"!)))
+;;
+
+MACRO EXP_APP_FUNC
+  (!2!)
+;; 
+
+MACRO EXP_PG
+  (APP (APP (APP (APP (~WRAP~) (!3!))
+    (APP (~TERM~) (!"(~"!)))
+    (APP (~TERM~) (!"ident"!)))
+    (APP (~TERM~) (!"~)"!)))
+;;
+
+MACRO EXP_PG_FUNC
+  (!2!)
+;; 
+
+MACRO EXP_LIT
+  (APP (APP (APP (APP (~WRAP~) (!3!))
+    (APP (~TERM~) (!"(!"!)))
+    (APP (~NON_TERM~) (!"literal"!)))
+    (APP (~TERM~) (!"!)"!)))
+;;
+
+MACRO EXP_LIT_FUNC
+  (!2!)
+;;
+
+MACRO EXP_REF
+  (APP (APP (APP (~WRAP~) (!2!))
+    (APP (~TERM~) (!"+"!)))
+    (APP (~TERM~) (!"number"!)))
+;;
+
+MACRO EXP_REF_FUNC
+  (!2!)
+;;
+
+MACRO EXP_MG
+  (APP (APP (APP (APP (~WRAP~) (!3!))
+    (APP (~TERM~) (!"(*"!)))
+    (APP (~TERM~) (!"ident"!)))
+    (APP (~TERM~) (!"*)"!)))
+;;
+
+MACRO EXP_MG_FUNC
+  (!2!)
+;; 
+
+MACRO EXPRESSION 
+  (APP (APP (APP (APP (APP (APP (APP (~WRAP~) (!6!))
+  
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*EXP_ABS*)) (*EXP_ABS_FUNC*)))  
+   
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*EXP_APP*)) (*EXP_APP_FUNC*)))  
+   
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*EXP_PG*)) (*EXP_PG_FUNC*)))  
+   
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*EXP_LIT*)) (*EXP_LIT_FUNC*)))  
+   
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*EXP_REF*)) (*EXP_REF_FUNC*)))
+        
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*EXP_MG*)) (*EXP_MG_FUNC*)))
+;;
+
+MACRO LIT_SYMBOL
+  (APP (APP (~WRAP~) (!1!))
+    (APP (~TERM~) (!"string"!)))
+;;
+
+MACRO LIT_SYMBOL_FUNC
+  (!2!)
+;; 
+
+MACRO LIT_INT
+  (APP (APP (~WRAP~) (!1!))
+    (APP (~TERM~) (!"number"!)))
+;;
+
+MACRO LIT_INT_FUNC
+  (!2!)
+;; 
+
+MACRO LITERAL 
+  (APP (APP (APP (~WRAP~) (!2!))
+  
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*LIT_SYMBOL*)) (*LIT_SYMBOL_FUNC*)))  
+   
+    (APP (APP (APP (~WRAP~) (!2!)) 
+      (*LIT_INT*)) (*LIT_INT_FUNC*)))
+;;
+      
+      
+MACRO GRAMMAR 
+  (APP (APP (~SET_NONTERMS~) (*GRAMMAR*))
+    (APP (APP (APP (APP (~WRAP~) (!3!))
+      (APP (APP (APP (~WRAP~) (!2!))
+        (!"statement"!)) (*STATEMENT*)))
+      
+      (APP (APP (APP (~WRAP~) (!2!))
+        (!"expression"!)) (*EXPRESSION*)))
+      
+      (APP (APP (APP (~WRAP~) (!2!))
+        (!"literal"!)) (*LITERAL*))))
+;;
+        
+SET_PARSER (APP (~RENDER_GRAMMAR~) (*GRAMMAR*));;      
+          

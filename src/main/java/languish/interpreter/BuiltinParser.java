@@ -170,30 +170,4 @@ public class BuiltinParser extends Parser {
 
     throw new AssertionError();
   }
-
-  // public static DataFunction getInterpreter() {
-  // return new SingleArgumentDataFunction() {
-  // @Override
-  // public LObject apply(LObject arg) {
-  // LComposite input = (LComposite) arg;
-  //
-  // char[] asChars = new char[input.size()];
-  //
-  // for (int i = 0; i < input.size(); i++) {
-  // asChars[i] = ((LCharacter) input.get(i)).charValue();
-  // }
-  //
-  // Statement statement = interpret(new String(asChars));
-  //
-  // return LComposite.of(new LObject[] {
-  // LInteger.of(statement.getType().ordinal()),
-  // statement.getExpression() });
-  // }
-  //
-  // @Override
-  // public String getName() {
-  // return "primtive_interpreter";
-  // }
-  // };
-  // }
 }

@@ -29,9 +29,10 @@ public class Shell {
 
     while (source.hasNext()) {
       String next = source.next();
-      System.out.println(next);
 
-      last = interpreter.processStatement(next);
+      if (next.trim().length() > 0) {
+        last = interpreter.processStatement(next);
+      }
     }
   }
 
