@@ -62,4 +62,17 @@ public class InterpreterTest extends TestCase {
     res = i.processStatement(test2);
     assertEquals(LSymbol.of(test2), res);
   }
+
+  public void testMacros() {
+    Object res;
+
+    res = i.processStatement("MACRO THREE (!3!)");
+
+    res = i.processStatement("DISP (*THREE*)");
+    assertEquals(res, TestConstants.THREE);
+
+    res = i.processStatement("DISP (APP (APP (~ADD~) (!2!)) (*THREE*))");
+    assertEquals(res, TestConstants.FIVE);
+
+  }
 }

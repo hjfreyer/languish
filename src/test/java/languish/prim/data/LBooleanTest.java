@@ -17,29 +17,29 @@ public class LBooleanTest extends TestCase {
   public enum Tests implements ExpressionToTest {
     // IDENITY TESTS
     TRUE(w(LBoolean.TRUE), //
-        "(!TRUE!)",
+        "(~TRUE~)",
         null,
         null),
 
     FALSE(w(LBoolean.FALSE), //
-        "(!FALSE!)",
+        "(~FALSE~)",
         null,
         null),
 
     // BASIC TESTS
     LITERAL_TRUE(Application.of(LBooleans.BRANCH, w(LBoolean.TRUE)), //
-        "(APP (~BRANCH~) (!TRUE!))",
+        "(APP (~BRANCH~) (~TRUE~))",
         LBooleans.BRANCH_THEN,
         null),
 
     LITERAL_FALSE(Application.of(LBooleans.BRANCH, w(LBoolean.FALSE)), //
-        "(APP (~BRANCH~) (!FALSE!))",
+        "(APP (~BRANCH~) (~FALSE~))",
         LBooleans.BRANCH_ELSE,
         null),
 
     APPLICATION_ON_SELECTOR(Application.of(LBooleans.BRANCH, Application.of(
         IDENT, w(LBoolean.TRUE))),
-        "(APP (~BRANCH~) (APP (ABS +1) (!TRUE!)))",
+        "(APP (~BRANCH~) (APP (ABS +1) (~TRUE~)))",
         LITERAL_TRUE.expression,
         null),
 
@@ -87,7 +87,7 @@ public class LBooleanTest extends TestCase {
     WHOLE_SHEBANG(Application.of(Application.of(Application.of(
         LBooleans.BRANCH, w(LBoolean.TRUE)), Application.of(IDENT, w(FOUR))),
         w(FIVE)), //
-        "(APP (APP (APP (~BRANCH~) (!TRUE!)) (APP (ABS +1) (!4!))) (!5!))",
+        "(APP (APP (APP (~BRANCH~) (~TRUE~)) (APP (ABS +1) (!4!))) (!5!))",
         Application.of(Application.of(Abstraction.of(Abstraction.of(Reference
             .to(2))), Application.of(Abstraction.of(Reference.to(1)), Wrapper
             .of(LInteger.of(4)))), Wrapper.of(LInteger.of(5))),
@@ -99,7 +99,7 @@ public class LBooleanTest extends TestCase {
                 w(LBoolean.TRUE)), w(LBoolean.FALSE)), w(LBoolean.TRUE))),
             w(FOUR)), w(FIVE)), //
         "(APP (APP (APP (~BRANCH~) "
-            + "(APP (APP (APP (~BRANCH~) (!TRUE!)) (!FALSE!)) (!TRUE!))) "
+            + "(APP (APP (APP (~BRANCH~) (~TRUE~)) (~FALSE~)) (~TRUE~))) "
             + "(!4!)) (!5!))",
         Application.of(Application.of(Application.of(LBooleans.BRANCH,
             Application.of(Application.of(Abstraction.of(Abstraction

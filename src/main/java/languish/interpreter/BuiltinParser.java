@@ -1,5 +1,9 @@
 package languish.interpreter;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import languish.interpreter.Statement.Type;
 import languish.lambda.Abstraction;
 import languish.lambda.Application;
 import languish.lambda.Expression;
@@ -10,6 +14,7 @@ import languish.prim.data.LBoolean;
 import languish.prim.data.LInteger;
 import languish.prim.data.LObject;
 import languish.prim.data.LSymbol;
+import languish.prim.data.LUnit;
 
 import org.quenta.tedir.antonius.doc.ITextDocument;
 import org.quenta.tedir.antonius.doc.ResourceDocument;
@@ -47,9 +52,10 @@ public class BuiltinParser extends Parser {
     }
   }
 
-  public BuiltinParser() {
+  private final Map<String, Expression> macros =
+      new HashMap<String, Expression>();
 
-  }
+  public BuiltinParser() {}
 
   @Override
   public Statement parseStatement(String statement, LObject env) {
@@ -66,20 +72,32 @@ public class BuiltinParser extends Parser {
 
     INode node = getHadrianParser().parse(doc);
 
-    // Unwrap statement
-    Statement.Type type = Statement.Type.valueOf(node.getTag().toString());
+    Statement.Type type;
+    Expression result;
+
+    String tag = node.getTag().toString();
     node = node.getChildren().get(0);
 
-    Expression exp = expressionFromINode(node);
+    if (tag.equals("MACRO")) {
+      String name = node.getChildren().get(0).asString();
+      Expression exp = expressionFromINode(node.getChildren().get(1));
 
-    return Pair.of(type, exp);
+      macros.put(name, exp);
+
+      type = Type.DISPLAY;
+      result = Wrapper.of(LUnit.UNIT);
+    } else {
+      type = Statement.Type.valueOf(tag);
+      result = expressionFromINode(node);
+    }
+    return Pair.of(type, result);
   }
 
   public static HadrianParser getHadrianParser() {
     return PrimitiveHadrianParser.INSTANCE.parser;
   }
 
-  private static Expression expressionFromINode(INode inode) {
+  private Expression expressionFromINode(INode inode) {
     if (inode.getTag().equals("LITERAL")) {
       return literalFromINode(inode.getChildren().get(0));
     } else if (inode.getTag().equals("APPLICATION")) {
@@ -90,6 +108,8 @@ public class BuiltinParser extends Parser {
       return primGetFromINode(inode.getChildren().get(0));
     } else if (inode.getTag().equals("REFERENCE")) {
       return referenceFromINode(inode.getChildren().get(0));
+    } else if (inode.getTag().equals("MACRO_GET")) {
+      return macros.get(inode.getChildren().get(0).asString());
     } else {
       throw new AssertionError();
     }
@@ -101,42 +121,22 @@ public class BuiltinParser extends Parser {
     return Reference.to(value);
   }
 
-  private static Expression primGetFromINode(INode node) {
+  private Expression primGetFromINode(INode node) {
     String name = node.asString();
 
     return Builtins.valueOf(name).getExpression();
   }
 
-  private static Expression abstractionFromINode(INode node) {
+  private Expression abstractionFromINode(INode node) {
     return Abstraction.of(expressionFromINode(node));
   }
 
-  private static Expression applicationFromINode(INode node) {
+  private Expression applicationFromINode(INode node) {
     Expression function = expressionFromINode(node.getChildren().get(0));
     Expression argument = expressionFromINode(node.getChildren().get(1));
 
     return Application.of(function, argument);
   }
-
-  //
-  // private static BuiltinCall primCallFromINode(INode inode) {
-  // String primName = inode.getChildren().get(0).asString();
-  //
-  // INode argsNode = inode.getChildren().get(1);
-  //
-  // Expression[] args = new Expression[argsNode.getChildren().size()];
-  //
-  // for (int i = 0; i < args.length; i++) {
-  // args[i] = expressionFromINode(argsNode.getChildren().get(i));
-  // }
-  //
-  // return BuiltinCall.of(Wrapper.of(LSymbol.of(primName)), args);
-  // }
-
-  //
-  // private static Evalulate unwrapFromINode(INode inode) {
-  // return Evalulate.of(expressionFromINode(inode));
-  // }
 
   private static Wrapper literalFromINode(INode inode) {
     String type = inode.getTag().toString();

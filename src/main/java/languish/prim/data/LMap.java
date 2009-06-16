@@ -1,5 +1,6 @@
 package languish.prim.data;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class LMap extends LObject {
@@ -10,12 +11,26 @@ public class LMap extends LObject {
     this.map = map;
   }
 
+  public static LMap of() {
+    return new LMap(new HashMap<LSymbol, LObject>());
+  }
+
   public static LMap of(Map<LSymbol, LObject> map) {
     return new LMap(map);
   }
 
   public Map<LSymbol, LObject> getMap() {
     return map;
+  }
+
+  public LMap put(String k, LObject v) {
+    map.put(LSymbol.of(k), v);
+    return this;
+  }
+
+  @Override
+  public String toString() {
+    return map.toString();
   }
 
   @Override

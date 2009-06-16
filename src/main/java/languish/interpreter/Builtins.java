@@ -7,6 +7,7 @@ import languish.prim.data.LBooleans;
 import languish.prim.data.LComposites;
 import languish.prim.data.LExpressionWrappers;
 import languish.prim.data.LIntegers;
+import languish.prim.data.LMaps;
 
 public enum Builtins {
   // Starting interpreter
@@ -33,6 +34,12 @@ public enum Builtins {
   // LComposite
   GET_ELEMENT(LComposites.GET_ELEMENT),
   WRAP(LComposites.WRAP),
+
+  // Map Expressions
+  EMPTY_MAP(Wrapper.of(LMaps.EMPTY_MAP)),
+  PUT_MAP(LMaps.PUT_MAP),
+
+  // Hadrian
 
   ;
 

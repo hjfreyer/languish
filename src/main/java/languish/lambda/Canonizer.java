@@ -1,16 +1,27 @@
 package languish.lambda;
 
+import java.util.Map;
+
+import languish.interpreter.Builtins;
 import languish.lambda.Expression.Type;
 import languish.prim.data.LComposite;
 import languish.prim.data.LComposites;
 import languish.prim.data.LExpressionWrappers;
 import languish.prim.data.LInteger;
+import languish.prim.data.LMap;
+import languish.prim.data.LMaps;
 import languish.prim.data.LObject;
 import languish.prim.data.LSymbol;
 
 public class Canonizer {
 
   public static String getCodeForExpression(Expression exp) {
+    for (Builtins b : Builtins.values()) {
+      if (b.getExpression().equals(exp)) {
+        return "(~" + b.name() + "~)";
+      }
+    }
+
     switch (exp.getType()) {
     case ABSTRACTION:
       Abstraction abs = (Abstraction) exp;
@@ -22,13 +33,14 @@ public class Canonizer {
           + getCodeForExpression(app.getArgument()) + ")";
 
     case NATIVE_FUNC:
-      NativeFunction nat = (NativeFunction) exp;
-
-      if (nat.getName().indexOf('*') != -1) {
-        throw new UnsupportedOperationException();
-      }
-
-      return "(~" + nat.getName() + "~)";
+      throw new UnsupportedOperationException();
+      // NativeFunction nat = (NativeFunction) exp;
+      //
+      // if (nat.getName().indexOf('*') != -1) {
+      // throw new UnsupportedOperationException();
+      // }
+      //
+      // return "(~" + nat.getName() + "~)";
 
     case REFERENCE:
       Reference ref = (Reference) exp;
@@ -65,6 +77,21 @@ public class Canonizer {
 
       for (LObject element : comp.getArray()) {
         result = Application.of(result, getGeneratingExpressionFor(element));
+      }
+
+      return result;
+
+    } else if (obj instanceof LMap) {
+      Map<LSymbol, LObject> map = ((LMap) obj).getMap();
+
+      Expression result = Wrapper.of(LMaps.EMPTY_MAP);
+
+      for (LSymbol key : map.keySet()) {
+        result =
+            Application.of(Application.of(
+                Application.of(LMaps.PUT_MAP, result),
+                getGeneratingExpressionFor(key)), //
+                getGeneratingExpressionFor(map.get(key)));
       }
 
       return result;

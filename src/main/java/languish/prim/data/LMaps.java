@@ -11,8 +11,8 @@ import languish.lambda.Wrapper;
 public class LMaps {
   private LMaps() {}
 
-  public static final Wrapper EMPTY_MAP =
-      Wrapper.of(LMap.of(Collections.<LSymbol, LObject> emptyMap()));
+  public static final LMap EMPTY_MAP =
+      LMap.of(Collections.<LSymbol, LObject> emptyMap());
 
   public static final NativeFunction PUT_MAP = new NativeFunction("PUT_MAP") {
     @Override

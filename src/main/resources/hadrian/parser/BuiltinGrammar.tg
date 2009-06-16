@@ -1,6 +1,5 @@
 export <statement>;
 
-
 token word ($number) {
   part: '0' .. '9';
 }
@@ -13,6 +12,7 @@ token word ($PrimIdent) {
 token delimiters;
 
 <statement>
+  MACRO -> "MACRO" $PrimIdent <expression>
   DISPLAY -> "DISP" <expression>
   SET_ENV -> "SET_ENV" <expression>
   SET_PARSER -> "SET_PARSER" <expression>
@@ -24,15 +24,10 @@ token delimiters;
   PRIM_GET -> "(~" $PrimIdent "~)" 
   LITERAL -> "(!" <literal> "!)"
   REFERENCE -> "+" $number
+  MACRO_GET -> "(*" $PrimIdent "*)"
 ;
 
 <literal>
   SYMBOL -> "\""  ($PrimIdent) "\""
   INT -> $number
-  BOOL -> <boolean>
-;
-
-<boolean> 
-  TRUE -> "TRUE"
-  FALSE -> "FALSE"
 ;
