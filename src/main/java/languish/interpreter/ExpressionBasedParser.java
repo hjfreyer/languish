@@ -20,9 +20,11 @@ public class ExpressionBasedParser extends Parser {
   @Override
   public Statement parseStatement(String statement, LObject environment) {
 
-    Application parseCall =
-        Application.of(Application.of(expression, Wrapper.of(LSymbol
-            .of(statement))), Wrapper.of(environment));
+    Application parseCall = Application.of( //
+        Application.of(//
+            expression, //
+            Wrapper.of(LSymbol.of(statement))), //
+        Wrapper.of(environment));
 
     LComposite result = (LComposite) Reducer.reduce(parseCall);
 

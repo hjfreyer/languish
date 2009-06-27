@@ -63,4 +63,11 @@ public class LExpressionWrappers {
               .of(Builtins.valueOf(nat.stringValue()).getExpression());
         }
       };
+
+  public static final NativeFunction UNWRAP = new NativeFunction("UNWRAP") {
+    @Override
+    public Expression apply(LObject obj) {
+      return (Expression) obj;
+    }
+  };
 }

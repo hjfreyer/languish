@@ -6,15 +6,17 @@ import languish.prim.data.LBoolean;
 import languish.prim.data.LBooleans;
 import languish.prim.data.LComposites;
 import languish.prim.data.LExpressionWrappers;
+import languish.prim.data.LGrammars;
 import languish.prim.data.LIntegers;
 import languish.prim.data.LMaps;
+import languish.prim.data.LParsers;
 
 public enum Builtins {
   // Starting interpreter
   // PRIM_INTERP(BuiltinParser.getInterpreter()),
 
   // Expression reducer
-  // REDUCE_EXP(ExpressionOps.UNWRAP),
+  UNWRAP(LExpressionWrappers.UNWRAP),
 
   // Arithmetic
   ADD(LIntegers.ADD),
@@ -40,13 +42,16 @@ public enum Builtins {
   PUT_MAP(LMaps.PUT_MAP),
 
   // Hadrian
-  EMPTY_GRAMMAR(Wrapper.of(LMaps.EMPTY_MAP)),
-  SET_EXPORT(Wrapper.of(LMaps.EMPTY_MAP)),
-  SET_NONTERMS(Wrapper.of(LMaps.EMPTY_MAP)),
-  TERM(Wrapper.of(LMaps.EMPTY_MAP)),
-  NON_TERM(Wrapper.of(LMaps.EMPTY_MAP)),
-  RENDER_GRAMMAR(Wrapper.of(LMaps.EMPTY_MAP)),
-
+  EMPTY_GRAMMAR(Wrapper.of(LGrammars.EMPTY_GRAMMAR)),
+  INTERPRET_STATEMENT(LGrammars.INTERPRET_STATEMENT),
+  ADD_RULE(LGrammars.ADD_RULE),
+  // SET_NONTERMS(Wrapper.of(LMaps.EMPTY_MAP)),
+  TERM(LGrammars.TERM),
+  VALUE(LGrammars.VALUE),
+  NON_TERM(LGrammars.NON_TERM),
+  
+  // Primitive Parsing
+  PARSE_INT(LParsers.PARSE_INT);
   ;
 
   private Expression expression;

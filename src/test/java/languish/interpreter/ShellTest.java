@@ -15,4 +15,8 @@ public class ShellTest extends TestCase {
 
     assertEquals(TestConstants.FOUR, s.getLast());
   }
+
+  public static void main(String[] args) {
+    new ShellTest().testFoo();
+  }
 }
