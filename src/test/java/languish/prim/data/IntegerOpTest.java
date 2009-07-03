@@ -5,39 +5,35 @@ import static languish.testing.TestConstants.*;
 import junit.framework.TestCase;
 import languish.lambda.Abstraction;
 import languish.lambda.Application;
-import languish.lambda.Expression;
-import languish.lambda.Reducer;
+import languish.lambda.Lambda;
 import languish.lambda.Reference;
+import languish.lambda.Tuple;
 
 public class IntegerOpTest extends TestCase {
 
-  private static final Expression DOUBLE_FUNC =
+  private static final Tuple DOUBLE_FUNC =
       Abstraction.of(Application.of(Application.of(LIntegers.ADD, Reference
           .to(1)), Reference.to(1)));
 
   public void testBasicAdd() {
-    Application addition1 =
-        Application.of(Application.of(ADD, w(FOUR)), w(FIVE));
+    Tuple addition1 = Application.of(Application.of(ADD, w(FOUR)), w(FIVE));
 
-    Application addition2 =
-        Application.of(Application.of(ADD, w(FIVE)), w(FOUR));
+    Tuple addition2 = Application.of(Application.of(ADD, w(FIVE)), w(FOUR));
 
-    assertEquals(NINE, Reducer.reduce(addition1));
-    assertEquals(NINE, Reducer.reduce(addition2));
+    assertEquals(NINE, Lambda.reduce(addition1));
+    assertEquals(NINE, Lambda.reduce(addition2));
   }
 
   public void testTripleAdd() {
-    Application addition1 =
-        Application.of(Application.of(ADD, w(FOUR)), w(FIVE));
+    Tuple addition1 = Application.of(Application.of(ADD, w(FOUR)), w(FIVE));
 
-    Application tripleAdd =
-        Application.of(Application.of(ADD, addition1), w(THREE));
+    Tuple tripleAdd = Application.of(Application.of(ADD, addition1), w(THREE));
 
-    assertEquals(TWELVE, Reducer.reduce(tripleAdd));
+    assertEquals(TWELVE, Lambda.reduce(tripleAdd));
   }
 
   public void testDoubleFunc() {
-    assertEquals(EIGHT, Reducer.reduce(Application.of(DOUBLE_FUNC, w(FOUR))));
+    assertEquals(EIGHT, Lambda.reduce(Application.of(DOUBLE_FUNC, w(FOUR))));
 
   }
 }

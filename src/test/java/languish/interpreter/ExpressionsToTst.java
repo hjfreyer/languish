@@ -2,10 +2,10 @@ package languish.interpreter;
 
 import static languish.testing.TestConstants.*;
 import languish.lambda.Application;
-import languish.lambda.Expression;
-import languish.prim.data.LIntegers;
-import languish.prim.data.LBooleans;
+import languish.lambda.Tuple;
 import languish.prim.data.LBoolean;
+import languish.prim.data.LBooleans;
+import languish.prim.data.LIntegers;
 import languish.prim.data.LObject;
 
 public enum ExpressionsToTst {
@@ -118,16 +118,15 @@ public enum ExpressionsToTst {
   //      
   ;
 
-  public Expression expForm;
+  public Tuple expForm;
   public String codeForm;
   public boolean reduceOnce;
-  public Expression reducedOnce;
+  public Tuple reducedOnce;
   public boolean reduceCompletely;
   public LObject reducedCompletely;
 
-  private ExpressionsToTst(Expression expForm, String codeForm,
-      boolean reduceOnce, Expression reducedOnce, boolean reduceCompletely,
-      LObject reducedCompletely) {
+  private ExpressionsToTst(Tuple expForm, String codeForm, boolean reduceOnce,
+      Tuple reducedOnce, boolean reduceCompletely, LObject reducedCompletely) {
     this.expForm = expForm;
     this.codeForm = codeForm;
     this.reduceOnce = reduceOnce;
@@ -135,5 +134,4 @@ public enum ExpressionsToTst {
     this.reduceCompletely = reduceCompletely;
     this.reducedCompletely = reducedCompletely;
   }
-
 }

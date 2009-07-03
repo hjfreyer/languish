@@ -1,49 +1,41 @@
 
-MACRO MK_IDENT (APP (~MK_ABS~) (APP (~MK_REF~) (!1!)));;
-
 MACRO GRAMMAR (~EMPTY_GRAMMAR~);;
 
 MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
   (!"ROOT"!))
   (APP (APP (~WRAP~) (!1!)) 
     (APP (~NON_TERM~) (!"STATEMENT"!))))
-  (*MK_IDENT*))
+  (WRAP (ABS +1)))
 ;;
 
-MACRO STATEMENT_MACRO 
-  (APP (APP (APP (APP (~WRAP~) (!3!)) 
-    (APP (~TERM~) (!"MACRO"!)))
-    (APP (~VALUE~) (!"PrimIdent"!)))
-    (APP (~NON_TERM~) (!"EXPRESSION"!)))
-;;  
+// MACRO STATEMENT_MACRO 
+//  (APP (APP (APP (APP (~WRAP~) (!3!)) 
+//    (APP (~TERM~) (!"MACRO"!)))
+//    (APP (~VALUE~) (!"PrimIdent"!)))
+//    (APP (~NON_TERM~) (!"EXPRESSION"!)))
+//
 
-MACRO STATEMENT_MACRO_FUNC 
-  (APP (~MK_WRAPPER~) (!"macro"!))
-;;  
 
-MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-  (!"STATEMENT"!))
-  (*STATEMENT_MACRO*))
-  (*STATEMENT_MACRO_FUNC*))
-;;
+//MACRO STATEMENT_MACRO_FUNC 
+//  (WRAP (!"macro"!))
+//
+
+
+//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
+//  (!"STATEMENT"!))
+//  (*STATEMENT_MACRO*))
+//  (*STATEMENT_MACRO_FUNC*))
+//
 
 MACRO STATEMENT_DISPLAY 
   (APP (APP (APP (~WRAP~) (!2!)) 
-    (APP (~TERM~) (!"DISP"!)))
+    (APP (~TERM~) (!"EVAL"!)))
     (APP (~NON_TERM~) (!"EXPRESSION"!)))
 ;;
 
 MACRO STATEMENT_DISPLAY_FUNC
-  (APP (~MK_ABS~) 
-    (APP (~MK_ABS~) 
-      (APP (~MK_WRAPPER~)
-        (APP (APP (APP (~WRAP~) (!2!))
-          (!0!))
-          (!"foo"!)
-        )
-      )
-    )
-  )
+  (WRAP (ABS (APP (APP (APP (~WRAP~) (!2!)) (!0!)) +1)
+  ))
 ;; 
 
 MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
@@ -53,13 +45,16 @@ MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
 ;;
 
 MACRO STATEMENT_SET_ENV
-  (APP (APP (APP (~WRAP~) (!2!)) 
-    (APP (~TERM~) (!"SET_ENV"!)))
+  (APP (APP (APP (APP (~WRAP~) (!3!)) 
+    (APP (~TERM~) (!"SET"!)))
+    (APP (~VALUE~) (!"PrimIdent"!)))
     (APP (~NON_TERM~) (!"EXPRESSION"!)))
 ;;
 
 MACRO STATEMENT_SET_ENV_FUNC
-  (APP (~MK_WRAPPER~) (!"set_env"!))
+  (WRAP (ABS // This is the expression following SET_ENV
+    (APP (APP (APP (~WRAP~) (!2!)) (!1!)) +1)
+  ))
 ;; 
 
 MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
@@ -145,7 +140,7 @@ MACRO EXP_LIT
 ;;
 
 MACRO EXP_LIT_FUNC
-  (*MK_IDENT*)
+  (WRAP (ABS +1))
 ;;
 
 MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
@@ -216,18 +211,8 @@ MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
   (*LIT_INT*))
   (*LIT_INT_FUNC*))
 ;;
-        
-SET_PARSER 
-  (APP (~MK_ABS~)
-    (APP (APP (~MK_APP~)
-      (APP (APP (~MK_APP~)
-        (APP (~MK_BUILTIN_GET~) (!"INTERPRET_STATEMENT"!)))
-        (APP (~MK_WRAPPER~) (*GRAMMAR*)))
-      )
-      (APP (~MK_REF~) (!1!))
-    )
-  )
-;;
 
-DISP (!4!);;
+SET_PARSER (APP (~INTERPRET_STATEMENT~) (*GRAMMAR*));;
+
+EVAL (!4!);;
           

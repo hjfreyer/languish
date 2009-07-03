@@ -13,28 +13,29 @@ import languish.testing.TestConstants;
 public class ExpressionTest extends TestCase {
   public enum Tests implements ExpressionToTest {
     LITERAL_INT(w(FIVE), //
-        "(!5!)",
+        "[DATA (!5!)]",
         null,
         FIVE),
 
     IDENTITY(Application.of(IDENT, w(FOUR)), //
-        "(APP (ABS +1) (!4!))",
+        "[APP [[ABS [[REF (!1!)]]] [DATA (!4!)]]]",
         null,
         FOUR),
 
     LOOP(TestConstants.LOOP, //
-        "(APP (ABS (APP +1 +1)) (ABS (APP +1 +1)))",
+        "[APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
+            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]",
         TestConstants.LOOP,
         null),
 
     ;
 
-    private final Expression expression;
+    private final Tuple expression;
     private final String code;
-    private final Expression reducedOnce;
+    private final Tuple reducedOnce;
     private final LObject reducedCompletely;
 
-    private Tests(Expression expression, String code, Expression reducedOnce,
+    private Tests(Tuple expression, String code, Tuple reducedOnce,
         LObject reducedCompletely) {
       this.expression = expression;
       this.code = code;
@@ -42,7 +43,7 @@ public class ExpressionTest extends TestCase {
       this.reducedCompletely = reducedCompletely;
     }
 
-    public Expression getExpression() {
+    public Tuple getExpression() {
       return expression;
     }
 
@@ -50,7 +51,7 @@ public class ExpressionTest extends TestCase {
       return code;
     }
 
-    public Expression getReducedOnce() {
+    public Tuple getReducedOnce() {
       return reducedOnce;
     }
 

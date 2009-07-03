@@ -1,8 +1,7 @@
 package languish.prim.data;
 
-import languish.lambda.Literalizable;
 
-public final class LSymbol extends LObject implements Literalizable {
+public final class LSymbol extends LObject {
   private final String value;
 
   private LSymbol(String value) {

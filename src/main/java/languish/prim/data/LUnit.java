@@ -1,8 +1,7 @@
 package languish.prim.data;
 
-import languish.lambda.Literalizable;
 
-public final class LUnit extends LObject implements Literalizable {
+public final class LUnit extends LObject {
 
   private LUnit() {}
 

@@ -1,30 +1,31 @@
 package languish.interpreter;
 
-import languish.lambda.Expression;
+import languish.lambda.Lambda;
+import languish.lambda.Tuple;
 import languish.prim.data.LObject;
-import languish.prim.data.LUnit;
 
 public class Interpreter {
 
-  private LObject env = LUnit.UNIT;
+  private LObject env = Tuple.of();
   private Parser parser = new BuiltinParser();
 
   public Interpreter() {}
 
   public LObject processStatement(String input) {
     Statement statement = parser.parseStatement(input, env);
+    LObject expression = statement.getObject();
 
     switch (statement.getType()) {
-    case DISPLAY:
-      break;
+    case EVAL:
+      return Lambda.reduce(expression);
     case SET_ENV:
-      env = statement.getObject();
-      break;
+      env = expression;
+      return expression;
     case SET_PARSER:
-      Expression expression = (Expression) statement.getObject();
       parser = new ExpressionBasedParser(expression);
-      break;
+      return expression;
+    default:
+      throw new AssertionError();
     }
-    return statement.getObject();
   }
 }

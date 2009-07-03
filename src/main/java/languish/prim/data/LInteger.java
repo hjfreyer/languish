@@ -1,8 +1,6 @@
 package languish.prim.data;
 
-import languish.lambda.Literalizable;
-
-public final class LInteger extends LObject implements Literalizable {
+public final class LInteger extends LObject {
   private final int value;
 
   public LInteger(int value) {

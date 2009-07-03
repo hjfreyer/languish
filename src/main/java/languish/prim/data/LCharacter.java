@@ -1,8 +1,7 @@
 package languish.prim.data;
 
-import languish.lambda.Literalizable;
 
-public final class LCharacter extends LObject implements Literalizable {
+public final class LCharacter extends LObject {
   private final char value;
 
   public LCharacter(char value) {

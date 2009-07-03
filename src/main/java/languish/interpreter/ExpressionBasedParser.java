@@ -1,37 +1,33 @@
 package languish.interpreter;
 
 import languish.lambda.Application;
-import languish.lambda.Expression;
-import languish.lambda.Reducer;
-import languish.lambda.Wrapper;
-import languish.prim.data.LComposite;
+import languish.lambda.Data;
+import languish.lambda.Lambda;
+import languish.lambda.Tuple;
 import languish.prim.data.LInteger;
 import languish.prim.data.LObject;
 import languish.prim.data.LSymbol;
 
 public class ExpressionBasedParser extends Parser {
 
-  private final Expression expression;
+  private final LObject expression;
 
-  public ExpressionBasedParser(Expression expression) {
+  public ExpressionBasedParser(LObject expression) {
     this.expression = expression;
   }
 
   @Override
   public Statement parseStatement(String statement, LObject environment) {
 
-    Application parseCall = Application.of( //
-        Application.of(//
-            expression, //
-            Wrapper.of(LSymbol.of(statement))), //
-        Wrapper.of(environment));
+    LObject parseCall =
+        Application.of(Application.of(expression, Data
+            .of(LSymbol.of(statement))), environment);
 
-    LComposite result = (LComposite) Reducer.reduce(parseCall);
+    Tuple type = Tuple.of(Lambda.GET, Tuple.of(LInteger.of(0), parseCall));
+    Tuple exp = Tuple.of(Lambda.GET, Tuple.of(LInteger.of(1), parseCall));
 
-    int statementType = ((LInteger) result.getArray()[0]).intValue();
-    LObject statementObject = result.getArray()[1];
+    int statementType = ((LInteger) Lambda.reduce(type)).intValue();
 
-    return new Statement(Statement.Type.values()[statementType],
-        statementObject);
+    return new Statement(Statement.Type.values()[statementType], exp);
   }
 }

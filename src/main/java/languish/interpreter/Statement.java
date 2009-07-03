@@ -5,26 +5,9 @@ import languish.prim.data.LObject;
 public class Statement {
 
   public static enum Type {
-    SET_ENV,
+    EVAL,
     SET_PARSER,
-    DISPLAY
-    // LObject (env) -> LObject
-    ;
-    //
-    // public static Type fromId(int intValue) {
-    // switch (intValue) {
-    // case 0:
-    // return SET_ENV;
-    // case 1:
-    // return SET_PARSER;
-    // case 2:
-    // return SET_EVAL;
-    // case 3:
-    // return DISPLAY;
-    // default:
-    // throw new AssertionError();
-    // }
-    // }
+    SET_ENV,
   }
 
   private final Type type;
@@ -42,5 +25,4 @@ public class Statement {
   public LObject getObject() {
     return object;
   }
-
 }

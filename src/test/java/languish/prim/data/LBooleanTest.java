@@ -7,9 +7,9 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 import languish.lambda.Abstraction;
 import languish.lambda.Application;
-import languish.lambda.Expression;
+import languish.lambda.Data;
 import languish.lambda.Reference;
-import languish.lambda.Wrapper;
+import languish.lambda.Tuple;
 import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;
 
@@ -52,22 +52,22 @@ public class LBooleanTest extends TestCase {
     BASIC_BRANCH_THEN(Application.of(Application.of(LBooleans.BRANCH_THEN,
         w(FIVE)), w(FOUR)), //
         "(APP (APP (ABS (ABS +2)) (!5!)) (!4!))",
-        Application.of(Abstraction.of(Wrapper.of(LInteger.of(5))), Wrapper
+        Application.of(Abstraction.of(Data.of(LInteger.of(5))), Data
             .of(LInteger.of(4))),
         FIVE),
 
     BASIC_BRANCH_ELSE(Application.of(Application.of(LBooleans.BRANCH_ELSE,
         w(FIVE)), w(FOUR)), //
         "(APP (APP (ABS (ABS +1)) (!5!)) (!4!))",
-        Application.of(Abstraction.of(Reference.to(1)), Wrapper.of(LInteger
-            .of(4))),
+        Application
+            .of(Abstraction.of(Reference.to(1)), Data.of(LInteger.of(4))),
         FOUR),
 
     LOOP_ON_BRANCH(Application.of(Application.of(LBooleans.BRANCH_THEN, LOOP),
         w(FIVE)), //
         "(APP (APP (ABS (ABS +2)) (APP (ABS (APP +1 +1)) "
             + "(ABS (APP +1 +1)))) (!5!))",
-        Application.of(Abstraction.of(LOOP), Wrapper.of(LInteger.of(5))),
+        Application.of(Abstraction.of(LOOP), Data.of(LInteger.of(5))),
         null),
 
     LOOP_ON_BRANCH_2(LOOP_ON_BRANCH.reducedOnce, //
@@ -79,8 +79,8 @@ public class LBooleanTest extends TestCase {
         w(FIVE)), //
         "(APP (APP (ABS (ABS +1)) (APP (ABS (APP +1 +1)) "
             + "(ABS (APP +1 +1)))) (!5!))",
-        Application.of(Abstraction.of(Reference.to(1)), Wrapper.of(LInteger
-            .of(5))),
+        Application
+            .of(Abstraction.of(Reference.to(1)), Data.of(LInteger.of(5))),
         FIVE),
 
     // OVERALL
@@ -89,8 +89,8 @@ public class LBooleanTest extends TestCase {
         w(FIVE)), //
         "(APP (APP (APP (~BRANCH~) (~TRUE~)) (APP (ABS +1) (!4!))) (!5!))",
         Application.of(Application.of(Abstraction.of(Abstraction.of(Reference
-            .to(2))), Application.of(Abstraction.of(Reference.to(1)), Wrapper
-            .of(LInteger.of(4)))), Wrapper.of(LInteger.of(5))),
+            .to(2))), Application.of(Abstraction.of(Reference.to(1)), Data
+            .of(LInteger.of(4)))), Data.of(LInteger.of(5))),
         FOUR),
 
     NESTED(Application.of(
@@ -103,19 +103,19 @@ public class LBooleanTest extends TestCase {
             + "(!4!)) (!5!))",
         Application.of(Application.of(Application.of(LBooleans.BRANCH,
             Application.of(Application.of(Abstraction.of(Abstraction
-                .of(Reference.to(2))), Wrapper.of(LBoolean.FALSE)), Wrapper
-                .of(LBoolean.TRUE))), Wrapper.of(LInteger.of(4))), Wrapper
+                .of(Reference.to(2))), Data.of(LBoolean.FALSE)), Data
+                .of(LBoolean.TRUE))), Data.of(LInteger.of(4))), Data
             .of(LInteger.of(5))),
         FIVE),
 
     ;
 
-    private final Expression expression;
+    private final Tuple expression;
     private final String code;
-    private final Expression reducedOnce;
+    private final Tuple reducedOnce;
     private final LObject reducedCompletely;
 
-    private Tests(Expression expression, String code, Expression reducedOnce,
+    private Tests(Tuple expression, String code, Tuple reducedOnce,
         LObject reducedCompletely) {
       this.expression = expression;
       this.code = code;
@@ -123,7 +123,7 @@ public class LBooleanTest extends TestCase {
       this.reducedCompletely = reducedCompletely;
     }
 
-    public Expression getExpression() {
+    public Tuple getExpression() {
       return expression;
     }
 
@@ -131,7 +131,7 @@ public class LBooleanTest extends TestCase {
       return code;
     }
 
-    public Expression getReducedOnce() {
+    public Tuple getReducedOnce() {
       return reducedOnce;
     }
 

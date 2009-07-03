@@ -4,13 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import languish.interpreter.Statement.Type;
-import languish.lambda.Abstraction;
-import languish.lambda.Application;
-import languish.lambda.Expression;
-import languish.lambda.Reducer;
-import languish.lambda.Reference;
-import languish.lambda.Wrapper;
-import languish.prim.data.LBoolean;
+import languish.lambda.Data;
+import languish.lambda.Tuple;
 import languish.prim.data.LInteger;
 import languish.prim.data.LObject;
 import languish.prim.data.LSymbol;
@@ -52,40 +47,38 @@ public class BuiltinParser extends Parser {
     }
   }
 
-  private final Map<String, Expression> macros =
-      new HashMap<String, Expression>();
+  private final Map<String, LObject> macros = new HashMap<String, LObject>();
 
   public BuiltinParser() {}
 
   @Override
   public Statement parseStatement(String statement, LObject env) {
 
-    Pair<Statement.Type, Expression> exp =
-        parseStatementToExpression(statement);
+    Pair<Statement.Type, LObject> exp = parseStatementToExpression(statement);
 
-    return new Statement(exp.getFirst(), Reducer.reduce(exp.getSecond()));
+    return new Statement(exp.getFirst(), exp.getSecond());
   }
 
-  public Pair<Statement.Type, Expression> parseStatementToExpression(
+  public Pair<Statement.Type, LObject> parseStatementToExpression(
       String statement) {
     ITextDocument doc = new StringDocument(statement);
 
     INode node = getHadrianParser().parse(doc);
 
     Statement.Type type;
-    Expression result;
+    LObject result;
 
     String tag = node.getTag().toString();
     node = node.getChildren().get(0);
 
     if (tag.equals("MACRO")) {
       String name = node.getChildren().get(0).asString();
-      Expression exp = expressionFromINode(node.getChildren().get(1));
+      LObject exp = expressionFromINode(node.getChildren().get(1));
 
       macros.put(name, exp);
 
-      type = Type.DISPLAY;
-      result = Wrapper.of(LUnit.UNIT);
+      type = Type.EVAL;
+      result = Data.of(LUnit.UNIT);
     } else {
       type = Statement.Type.valueOf(tag);
       result = expressionFromINode(node);
@@ -97,77 +90,60 @@ public class BuiltinParser extends Parser {
     return PrimitiveHadrianParser.INSTANCE.parser;
   }
 
-  private Expression expressionFromINode(INode inode) {
+  private LObject expressionFromINode(INode inode) {
     if (inode.getTag().equals("LITERAL")) {
       return literalFromINode(inode.getChildren().get(0));
-    } else if (inode.getTag().equals("APPLICATION")) {
-      return applicationFromINode(inode.getChildren().get(0));
-    } else if (inode.getTag().equals("ABSTRACTION")) {
-      return abstractionFromINode(inode.getChildren().get(0));
     } else if (inode.getTag().equals("PRIM_GET")) {
       return primGetFromINode(inode.getChildren().get(0));
-    } else if (inode.getTag().equals("REFERENCE")) {
-      return referenceFromINode(inode.getChildren().get(0));
+    } else if (inode.getTag().equals("TUPLE")) {
+      return tupleFromINode(inode.getChildren().get(0));
     } else if (inode.getTag().equals("MACRO_GET")) {
-      return macros.get(inode.getChildren().get(0).asString());
+      String macroName = inode.getChildren().get(0).asString();
+
+      if (!macros.containsKey(macroName)) {
+        throw new IllegalArgumentException("macro " + macroName + " undefined.");
+      }
+
+      return macros.get(macroName);
     } else {
       throw new AssertionError();
     }
   }
 
-  private static Expression referenceFromINode(INode node) {
-    int value = Integer.parseInt(node.asString());
-
-    return Reference.to(value);
-  }
-
-  private Expression primGetFromINode(INode node) {
+  public LObject primGetFromINode(INode node) {
     String name = node.asString();
 
     return Builtins.valueOf(name).getExpression();
   }
 
-  private Expression abstractionFromINode(INode node) {
-    return Abstraction.of(expressionFromINode(node));
-  }
+  private Tuple tupleFromINode(INode node) {
+    int size = node.getChildren().size();
 
-  private Expression applicationFromINode(INode node) {
-    Expression function = expressionFromINode(node.getChildren().get(0));
-    Expression argument = expressionFromINode(node.getChildren().get(1));
+    LObject[] tuple = new LObject[size];
 
-    return Application.of(function, argument);
-  }
-
-  private static Wrapper literalFromINode(INode inode) {
-    String type = inode.getTag().toString();
-
-    return parseLiteral(Literal.valueOf(type), inode.getChildren().get(0));
-  }
-
-  private static Wrapper parseLiteral(Literal type, INode content) {
-    String strVal;
-
-    switch (type) {
-    case INT:
-      strVal = content.asString();
-
-      return Wrapper.of(LInteger.of(Integer.parseInt(strVal)));
-
-    case BOOL:
-      strVal = content.getTag().toString();
-
-      if (strVal.equals("TRUE")) {
-        return Wrapper.of(LBoolean.TRUE);
-      } else if (strVal.equals("FALSE")) {
-        return Wrapper.of(LBoolean.FALSE);
-      } else {
-        throw new AssertionError();
-      }
-
-    case SYMBOL:
-      return Wrapper.of(LSymbol.of(content.asString()));
+    for (int i = 0; i < size; i++) {
+      tuple[i] = expressionFromINode(node.getChildren().get(i));
     }
 
-    throw new AssertionError();
+    return Tuple.of(tuple);
+  }
+
+  private LObject literalFromINode(INode inode) {
+    String type = inode.getTag().toString();
+    INode content = inode.getChildren().get(0);
+
+    if (type.equals("SYMBOL")) {
+
+      return LSymbol.of(content.asString());
+    } else if (type.equals("INT")) {
+      String strVal = content.asString();
+
+      return LInteger.of(Integer.parseInt(strVal));
+
+    } else {
+      throw new AssertionError();
+    }
+
+    // return parseLiteral(Literal.valueOf(type), content);
   }
 }

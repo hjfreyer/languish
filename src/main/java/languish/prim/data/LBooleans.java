@@ -1,23 +1,23 @@
 package languish.prim.data;
 
 import languish.lambda.Abstraction;
-import languish.lambda.Expression;
-import languish.lambda.NativeFunction;
+import languish.lambda.DataFunction;
 import languish.lambda.Reference;
+import languish.lambda.Tuple;
 
 public class LBooleans {
   private LBooleans() {
 
   }
 
-  public static final Abstraction BRANCH_THEN =
+  public static final Tuple BRANCH_THEN =
       Abstraction.of(Abstraction.of(Reference.to(2)));
-  public static final Abstraction BRANCH_ELSE =
+  public static final Tuple BRANCH_ELSE =
       Abstraction.of(Abstraction.of(Reference.to(1)));
 
-  public static final NativeFunction BRANCH = new NativeFunction("BRANCH") {
+  public static final DataFunction BRANCH = new DataFunction() {
     @Override
-    public Expression apply(LObject obj) {
+    public LObject apply(LObject obj) {
       return ((LBoolean) obj).booleanValue() ? BRANCH_THEN : BRANCH_ELSE;
     }
   };

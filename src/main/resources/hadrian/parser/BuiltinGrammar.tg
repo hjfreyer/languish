@@ -14,22 +14,21 @@ token delimited ($string): "\"" .. "\"" {
   strip-delimiters: true;
 }
 
+ignore end-of-line: "//";
+ 
 token delimiters;
 
 <statement>
-  MACRO -> "MACRO" $PrimIdent <expression>
-  DISPLAY -> "DISP" <expression>
-  SET_ENV -> "SET_ENV" <expression>
-  SET_PARSER -> "SET_PARSER" <expression>
+  MACRO -> "MACRO" $PrimIdent <lobject>
+  EVAL -> "EVAL" <lobject>
+  SET_ENV -> "SET_ENV" <lobject>
+  SET_PARSER -> "SET_PARSER" <lobject>
 ; 
 
-<expression>
-  ABSTRACTION -> "(ABS " <expression> ")" 
-  APPLICATION -> "(APP " <expression> <expression> ")" 
-  PRIM_GET -> "(~" $PrimIdent "~)" 
+<lobject>
+  PRIM_GET -> $PrimIdent
   LITERAL -> "(!" <literal> "!)"
-  REFERENCE -> "+" $number
-  MACRO_GET -> "(*" $PrimIdent "*)"
+  TUPLE -> "[" <lobject>* "]"
 ;
 
 <literal>

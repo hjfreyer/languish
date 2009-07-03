@@ -1,17 +1,17 @@
 package languish.testing;
 
-import languish.lambda.Expression;
+import languish.lambda.Tuple;
 import languish.prim.data.LObject;
 
 public interface ExpressionToTest {
 
   public String name();
 
-  public Expression getExpression();
+  public Tuple getExpression();
 
   public String getCode();
 
-  public Expression getReducedOnce();
+  public Tuple getReducedOnce();
 
   public LObject getReducedCompletely();
 }

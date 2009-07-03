@@ -2,9 +2,7 @@ package languish.prim.data;
 
 import java.util.Arrays;
 
-import languish.lambda.Literalizable;
-
-public final class LBoolean extends LObject implements Literalizable {
+public final class LBoolean extends LObject {
 
   private final boolean value;
 

@@ -19,4 +19,5 @@ public class ShellTest extends TestCase {
   public static void main(String[] args) {
     new ShellTest().testFoo();
   }
+
 }
