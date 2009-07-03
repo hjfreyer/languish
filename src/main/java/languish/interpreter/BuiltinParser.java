@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import languish.interpreter.Statement.Type;
-import languish.lambda.Data;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
 import languish.lambda.Tuple;
 import languish.prim.data.LInteger;
-import languish.prim.data.LObject;
 import languish.prim.data.LSymbol;
 import languish.prim.data.LUnit;
 
@@ -77,8 +77,8 @@ public class BuiltinParser extends Parser {
 
       macros.put(name, exp);
 
-      type = Type.EVAL;
-      result = Data.of(LUnit.UNIT);
+      type = Type.REDUCE;
+      result = Lambda.data(LUnit.UNIT);
     } else {
       type = Statement.Type.valueOf(tag);
       result = expressionFromINode(node);

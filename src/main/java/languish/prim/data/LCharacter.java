@@ -1,7 +1,8 @@
 package languish.prim.data;
 
+import languish.lambda.ImmutableLObject;
 
-public final class LCharacter extends LObject {
+public final class LCharacter extends ImmutableLObject {
   private final char value;
 
   public LCharacter(char value) {

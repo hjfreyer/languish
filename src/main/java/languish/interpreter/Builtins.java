@@ -1,11 +1,10 @@
 package languish.interpreter;
 
-import languish.lambda.Data;
+import languish.lambda.LObject;
 import languish.lambda.Lambda;
 import languish.prim.data.LBoolean;
 import languish.prim.data.LBooleans;
 import languish.prim.data.LIntegers;
-import languish.prim.data.LObject;
 import languish.prim.data.LParsers;
 
 public enum Builtins {
@@ -19,8 +18,8 @@ public enum Builtins {
   ADD(LIntegers.ADD),
 
   // Boolean ops
-  TRUE(Data.of(LBoolean.TRUE)),
-  FALSE(Data.of(LBoolean.FALSE)),
+  TRUE(Lambda.data(LBoolean.TRUE)),
+  FALSE(Lambda.data(LBoolean.FALSE)),
   BRANCH(LBooleans.BRANCH),
 
   // Expression constructors
@@ -28,6 +27,7 @@ public enum Builtins {
   APP(Lambda.APP),
   DATA(Lambda.DATA),
   GET(Lambda.GET),
+  PRIM(Lambda.PRIM),
   REF(Lambda.REF),
   TUPLE(Lambda.TUPLE),
 

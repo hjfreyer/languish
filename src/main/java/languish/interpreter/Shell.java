@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-import languish.prim.data.LObject;
+import languish.lambda.LObject;
 import languish.prim.data.LUnit;
 
 public class Shell {

@@ -1,8 +1,8 @@
 package languish.prim.data;
 
-import languish.lambda.Abstraction;
 import languish.lambda.DataFunction;
-import languish.lambda.Reference;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
 import languish.lambda.Tuple;
 
 public class LBooleans {
@@ -10,14 +10,12 @@ public class LBooleans {
 
   }
 
-  public static final Tuple BRANCH_THEN =
-      Abstraction.of(Abstraction.of(Reference.to(2)));
-  public static final Tuple BRANCH_ELSE =
-      Abstraction.of(Abstraction.of(Reference.to(1)));
+  public static final Tuple BRANCH_THEN = Lambda.abs(Lambda.abs(Lambda.ref(2)));
+  public static final Tuple BRANCH_ELSE = Lambda.abs(Lambda.abs(Lambda.ref(1)));
 
   public static final DataFunction BRANCH = new DataFunction() {
     @Override
-    public LObject apply(LObject obj) {
+    public Tuple apply(LObject obj) {
       return ((LBoolean) obj).booleanValue() ? BRANCH_THEN : BRANCH_ELSE;
     }
   };

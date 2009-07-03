@@ -1,24 +1,26 @@
 package languish.interpreter;
 
+import static languish.lambda.Lambda.*;
+import static languish.prim.data.LIntegers.ADD;
 import static languish.testing.TestConstants.*;
-import languish.lambda.Application;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
 import languish.lambda.Tuple;
 import languish.prim.data.LBoolean;
 import languish.prim.data.LBooleans;
 import languish.prim.data.LIntegers;
-import languish.prim.data.LObject;
 
 public enum ExpressionsToTst {
 
-  SINGLE_ADD(Application.of(Application.of(LIntegers.ADD, w(FIVE)), w(FOUR)), //
+  SINGLE_ADD(Lambda.app(Lambda.app(LIntegers.ADD, data(FIVE)), data(FOUR)), //
       "(APP (APP (~ADD~) (!5!)) (!4!))",
       false,
       null,
       true,
       NINE),
 
-  DOUBLE_ADD(Application.of(Application.of(LIntegers.ADD, Application.of(
-      Application.of(LIntegers.ADD, w(FIVE)), w(FOUR))), w(THREE)), //
+  DOUBLE_ADD(app(app(prim(ADD), app(app(prim(ADD), data(FIVE)), data(FOUR))),
+      data(THREE)), //
       "(APP (APP (~ADD~) (APP (APP (~ADD~) (!5!)) (!4!))) (!3!))",
       false,
       null,
@@ -26,19 +28,19 @@ public enum ExpressionsToTst {
       TWELVE),
 
   /** BOOLEAN TESTS **/
-  SIMPLE_BRANCH(Application.of(Application.of(Application.of(LBooleans.BRANCH,
-      w(LBoolean.TRUE)), w(FOUR)), w(FIVE)), //
+  SIMPLE_BRANCH(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
+      data(LBoolean.TRUE)), data(FOUR)), data(FIVE)), //
       "(APP (APP (APP (~BRANCH~) (!TRUE!)) (!4!)) (!5!))",
       true,
-      Application.of(Application.of(LBooleans.BRANCH_THEN, w(FOUR)), w(FIVE)),
+      Lambda.app(Lambda.app(LBooleans.BRANCH_THEN, data(FOUR)), data(FIVE)),
       true,
       FOUR),
 
-  SIMPLE_BRANCH_FALSE(Application.of(Application.of(Application.of(
-      LBooleans.BRANCH, w(LBoolean.FALSE)), w(FOUR)), w(FIVE)), //
+  SIMPLE_BRANCH_FALSE(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
+      data(LBoolean.FALSE)), data(FOUR)), data(FIVE)), //
       "(APP (APP (APP (~BRANCH~) (!FALSE!)) (!4!)) (!5!))",
       true,
-      Application.of(Application.of(LBooleans.BRANCH_ELSE, w(FOUR)), w(FIVE)),
+      Lambda.app(Lambda.app(LBooleans.BRANCH_ELSE, data(FOUR)), data(FIVE)),
       true,
       FIVE),
 

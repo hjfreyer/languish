@@ -1,8 +1,8 @@
 package languish.interpreter;
 
 import junit.framework.TestCase;
+import languish.lambda.LObject;
 import languish.prim.data.LInteger;
-import languish.prim.data.LObject;
 import languish.prim.data.LSymbol;
 import languish.testing.TestConstants;
 

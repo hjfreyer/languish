@@ -1,32 +1,40 @@
-package languish.lambda;
+package languish.prim.data;
 
-import static languish.lambda.Lambda.data;
+import static languish.lambda.Lambda.*;
+import static languish.prim.data.LIntegers.ADD;
 import static languish.testing.TestConstants.*;
 
 import java.util.Arrays;
 
 import junit.framework.TestCase;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
+import languish.lambda.Tuple;
 import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;
-import languish.testing.TestConstants;
 
-public class ExpressionTest extends TestCase {
+public class LIntegerTest extends TestCase {
+
+  public static final Tuple DOUBLE_FUNC =
+      abs(app(app(prim(ADD), ref(1)), ref(1)));
+
   public enum Tests implements ExpressionToTest {
-    LITERAL_INT(data(FIVE), //
+    // IDENITY TESTS
+    TEST_DATA(data(FIVE), //
         "[DATA (!5!)]",
         null,
         FIVE),
 
-    IDENTITY(Lambda.app(IDENT, data(FOUR)), //
-        "[APP [[ABS [[REF (!1!)]]] [DATA (!4!)]]]",
+    TEST_SIMPLE_ADD(app(app(prim(ADD), data(FIVE)), data(THREE)),
+        "[APP [[APP [[PRIM ADD] [DATA (!5!)]]] [DATA (!3!)]]]",
         null,
-        FOUR),
+        EIGHT),
 
-    LOOP(TestConstants.LOOP, //
-        "[APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
-            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]",
-        TestConstants.LOOP,
-        null),
+    TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
+        "[APP [[ABS [[APP [[APP [[PRIM ADD] [REF (!1!)]]] "
+            + "[REF (!1!)]]]]] [DATA (!4!)]]]",
+        app(app(prim(ADD), data(FOUR)), data(FOUR)),
+        EIGHT),
 
     ;
 

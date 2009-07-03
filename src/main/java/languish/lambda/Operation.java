@@ -1,8 +1,7 @@
 package languish.lambda;
 
-import languish.prim.data.LObject;
 
-public abstract class Operation extends LObject {
+public abstract class Operation extends ImmutableLObject {
 
   public abstract Tuple reduceOnce(Tuple tuple);
 

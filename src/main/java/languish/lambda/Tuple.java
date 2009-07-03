@@ -2,7 +2,6 @@ package languish.lambda;
 
 import java.util.Arrays;
 
-import languish.prim.data.LObject;
 
 public class Tuple extends LObject {
 
@@ -46,6 +45,17 @@ public class Tuple extends LObject {
 
   public static Tuple of(LObject... contents) {
     return new Tuple(contents);
+  }
+
+  @Override
+  public Tuple deepClone() {
+    LObject[] clones = new LObject[contents.length];
+
+    for (int i = 0; i < clones.length; i++) {
+      clones[i] = contents[i].deepClone();
+    }
+
+    return Tuple.of(clones);
   }
 
   @Override

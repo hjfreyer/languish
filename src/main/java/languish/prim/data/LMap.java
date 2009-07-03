@@ -3,7 +3,10 @@ package languish.prim.data;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LMap extends LObject {
+import languish.lambda.ImmutableLObject;
+import languish.lambda.LObject;
+
+public class LMap extends ImmutableLObject {
 
   private final Map<LSymbol, LObject> map;
 

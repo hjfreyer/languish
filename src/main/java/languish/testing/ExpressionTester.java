@@ -5,9 +5,9 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.interpreter.BuiltinParser;
 import languish.lambda.Canonizer;
+import languish.lambda.LObject;
 import languish.lambda.Lambda;
 import languish.lambda.Tuple;
-import languish.prim.data.LObject;
 
 public class ExpressionTester {
 
@@ -36,7 +36,7 @@ public class ExpressionTester {
 
         // PARSE
         LObject parsed =
-            parser.parseStatementToExpression("EVAL " + code).getSecond();
+            parser.parseStatementToExpression("REDUCE " + code).getSecond();
 
         TestCase.assertEquals("on test " + expToTest.name()
             + " - code does not parse to given expression:", parsed, exp);
@@ -45,7 +45,7 @@ public class ExpressionTester {
       if (reducedOnce != null) {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not reduce once to given value:",
-            reducedOnce, Lambda.reduceTupleOnce(exp));
+            reducedOnce, Lambda.reduceTupleOnce(exp.deepClone()));
       }
 
       // REDUCE COMPLETELY

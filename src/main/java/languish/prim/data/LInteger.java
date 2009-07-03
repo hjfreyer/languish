@@ -1,6 +1,8 @@
 package languish.prim.data;
 
-public final class LInteger extends LObject {
+import languish.lambda.ImmutableLObject;
+
+public final class LInteger extends ImmutableLObject {
   private final int value;
 
   public LInteger(int value) {

@@ -2,7 +2,10 @@ package languish.prim.data;
 
 import java.util.Arrays;
 
-public final class LBoolean extends LObject {
+import languish.lambda.ImmutableLObject;
+import languish.lambda.LObject;
+
+public final class LBoolean extends ImmutableLObject {
 
   private final boolean value;
 

@@ -1,8 +1,8 @@
 package languish.interpreter;
 
+import languish.lambda.LObject;
 import languish.lambda.Lambda;
 import languish.lambda.Tuple;
-import languish.prim.data.LObject;
 
 public class Interpreter {
 
@@ -16,7 +16,7 @@ public class Interpreter {
     LObject expression = statement.getObject();
 
     switch (statement.getType()) {
-    case EVAL:
+    case REDUCE:
       return Lambda.reduce(expression);
     case SET_ENV:
       env = expression;

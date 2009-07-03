@@ -1,7 +1,8 @@
 package languish.prim.data;
 
+import languish.lambda.ImmutableLObject;
 
-public final class LUnit extends LObject {
+public final class LUnit extends ImmutableLObject {
 
   private LUnit() {}
 

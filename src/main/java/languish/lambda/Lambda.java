@@ -2,13 +2,12 @@ package languish.lambda;
 
 import languish.lambda.error.IllegalReductionError;
 import languish.prim.data.LInteger;
-import languish.prim.data.LObject;
 
 public class Lambda {
   private Lambda() {}
 
   public static LObject reduce(LObject exp) {
-    Tuple tuple = (Tuple) exp;
+    Tuple tuple = (Tuple) exp.deepClone();
 
     while (true) {
       if (tuple.getFirst() != DATA) {
@@ -24,7 +23,9 @@ public class Lambda {
     Operation op = (Operation) t.getFirst();
     Tuple arg = (Tuple) t.getSecond();
 
-    return op.reduceOnce(arg);
+    Tuple result = op.reduceOnce(arg);
+
+    return result;
   }
 
   public static final Operation ABS = new IrreducibleOperation("ABS");
@@ -32,17 +33,34 @@ public class Lambda {
   public static final Operation APP = new Operation() {
     @Override
     public Tuple reduceOnce(Tuple app) {
-      Tuple func = (Tuple) app.get(0);
-      Tuple arg = (Tuple) app.get(1);
+      Tuple func = (Tuple) app.getFirst();
+      Tuple arg = (Tuple) app.getSecond();
 
-      if (func.getFirst() != ABS) {
-        app.getContents()[0] = reduceTupleOnce(func);
-        return new Tuple(APP, app);
+      LObject funcType = func.getFirst();
+      LObject argType = arg.getFirst();
+
+      if (funcType != ABS && funcType != PRIM) {
+        app.setFirst(reduceTupleOnce(func));
+        return Tuple.of(APP, app);
       }
 
-      Tuple abs = (Tuple) func.getSecond();
+      if (funcType == PRIM) {
+        if (argType != DATA) {
+          app.setSecond(reduceTupleOnce(arg));
+          return Tuple.of(APP, app);
+        }
 
-      return replaceAllReferencesToParam((Tuple) abs.getFirst(), 1, arg);
+        DataFunction dataFunc = (DataFunction) func.getSecond();
+        return dataFunc.apply(arg.getSecond()).deepClone();
+      }
+
+      if (funcType == ABS) {
+        Tuple abs = (Tuple) func.getSecond();
+
+        return replaceAllReferencesToParam((Tuple) abs.getFirst(), 1, arg);
+      }
+
+      throw new AssertionError();
     }
   };
 
@@ -50,18 +68,20 @@ public class Lambda {
 
   public static final Operation GET = new Operation() {
     @Override
-    public Tuple reduceOnce(Tuple tuple) {
-      if (tuple.getSecond() != TUPLE) {
-        tuple.setSecond(reduceTupleOnce(tuple.getSecond()));
-        return tuple;
+    public Tuple reduceOnce(Tuple get) {
+      LInteger i = (LInteger) get.getFirst();
+      Tuple tuple = (Tuple) get.getSecond();
+
+      if (tuple.getFirst() != TUPLE) {
+        get.setSecond(reduceTupleOnce(tuple));
+        return get;
       }
 
-      LInteger i = (LInteger) tuple.getFirst();
-      Tuple t = (Tuple) tuple.getSecond();
-
-      return (Tuple) t.getContents()[i.intValue()];
+      return (Tuple) tuple.getContents()[i.intValue()];
     }
   };
+
+  public static final Operation PRIM = new IrreducibleOperation("PRIM");
 
   public static final Operation REF = new IrreducibleOperation("REF");
 
@@ -83,7 +103,7 @@ public class Lambda {
   private static Tuple replaceAllReferencesToParam(Tuple exp, int id, Tuple with) {
     Operation op = (Operation) exp.getFirst();
 
-    if (op == DATA) {
+    if (op == DATA || op == PRIM) {
       return exp;
     }
     if (op == REF) {
@@ -101,6 +121,26 @@ public class Lambda {
     }
 
     return exp;
+  }
+
+  public static Tuple abs(Tuple exp) {
+    return Tuple.of(ABS, Tuple.of(exp));
+  }
+
+  public static Tuple app(LObject func, LObject arg) {
+    return Tuple.of(APP, Tuple.of(func, arg));
+  }
+
+  public static Tuple data(LObject obj) {
+    return Tuple.of(DATA, obj);
+  }
+
+  public static Tuple ref(int i) {
+    return Tuple.of(REF, LInteger.of(i));
+  }
+
+  public static Tuple prim(DataFunction func) {
+    return Tuple.of(PRIM, func);
   }
 
 }

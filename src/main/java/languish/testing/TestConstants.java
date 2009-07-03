@@ -1,17 +1,14 @@
 package languish.testing;
 
-import languish.lambda.Abstraction;
-import languish.lambda.Application;
-import languish.lambda.Data;
-import languish.lambda.Reference;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
 import languish.lambda.Tuple;
 import languish.prim.data.LInteger;
-import languish.prim.data.LObject;
 import languish.prim.data.LUnit;
 
 public class TestConstants {
   public static final LUnit UNIT = LUnit.UNIT;
-  public static final Tuple NULL = Data.of(LUnit.UNIT);
+  public static final Tuple NULL = Lambda.data(LUnit.UNIT);
 
   public static final LInteger ZERO = LInteger.of(0);
   public static final LInteger ONE = LInteger.of(1);
@@ -30,14 +27,10 @@ public class TestConstants {
   public static final LInteger FOURTEEN = LInteger.of(14);
   public static final LInteger FIFTEEN = LInteger.of(15);
 
-  public static final Tuple IDENT = Abstraction.of(Reference.to(1));
+  public static final Tuple IDENT = Lambda.abs(Lambda.ref(1));
 
   public static final Tuple OMEGA =
-      Abstraction.of(Application.of(Reference.to(1), Reference.to(1)));
-  public static final Tuple LOOP = Application.of(OMEGA, OMEGA);
-
-  public static Tuple w(LObject obj) {
-    return Data.of(obj);
-  }
+      Lambda.abs(Lambda.app(Lambda.ref(1), Lambda.ref(1)));
+  public static final Tuple LOOP = Lambda.app(OMEGA, OMEGA);
 
 }

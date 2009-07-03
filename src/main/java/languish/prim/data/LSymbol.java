@@ -1,7 +1,8 @@
 package languish.prim.data;
 
+import languish.lambda.ImmutableLObject;
 
-public final class LSymbol extends LObject {
+public final class LSymbol extends ImmutableLObject {
   private final String value;
 
   private LSymbol(String value) {

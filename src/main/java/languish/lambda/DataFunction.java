@@ -1,20 +1,17 @@
 package languish.lambda;
 
-import languish.prim.data.LObject;
 
-public abstract class DataFunction extends Operation {
+public abstract class DataFunction extends ImmutableLObject {
+
+  public abstract Tuple apply(LObject arg);
 
   @Override
-  public Tuple reduceOnce(Tuple tuple) {
-    if (tuple.getFirst() == Lambda.DATA) {
-      tuple.setSecond(apply(tuple.getSecond()));
-
-      return tuple;
-    }
-
-    return Lambda.reduceTupleOnce(tuple);
+  public final boolean equals(Object obj) {
+    return this == obj;
   }
 
-  public abstract LObject apply(LObject arg);
-
+  @Override
+  public final int hashCode() {
+    return System.identityHashCode(this);
+  }
 }

@@ -1,14 +1,14 @@
 package languish.prim.data;
 
+import static languish.lambda.Lambda.*;
+import static languish.prim.data.LBoolean.*;
+import static languish.prim.data.LBooleans.*;
 import static languish.testing.TestConstants.*;
 
 import java.util.Arrays;
 
 import junit.framework.TestCase;
-import languish.lambda.Abstraction;
-import languish.lambda.Application;
-import languish.lambda.Data;
-import languish.lambda.Reference;
+import languish.lambda.LObject;
 import languish.lambda.Tuple;
 import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;
@@ -16,96 +16,87 @@ import languish.testing.ExpressionToTest;
 public class LBooleanTest extends TestCase {
   public enum Tests implements ExpressionToTest {
     // IDENITY TESTS
-    TRUE(w(LBoolean.TRUE), //
-        "(~TRUE~)",
+    GET_TRUE(data(TRUE), //
+        "TRUE",
         null,
         null),
 
-    FALSE(w(LBoolean.FALSE), //
-        "(~FALSE~)",
+    GET_FALSE(data(FALSE), //
+        "FALSE",
         null,
         null),
 
     // BASIC TESTS
-    LITERAL_TRUE(Application.of(LBooleans.BRANCH, w(LBoolean.TRUE)), //
-        "(APP (~BRANCH~) (~TRUE~))",
-        LBooleans.BRANCH_THEN,
+    LITERAL_TRUE(app(prim(BRANCH), data(TRUE)), //
+        "[APP [[PRIM BRANCH] TRUE]]",
+        BRANCH_THEN,
         null),
 
-    LITERAL_FALSE(Application.of(LBooleans.BRANCH, w(LBoolean.FALSE)), //
-        "(APP (~BRANCH~) (~FALSE~))",
-        LBooleans.BRANCH_ELSE,
+    LITERAL_FALSE(app(prim(BRANCH), data(FALSE)), //
+        "[APP [[PRIM BRANCH] FALSE]]",
+        BRANCH_ELSE,
         null),
 
-    APPLICATION_ON_SELECTOR(Application.of(LBooleans.BRANCH, Application.of(
-        IDENT, w(LBoolean.TRUE))),
-        "(APP (~BRANCH~) (APP (ABS +1) (~TRUE~)))",
+    APPLICATION_ON_SELECTOR(app(prim(BRANCH), app(IDENT, data(TRUE))),
+        "[APP [[PRIM BRANCH] [APP [[ABS [[REF (!1!)]]] TRUE]]]]",
         LITERAL_TRUE.expression,
         null),
 
-    LOOP_ON_SELECTOR(Application.of(LBooleans.BRANCH, LOOP),
-        "(APP (~BRANCH~) (APP (ABS (APP +1 +1)) (ABS (APP +1 +1))))",
-        Application.of(LBooleans.BRANCH, LOOP),
+    LOOP_ON_SELECTOR(app(prim(BRANCH), LOOP),
+        "[APP [[PRIM BRANCH] [APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
+            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]]]",
+        app(prim(BRANCH), LOOP),
         null),
 
     // BRANCH TESTS
-    BASIC_BRANCH_THEN(Application.of(Application.of(LBooleans.BRANCH_THEN,
-        w(FIVE)), w(FOUR)), //
-        "(APP (APP (ABS (ABS +2)) (!5!)) (!4!))",
-        Application.of(Abstraction.of(Data.of(LInteger.of(5))), Data
-            .of(LInteger.of(4))),
+    BASIC_BRANCH_THEN(app(app(BRANCH_THEN, data(FIVE)), data(FOUR)), //
+        "[APP [[APP [[ABS [[ABS [[REF (!2!)]]]]] [DATA (!5!)]]] [DATA (!4!)]]]",
+        app(abs(data(LInteger.of(5))), data(LInteger.of(4))),
         FIVE),
 
-    BASIC_BRANCH_ELSE(Application.of(Application.of(LBooleans.BRANCH_ELSE,
-        w(FIVE)), w(FOUR)), //
-        "(APP (APP (ABS (ABS +1)) (!5!)) (!4!))",
-        Application
-            .of(Abstraction.of(Reference.to(1)), Data.of(LInteger.of(4))),
+    BASIC_BRANCH_ELSE(app(app(BRANCH_ELSE, data(FIVE)), data(FOUR)), //
+        "[APP [[APP [[ABS [[ABS [[REF (!1!)]]]]] [DATA (!5!)]]] [DATA (!4!)]]]",
+        app(abs(ref(1)), data(LInteger.of(4))),
         FOUR),
 
-    LOOP_ON_BRANCH(Application.of(Application.of(LBooleans.BRANCH_THEN, LOOP),
-        w(FIVE)), //
-        "(APP (APP (ABS (ABS +2)) (APP (ABS (APP +1 +1)) "
-            + "(ABS (APP +1 +1)))) (!5!))",
-        Application.of(Abstraction.of(LOOP), Data.of(LInteger.of(5))),
+    LOOP_ON_BRANCH(app(app(BRANCH_THEN, LOOP), data(FIVE)), //
+        "[APP [[APP [[ABS [[ABS [[REF (!2!)]]]]] [APP [[ABS [[APP [[REF (!1!)] "
+            + "[REF (!1!)]]]]] [ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]]] "
+            + "[DATA (!5!)]]]",
+        app(abs(LOOP), data(LInteger.of(5))),
         null),
 
     LOOP_ON_BRANCH_2(LOOP_ON_BRANCH.reducedOnce, //
-        "(APP (ABS (APP (ABS (APP +1 +1)) (ABS (APP +1 +1)))) (!5!))",
+        "[APP [[ABS [[APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
+            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]]] [DATA (!5!)]]]",
         LOOP,
         null),
 
-    LOOP_OFF_BRANCH(Application.of(Application.of(LBooleans.BRANCH_ELSE, LOOP),
-        w(FIVE)), //
-        "(APP (APP (ABS (ABS +1)) (APP (ABS (APP +1 +1)) "
-            + "(ABS (APP +1 +1)))) (!5!))",
-        Application
-            .of(Abstraction.of(Reference.to(1)), Data.of(LInteger.of(5))),
+    LOOP_OFF_BRANCH(app(app(BRANCH_ELSE, LOOP), data(FIVE)), //
+        "[APP [[APP [[ABS [[ABS [[REF (!1!)]]]]] "
+            + "[APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
+            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]]] [DATA (!5!)]]]",
+        app(abs(ref(1)), data(LInteger.of(5))),
         FIVE),
 
     // OVERALL
-    WHOLE_SHEBANG(Application.of(Application.of(Application.of(
-        LBooleans.BRANCH, w(LBoolean.TRUE)), Application.of(IDENT, w(FOUR))),
-        w(FIVE)), //
-        "(APP (APP (APP (~BRANCH~) (~TRUE~)) (APP (ABS +1) (!4!))) (!5!))",
-        Application.of(Application.of(Abstraction.of(Abstraction.of(Reference
-            .to(2))), Application.of(Abstraction.of(Reference.to(1)), Data
-            .of(LInteger.of(4)))), Data.of(LInteger.of(5))),
+    WHOLE_SHEBANG(app(
+        app(app(prim(BRANCH), data(TRUE)), app(IDENT, data(FOUR))), data(FIVE)),
+        //
+        "[APP [[APP [[APP [[PRIM BRANCH] TRUE]] [APP [[ABS [[REF (!1!)]]] "
+            + "[DATA (!4!)]]]]] [DATA (!5!)]]]",
+        app(app(abs(abs(ref(2))), app(abs(ref(1)), data(LInteger.of(4)))),
+            data(LInteger.of(5))),
         FOUR),
 
-    NESTED(Application.of(
-        Application.of(Application.of(LBooleans.BRANCH, //
-            Application.of(Application.of(Application.of(LBooleans.BRANCH,
-                w(LBoolean.TRUE)), w(LBoolean.FALSE)), w(LBoolean.TRUE))),
-            w(FOUR)), w(FIVE)), //
-        "(APP (APP (APP (~BRANCH~) "
-            + "(APP (APP (APP (~BRANCH~) (~TRUE~)) (~FALSE~)) (~TRUE~))) "
-            + "(!4!)) (!5!))",
-        Application.of(Application.of(Application.of(LBooleans.BRANCH,
-            Application.of(Application.of(Abstraction.of(Abstraction
-                .of(Reference.to(2))), Data.of(LBoolean.FALSE)), Data
-                .of(LBoolean.TRUE))), Data.of(LInteger.of(4))), Data
-            .of(LInteger.of(5))),
+    NESTED(app(app(app(prim(BRANCH), //
+        app(app(app(prim(BRANCH), data(TRUE)), data(FALSE)), data(TRUE))),
+        data(FOUR)), data(FIVE)), //
+        "[APP [[APP [[APP [[PRIM BRANCH] "
+            + "[APP [[APP [[APP [[PRIM BRANCH] TRUE]] FALSE]] TRUE]]]] "
+            + "[DATA (!4!)]]] [DATA (!5!)]]]",
+        app(app(app(prim(BRANCH), app(app(abs(abs(ref(2))), data(FALSE)),
+            data(TRUE))), data(FOUR)), data(FIVE)),
         FIVE),
 
     ;

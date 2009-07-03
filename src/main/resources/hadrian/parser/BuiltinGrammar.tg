@@ -20,7 +20,7 @@ token delimiters;
 
 <statement>
   MACRO -> "MACRO" $PrimIdent <lobject>
-  EVAL -> "EVAL" <lobject>
+  REDUCE -> "REDUCE" <lobject>
   SET_ENV -> "SET_ENV" <lobject>
   SET_PARSER -> "SET_PARSER" <lobject>
 ; 

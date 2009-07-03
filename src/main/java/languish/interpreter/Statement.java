@@ -1,11 +1,11 @@
 package languish.interpreter;
 
-import languish.prim.data.LObject;
+import languish.lambda.LObject;
 
 public class Statement {
 
   public static enum Type {
-    EVAL,
+    REDUCE,
     SET_PARSER,
     SET_ENV,
   }

@@ -5,45 +5,45 @@ import junit.framework.TestCase;
 
 public class AbstractionTest extends TestCase {
 
-  private static final Tuple IDENTITY = Abstraction.of(Reference.to(1));
+  private static final Tuple IDENTITY = Lambda.abs(Lambda.ref(1));
 
   private static final Tuple FIRST_PICKER =
-      Abstraction.of(Abstraction.of(Reference.to(2)));
+      Lambda.abs(Lambda.abs(Lambda.ref(2)));
   private static final Tuple SECOND_PICKER =
-      Abstraction.of(Abstraction.of(Reference.to(1)));
+      Lambda.abs(Lambda.abs(Lambda.ref(1)));
 
   private static final Tuple OMEGA =
-      Abstraction.of(Application.of(Reference.to(1), Reference.to(1)));
-  private static final Tuple LOOP = Application.of(OMEGA, OMEGA);
+      Lambda.abs(Lambda.app(Lambda.ref(1), Lambda.ref(1)));
+  private static final Tuple LOOP = Lambda.app(OMEGA, OMEGA);
 
   public void testBlob() {
-    assertEquals(THREE, Lambda.reduce(w(THREE)));
+    assertEquals(THREE, Lambda.reduce(Lambda.data(THREE)));
   }
 
   public void testBasicApply() {
-    Tuple applyFour = Application.of(IDENTITY, w(FOUR));
+    Tuple applyFour = Lambda.app(IDENTITY, Lambda.data(FOUR));
 
-    assertEquals(w(FOUR), Lambda.reduceTupleOnce(applyFour));
+    assertEquals(Lambda.data(FOUR), Lambda.reduceTupleOnce(applyFour));
     assertEquals(FOUR, Lambda.reduce(applyFour));
   }
 
   public void testArgumentChooser() {
-    assertEquals(FOUR, Lambda.reduce(Application.of(Application.of(
-        FIRST_PICKER, w(FOUR)), w(FIVE))));
+    assertEquals(FOUR, Lambda.reduce(Lambda.app(Lambda.app(
+        FIRST_PICKER, Lambda.data(FOUR)), Lambda.data(FIVE))));
 
-    assertEquals(FIVE, Lambda.reduce(Application.of(Application.of(
-        SECOND_PICKER, w(FOUR)), w(FIVE))));
+    assertEquals(FIVE, Lambda.reduce(Lambda.app(Lambda.app(
+        SECOND_PICKER, Lambda.data(FOUR)), Lambda.data(FIVE))));
   }
 
   public void testIrrelevantNonHalter() {
-    assertEquals(FOUR, Lambda.reduce(Application.of(Application.of(
-        FIRST_PICKER, w(FOUR)), LOOP)));
+    assertEquals(FOUR, Lambda.reduce(Lambda.app(Lambda.app(
+        FIRST_PICKER, Lambda.data(FOUR)), LOOP)));
   }
 
   public void testRelevantNonHalterFunction() {
     Tuple exp =
-        Lambda.reduceTupleOnce(Application.of(Application.of(SECOND_PICKER,
-            w(FOUR)), LOOP));
+        Lambda.reduceTupleOnce(Lambda.app(Lambda.app(SECOND_PICKER,
+            Lambda.data(FOUR)), LOOP));
 
     assertEquals(LOOP, Lambda.reduceTupleOnce(exp));
   }

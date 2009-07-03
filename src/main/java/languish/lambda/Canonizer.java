@@ -2,7 +2,6 @@ package languish.lambda;
 
 import languish.interpreter.Builtins;
 import languish.prim.data.LInteger;
-import languish.prim.data.LObject;
 import languish.prim.data.LSymbol;
 
 public class Canonizer {
@@ -39,7 +38,7 @@ public class Canonizer {
       return "(!\"" + ((LSymbol) exp).stringValue() + "\"!)";
     }
 
-    throw new AssertionError();
+    return "<UNKNOWN>";
   }
   //
   // public static Expression getGeneratingExpressionFor(LObject obj) {

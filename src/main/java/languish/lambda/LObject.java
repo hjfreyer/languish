@@ -1,6 +1,5 @@
-package languish.prim.data;
+package languish.lambda;
 
-import languish.lambda.Canonizer;
 
 public abstract class LObject {
 
@@ -10,8 +9,11 @@ public abstract class LObject {
   @Override
   public abstract int hashCode();
 
+  public abstract LObject deepClone();
+
   @Override
   public String toString() {
     return Canonizer.getCodeForExpression(this);
   }
+
 }
