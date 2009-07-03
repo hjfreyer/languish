@@ -6,7 +6,7 @@ import languish.lambda.Tuple;
 
 public class Interpreter {
 
-  private LObject env = Tuple.of();
+  private LObject env = Lambda.data(Tuple.of());
   private Parser parser = new BuiltinParser();
 
   public Interpreter() {}

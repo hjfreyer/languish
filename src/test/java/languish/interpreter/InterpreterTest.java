@@ -11,7 +11,7 @@ public class InterpreterTest extends TestCase {
   private final Interpreter i = new Interpreter();
 
   public void testBasicDisplay() {
-    LObject res = i.processStatement("DISP (!5!)");
+    LObject res = i.processStatement("REDUCE [DATA (!5!)]");
 
     assertEquals(TestConstants.FIVE, res);
   }
@@ -19,11 +19,10 @@ public class InterpreterTest extends TestCase {
   public void testTrivialParserChange() {
     LObject res;
 
-    String statementToReturn =
-        "(APP (APP (APP (~WRAP~) (!2!)) (!0!)) (APP (~MK_WRAPPER~) (!42!)))";
+    String statementToReturn = "[TUPLE [[DATA (!0!)] [DATA (!42!)]]]";
 
-    res =
-        i.processStatement("SET_PARSER (ABS (ABS " + statementToReturn + "))");
+    res = i.processStatement("SET_PARSER [ABS [[ABS [" //
+        + statementToReturn + "]]]]");
 
     res = i.processStatement("THIS IS GARBAGE!!@E#!q34!");
 
@@ -31,12 +30,10 @@ public class InterpreterTest extends TestCase {
   }
 
   public void testEchoParser() {
-    String echoCode =
-        "(ABS (ABS (APP (APP (APP (~WRAP~) (!2!)) (!0!)) "
-            + "(APP (~MK_WRAPPER~) +2))))";
+    String echoCode = "[ABS [[ABS [[TUPLE [[DATA (!0!)] [REF (!2!)]]]]]]]";
 
     String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
-    String test2 = "rock me amadeus!~";
+    String test2 = "rock me am[ad]]eus!~";
 
     LObject res;
 
@@ -54,30 +51,32 @@ public class InterpreterTest extends TestCase {
   public void testMacros() {
     Object res;
 
-    res = i.processStatement("MACRO THREE (!3!)");
+    res = i.processStatement("MACRO THREE [DATA (!3!)]");
 
-    res = i.processStatement("DISP (*THREE*)");
+    res = i.processStatement("REDUCE (*THREE*)");
     assertEquals(res, TestConstants.THREE);
 
-    res = i.processStatement("DISP (APP (APP (~ADD~) (!2!)) (*THREE*))");
+    res =
+        i.processStatement("REDUCE [APP [[APP [[PRIM ADD] "
+            + "[DATA (!2!)]]] (*THREE*)]]");
     assertEquals(res, TestConstants.FIVE);
   }
 
   public void testMacrosReplace() {
     Object res;
 
-    res = i.processStatement("MACRO THREE (!2!)");
+    res = i.processStatement("MACRO THREE [DATA (!2!)]");
 
-    res = i.processStatement("DISP (*THREE*)");
+    res = i.processStatement("REDUCE (*THREE*)");
     assertEquals(res, TestConstants.TWO);
 
-    res = i.processStatement("MACRO THREE (!3!)");
-    res = i.processStatement("DISP (*THREE*)");
+    res = i.processStatement("MACRO THREE [DATA (!3!)]");
+    res = i.processStatement("REDUCE (*THREE*)");
     assertEquals(res, TestConstants.THREE);
 
-    res = i.processStatement("MACRO THREE (APP (~ADD~) (*THREE*))");
+    res = i.processStatement("MACRO THREE [APP [[PRIM ADD] (*THREE*)]]");
 
-    res = i.processStatement("DISP (APP (*THREE*) (!2!))");
+    res = i.processStatement("REDUCE [APP [(*THREE*) [DATA (!2!)]]]");
     assertEquals(res, TestConstants.FIVE);
   }
 }

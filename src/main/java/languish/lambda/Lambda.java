@@ -74,10 +74,12 @@ public class Lambda {
 
       if (tuple.getFirst() != TUPLE) {
         get.setSecond(reduceTupleOnce(tuple));
-        return get;
+        return Tuple.of(GET, get);
       }
 
-      return (Tuple) tuple.getContents()[i.intValue()];
+      Tuple contents = (Tuple) tuple.getSecond();
+
+      return (Tuple) contents.get(i.intValue());
     }
   };
 

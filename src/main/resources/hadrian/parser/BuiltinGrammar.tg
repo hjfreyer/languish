@@ -27,6 +27,7 @@ token delimiters;
 
 <lobject>
   PRIM_GET -> $PrimIdent
+  MACRO_GET -> "(*" $PrimIdent "*)"
   LITERAL -> "(!" <literal> "!)"
   TUPLE -> "[" <lobject>* "]"
 ;
