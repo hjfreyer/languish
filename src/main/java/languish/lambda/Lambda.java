@@ -37,30 +37,14 @@ public class Lambda {
       Tuple arg = (Tuple) app.getSecond();
 
       LObject funcType = func.getFirst();
-      LObject argType = arg.getFirst();
 
-      if (funcType != ABS && funcType != PRIM) {
+      if (funcType != ABS) {
         app.setFirst(reduceTupleOnce(func));
         return Tuple.of(APP, app);
       }
 
-      if (funcType == PRIM) {
-        if (argType != DATA) {
-          app.setSecond(reduceTupleOnce(arg));
-          return Tuple.of(APP, app);
-        }
-
-        DataFunction dataFunc = (DataFunction) func.getSecond();
-        return dataFunc.apply(arg.getSecond()).deepClone();
-      }
-
-      if (funcType == ABS) {
-        Tuple abs = (Tuple) func.getSecond();
-
-        return replaceAllReferencesToParam((Tuple) abs.getFirst(), 1, arg);
-      }
-
-      throw new AssertionError();
+      Tuple abs = (Tuple) func.getSecond();
+      return replaceAllReferencesToParam((Tuple) abs.getFirst(), 1, arg);
     }
   };
 
@@ -72,18 +56,30 @@ public class Lambda {
       LInteger i = (LInteger) get.getFirst();
       Tuple tuple = (Tuple) get.getSecond();
 
-      if (tuple.getFirst() != TUPLE) {
+      if (tuple.getFirst() != TUPLE && tuple.getFirst() != DATA) {
         get.setSecond(reduceTupleOnce(tuple));
         return Tuple.of(GET, get);
       }
 
       Tuple contents = (Tuple) tuple.getSecond();
-
       return (Tuple) contents.get(i.intValue());
     }
   };
 
-  public static final Operation PRIM = new IrreducibleOperation("PRIM");
+  public static final Operation PRIM = new Operation() {
+    @Override
+    public Tuple reduceOnce(Tuple prim) {
+      DataFunction func = (DataFunction) prim.getFirst();
+      Tuple arg = (Tuple) prim.getSecond();
+
+      if (arg.getFirst() != DATA) {
+        prim.setSecond(reduceTupleOnce(arg));
+        return Tuple.of(PRIM, prim);
+      }
+
+      return func.apply(arg.getSecond()).deepClone();
+    }
+  };
 
   public static final Operation REF = new IrreducibleOperation("REF");
 
@@ -105,13 +101,11 @@ public class Lambda {
   private static Tuple replaceAllReferencesToParam(Tuple exp, int id, Tuple with) {
     Operation op = (Operation) exp.getFirst();
 
-    if (op == DATA || op == PRIM) {
+    if (op == DATA) {
       return exp;
-    }
-    if (op == REF) {
+    } else if (op == REF) {
       return id == ((LInteger) exp.getSecond()).intValue() ? with : exp;
-    }
-    if (op == ABS) {
+    } else if (op == ABS) {
       id++;
     }
 

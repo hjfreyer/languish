@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import languish.testing.TestConstants;
 
 public class ShellTest extends TestCase {
-  public void testFoo() {
+  public void testTestLish() {
     InputStream stream =
         getClass().getClassLoader().getResourceAsStream("languish/test.lish");
 
@@ -16,8 +16,14 @@ public class ShellTest extends TestCase {
     assertEquals(TestConstants.FOUR, s.getLast());
   }
 
-  public static void main(String[] args) {
-    new ShellTest().testFoo();
+  public void testBasicGrammarLish() {
+    InputStream stream =
+        getClass().getClassLoader().getResourceAsStream(
+            "languish/base_grammar.lish");
+
+    Shell s = new Shell(new InputStreamReader(stream));
+
+    assertEquals(TestConstants.FOUR, s.getLast());
   }
 
 }

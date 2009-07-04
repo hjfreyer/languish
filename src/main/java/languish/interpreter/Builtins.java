@@ -4,6 +4,7 @@ import languish.lambda.LObject;
 import languish.lambda.Lambda;
 import languish.prim.data.LBoolean;
 import languish.prim.data.LBooleans;
+import languish.prim.data.LGrammars;
 import languish.prim.data.LIntegers;
 import languish.prim.data.LParsers;
 
@@ -25,7 +26,7 @@ public enum Builtins {
   // Expression constructors
   ABS(Lambda.ABS),
   APP(Lambda.APP),
-  DATA(Lambda.DATA),
+  LITERAL(Lambda.DATA),
   GET(Lambda.GET),
   PRIM(Lambda.PRIM),
   REF(Lambda.REF),
@@ -39,14 +40,14 @@ public enum Builtins {
 //  EMPTY_MAP(Data.of(LMaps.EMPTY_MAP)),
 //  PUT_MAP(LMaps.PUT_MAP),
 //
-//  // Hadrian
-//  EMPTY_GRAMMAR(Data.of(LGrammars.EMPTY_GRAMMAR)),
-//  INTERPRET_STATEMENT(LGrammars.INTERPRET_STATEMENT),
-//  ADD_RULE(LGrammars.ADD_RULE),
+  // Hadrian
+  EMPTY_GRAMMAR(Lambda.data(LGrammars.EMPTY_GRAMMAR)),
+  INTERPRET_STATEMENT(LGrammars.INTERPRET_STATEMENT),
+  ADD_RULE(LGrammars.ADD_RULE),
 //  // SET_NONTERMS(Wrapper.of(LMaps.EMPTY_MAP)),
 //  TERM(LGrammars.TERM),
 //  VALUE(LGrammars.VALUE),
-//  NON_TERM(LGrammars.NON_TERM),
+  NON_TERM(LGrammars.NON_TERM),
 //  
   // Primitive Parsing
   PARSE_INT(LParsers.PARSE_INT);
