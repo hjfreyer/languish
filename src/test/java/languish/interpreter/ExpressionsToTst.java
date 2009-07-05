@@ -1,7 +1,7 @@
 package languish.interpreter;
 
-import languish.lambda.LObject;
-import languish.lambda.Tuple;
+import languish.base.LObject;
+import languish.base.Tuple;
 
 public enum ExpressionsToTst {
 //

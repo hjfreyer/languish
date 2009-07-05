@@ -1,4 +1,4 @@
-package languish.interpreter;
+package languish.parsing;
 
 public class InternalParsingError extends RuntimeException {
 

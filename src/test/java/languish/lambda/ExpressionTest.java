@@ -1,11 +1,14 @@
 package languish.lambda;
 
-import static languish.lambda.Lambda.data;
+import static languish.base.Lambda.data;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 
 import junit.framework.TestCase;
+import languish.base.LObject;
+import languish.base.Lambda;
+import languish.base.Tuple;
 import languish.testing.CommonExps;
 import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;

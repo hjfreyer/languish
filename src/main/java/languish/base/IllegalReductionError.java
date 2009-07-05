@@ -1,6 +1,11 @@
-package languish.lambda.error;
+package languish.base;
 
 public class IllegalReductionError extends RuntimeException {
+
+  /**
+   * 
+   */
+  private static final long serialVersionUID = -2100855621789049690L;
 
   public IllegalReductionError() {
     super();

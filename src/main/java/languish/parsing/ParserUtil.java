@@ -1,11 +1,12 @@
-package languish.interpreter;
+package languish.parsing;
 
 import java.util.List;
+
 
 import org.quenta.tedir.antonius.doc.ITextDocument;
 import org.quenta.tedir.antonius.message.IMessage;
 
-public class IOUtil {
+public class ParserUtil {
 
   public static void failWithInternalMessages(List<IMessage> messages,
       ITextDocument doc) {

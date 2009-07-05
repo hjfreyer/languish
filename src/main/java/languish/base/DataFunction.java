@@ -1,9 +1,13 @@
-package languish.lambda;
+package languish.base;
 
-
-public abstract class DataFunction extends ImmutableLObject {
+public abstract class DataFunction extends LObject {
 
   public abstract Tuple apply(LObject arg);
+
+  @Override
+  public final LObject deepClone() {
+    return this;
+  }
 
   @Override
   public final boolean equals(Object obj) {

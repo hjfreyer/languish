@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import junit.framework.TestCase;
-import languish.lambda.Tuple;
+import languish.base.Tuple;
 
 public class ShellTest extends TestCase {
   public void testTestLish() {

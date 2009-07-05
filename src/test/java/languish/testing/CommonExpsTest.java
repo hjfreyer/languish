@@ -5,8 +5,8 @@ import static languish.testing.CommonExps.*;
 import java.util.Arrays;
 
 import junit.framework.TestCase;
-import languish.lambda.LObject;
-import languish.lambda.Tuple;
+import languish.base.LObject;
+import languish.base.Tuple;
 
 public class CommonExpsTest extends TestCase {
   public enum Tests implements ExpressionToTest {

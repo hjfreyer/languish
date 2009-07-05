@@ -1,9 +1,13 @@
-package languish.lambda;
+package languish.base;
 
-
-public abstract class Operation extends ImmutableLObject {
+public abstract class Operation extends LObject {
 
   public abstract Tuple reduceOnce(Tuple tuple);
+
+  @Override
+  public final LObject deepClone() {
+    return this;
+  }
 
   @Override
   public final boolean equals(Object obj) {

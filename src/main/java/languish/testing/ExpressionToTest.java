@@ -1,7 +1,7 @@
 package languish.testing;
 
-import languish.lambda.LObject;
-import languish.lambda.Tuple;
+import languish.base.LObject;
+import languish.base.Tuple;
 
 public interface ExpressionToTest {
 

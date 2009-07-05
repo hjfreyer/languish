@@ -2,6 +2,8 @@ package languish.lambda;
 
 import static languish.testing.TestUtil.*;
 import junit.framework.TestCase;
+import languish.base.Lambda;
+import languish.base.Tuple;
 import languish.testing.TestUtil;
 
 public class AbstractionTest extends TestCase {

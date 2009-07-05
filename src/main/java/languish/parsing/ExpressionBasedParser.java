@@ -1,9 +1,11 @@
-package languish.interpreter;
+package languish.parsing;
 
-import static languish.lambda.Lambda.*;
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
-import languish.lambda.Tuple;
+import static languish.base.Lambda.*;
+import languish.base.LObject;
+import languish.base.Lambda;
+import languish.base.Tuple;
+import languish.interpreter.Statement;
+import languish.interpreter.Statement.Type;
 import languish.prim.data.LInteger;
 import languish.prim.data.LSymbol;
 

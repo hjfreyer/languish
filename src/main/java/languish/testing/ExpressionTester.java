@@ -3,11 +3,10 @@ package languish.testing;
 import java.util.List;
 
 import junit.framework.TestCase;
-import languish.interpreter.BuiltinParser;
-import languish.lambda.Canonizer;
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
-import languish.lambda.Tuple;
+import languish.base.LObject;
+import languish.base.Lambda;
+import languish.base.Tuple;
+import languish.parsing.BuiltinParser;
 
 public class ExpressionTester {
 

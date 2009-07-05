@@ -1,9 +1,9 @@
 package languish.testing;
 
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
-import languish.lambda.Operation;
-import languish.lambda.Tuple;
+import languish.base.LObject;
+import languish.base.Lambda;
+import languish.base.Operation;
+import languish.base.Tuple;
 import languish.prim.data.LInteger;
 
 public class TestUtil {

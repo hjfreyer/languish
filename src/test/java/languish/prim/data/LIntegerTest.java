@@ -1,15 +1,15 @@
 package languish.prim.data;
 
-import static languish.lambda.Lambda.*;
-import static languish.prim.data.LIntegers.ADD;
+import static languish.base.Lambda.*;
+import static languish.prim.data.DataFunctions.ADD;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 
 import junit.framework.TestCase;
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
-import languish.lambda.Tuple;
+import languish.base.LObject;
+import languish.base.Lambda;
+import languish.base.Tuple;
 import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;
 

@@ -5,8 +5,8 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-import languish.lambda.LObject;
-import languish.lambda.Tuple;
+import languish.base.LObject;
+import languish.base.Tuple;
 
 public class Shell {
 

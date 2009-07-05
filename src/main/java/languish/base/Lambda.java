@@ -1,6 +1,5 @@
-package languish.lambda;
+package languish.base;
 
-import languish.lambda.error.IllegalReductionError;
 import languish.prim.data.LInteger;
 import languish.testing.TestUtil;
 

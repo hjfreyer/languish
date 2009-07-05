@@ -1,9 +1,9 @@
 package languish.testing;
 
-import static languish.lambda.Lambda.*;
-import languish.lambda.LObject;
-import languish.lambda.Tuple;
-import languish.prim.data.LBooleans;
+import static languish.base.Lambda.*;
+import languish.base.LObject;
+import languish.base.Tuple;
+import languish.prim.data.DataFunctions;
 
 public class CommonExps {
 
@@ -33,8 +33,8 @@ public class CommonExps {
           abs( // ============= SELF
           abs( // ============= LIST
           abs( // ============= ITEM
-          app(app(prim(LBooleans.BRANCH, prim(LObject.EQUALS, pair(EMPTY_LIST,
-              ref(2)))), // ============= If (LIST == [])
+          app(app(prim(DataFunctions.BRANCH, prim(LObject.EQUALS, pair(
+              EMPTY_LIST, ref(2)))), // ============= If (LIST == [])
               pair(ref(1), EMPTY_LIST)), // Then: return [ITEM []]
               pair(app(CAR, ref(2)), // === Else, return (CAR LIST) ::
                   // ======================== ADDL(ADDL, (CDR LIST), ITEM)

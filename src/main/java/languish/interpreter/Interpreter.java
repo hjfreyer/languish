@@ -1,8 +1,11 @@
 package languish.interpreter;
 
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
-import languish.lambda.Tuple;
+import languish.base.LObject;
+import languish.base.Lambda;
+import languish.base.Tuple;
+import languish.parsing.BuiltinParser;
+import languish.parsing.ExpressionBasedParser;
+import languish.parsing.Parser;
 
 public class Interpreter {
 

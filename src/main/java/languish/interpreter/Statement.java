@@ -1,6 +1,6 @@
 package languish.interpreter;
 
-import languish.lambda.LObject;
+import languish.base.LObject;
 
 public class Statement {
 

@@ -1,12 +1,9 @@
 package languish.interpreter;
 
-import static languish.lambda.Lambda.data;
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
+import languish.base.LObject;
+import languish.base.Lambda;
+import languish.prim.data.DataFunctions;
 import languish.prim.data.LBoolean;
-import languish.prim.data.LBooleans;
-import languish.prim.data.LIntegers;
-import languish.prim.data.LParsers;
 
 public enum Builtins {
   // General Ops
@@ -16,12 +13,12 @@ public enum Builtins {
 //  UNWRAP(LExpressionWrappers.UNWRAP),
 
   // Arithmetic
-  ADD(LIntegers.ADD),
+  ADD(DataFunctions.ADD),
 
   // Boolean ops
   TRUE(Lambda.data(LBoolean.TRUE)),
-  FALSE(data(LBoolean.FALSE)),
-  BRANCH(LBooleans.BRANCH),
+  FALSE(Lambda.data(LBoolean.FALSE)),
+  BRANCH(DataFunctions.BRANCH),
 
   // Expression Operations
   ABS(Lambda.ABS),
@@ -50,7 +47,7 @@ public enum Builtins {
 //  NON_TERM(LGrammars.NON_TERM),
 //  
   // Primitive Parsing
-  PARSE_INT(LParsers.PARSE_INT);
+  PARSE_INT(DataFunctions.PARSE_INT);
   ;
 
   private final LObject expression;

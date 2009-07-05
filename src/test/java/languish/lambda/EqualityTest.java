@@ -1,9 +1,11 @@
 package languish.lambda;
 
-import static languish.lambda.LObject.EQUALS;
-import static languish.lambda.Lambda.*;
+import static languish.base.LObject.EQUALS;
+import static languish.base.Lambda.*;
 import static languish.testing.TestUtil.TWO;
 import junit.framework.TestCase;
+import languish.base.Lambda;
+import languish.base.Tuple;
 import languish.prim.data.LBoolean;
 import languish.prim.data.LInteger;
 

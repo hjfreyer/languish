@@ -1,12 +1,14 @@
-package languish.interpreter;
+package languish.parsing;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import languish.base.LObject;
+import languish.base.Lambda;
+import languish.base.Tuple;
+import languish.interpreter.Builtins;
+import languish.interpreter.Statement;
 import languish.interpreter.Statement.Type;
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
-import languish.lambda.Tuple;
 import languish.prim.data.LInteger;
 import languish.prim.data.LSymbol;
 
@@ -42,7 +44,7 @@ public class BuiltinParser extends Parser {
 
       final MessageMonitor monitor = new MessageMonitor();
       this.parser = HadrianReader.getDefault().readParser(grammarDoc, monitor);
-      IOUtil.failWithInternalMessages(monitor.getMessages(), grammarDoc);
+      ParserUtil.failWithInternalMessages(monitor.getMessages(), grammarDoc);
     }
   }
 
