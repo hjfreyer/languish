@@ -95,7 +95,25 @@ public class Lambda {
   // }
   // };
 
-  public static final Operation PAIR = new IrreducibleOperation("PAIR");
+  public static final Operation PAIR = new Operation() {
+    @Override
+    public Tuple reduceOnce(Tuple tuple) {
+      Tuple first = (Tuple) tuple.getSecond();
+      Tuple second = (Tuple) tuple.getThird();
+
+      if (first.getFirst() != DATA) {
+        tuple.setSecond(reduceTupleOnce(first));
+        return tuple;
+      }
+
+      if (second.getFirst() != DATA) {
+        tuple.setThird(reduceTupleOnce(second));
+        return tuple;
+      }
+
+      return data(Tuple.of(first.getSecond(), second.getSecond()));
+    }
+  };
 
   public static final Operation PRIM = new IrreducibleOperation("PRIM");
 

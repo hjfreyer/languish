@@ -1,2 +1,18 @@
 
-REDUCE [GET 2 [PAIR [DATA 3] [DATA 4]]];;
+MACRO EMPTY_LIST [DATA []];;
+
+MACRO CAR [ABS [GET 1 [REF 1]]];;
+MACRO CDR [ABS [GET 2 [REF 1]]];;
+
+MACRO PUSH [ABS [ABS [PAIR [REF 1] [REF 2]]]];;
+
+MACRO ADDL [ABS // SELF
+  [ABS // LIST
+    [ABS // ITEM
+
+REDUCE 
+  [APP (*CAR*) 
+    [APP (*CDR*) 
+      [APP [APP (*PUSH*) [DATA 3] 
+        [APP [APP (*PUSH*) [DATA 4]] (*EMPTY_LIST*)]]]]];;
+
