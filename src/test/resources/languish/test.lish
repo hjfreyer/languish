@@ -1,1 +1,2 @@
-REDUCE [LITERAL (!4!)]
+
+REDUCE [GET 2 [PAIR [DATA 3] [DATA 4]]];;

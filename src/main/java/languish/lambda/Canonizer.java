@@ -33,9 +33,9 @@ public class Canonizer {
 
       return sb.toString();
     } else if (exp instanceof LInteger) {
-      return "(!" + ((LInteger) exp).intValue() + "!)";
+      return "" + ((LInteger) exp).intValue();
     } else if (exp instanceof LSymbol) {
-      return "(!\"" + ((LSymbol) exp).stringValue() + "\"!)";
+      return "\"" + ((LSymbol) exp).stringValue() + "\"";
     }
 
     return "<UNKNOWN>";

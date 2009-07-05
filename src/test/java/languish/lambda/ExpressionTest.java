@@ -13,18 +13,17 @@ import languish.testing.TestConstants;
 public class ExpressionTest extends TestCase {
   public enum Tests implements ExpressionToTest {
     LITERAL_INT(data(FIVE), //
-        "[DATA (!5!)]",
+        "[DATA 5]",
         null,
         FIVE),
 
     IDENTITY(Lambda.app(IDENT, data(FOUR)), //
-        "[APP [[ABS [[REF (!1!)]]] [DATA (!4!)]]]",
+        "[APP [ABS [REF 1]] [DATA 4]]",
         null,
         FOUR),
 
     LOOP(TestConstants.LOOP, //
-        "[APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
-            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]",
+        "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [APP [REF 1] [REF 1]]]]",
         TestConstants.LOOP,
         null),
 

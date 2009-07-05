@@ -21,18 +21,17 @@ public class LIntegerTest extends TestCase {
   public enum Tests implements ExpressionToTest {
     // IDENITY TESTS
     TEST_DATA(data(FIVE), //
-        "[DATA (!5!)]",
+        "[DATA 5]",
         null,
         FIVE),
 
     TEST_SIMPLE_ADD(app(app(prim(ADD), data(FIVE)), data(THREE)),
-        "[APP [[APP [[PRIM ADD] [DATA (!5!)]]] [DATA (!3!)]]]",
+        "[APP [APP [PRIM ADD] [DATA 5]] [DATA 3]]",
         null,
         EIGHT),
 
     TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
-        "[APP [[ABS [[APP [[APP [[PRIM ADD] [REF (!1!)]]] "
-            + "[REF (!1!)]]]]] [DATA (!4!)]]]",
+        "[APP [ABS [APP [APP [PRIM ADD] [REF 1]] [REF 1]]] [DATA 4]]",
         app(app(prim(ADD), data(FOUR)), data(FOUR)),
         EIGHT),
 

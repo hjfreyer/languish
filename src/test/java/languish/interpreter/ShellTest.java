@@ -16,7 +16,7 @@ public class ShellTest extends TestCase {
     assertEquals(TestConstants.FOUR, s.getLast());
   }
 
-  public void testBasicGrammarLish() {
+  public void testBaseGrammarLish() {
     InputStream stream =
         getClass().getClassLoader().getResourceAsStream(
             "languish/base_grammar.lish");
@@ -25,5 +25,4 @@ public class ShellTest extends TestCase {
 
     assertEquals(TestConstants.FOUR, s.getLast());
   }
-
 }

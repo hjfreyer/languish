@@ -9,7 +9,6 @@ import languish.lambda.Lambda;
 import languish.lambda.Tuple;
 import languish.prim.data.LInteger;
 import languish.prim.data.LSymbol;
-import languish.prim.data.LUnit;
 
 import org.quenta.tedir.antonius.doc.ITextDocument;
 import org.quenta.tedir.antonius.doc.ResourceDocument;
@@ -78,7 +77,7 @@ public class BuiltinParser extends Parser {
       macros.put(name, exp);
 
       type = Type.REDUCE;
-      result = Lambda.data(LUnit.UNIT);
+      result = Lambda.data(Tuple.of());
     } else {
       type = Statement.Type.valueOf(tag);
       result = expressionFromINode(node);

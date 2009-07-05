@@ -1,14 +1,12 @@
 package languish.testing;
 
-import languish.lambda.LObject;
 import languish.lambda.Lambda;
 import languish.lambda.Tuple;
 import languish.prim.data.LInteger;
-import languish.prim.data.LUnit;
 
 public class TestConstants {
-  public static final LUnit UNIT = LUnit.UNIT;
-  public static final Tuple NULL = Lambda.data(LUnit.UNIT);
+  // public static final LUnit UNIT = LUnit.UNIT;
+  public static final Tuple NULL = Lambda.data(Tuple.of());
 
   public static final LInteger ZERO = LInteger.of(0);
   public static final LInteger ONE = LInteger.of(1);
