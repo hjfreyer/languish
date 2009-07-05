@@ -1,10 +1,11 @@
 package languish.interpreter;
 
+import static languish.testing.TestConstants.FOUR;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import junit.framework.TestCase;
-import languish.testing.TestConstants;
 
 public class ShellTest extends TestCase {
   public void testTestLish() {
@@ -13,7 +14,7 @@ public class ShellTest extends TestCase {
 
     Shell s = new Shell(new InputStreamReader(stream));
 
-    assertEquals(TestConstants.FOUR, s.getLast());
+    assertEquals(FOUR, s.getLast());
   }
 
   public void testBaseGrammarLish() {
@@ -23,6 +24,6 @@ public class ShellTest extends TestCase {
 
     Shell s = new Shell(new InputStreamReader(stream));
 
-    assertEquals(TestConstants.FOUR, s.getLast());
+    assertEquals(FOUR, s.getLast());
   }
 }
