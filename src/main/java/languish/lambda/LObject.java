@@ -6,13 +6,9 @@ public abstract class LObject {
 
   public static final DataFunction EQUALS = new DataFunction() {
     @Override
-    public Tuple apply(final LObject obj1) {
-      return Lambda.prim(new DataFunction() {
-        @Override
-        public Tuple apply(LObject obj2) {
-          return Lambda.data(LBoolean.of(obj1.equals(obj2)));
-        }
-      });
+    public Tuple apply(LObject arg) {
+      Tuple pair = (Tuple) arg;
+      return Lambda.data(LBoolean.of(pair.getFirst().equals(pair.getSecond())));
     }
   };
 
