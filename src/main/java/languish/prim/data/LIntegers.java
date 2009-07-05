@@ -11,12 +11,17 @@ public class LIntegers {
   public static final DataFunction ADD = new DataFunction() {
     @Override
     public Tuple apply(LObject obj) {
-      Tuple pair = (Tuple) obj;
+      final LInteger intVal1 = (LInteger) obj;
 
-      LInteger a = (LInteger) pair.getFirst();
-      LInteger b = (LInteger) pair.getSecond();
+      return Lambda.prim(new DataFunction() {
+        @Override
+        public Tuple apply(LObject obj) {
+          final LInteger intVal2 = (LInteger) obj;
 
-      return Lambda.data(LInteger.of(a.intValue() + b.intValue()));
+          return Lambda.data(LInteger.of(intVal1.intValue()
+              + intVal2.intValue()));
+        }
+      });
     }
   };
 }

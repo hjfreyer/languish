@@ -27,25 +27,25 @@ public class LBooleanTest extends TestCase {
         null),
 
     // BASIC TESTS
-    LITERAL_TRUE(prim(BRANCH, data(TRUE)), //
-        "[PRIM BRANCH TRUE]",
+    LITERAL_TRUE(app(prim(BRANCH), data(TRUE)), //
+        "[APP [PRIM BRANCH] TRUE]",
         BRANCH_THEN,
         null),
 
-    LITERAL_FALSE(prim(BRANCH, data(FALSE)), //
-        "[PRIM BRANCH FALSE]",
+    LITERAL_FALSE(app(prim(BRANCH), data(FALSE)), //
+        "[APP [PRIM BRANCH] FALSE]",
         BRANCH_ELSE,
         null),
 
-    APPLICATION_ON_SELECTOR(prim(BRANCH, app(IDENT, data(TRUE))),
-        "[PRIM BRANCH [APP [ABS [REF 1]] TRUE]]",
+    APPLICATION_ON_SELECTOR(app(prim(BRANCH), app(IDENT, data(TRUE))),
+        "[APP [PRIM BRANCH] [APP [ABS [REF 1]] TRUE]]",
         LITERAL_TRUE.expression,
         null),
 
-    LOOP_ON_SELECTOR(prim(BRANCH, LOOP),
-        "[PRIM BRANCH [APP [ABS [APP [REF 1] [REF 1]]] "
+    LOOP_ON_SELECTOR(app(prim(BRANCH), LOOP),
+        "[APP [PRIM BRANCH] [APP [ABS [APP [REF 1] [REF 1]]] "
             + "[ABS [APP [REF 1] [REF 1]]]]]",
-        prim(BRANCH, LOOP),
+        app(prim(BRANCH), LOOP),
         null),
 
     // BRANCH TESTS
@@ -78,22 +78,23 @@ public class LBooleanTest extends TestCase {
         FIVE),
 
     // OVERALL
-    WHOLE_SHEBANG(app(app(prim(BRANCH, data(TRUE)), app(IDENT, data(FOUR))),
-        data(FIVE)), //
-        "[APP [APP [PRIM BRANCH TRUE] "
+    WHOLE_SHEBANG(app(
+        app(app(prim(BRANCH), data(TRUE)), app(IDENT, data(FOUR))), data(FIVE)),
+        //
+        "[APP [APP [APP [PRIM BRANCH] TRUE] "
             + "[APP [ABS [REF 1]] [DATA 4]]] [DATA 5]]",
         app(app(abs(abs(ref(2))), app(abs(ref(1)), data(LInteger.of(4)))),
             data(LInteger.of(5))),
         FOUR),
 
-    NESTED(app(app(prim(BRANCH, //
-        app(app(prim(BRANCH, data(TRUE)), data(FALSE)), data(TRUE))),
+    NESTED(app(app(app(prim(BRANCH), //
+        app(app(app(prim(BRANCH), data(TRUE)), data(FALSE)), data(TRUE))),
         data(FOUR)), data(FIVE)), //
-        "[APP [APP [PRIM BRANCH [APP [APP [PRIM BRANCH TRUE] FALSE] TRUE]] "
+        "[APP [APP [APP [PRIM BRANCH] "
+            + "[APP [APP [APP [PRIM BRANCH] TRUE] FALSE] TRUE]] "
             + "[DATA 4]] [DATA 5]]",
-        app(app(prim(BRANCH,
-            app(app(abs(abs(ref(2))), data(FALSE)), data(TRUE))), data(FOUR)),
-            data(FIVE)),
+        app(app(app(prim(BRANCH), app(app(abs(abs(ref(2))), data(FALSE)),
+            data(TRUE))), data(FOUR)), data(FIVE)),
         FIVE),
 
     ;

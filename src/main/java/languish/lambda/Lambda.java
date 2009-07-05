@@ -36,13 +36,28 @@ public class Lambda {
       Tuple arg = (Tuple) app.getThird();
 
       LObject funcType = func.getFirst();
+      LObject argType = arg.getFirst();
 
-      if (funcType != ABS) {
+      if (funcType != ABS && funcType != PRIM) {
         app.setSecond(reduceTupleOnce(func));
         return app;
       }
 
-      return replaceAllReferencesToParam((Tuple) func.getSecond(), 1, arg);
+      if (funcType == PRIM) {
+        if (argType != DATA) {
+          app.setThird(reduceTupleOnce(arg));
+          return app;
+        }
+
+        DataFunction dataFunc = (DataFunction) func.getSecond();
+        return dataFunc.apply(arg.getSecond()).deepClone();
+      }
+
+      if (funcType == ABS) {
+        return replaceAllReferencesToParam((Tuple) func.getSecond(), 1, arg);
+      }
+
+      throw new AssertionError();
     }
   };
 
@@ -52,22 +67,14 @@ public class Lambda {
     @Override
     public Tuple reduceOnce(Tuple get) {
       LInteger index = (LInteger) get.getSecond();
-      Tuple arg = (Tuple) get.getThird();
+      Tuple pair = (Tuple) get.getThird();
 
-      if (arg.getFirst() != PAIR && arg.getFirst() != DATA) {
-        get.setThird(reduceTupleOnce(arg));
+      if (pair.getFirst() != PAIR) {
+        get.setThird(reduceTupleOnce(pair));
         return get;
       }
 
-      if (arg.getFirst() == PAIR) {
-        return (Tuple) arg.get(index.intValue());
-      }
-
-      if (arg.getFirst() == DATA) {
-        return data(((Tuple) arg.getSecond()).get(index.intValue() - 1));
-      }
-
-      throw new AssertionError();
+      return (Tuple) pair.get(index.intValue());
     }
   };
 
@@ -108,22 +115,11 @@ public class Lambda {
     }
   };
 
-  public static final Operation PRIM = new Operation() {
-    @Override
-    public Tuple reduceOnce(Tuple prim) {
-      DataFunction func = (DataFunction) prim.getSecond();
-      Tuple argument = (Tuple) prim.getThird();
-
-      if (argument.getFirst() != DATA) {
-        prim.setThird(reduceTupleOnce(argument));
-        return prim;
-      }
-
-      return func.apply(argument.getSecond()).deepClone();
-    }
-  };
+  public static final Operation PRIM = new IrreducibleOperation("PRIM");
 
   public static final Operation REF = new IrreducibleOperation("REF");
+
+  // public static final Operation TUPLE = new IrreducibleOperation("TUPLE");
 
   private static class IrreducibleOperation extends Operation {
     private final String name;
@@ -141,7 +137,7 @@ public class Lambda {
   private static Tuple replaceAllReferencesToParam(Tuple exp, int id, Tuple with) {
     Operation op = (Operation) exp.getFirst();
 
-    if (op == DATA) {
+    if (op == DATA || op == PRIM) {
       return exp;
     }
     if (op == REF) {
@@ -159,7 +155,7 @@ public class Lambda {
           replaceAllReferencesToParam((Tuple) exp.getThird(), id, with));
       return exp;
     }
-    if (op == GET || op == PRIM) {
+    if (op == GET) {
       exp.setThird( // 
           replaceAllReferencesToParam((Tuple) exp.getThird(), id, with));
       return exp;
@@ -183,8 +179,8 @@ public class Lambda {
     return Tuple.of(REF, LInteger.of(i));
   }
 
-  public static Tuple prim(DataFunction func, Tuple arg) {
-    return Tuple.of(PRIM, func, arg);
+  public static Tuple prim(DataFunction func) {
+    return Tuple.of(PRIM, func);
   }
 
   public static Tuple pair(Tuple first, Tuple second) {

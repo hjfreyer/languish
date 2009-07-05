@@ -1,41 +1,48 @@
 package languish.interpreter;
 
+import static languish.lambda.Lambda.*;
+import static languish.prim.data.LIntegers.ADD;
+import static languish.testing.TestConstants.*;
 import languish.lambda.LObject;
+import languish.lambda.Lambda;
 import languish.lambda.Tuple;
+import languish.prim.data.LBoolean;
+import languish.prim.data.LBooleans;
+import languish.prim.data.LIntegers;
 
 public enum ExpressionsToTst {
-//
-//  SINGLE_ADD(Lambda.app(Lambda.app(LIntegers.ADD, data(FIVE)), data(FOUR)), //
-//      "(APP (APP (~ADD~) (!5!)) (!4!))",
-//      false,
-//      null,
-//      true,
-//      NINE),
-//
-//  DOUBLE_ADD(prim(ADD, pair(prim(ADD, pair(data(FIVE), data(FOUR))),
-//      data(THREE)), //
-//      "(APP (APP (~ADD~) (APP (APP (~ADD~) (!5!)) (!4!))) (!3!))",
-//      false,
-//      null,
-//      true,
-//      TWELVE),
-//
-//  /** BOOLEAN TESTS **/
-//  SIMPLE_BRANCH(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
-//      data(LBoolean.TRUE)), data(FOUR)), data(FIVE)), //
-//      "(APP (APP (APP (~BRANCH~) (!TRUE!)) (!4!)) (!5!))",
-//      true,
-//      Lambda.app(Lambda.app(LBooleans.BRANCH_THEN, data(FOUR)), data(FIVE)),
-//      true,
-//      FOUR),
-//
-//  SIMPLE_BRANCH_FALSE(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
-//      data(LBoolean.FALSE)), data(FOUR)), data(FIVE)), //
-//      "(APP (APP (APP (~BRANCH~) (!FALSE!)) (!4!)) (!5!))",
-//      true,
-//      Lambda.app(Lambda.app(LBooleans.BRANCH_ELSE, data(FOUR)), data(FIVE)),
-//      true,
-//      FIVE),
+
+  SINGLE_ADD(Lambda.app(Lambda.app(LIntegers.ADD, data(FIVE)), data(FOUR)), //
+      "(APP (APP (~ADD~) (!5!)) (!4!))",
+      false,
+      null,
+      true,
+      NINE),
+
+  DOUBLE_ADD(app(app(prim(ADD), app(app(prim(ADD), data(FIVE)), data(FOUR))),
+      data(THREE)), //
+      "(APP (APP (~ADD~) (APP (APP (~ADD~) (!5!)) (!4!))) (!3!))",
+      false,
+      null,
+      true,
+      TWELVE),
+
+  /** BOOLEAN TESTS **/
+  SIMPLE_BRANCH(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
+      data(LBoolean.TRUE)), data(FOUR)), data(FIVE)), //
+      "(APP (APP (APP (~BRANCH~) (!TRUE!)) (!4!)) (!5!))",
+      true,
+      Lambda.app(Lambda.app(LBooleans.BRANCH_THEN, data(FOUR)), data(FIVE)),
+      true,
+      FOUR),
+
+  SIMPLE_BRANCH_FALSE(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
+      data(LBoolean.FALSE)), data(FOUR)), data(FIVE)), //
+      "(APP (APP (APP (~BRANCH~) (!FALSE!)) (!4!)) (!5!))",
+      true,
+      Lambda.app(Lambda.app(LBooleans.BRANCH_ELSE, data(FOUR)), data(FIVE)),
+      true,
+      FIVE),
 
   // public void testApplicationOnBranch() {
   // Expression[] cases = new Expression[] { Application.of(IDENT, FOUR), FIVE
