@@ -1,14 +1,14 @@
 package languish.lambda;
 
 import static languish.lambda.Lambda.data;
-import static languish.testing.TestConstants.*;
+import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 
 import junit.framework.TestCase;
+import languish.testing.CommonExps;
 import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;
-import languish.testing.TestConstants;
 
 public class ExpressionTest extends TestCase {
   public enum Tests implements ExpressionToTest {
@@ -22,9 +22,9 @@ public class ExpressionTest extends TestCase {
         null,
         FOUR),
 
-    LOOP(TestConstants.LOOP, //
+    LOOP(CommonExps.LOOP, //
         "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [APP [REF 1] [REF 1]]]]",
-        TestConstants.LOOP,
+        CommonExps.LOOP,
         null),
 
     ;

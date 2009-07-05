@@ -2,6 +2,7 @@ package languish.lambda;
 
 import languish.lambda.error.IllegalReductionError;
 import languish.prim.data.LInteger;
+import languish.testing.TestUtil;
 
 public class Lambda {
   private Lambda() {}
@@ -18,7 +19,7 @@ public class Lambda {
     }
   }
 
-  public static Tuple reduceTupleOnce(LObject tuple) {
+  private static Tuple reduceTupleOnce(LObject tuple) {
     Tuple t = (Tuple) tuple;
     Operation op = (Operation) t.getFirst();
 
@@ -55,7 +56,7 @@ public class Lambda {
       Tuple arg = (Tuple) get.getThird();
 
       if (arg.getFirst() != PAIR && arg.getFirst() != DATA) {
-        get.setThird(reduceTupleOnce(arg));
+        get.setThird(TestUtil.reduceTupleOnce(arg));
         return get;
       }
 
@@ -95,12 +96,12 @@ public class Lambda {
       Tuple second = (Tuple) tuple.getThird();
 
       if (first.getFirst() != DATA) {
-        tuple.setSecond(reduceTupleOnce(first));
+        tuple.setSecond(TestUtil.reduceTupleOnce(first));
         return tuple;
       }
 
       if (second.getFirst() != DATA) {
-        tuple.setThird(reduceTupleOnce(second));
+        tuple.setThird(TestUtil.reduceTupleOnce(second));
         return tuple;
       }
 
@@ -115,7 +116,7 @@ public class Lambda {
       Tuple argument = (Tuple) prim.getThird();
 
       if (argument.getFirst() != DATA) {
-        prim.setThird(reduceTupleOnce(argument));
+        prim.setThird(TestUtil.reduceTupleOnce(argument));
         return prim;
       }
 
@@ -145,7 +146,8 @@ public class Lambda {
       return exp;
     }
     if (op == REF) {
-      return id == ((LInteger) exp.getSecond()).intValue() ? with : exp;
+      return id == ((LInteger) exp.getSecond()).intValue() ? with.deepClone()
+          : exp;
     }
     if (op == ABS) {
       exp.setSecond(replaceAllReferencesToParam((Tuple) exp.getSecond(),

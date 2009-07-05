@@ -1,7 +1,8 @@
 package languish.lambda;
 
-import static languish.testing.TestConstants.*;
+import static languish.testing.TestUtil.*;
 import junit.framework.TestCase;
+import languish.testing.TestUtil;
 
 public class AbstractionTest extends TestCase {
 
@@ -23,32 +24,32 @@ public class AbstractionTest extends TestCase {
   public void testBasicApply() {
     Tuple applyFour = Lambda.app(IDENTITY, Lambda.data(FOUR));
 
-    assertEquals(Lambda.data(FOUR), Lambda.reduceTupleOnce(applyFour));
+    assertEquals(Lambda.data(FOUR), TestUtil.reduceTupleOnce(applyFour));
     assertEquals(FOUR, Lambda.reduce(applyFour));
   }
 
   public void testArgumentChooser() {
-    assertEquals(FOUR, Lambda.reduce(Lambda.app(Lambda.app(
-        FIRST_PICKER, Lambda.data(FOUR)), Lambda.data(FIVE))));
+    assertEquals(FOUR, Lambda.reduce(Lambda.app(Lambda.app(FIRST_PICKER, Lambda
+        .data(FOUR)), Lambda.data(FIVE))));
 
-    assertEquals(FIVE, Lambda.reduce(Lambda.app(Lambda.app(
-        SECOND_PICKER, Lambda.data(FOUR)), Lambda.data(FIVE))));
+    assertEquals(FIVE, Lambda.reduce(Lambda.app(Lambda.app(SECOND_PICKER,
+        Lambda.data(FOUR)), Lambda.data(FIVE))));
   }
 
   public void testIrrelevantNonHalter() {
-    assertEquals(FOUR, Lambda.reduce(Lambda.app(Lambda.app(
-        FIRST_PICKER, Lambda.data(FOUR)), LOOP)));
+    assertEquals(FOUR, Lambda.reduce(Lambda.app(Lambda.app(FIRST_PICKER, Lambda
+        .data(FOUR)), LOOP)));
   }
 
   public void testRelevantNonHalterFunction() {
     Tuple exp =
-        Lambda.reduceTupleOnce(Lambda.app(Lambda.app(SECOND_PICKER,
-            Lambda.data(FOUR)), LOOP));
+        TestUtil.reduceTupleOnce(Lambda.app(Lambda.app(SECOND_PICKER, Lambda
+            .data(FOUR)), LOOP));
 
-    assertEquals(LOOP, Lambda.reduceTupleOnce(exp));
+    assertEquals(LOOP, TestUtil.reduceTupleOnce(exp));
   }
 
   public void testNonHalter() {
-    assertEquals(LOOP, Lambda.reduceTupleOnce(LOOP));
+    assertEquals(LOOP, TestUtil.reduceTupleOnce(LOOP));
   }
 }

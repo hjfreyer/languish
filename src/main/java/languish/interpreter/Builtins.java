@@ -9,8 +9,8 @@ import languish.prim.data.LIntegers;
 import languish.prim.data.LParsers;
 
 public enum Builtins {
-  // Starting interpreter
-  // PRIM_INTERP(BuiltinParser.getInterpreter()),
+  // General Ops
+  EQUALS(LObject.EQUALS),
 
   // Expression reducer
 //  UNWRAP(LExpressionWrappers.UNWRAP),
@@ -23,7 +23,7 @@ public enum Builtins {
   FALSE(data(LBoolean.FALSE)),
   BRANCH(LBooleans.BRANCH),
 
-  // Expression constructors
+  // Expression Operations
   ABS(Lambda.ABS),
   APP(Lambda.APP),
   DATA(Lambda.DATA),

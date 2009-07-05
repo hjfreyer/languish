@@ -1,11 +1,12 @@
 package languish.interpreter;
 
-import static languish.testing.TestConstants.FOUR;
+import static languish.testing.TestUtil.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import junit.framework.TestCase;
+import languish.lambda.Tuple;
 
 public class ShellTest extends TestCase {
   public void testTestLish() {
@@ -14,7 +15,7 @@ public class ShellTest extends TestCase {
 
     Shell s = new Shell(new InputStreamReader(stream));
 
-    assertEquals(FOUR, s.getLast());
+    assertEquals(Tuple.of(THREE, Tuple.of()), s.getLast());
   }
 
   public void testBaseGrammarLish() {

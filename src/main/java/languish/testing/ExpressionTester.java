@@ -45,7 +45,7 @@ public class ExpressionTester {
       if (reducedOnce != null) {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not reduce once to given value:",
-            reducedOnce, Lambda.reduceTupleOnce(exp.deepClone()));
+            reducedOnce, TestUtil.reduceTupleOnce(exp.deepClone()));
       }
 
       // REDUCE COMPLETELY

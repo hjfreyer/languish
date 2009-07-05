@@ -2,7 +2,7 @@ package languish.prim.data;
 
 import static languish.lambda.Lambda.*;
 import static languish.prim.data.LIntegers.ADD;
-import static languish.testing.TestConstants.*;
+import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 

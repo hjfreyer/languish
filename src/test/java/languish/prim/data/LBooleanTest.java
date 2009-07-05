@@ -3,7 +3,8 @@ package languish.prim.data;
 import static languish.lambda.Lambda.*;
 import static languish.prim.data.LBoolean.*;
 import static languish.prim.data.LBooleans.*;
-import static languish.testing.TestConstants.*;
+import static languish.testing.CommonExps.LOOP;
+import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 

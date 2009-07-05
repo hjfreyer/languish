@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import languish.lambda.LObject;
 import languish.prim.data.LInteger;
 import languish.prim.data.LSymbol;
-import languish.testing.TestConstants;
+import languish.testing.TestUtil;
 
 public class InterpreterTest extends TestCase {
 
@@ -13,7 +13,7 @@ public class InterpreterTest extends TestCase {
   public void testBasicDisplay() {
     LObject res = i.processStatement("REDUCE [DATA 5]");
 
-    assertEquals(TestConstants.FIVE, res);
+    assertEquals(TestUtil.FIVE, res);
   }
 
   public void testTrivialParserChange() {
@@ -54,10 +54,10 @@ public class InterpreterTest extends TestCase {
     res = i.processStatement("MACRO THREE [DATA 3]");
 
     res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestConstants.THREE);
+    assertEquals(res, TestUtil.THREE);
 
     res = i.processStatement("REDUCE [PRIM ADD [PAIR [DATA 2] (*THREE*)]]");
-    assertEquals(res, TestConstants.FIVE);
+    assertEquals(res, TestUtil.FIVE);
   }
 
   public void testMacrosReplace() {
@@ -66,17 +66,17 @@ public class InterpreterTest extends TestCase {
     res = i.processStatement("MACRO THREE [DATA 2]");
 
     res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestConstants.TWO);
+    assertEquals(res, TestUtil.TWO);
 
     res = i.processStatement("MACRO THREE [DATA 3]");
     res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestConstants.THREE);
+    assertEquals(res, TestUtil.THREE);
 
     res =
         i.processStatement("MACRO THREE "
             + "[ABS [PRIM ADD [PAIR [REF 1] (*THREE*)]]]");
 
     res = i.processStatement("REDUCE [APP (*THREE*) [DATA 2]]");
-    assertEquals(res, TestConstants.FIVE);
+    assertEquals(res, TestUtil.FIVE);
   }
 }

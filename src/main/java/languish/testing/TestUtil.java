@@ -1,10 +1,12 @@
 package languish.testing;
 
+import languish.lambda.LObject;
 import languish.lambda.Lambda;
+import languish.lambda.Operation;
 import languish.lambda.Tuple;
 import languish.prim.data.LInteger;
 
-public class TestConstants {
+public class TestUtil {
   // public static final LUnit UNIT = LUnit.UNIT;
   public static final Tuple NULL = Lambda.data(Tuple.of());
 
@@ -27,8 +29,13 @@ public class TestConstants {
 
   public static final Tuple IDENT = Lambda.abs(Lambda.ref(1));
 
-  public static final Tuple OMEGA =
-      Lambda.abs(Lambda.app(Lambda.ref(1), Lambda.ref(1)));
-  public static final Tuple LOOP = Lambda.app(OMEGA, OMEGA);
+  public static Tuple reduceTupleOnce(LObject tuple) {
+    Tuple t = (Tuple) tuple.deepClone();
+    Operation op = (Operation) t.getFirst();
+
+    Tuple result = op.reduceOnce(t);
+
+    return result;
+  }
 
 }

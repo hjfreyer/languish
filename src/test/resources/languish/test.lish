@@ -1,4 +1,6 @@
 
+MACRO OMEGA [ABS [APP [REF 1] [REF 1]]];;
+
 MACRO EMPTY_LIST [DATA []];;
 
 MACRO CAR [ABS [GET 1 [REF 1]]];;
@@ -6,13 +8,15 @@ MACRO CDR [ABS [GET 2 [REF 1]]];;
 
 MACRO PUSH [ABS [ABS [PAIR [REF 1] [REF 2]]]];;
 
-MACRO ADDL [ABS // SELF
-  [ABS // LIST
-    [ABS // ITEM
+// SEE CommonExps.java for annotated version
+MACRO ADDL 
+  [APP [ABS [APP [REF 1] [REF 1]]] 
+  [ABS [ABS [ABS [APP [APP [PRIM BRANCH 
+    [PRIM EQUALS [PAIR [DATA []] [REF 2]]]] 
+      [PAIR [REF 1] [DATA []]]] 
+      [PAIR [APP [ABS [GET 1 [REF 1]]] [REF 2]] 
+        [APP [APP [APP [REF 3] [REF 3]] 
+          [APP [ABS [GET 2 [REF 1]]] [REF 2]]] [REF 1]]]]]]]]
+;;
 
-REDUCE 
-  [APP (*CAR*) 
-    [APP (*CDR*) 
-      [APP [APP (*PUSH*) [DATA 3] 
-        [APP [APP (*PUSH*) [DATA 4]] (*EMPTY_LIST*)]]]]];;
-
+REDUCE [APP [APP (*ADDL*) (*EMPTY_LIST*)] [DATA 3]];;

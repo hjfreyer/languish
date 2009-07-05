@@ -1,7 +1,8 @@
 package languish.prim.data;
 
 import static languish.lambda.Lambda.*;
-import static languish.testing.TestConstants.*;
+import static languish.testing.CommonExps.*;
+import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 
@@ -13,15 +14,9 @@ import languish.testing.ExpressionToTest;
 
 public class ListTest extends TestCase {
 
-  public static final Tuple CAR = abs(get(1, ref(1)));
-  public static final String CAR_CODE = "[ABS [GET 1 [REF 1]]]";
-
-  public static final Tuple CDR = abs(get(2, ref(1)));
-  public static final String CDR_CODE = "[ABS [GET 2 [REF 1]]]";
-
   public enum Tests implements ExpressionToTest {
     // IDENITY TESTS
-    EMPTY_LIST(data(Tuple.of()), //
+    TEST_EMPTY_LIST(data(Tuple.of()), //
         "[DATA []]",
         null,
         Tuple.of()),
@@ -69,6 +64,13 @@ public class ListTest extends TestCase {
             + "]]",
         get(1, app(CAR, NESTED_LIST.expression)),
         TWO),
+
+    TEST_BUILD_ADDL(app(app(ADDL, app(app(ADDL, EMPTY_LIST), data(TWO))),
+        data(THREE)), //
+        "[APP [APP " + ADDL_CODE + " [APP [APP " + ADDL_CODE + " "
+            + EMPTY_LIST_CODE + "] [DATA 2]]] [DATA 3]]",
+        null,
+        Tuple.of(TWO, Tuple.of(THREE, Tuple.of()))),
 
     ;
 
