@@ -2,10 +2,9 @@
 //
 //import java.util.List;
 //
-//import languish.lambda.Application;
-//import languish.lambda.Expression;
 //import languish.lambda.DataFunction;
-//import languish.lambda.Data;
+//import languish.lambda.LObject;
+//import languish.lambda.Tuple;
 //import languish.prim.data.LGrammar.GrammarRule;
 //import languish.prim.data.LGrammar.HTreeWrapper;
 //
@@ -13,32 +12,32 @@
 //import org.quenta.tedir.hadrian.HTree;
 //import org.quenta.tedir.hadrian.INode;
 //
+//import com.apple.eawt.Application;
+//
 //public class LGrammars {
 //
 //  public static final LGrammar EMPTY_GRAMMAR = new LGrammar();
 //
 //  private LGrammars() {}
 //
-//  public static final DataFunction INTERPRET_STATEMENT =
-//      new DataFunction("INTERPRET_STATEMENT") {
+//  public static final DataFunction INTERPRET_STATEMENT = new DataFunction() {
+//    @Override
+//    public Tuple apply(LObject obj) {
+//      final LGrammar grammar = (LGrammar) obj;
+//
+//      return new DataFunction("INTERPRET_STATEMENT*") {
 //        @Override
-//        public languish.lambda.Expression apply(LObject obj) {
-//          final LGrammar grammar = (LGrammar) obj;
+//        public Expression apply(LObject obj) {
+//          LSymbol code = (LSymbol) obj;
 //
-//          return new DataFunction("INTERPRET_STATEMENT*") {
-//            @Override
-//            public Expression apply(LObject obj) {
-//              LSymbol code = (LSymbol) obj;
+//          INode root =
+//              grammar.getParser().parse(new StringDocument(code.stringValue()));
 //
-//              INode root =
-//                  grammar.getParser().parse(
-//                      new StringDocument(code.stringValue()));
-//
-//              return convertNode(root);
-//            }
-//          };
+//          return convertNode(root);
 //        }
 //      };
+//    }
+//  };
 //
 //  public static final DataFunction ADD_RULE = new DataFunction("ADD_RULE") {
 //    @Override
@@ -60,8 +59,8 @@
 //                public Expression apply(LObject obj) {
 //                  final Expression exp = (Expression) obj;
 //
-//                  return Data.of(addRule(grammar, type.stringValue(), tree,
-//                      exp));
+//                  return Data
+//                      .of(addRule(grammar, type.stringValue(), tree, exp));
 //                }
 //              };
 //            }

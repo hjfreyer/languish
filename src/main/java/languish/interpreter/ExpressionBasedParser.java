@@ -1,5 +1,6 @@
 package languish.interpreter;
 
+import static languish.lambda.Lambda.*;
 import languish.lambda.LObject;
 import languish.lambda.Lambda;
 import languish.lambda.Tuple;
@@ -17,12 +18,11 @@ public class ExpressionBasedParser extends Parser {
   @Override
   public Statement parseStatement(String statement, LObject environment) {
 
-    LObject parseCall =
-        Lambda.app(Lambda.app(expression, Lambda
-            .data(LSymbol.of(statement))), environment);
+    Tuple parseCall =
+        app(app(expression, data(LSymbol.of(statement))), environment);
 
-    Tuple type = Tuple.of(Lambda.GET, Tuple.of(LInteger.of(0), parseCall));
-    Tuple exp = Tuple.of(Lambda.GET, Tuple.of(LInteger.of(1), parseCall));
+    Tuple type = get(1, parseCall);
+    Tuple exp = get(2, parseCall);
 
     int statementType = ((LInteger) Lambda.reduce(type)).intValue();
 

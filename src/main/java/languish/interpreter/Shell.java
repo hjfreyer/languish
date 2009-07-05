@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import languish.lambda.LObject;
-import languish.prim.data.LUnit;
+import languish.lambda.Tuple;
 
 public class Shell {
 
@@ -14,7 +14,7 @@ public class Shell {
 
   private final Interpreter interpreter = new Interpreter();
 
-  private LObject last = LUnit.UNIT;
+  private LObject last = Tuple.of();
 
   public Shell() {
     this(new InputStreamReader(System.in));

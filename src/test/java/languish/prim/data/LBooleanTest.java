@@ -28,54 +28,52 @@ public class LBooleanTest extends TestCase {
 
     // BASIC TESTS
     LITERAL_TRUE(app(prim(BRANCH), data(TRUE)), //
-        "[APP [[PRIM BRANCH] TRUE]]",
+        "[APP [PRIM BRANCH] TRUE]",
         BRANCH_THEN,
         null),
 
     LITERAL_FALSE(app(prim(BRANCH), data(FALSE)), //
-        "[APP [[PRIM BRANCH] FALSE]]",
+        "[APP [PRIM BRANCH] FALSE]",
         BRANCH_ELSE,
         null),
 
     APPLICATION_ON_SELECTOR(app(prim(BRANCH), app(IDENT, data(TRUE))),
-        "[APP [[PRIM BRANCH] [APP [[ABS [[REF (!1!)]]] TRUE]]]]",
+        "[APP [PRIM BRANCH] [APP [ABS [REF 1]] TRUE]]",
         LITERAL_TRUE.expression,
         null),
 
     LOOP_ON_SELECTOR(app(prim(BRANCH), LOOP),
-        "[APP [[PRIM BRANCH] [APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
-            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]]]",
+        "[APP [PRIM BRANCH] [APP [ABS [APP [REF 1] [REF 1]]] "
+            + "[ABS [APP [REF 1] [REF 1]]]]]",
         app(prim(BRANCH), LOOP),
         null),
 
     // BRANCH TESTS
     BASIC_BRANCH_THEN(app(app(BRANCH_THEN, data(FIVE)), data(FOUR)), //
-        "[APP [[APP [[ABS [[ABS [[REF (!2!)]]]]] [DATA (!5!)]]] [DATA (!4!)]]]",
+        "[APP [APP [ABS [ABS [REF 2]]] [DATA 5]] [DATA 4]]",
         app(abs(data(LInteger.of(5))), data(LInteger.of(4))),
         FIVE),
 
     BASIC_BRANCH_ELSE(app(app(BRANCH_ELSE, data(FIVE)), data(FOUR)), //
-        "[APP [[APP [[ABS [[ABS [[REF (!1!)]]]]] [DATA (!5!)]]] [DATA (!4!)]]]",
+        "[APP [APP [ABS [ABS [REF 1]]] [DATA 5]] [DATA 4]]",
         app(abs(ref(1)), data(LInteger.of(4))),
         FOUR),
 
     LOOP_ON_BRANCH(app(app(BRANCH_THEN, LOOP), data(FIVE)), //
-        "[APP [[APP [[ABS [[ABS [[REF (!2!)]]]]] [APP [[ABS [[APP [[REF (!1!)] "
-            + "[REF (!1!)]]]]] [ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]]] "
-            + "[DATA (!5!)]]]",
+        "[APP [APP [ABS [ABS [REF 2]]] [APP [ABS [APP [REF 1] [REF 1]]] "
+            + "[ABS [APP [REF 1] [REF 1]]]]] [DATA 5]]",
         app(abs(LOOP), data(LInteger.of(5))),
         null),
 
     LOOP_ON_BRANCH_2(LOOP_ON_BRANCH.reducedOnce, //
-        "[APP [[ABS [[APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
-            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]]] [DATA (!5!)]]]",
+        "[APP [ABS [APP [ABS [APP [REF 1] [REF 1]]] "
+            + "[ABS [APP [REF 1] [REF 1]]]]] [DATA 5]]",
         LOOP,
         null),
 
     LOOP_OFF_BRANCH(app(app(BRANCH_ELSE, LOOP), data(FIVE)), //
-        "[APP [[APP [[ABS [[ABS [[REF (!1!)]]]]] "
-            + "[APP [[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]] "
-            + "[ABS [[APP [[REF (!1!)] [REF (!1!)]]]]]]]]] [DATA (!5!)]]]",
+        "[APP [APP [ABS [ABS [REF 1]]] [APP [ABS [APP [REF 1] [REF 1]]] "
+            + "[ABS [APP [REF 1] [REF 1]]]]] [DATA 5]]",
         app(abs(ref(1)), data(LInteger.of(5))),
         FIVE),
 
@@ -83,8 +81,8 @@ public class LBooleanTest extends TestCase {
     WHOLE_SHEBANG(app(
         app(app(prim(BRANCH), data(TRUE)), app(IDENT, data(FOUR))), data(FIVE)),
         //
-        "[APP [[APP [[APP [[PRIM BRANCH] TRUE]] [APP [[ABS [[REF (!1!)]]] "
-            + "[DATA (!4!)]]]]] [DATA (!5!)]]]",
+        "[APP [APP [APP [PRIM BRANCH] TRUE] "
+            + "[APP [ABS [REF 1]] [DATA 4]]] [DATA 5]]",
         app(app(abs(abs(ref(2))), app(abs(ref(1)), data(LInteger.of(4)))),
             data(LInteger.of(5))),
         FOUR),
@@ -92,9 +90,9 @@ public class LBooleanTest extends TestCase {
     NESTED(app(app(app(prim(BRANCH), //
         app(app(app(prim(BRANCH), data(TRUE)), data(FALSE)), data(TRUE))),
         data(FOUR)), data(FIVE)), //
-        "[APP [[APP [[APP [[PRIM BRANCH] "
-            + "[APP [[APP [[APP [[PRIM BRANCH] TRUE]] FALSE]] TRUE]]]] "
-            + "[DATA (!4!)]]] [DATA (!5!)]]]",
+        "[APP [APP [APP [PRIM BRANCH] "
+            + "[APP [APP [APP [PRIM BRANCH] TRUE] FALSE] TRUE]] "
+            + "[DATA 4]] [DATA 5]]",
         app(app(app(prim(BRANCH), app(app(abs(abs(ref(2))), data(FALSE)),
             data(TRUE))), data(FOUR)), data(FIVE)),
         FIVE),

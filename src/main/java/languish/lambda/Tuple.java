@@ -2,8 +2,33 @@ package languish.lambda;
 
 import java.util.Arrays;
 
+import languish.prim.data.LInteger;
 
 public class Tuple extends LObject {
+
+  public static final DataFunction MK_TUPLE = new DataFunction() {
+    @Override
+    public Tuple apply(LObject arg) {
+      final int elements = ((LInteger) arg).intValue();
+
+      final LObject[] result = new LObject[elements];
+
+      return tupleBuilder(result, 0);
+    }
+  };
+
+  private static Tuple tupleBuilder(final LObject[] result,
+      final int numPutAlready) {
+    return numPutAlready == result.length ? Tuple.of(result) //
+        : Lambda.prim(new DataFunction() {
+          @Override
+          public Tuple apply(LObject obj) {
+            result[numPutAlready] = obj;
+
+            return tupleBuilder(result, numPutAlready + 1);
+          }
+        });
+  }
 
   private final LObject[] contents;
 
@@ -33,6 +58,14 @@ public class Tuple extends LObject {
 
   public void setSecond(LObject second) {
     contents[1] = second;
+  }
+
+  public LObject getThird() {
+    return contents[2];
+  }
+
+  public void setThird(LObject third) {
+    contents[2] = third;
   }
 
   public LObject get(int i) {
