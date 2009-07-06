@@ -15,7 +15,8 @@ public class ShellTest extends TestCase {
 
     Shell s = new Shell(new InputStreamReader(stream));
 
-    assertEquals(Tuple.of(THREE, Tuple.of()), s.getLast());
+    assertEquals(Tuple.of(FIVE, Tuple.of(SIX, Tuple.of(TWO, Tuple.of()))), s
+        .getLast());
   }
 
   public void testBaseGrammarLish() {

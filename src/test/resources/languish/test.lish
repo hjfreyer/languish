@@ -9,14 +9,25 @@ MACRO CDR [ABS [GET 2 [REF 1]]];;
 MACRO PUSH [ABS [ABS [PAIR [REF 1] [REF 2]]]];;
 
 // SEE CommonExps.java for annotated version
-MACRO ADDL 
-  [APP [ABS [APP [REF 1] [REF 1]]] 
-  [ABS [ABS [ABS [APP [APP [PRIM BRANCH 
-    [PRIM EQUALS [PAIR [DATA []] [REF 2]]]] 
-      [PAIR [REF 1] [DATA []]]] 
-      [PAIR [APP [ABS [GET 1 [REF 1]]] [REF 2]] 
-        [APP [APP [APP [REF 3] [REF 3]] 
-          [APP [ABS [GET 2 [REF 1]]] [REF 2]]] [REF 1]]]]]]]]
+MACRO MAP 
+  [ABS // SELF
+  [ABS // FUNC
+  [ABS // LIST
+    [APP [APP
+    [PRIM BRANCH [PRIM EQUALS [PAIR (*EMPTY_LIST*) [REF 1]]]] // if LIST == []
+      [DATA []]] // Then: return []
+      [PAIR [APP [REF 2] [APP (*CAR*) [REF 1]]] // Else return FUNC(CAR LIST) ::
+            [APP [APP [APP                      // SELF(SELF, FUNC, (CDR LIST))
+              [REF 3] [REF 3]] [REF 2]] [APP (*CDR*) [REF 1]]]
+      ]
+    ]
+  ]]] 
 ;;
 
-REDUCE [APP [APP (*ADDL*) (*EMPTY_LIST*)] [DATA 3]];;
+MACRO MAP [APP (*OMEGA*) (*MAP*)];;
+
+MACRO ADDONE [ABS [PRIM ADD [PAIR [REF 1] [DATA 1]]]];;
+
+MACRO LIST [PAIR [DATA 4] [PAIR [DATA 5] [PAIR [DATA 1] [DATA []]]]];;
+
+REDUCE [APP [APP (*MAP*) (*ADDONE*)] (*LIST*)];;
