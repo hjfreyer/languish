@@ -27,7 +27,7 @@ public enum Builtins {
   GET(Lambda.GET),
   PRIM(Lambda.PRIM),
   REF(Lambda.REF),
-  PAIR(Lambda.PAIR),
+  CONS(Lambda.CONS),
 
   // LComposite
 //  GET_ELEMENT(LComposites.GET_ELEMENT),

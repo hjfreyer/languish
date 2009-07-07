@@ -1,7 +1,6 @@
 package languish.base;
 
 import languish.prim.data.LInteger;
-import languish.testing.TestUtil;
 
 public class Lambda {
   private Lambda() {}
@@ -54,12 +53,12 @@ public class Lambda {
       LInteger index = (LInteger) get.getSecond();
       Tuple arg = (Tuple) get.getThird();
 
-      if (arg.getFirst() != PAIR && arg.getFirst() != DATA) {
-        get.setThird(TestUtil.reduceTupleOnce(arg));
+      if (arg.getFirst() != CONS && arg.getFirst() != DATA) {
+        get.setThird(reduceTupleOnce(arg));
         return get;
       }
 
-      if (arg.getFirst() == PAIR) {
+      if (arg.getFirst() == CONS) {
         return (Tuple) arg.get(index.intValue());
       }
 
@@ -88,23 +87,28 @@ public class Lambda {
   // }
   // };
 
-  public static final Operation PAIR = new Operation() {
+  public static final Operation CONS = new Operation() {
     @Override
     public Tuple reduceOnce(Tuple tuple) {
-      Tuple first = (Tuple) tuple.getSecond();
-      Tuple second = (Tuple) tuple.getThird();
+      for (int i = 1; i < tuple.size(); i++) {
+        Tuple child = (Tuple) tuple.get(i);
 
-      if (first.getFirst() != DATA) {
-        tuple.setSecond(TestUtil.reduceTupleOnce(first));
-        return tuple;
+        if (child.getFirst() != DATA) {
+          tuple.set(i, reduceTupleOnce(child));
+          return tuple;
+        }
       }
 
-      if (second.getFirst() != DATA) {
-        tuple.setThird(TestUtil.reduceTupleOnce(second));
-        return tuple;
+      LObject[] reduced = new LObject[tuple.size() - 1];
+
+      for (int i = 1; i < tuple.size(); i++) {
+        Tuple child = (Tuple) tuple.get(i);
+        // Since all children are reduced, first element is DATA
+
+        reduced[i - 1] = child.getSecond();
       }
 
-      return data(Tuple.of(first.getSecond(), second.getSecond()));
+      return data(Tuple.of(reduced));
     }
   };
 
@@ -115,7 +119,7 @@ public class Lambda {
       Tuple argument = (Tuple) prim.getThird();
 
       if (argument.getFirst() != DATA) {
-        prim.setThird(TestUtil.reduceTupleOnce(argument));
+        prim.setThird(reduceTupleOnce(argument));
         return prim;
       }
 
@@ -153,7 +157,13 @@ public class Lambda {
           id + 1, with));
       return exp;
     }
-    if (op == APP || op == PAIR) {
+    if (op == CONS) {
+      for (int i = 1; i < exp.size(); i++) {
+        exp.set(i, replaceAllReferencesToParam((Tuple) exp.get(i), id, with));
+      }
+      return exp;
+    }
+    if (op == APP) {
       exp.setSecond( //
           replaceAllReferencesToParam((Tuple) exp.getSecond(), id, with));
       exp.setThird( // 
@@ -172,7 +182,7 @@ public class Lambda {
     return Tuple.of(ABS, exp);
   }
 
-  public static Tuple app(LObject func, LObject arg) {
+  public static Tuple app(Tuple func, Tuple arg) {
     return Tuple.of(APP, func, arg);
   }
 
@@ -188,12 +198,20 @@ public class Lambda {
     return Tuple.of(PRIM, func, arg);
   }
 
-  public static Tuple pair(Tuple first, Tuple second) {
-    return Tuple.of(PAIR, first, second);
+  public static Tuple cons(LObject obj1) {
+    return Tuple.of(CONS, obj1);
   }
 
-  public static Tuple get(int i, Tuple pair) {
-    return Tuple.of(GET, LInteger.of(i), pair);
+  public static Tuple cons(LObject obj1, LObject obj2) {
+    return Tuple.of(CONS, obj1, obj2);
+  }
+
+  public static Tuple cons(LObject obj1, LObject obj2, LObject obj3) {
+    return Tuple.of(CONS, obj1, obj2, obj3);
+  }
+
+  public static Tuple get(int i, Tuple cons) {
+    return Tuple.of(GET, LInteger.of(i), cons);
   }
 
 }

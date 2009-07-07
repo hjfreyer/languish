@@ -1,7 +1,6 @@
 package languish.parsing;
 
 import static languish.base.Lambda.*;
-import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Tuple;
 import languish.interpreter.Statement;
@@ -10,14 +9,14 @@ import languish.prim.data.LSymbol;
 
 public class ExpressionBasedParser extends Parser {
 
-  private final LObject expression;
+  private final Tuple expression;
 
-  public ExpressionBasedParser(LObject expression) {
+  public ExpressionBasedParser(Tuple expression) {
     this.expression = expression;
   }
 
   @Override
-  public Statement parseStatement(String statement, LObject environment) {
+  public Statement parseStatement(String statement, Tuple environment) {
 
     Tuple parseCall =
         app(app(expression, data(LSymbol.of(statement))), environment);

@@ -1,4 +1,28 @@
-////MACRO GRAMMAR EMPTY_GRAMMAR
+
+MACRO OMEGA [ABS [APP [REF 1] [REF 1]]];;
+
+MACRO EMPTY_LIST [DATA []];;
+
+MACRO CAR [ABS [GET 1 [REF 1]]];;
+MACRO CDR [ABS [GET 2 [REF 1]]];;
+
+MACRO ADDL 
+  [APP [ABS [APP [REF 1] [REF 1]]] 
+    [ABS [ABS [ABS [APP [APP 
+      [PRIM BRANCH [PRIM EQUALS [CONS [DATA []] [REF 2]]]] 
+      [CONS [REF 1] [DATA []]]] 
+      [CONS [APP [ABS [GET 1 [REF 1]]] [REF 2]] 
+            [APP [APP [APP [REF 3] [REF 3]] 
+                [APP [ABS [GET 2 [REF 1]]] [REF 2]]] [REF 1]]]]]]]]
+;;
+
+// Building Grammar 
+MACRO GRAMMAR (*EMPTY_LIST*);;
+
+MACRO GRAMMAR [APP [APP (*ADDL*) (*GRAMMAR*)]
+  [DATA 4]
+];;
+
 //
 ////MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
 ////(!"ROOT"!))

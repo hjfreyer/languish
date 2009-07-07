@@ -53,7 +53,7 @@ public class BuiltinParser extends Parser {
   public BuiltinParser() {}
 
   @Override
-  public Statement parseStatement(String statement, LObject env) {
+  public Statement parseStatement(String statement, Tuple env) {
 
     Pair<Statement.Type, LObject> exp = parseStatementToExpression(statement);
 

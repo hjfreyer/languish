@@ -19,7 +19,7 @@ public class InterpreterTest extends TestCase {
   public void testTrivialParserChange() {
     LObject res;
 
-    String statementToReturn = "[PAIR [DATA 0] [DATA 42]]";
+    String statementToReturn = "[CONS [DATA 0] [DATA 42]]";
 
     res = i.processStatement("SET_PARSER [ABS [ABS " //
         + statementToReturn + "]]");
@@ -30,7 +30,7 @@ public class InterpreterTest extends TestCase {
   }
 
   public void testEchoParser() {
-    String echoCode = "[ABS [ABS [PAIR [DATA 0] [REF 2]]]]";
+    String echoCode = "[ABS [ABS [CONS [DATA 0] [REF 2]]]]";
 
     String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
     String test2 = "rock me am[ad]]eus!~";
@@ -56,7 +56,7 @@ public class InterpreterTest extends TestCase {
     res = i.processStatement("REDUCE (*THREE*)");
     assertEquals(res, TestUtil.THREE);
 
-    res = i.processStatement("REDUCE [PRIM ADD [PAIR [DATA 2] (*THREE*)]]");
+    res = i.processStatement("REDUCE [PRIM ADD [CONS [DATA 2] (*THREE*)]]");
     assertEquals(res, TestUtil.FIVE);
   }
 
@@ -74,7 +74,7 @@ public class InterpreterTest extends TestCase {
 
     res =
         i.processStatement("MACRO THREE "
-            + "[ABS [PRIM ADD [PAIR [REF 1] (*THREE*)]]]");
+            + "[ABS [PRIM ADD [CONS [REF 1] (*THREE*)]]]");
 
     res = i.processStatement("REDUCE [APP (*THREE*) [DATA 2]]");
     assertEquals(res, TestUtil.FIVE);

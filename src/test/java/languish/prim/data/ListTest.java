@@ -21,26 +21,26 @@ public class ListTest extends TestCase {
         null,
         Tuple.of()),
 
-    SINGLE_ELEMENT_LIST(pair(data(TWO), data(Tuple.of())), //
-        "[PAIR [DATA 2] [DATA []]]",
+    SINGLE_ELEMENT_LIST(cons(data(TWO), data(Tuple.of())), //
+        "[CONS [DATA 2] [DATA []]]",
         data(Tuple.of(TWO, Tuple.of())),
         Tuple.of(TWO, Tuple.of())),
 
-    DOUBLE_ELEMENT_LIST(pair(data(THREE), pair(data(TWO), data(Tuple.of()))), //
-        "[PAIR [DATA 3] [PAIR [DATA 2] [DATA []]]]",
-        pair(data(THREE), data(Tuple.of(TWO, Tuple.of()))),
+    DOUBLE_ELEMENT_LIST(cons(data(THREE), cons(data(TWO), data(Tuple.of()))), //
+        "[CONS [DATA 3] [CONS [DATA 2] [DATA []]]]",
+        cons(data(THREE), data(Tuple.of(TWO, Tuple.of()))),
         Tuple.of(THREE, Tuple.of(TWO, Tuple.of()))),
 
-    TRIPLE_ELEMENT_LIST(pair(data(THREE), pair(data(FOUR), pair(data(TWO),
+    TRIPLE_ELEMENT_LIST(cons(data(THREE), cons(data(FOUR), cons(data(TWO),
         data(Tuple.of())))), //
-        "[PAIR [DATA 3] [PAIR [DATA 4] [PAIR [DATA 2] [DATA []]]]]",
-        pair(data(THREE), pair(data(FOUR), data(Tuple.of(TWO, Tuple.of())))),
+        "[CONS [DATA 3] [CONS [DATA 4] [CONS [DATA 2] [DATA []]]]]",
+        cons(data(THREE), cons(data(FOUR), data(Tuple.of(TWO, Tuple.of())))),
         Tuple.of(THREE, Tuple.of(FOUR, Tuple.of(TWO, Tuple.of())))),
 
-    NESTED_LIST(pair(SINGLE_ELEMENT_LIST.expression, pair(data(SIX), data(Tuple
+    NESTED_LIST(cons(SINGLE_ELEMENT_LIST.expression, cons(data(SIX), data(Tuple
         .of()))), //
-        "[PAIR [PAIR [DATA 2] [DATA []]] [PAIR [DATA 6] [DATA []]]]",
-        pair(data(Tuple.of(TWO, Tuple.of())), pair(data(SIX), data(Tuple.of()))),
+        "[CONS [CONS [DATA 2] [DATA []]] [CONS [DATA 6] [DATA []]]]",
+        cons(data(Tuple.of(TWO, Tuple.of())), cons(data(SIX), data(Tuple.of()))),
         Tuple.of(Tuple.of(TWO, Tuple.of()), Tuple.of(SIX, Tuple.of()))),
 
     TEST_CAR(app(CAR, TRIPLE_ELEMENT_LIST.expression), //

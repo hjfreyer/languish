@@ -111,4 +111,8 @@ public class Tuple extends LObject {
     }
     return true;
   }
+
+  public void set(int i, LObject obj) {
+    contents[i] = obj;
+  }
 }

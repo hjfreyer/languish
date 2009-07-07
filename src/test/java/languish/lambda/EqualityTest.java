@@ -20,10 +20,10 @@ public class EqualityTest extends TestCase {
   }
 
   public void testIntegerPair() {
-    assertReducesTrue(prim(EQUALS, pair(data(TWO), data(TWO))));
-    assertReducesTrue(prim(EQUALS, pair(data(LInteger.of(2)), data(TWO))));
-    assertReducesFalse(prim(EQUALS, pair(data(LInteger.of(3)), data(TWO))));
-    assertReducesFalse(prim(EQUALS, pair(data(Tuple.of(LInteger.of(3))),
+    assertReducesTrue(prim(EQUALS, cons(data(TWO), data(TWO))));
+    assertReducesTrue(prim(EQUALS, cons(data(LInteger.of(2)), data(TWO))));
+    assertReducesFalse(prim(EQUALS, cons(data(LInteger.of(3)), data(TWO))));
+    assertReducesFalse(prim(EQUALS, cons(data(Tuple.of(LInteger.of(3))),
         data(TWO))));
   }
 

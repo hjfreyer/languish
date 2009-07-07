@@ -15,7 +15,7 @@ import languish.testing.ExpressionToTest;
 
 public class LIntegerTest extends TestCase {
 
-  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, pair(ref(1), ref(1))));
+  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, cons(ref(1), ref(1))));
 
   public enum Tests implements ExpressionToTest {
     // IDENITY TESTS
@@ -24,14 +24,14 @@ public class LIntegerTest extends TestCase {
         null,
         FIVE),
 
-    TEST_SIMPLE_ADD(prim(ADD, pair(data(FIVE), data(THREE))),
-        "[PRIM ADD [PAIR [DATA 5] [DATA 3]]]",
+    TEST_SIMPLE_ADD(prim(ADD, cons(data(FIVE), data(THREE))),
+        "[PRIM ADD [CONS [DATA 5] [DATA 3]]]",
         null,
         EIGHT),
 
     TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
-        "[APP [ABS [PRIM ADD [PAIR [REF 1] [REF 1]]]] [DATA 4]]",
-        prim(ADD, pair(data(FOUR), data(FOUR))),
+        "[APP [ABS [PRIM ADD [CONS [REF 1] [REF 1]]]] [DATA 4]]",
+        prim(ADD, cons(data(FOUR), data(FOUR))),
         EIGHT),
 
     ;
