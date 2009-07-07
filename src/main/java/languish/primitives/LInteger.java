@@ -1,4 +1,4 @@
-package languish.prim.data;
+package languish.primitives;
 
 
 public final class LInteger extends DataWrapper {

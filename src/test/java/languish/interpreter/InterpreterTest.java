@@ -2,8 +2,8 @@ package languish.interpreter;
 
 import junit.framework.TestCase;
 import languish.base.LObject;
-import languish.prim.data.LInteger;
-import languish.prim.data.LSymbol;
+import languish.primitives.LInteger;
+import languish.primitives.LSymbol;
 import languish.testing.TestUtil;
 
 public class InterpreterTest extends TestCase {

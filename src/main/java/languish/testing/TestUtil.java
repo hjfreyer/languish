@@ -4,7 +4,7 @@ import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Operation;
 import languish.base.Tuple;
-import languish.prim.data.LInteger;
+import languish.primitives.LInteger;
 
 public class TestUtil {
   // public static final LUnit UNIT = LUnit.UNIT;

@@ -1,6 +1,6 @@
 package languish.base;
 
-import languish.prim.data.LInteger;
+import languish.primitives.LInteger;
 
 public class Lambda {
   private Lambda() {}

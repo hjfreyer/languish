@@ -1,7 +1,7 @@
 package languish.prim.data;
 
 import static languish.base.Lambda.*;
-import static languish.prim.data.DataFunctions.ADD;
+import static languish.primitives.DataFunctions.ADD;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package languish.prim.data;
+package languish.primitives;
 
 import languish.base.DataFunction;
 import languish.base.LObject;

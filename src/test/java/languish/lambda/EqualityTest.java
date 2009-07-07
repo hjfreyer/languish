@@ -6,8 +6,8 @@ import static languish.testing.TestUtil.TWO;
 import junit.framework.TestCase;
 import languish.base.Lambda;
 import languish.base.Tuple;
-import languish.prim.data.LBoolean;
-import languish.prim.data.LInteger;
+import languish.primitives.LBoolean;
+import languish.primitives.LInteger;
 
 public class EqualityTest extends TestCase {
 

@@ -9,8 +9,8 @@ import languish.base.Tuple;
 import languish.interpreter.Builtins;
 import languish.interpreter.Statement;
 import languish.interpreter.Statement.Type;
-import languish.prim.data.LInteger;
-import languish.prim.data.LSymbol;
+import languish.primitives.LInteger;
+import languish.primitives.LSymbol;
 
 import org.quenta.tedir.antonius.doc.ITextDocument;
 import org.quenta.tedir.antonius.doc.ResourceDocument;

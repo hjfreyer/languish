@@ -2,8 +2,8 @@ package languish.interpreter;
 
 import languish.base.LObject;
 import languish.base.Lambda;
-import languish.prim.data.DataFunctions;
-import languish.prim.data.LBoolean;
+import languish.primitives.DataFunctions;
+import languish.primitives.LBoolean;
 
 public enum Builtins {
   // General Ops

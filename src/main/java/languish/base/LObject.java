@@ -1,6 +1,6 @@
 package languish.base;
 
-import languish.prim.data.LBoolean;
+import languish.primitives.LBoolean;
 import languish.testing.Canonizer;
 
 public abstract class LObject {

@@ -1,8 +1,8 @@
 package languish.prim.data;
 
 import static languish.base.Lambda.*;
-import static languish.prim.data.DataFunctions.*;
-import static languish.prim.data.LBoolean.*;
+import static languish.primitives.DataFunctions.*;
+import static languish.primitives.LBoolean.*;
 import static languish.testing.CommonExps.LOOP;
 import static languish.testing.TestUtil.*;
 
@@ -11,6 +11,7 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Tuple;
+import languish.primitives.LInteger;
 import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;
 

@@ -1,4 +1,4 @@
-package languish.prim.data;
+package languish.primitives;
 
 public final class LSymbol extends DataWrapper {
   private final String value;

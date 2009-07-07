@@ -3,7 +3,7 @@ package languish.testing;
 import static languish.base.Lambda.*;
 import languish.base.LObject;
 import languish.base.Tuple;
-import languish.prim.data.DataFunctions;
+import languish.primitives.DataFunctions;
 
 public class CommonExps {
 

@@ -4,8 +4,8 @@ import static languish.base.Lambda.*;
 import languish.base.Lambda;
 import languish.base.Tuple;
 import languish.interpreter.Statement;
-import languish.prim.data.LInteger;
-import languish.prim.data.LSymbol;
+import languish.primitives.LInteger;
+import languish.primitives.LSymbol;
 
 public class ExpressionBasedParser extends Parser {
 
