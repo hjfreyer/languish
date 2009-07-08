@@ -1,4 +1,4 @@
-package languish.lambda;
+package languish.base;
 
 import static languish.base.LObject.EQUALS;
 import static languish.base.Lambda.*;

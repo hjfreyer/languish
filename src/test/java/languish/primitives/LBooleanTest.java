@@ -1,4 +1,4 @@
-package languish.prim.data;
+package languish.primitives;
 
 import static languish.base.Lambda.*;
 import static languish.primitives.DataFunctions.*;

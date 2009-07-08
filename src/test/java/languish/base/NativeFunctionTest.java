@@ -1,4 +1,4 @@
-package languish.lambda;
+package languish.base;
 
 import junit.framework.TestCase;
 

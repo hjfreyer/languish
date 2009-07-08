@@ -1,3 +1,4 @@
+package languish.primitives;
 //package languish.prim.data;
 //
 //import static languish.testing.TestConstants.*;

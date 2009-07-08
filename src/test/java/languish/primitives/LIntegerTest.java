@@ -1,6 +1,7 @@
-package languish.lambda;
+package languish.primitives;
 
-import static languish.base.Lambda.data;
+import static languish.base.Lambda.*;
+import static languish.primitives.DataFunctions.ADD;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
@@ -9,26 +10,29 @@ import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Tuple;
-import languish.testing.CommonExps;
 import languish.testing.ExpressionTester;
 import languish.testing.ExpressionToTest;
 
-public class ExpressionTest extends TestCase {
+public class LIntegerTest extends TestCase {
+
+  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, cons(ref(1), ref(1))));
+
   public enum Tests implements ExpressionToTest {
-    LITERAL_INT(data(FIVE), //
+    // IDENITY TESTS
+    TEST_DATA(data(FIVE), //
         "[DATA 5]",
         null,
         FIVE),
 
-    IDENTITY(Lambda.app(IDENT, data(FOUR)), //
-        "[APP [ABS [REF 1]] [DATA 4]]",
+    TEST_SIMPLE_ADD(prim(ADD, cons(data(FIVE), data(THREE))),
+        "[PRIM ADD [CONS [DATA 5] [DATA 3]]]",
         null,
-        FOUR),
+        EIGHT),
 
-    LOOP(CommonExps.LOOP, //
-        "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [APP [REF 1] [REF 1]]]]",
-        CommonExps.LOOP,
-        null),
+    TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
+        "[APP [ABS [PRIM ADD [CONS [REF 1] [REF 1]]]] [DATA 4]]",
+        prim(ADD, cons(data(FOUR), data(FOUR))),
+        EIGHT),
 
     ;
 
