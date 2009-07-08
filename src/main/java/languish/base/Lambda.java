@@ -198,6 +198,10 @@ public class Lambda {
     return Tuple.of(PRIM, func, arg);
   }
 
+  public static Tuple cons() {
+    return Tuple.of(CONS);
+  }
+
   public static Tuple cons(LObject obj1) {
     return Tuple.of(CONS, obj1);
   }
@@ -208,6 +212,11 @@ public class Lambda {
 
   public static Tuple cons(LObject obj1, LObject obj2, LObject obj3) {
     return Tuple.of(CONS, obj1, obj2, obj3);
+  }
+
+  public static Tuple cons(LObject obj1, LObject obj2, LObject obj3,
+      LObject obj4) {
+    return Tuple.of(CONS, obj1, obj2, obj3, obj4);
   }
 
   public static Tuple get(int i, Tuple cons) {

@@ -11,6 +11,8 @@ import languish.base.Tuple;
 public class CommonExpsTest extends TestCase {
   public enum Tests implements ExpressionToTest {
 
+    IDENTITY_(IDENTITY, IDENTITY_CODE),
+
     OMEGA_(OMEGA, OMEGA_CODE),
     LOOP_(LOOP, LOOP_CODE),
 

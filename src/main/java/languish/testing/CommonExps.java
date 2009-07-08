@@ -7,6 +7,10 @@ import languish.primitives.DataFunctions;
 
 public class CommonExps {
 
+  // BASIC FUNCS
+  public static final Tuple IDENTITY = abs(ref(1));
+  public static final String IDENTITY_CODE = "[ABS [REF 1]]";
+
   // RECURSION
   public static final Tuple OMEGA = abs(app(ref(1), ref(1)));
   public static final String OMEGA_CODE = "[ABS [APP [REF 1] [REF 1]]]";

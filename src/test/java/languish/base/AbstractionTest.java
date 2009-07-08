@@ -1,14 +1,11 @@
 package languish.base;
 
+import static languish.testing.CommonExps.IDENTITY;
 import static languish.testing.TestUtil.*;
 import junit.framework.TestCase;
-import languish.base.Lambda;
-import languish.base.Tuple;
 import languish.testing.TestUtil;
 
 public class AbstractionTest extends TestCase {
-
-  private static final Tuple IDENTITY = Lambda.abs(Lambda.ref(1));
 
   private static final Tuple FIRST_PICKER =
       Lambda.abs(Lambda.abs(Lambda.ref(2)));
