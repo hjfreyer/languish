@@ -23,10 +23,10 @@ public class CommonExps {
   public static final String EMPTY_LIST_CODE = "[DATA []]";
 
   public static final Tuple CAR = abs(get(1, ref(1)));
-  public static final String CAR_CODE = "[ABS [GET 1 [REF 1]]]";
+  public static final String CAR_CODE = "[ABS [GET [DATA 1] [REF 1]]]";
 
   public static final Tuple CDR = abs(get(2, ref(1)));
-  public static final String CDR_CODE = "[ABS [GET 2 [REF 1]]]";
+  public static final String CDR_CODE = "[ABS [GET [DATA 2] [REF 1]]]";
 
   public static final Tuple PUSHL = abs(abs(cons(ref(1), ref(2))));
   public static final String PUSHL_CODE = "[ABS [ABS [CONS [REF 1] [REF 2]]]]";
@@ -45,7 +45,7 @@ public class CommonExps {
               app(app(app(ref(3), ref(3)), app(CDR, ref(2))), ref(1))))))));
 
   public static final String ADDL_CODE =
-      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [APP [APP [PRIM BRANCH [EQUALS [DATA []] [REF 2]]] [CONS [REF 1] [DATA []]]] [CONS [APP [ABS [GET 1 [REF 1]]] [REF 2]] [APP [APP [APP [REF 3] [REF 3]] [APP [ABS [GET 2 [REF 1]]] [REF 2]]] [REF 1]]]]]]]]";
+      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [EQUALS [DATA []] [REF 2]]] [CONS [REF 1] [DATA []]]] [CONS [APP [ABS [GET [DATA 1] [REF 1]]] [REF 2]] [APP [APP [APP [REF 3] [REF 3]] [APP [ABS [GET [DATA 2] [REF 1]]] [REF 2]]] [REF 1]]]]]]]]";
 
   private CommonExps() {}
 

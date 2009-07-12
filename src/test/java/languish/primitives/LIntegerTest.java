@@ -26,12 +26,12 @@ public class LIntegerTest extends TestCase {
         FIVE),
 
     TEST_SIMPLE_ADD(prim(ADD, data(FIVE), data(THREE)),
-        "[PRIM ADD [DATA 5] [DATA 3]]",
+        "[PRIM [DATA ADD] [DATA 5] [DATA 3]]",
         null,
         EIGHT),
 
     TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
-        "[APP [ABS [PRIM ADD [REF 1] [REF 1]]] [DATA 4]]",
+        "[APP [ABS [PRIM [DATA ADD] [REF 1] [REF 1]]] [DATA 4]]",
         prim(ADD, data(FOUR), data(FOUR)),
         EIGHT),
 

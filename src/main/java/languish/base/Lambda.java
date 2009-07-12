@@ -52,15 +52,22 @@ public class Lambda {
   public static final Operation GET = new Operation() {
     @Override
     public Tuple reduceOnce(Tuple get) {
-      LInteger index = (LInteger) get.getSecond();
+      Tuple index = (Tuple) get.getSecond();
       Tuple arg = (Tuple) get.getThird();
+
+      if (index.getFirst() != DATA) {
+        get.setSecond(reduceTupleOnce(index));
+        return get;
+      }
 
       if (arg.getFirst() != CONS) {
         get.setThird(reduceTupleOnce(arg));
         return get;
       }
 
-      return (Tuple) arg.get(index.intValue());
+      LInteger indexInt = (LInteger) index.getSecond();
+
+      return (Tuple) arg.get(indexInt.intValue());
     }
   };
 
@@ -134,18 +141,17 @@ public class Lambda {
   public static final Operation PRIM = new Operation() {
     @Override
     public Tuple reduceOnce(Tuple prim) {
-      DataFunction func = (DataFunction) prim.getSecond();
+      // Reduce children
+      for (int i = 1; i < prim.size(); i++) {
+        Tuple child = (Tuple) prim.get(i);
 
-      // Arguments start with 3 item
-      for (int i = 2; i < prim.size(); i++) {
-        Tuple arg = (Tuple) prim.get(i);
-
-        if (arg.getFirst() != DATA) {
-          prim.set(i, reduceTupleOnce(arg));
+        if (child.getFirst() != DATA) {
+          prim.set(i, reduceTupleOnce(child));
           return prim;
         }
       }
 
+      DataFunction func = (DataFunction) ((Tuple) prim.getSecond()).getSecond();
       LObject[] args = new LObject[prim.size() - 2];
 
       for (int i = 2; i < prim.size(); i++) {
@@ -239,28 +245,10 @@ public class Lambda {
           id + 1, with));
       return exp;
     }
-    if (op == CONS) {
+    if (op == CONS || op == PRIM || op == APP || op == EQUALS || op == GET) {
       for (int i = 1; i < exp.size(); i++) {
         exp.set(i, replaceAllReferencesToParam((Tuple) exp.get(i), id, with));
       }
-      return exp;
-    }
-    if (op == PRIM) {
-      for (int i = 2; i < exp.size(); i++) {
-        exp.set(i, replaceAllReferencesToParam((Tuple) exp.get(i), id, with));
-      }
-      return exp;
-    }
-    if (op == APP || op == EQUALS) {
-      exp.setSecond( //
-          replaceAllReferencesToParam((Tuple) exp.getSecond(), id, with));
-      exp.setThird( // 
-          replaceAllReferencesToParam((Tuple) exp.getThird(), id, with));
-      return exp;
-    }
-    if (op == GET) {
-      exp.setThird( // 
-          replaceAllReferencesToParam((Tuple) exp.getThird(), id, with));
       return exp;
     }
     throw new AssertionError();
@@ -286,7 +274,7 @@ public class Lambda {
     LObject[] tuple = new LObject[args.length + 2];
 
     tuple[0] = PRIM;
-    tuple[1] = func;
+    tuple[1] = data(func);
 
     for (int i = 0; i < args.length; i++) {
       tuple[i + 2] = args[i];
@@ -321,7 +309,7 @@ public class Lambda {
   }
 
   public static Tuple get(int i, Tuple cons) {
-    return Tuple.of(GET, LInteger.of(i), cons);
+    return Tuple.of(GET, data(LInteger.of(i)), cons);
   }
 
 }

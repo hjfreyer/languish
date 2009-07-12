@@ -30,22 +30,22 @@ public class LBooleanTest extends TestCase {
 
     // BASIC TESTS
     LITERAL_TRUE(prim(BRANCH, data(TRUE)), //
-        "[PRIM BRANCH [DATA TRUE]]",
+        "[PRIM [DATA BRANCH] [DATA TRUE]]",
         BRANCH_THEN,
         null),
 
     LITERAL_FALSE(prim(BRANCH, data(FALSE)), //
-        "[PRIM BRANCH [DATA FALSE]]",
+        "[PRIM [DATA BRANCH] [DATA FALSE]]",
         BRANCH_ELSE,
         null),
 
     APPLICATION_ON_SELECTOR(prim(BRANCH, app(IDENT, data(TRUE))),
-        "[PRIM BRANCH [APP [ABS [REF 1]] [DATA TRUE]]]",
+        "[PRIM [DATA BRANCH] [APP [ABS [REF 1]] [DATA TRUE]]]",
         LITERAL_TRUE.expression,
         null),
 
     LOOP_ON_SELECTOR(prim(BRANCH, LOOP),
-        "[PRIM BRANCH [APP [ABS [APP [REF 1] [REF 1]]] "
+        "[PRIM [DATA BRANCH] [APP [ABS [APP [REF 1] [REF 1]]] "
             + "[ABS [APP [REF 1] [REF 1]]]]]",
         prim(BRANCH, LOOP),
         null),
@@ -82,7 +82,7 @@ public class LBooleanTest extends TestCase {
     // OVERALL
     WHOLE_SHEBANG(app(app(prim(BRANCH, data(TRUE)), app(IDENT, data(FOUR))),
         data(FIVE)), //
-        "[APP [APP [PRIM BRANCH [DATA TRUE]] "
+        "[APP [APP [PRIM [DATA BRANCH] [DATA TRUE]] "
             + "[APP [ABS [REF 1]] [DATA 4]]] [DATA 5]]",
         app(app(abs(abs(ref(2))), app(abs(ref(1)), data(LInteger.of(4)))),
             data(LInteger.of(5))),
@@ -91,7 +91,8 @@ public class LBooleanTest extends TestCase {
     NESTED(app(app(prim(BRANCH, //
         app(app(prim(BRANCH, data(TRUE)), data(FALSE)), data(TRUE))),
         data(FOUR)), data(FIVE)), //
-        "[APP [APP [PRIM BRANCH [APP [APP [PRIM BRANCH [DATA TRUE]] "
+        "[APP [APP [PRIM [DATA BRANCH] [APP [APP [PRIM [DATA BRANCH] "
+            + "[DATA TRUE]] "
             + "[DATA FALSE]] [DATA TRUE]]] [DATA 4]] [DATA 5]]",
         app(app(prim(BRANCH,
             app(app(abs(abs(ref(2))), data(FALSE)), data(TRUE))), data(FOUR)),
