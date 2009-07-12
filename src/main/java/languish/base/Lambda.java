@@ -1,5 +1,7 @@
 package languish.base;
 
+import languish.primitives.DataFunctions;
+import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
 
 public class Lambda {
@@ -9,11 +11,11 @@ public class Lambda {
     Tuple tuple = (Tuple) exp.deepClone();
 
     while (true) {
-      if (tuple.getFirst() != DATA) {
-        tuple = reduceTupleOnce(tuple);
-      } else {
+      if (tuple.getFirst() == DATA) {
         return tuple.getSecond();
       }
+
+      tuple = reduceTupleOnce(tuple);
     }
   }
 
@@ -53,22 +55,37 @@ public class Lambda {
       LInteger index = (LInteger) get.getSecond();
       Tuple arg = (Tuple) get.getThird();
 
-      if (arg.getFirst() != CONS && arg.getFirst() != DATA) {
+      if (arg.getFirst() != CONS) {
         get.setThird(reduceTupleOnce(arg));
         return get;
       }
 
-      if (arg.getFirst() == CONS) {
-        return (Tuple) arg.get(index.intValue());
-      }
-
-      if (arg.getFirst() == DATA) {
-        return data(((Tuple) arg.getSecond()).get(index.intValue() - 1));
-      }
-
-      throw new AssertionError();
+      return (Tuple) arg.get(index.intValue());
     }
   };
+
+  // public static final Operation GET = new Operation() {
+  // @Override
+  // public Tuple reduceOnce(Tuple get) {
+  // LInteger index = (LInteger) get.getSecond();
+  // Tuple arg = (Tuple) get.getThird();
+  //
+  // if (arg.getFirst() != CONS && arg.getFirst() != DATA) {
+  // get.setThird(reduceTupleOnce(arg));
+  // return get;
+  // }
+  //
+  // if (arg.getFirst() == CONS) {
+  // return (Tuple) arg.get(index.intValue());
+  // }
+  //
+  // if (arg.getFirst() == DATA) {
+  // return data(((Tuple) arg.getSecond()).get(index.intValue() - 1));
+  // }
+  //
+  // throw new AssertionError();
+  // }
+  // };
 
   // public static final Operation GET = new Operation() {
   // @Override
@@ -87,47 +104,112 @@ public class Lambda {
   // }
   // };
 
-  public static final Operation CONS = new Operation() {
-    @Override
-    public Tuple reduceOnce(Tuple tuple) {
-      for (int i = 1; i < tuple.size(); i++) {
-        Tuple child = (Tuple) tuple.get(i);
+  public static final Operation CONS = new IrreducibleOperation("CONS");
 
-        if (child.getFirst() != DATA) {
-          tuple.set(i, reduceTupleOnce(child));
-          return tuple;
-        }
-      }
-
-      LObject[] reduced = new LObject[tuple.size() - 1];
-
-      for (int i = 1; i < tuple.size(); i++) {
-        Tuple child = (Tuple) tuple.get(i);
-        // Since all children are reduced, first element is DATA
-
-        reduced[i - 1] = child.getSecond();
-      }
-
-      return data(Tuple.of(reduced));
-    }
-  };
+  // public static final Operation CONS = new Operation() {
+  // @Override
+  // public Tuple reduceOnce(Tuple tuple) {
+  // for (int i = 1; i < tuple.size(); i++) {
+  // Tuple child = (Tuple) tuple.get(i);
+  //
+  // if (child.getFirst() != DATA) {
+  // tuple.set(i, reduceTupleOnce(child));
+  // return tuple;
+  // }
+  // }
+  //
+  // LObject[] reduced = new LObject[tuple.size() - 1];
+  //
+  // for (int i = 1; i < tuple.size(); i++) {
+  // Tuple child = (Tuple) tuple.get(i);
+  // // Since all children are reduced, first element is DATA
+  //
+  // reduced[i - 1] = child.getSecond();
+  // }
+  //
+  // return data(Tuple.of(reduced));
+  // }
+  // };
 
   public static final Operation PRIM = new Operation() {
     @Override
     public Tuple reduceOnce(Tuple prim) {
       DataFunction func = (DataFunction) prim.getSecond();
-      Tuple argument = (Tuple) prim.getThird();
 
-      if (argument.getFirst() != DATA) {
-        prim.setThird(reduceTupleOnce(argument));
-        return prim;
+      // Arguments start with 3 item
+      for (int i = 2; i < prim.size(); i++) {
+        Tuple arg = (Tuple) prim.get(i);
+
+        if (arg.getFirst() != DATA) {
+          prim.set(i, reduceTupleOnce(arg));
+          return prim;
+        }
       }
 
-      return func.apply(argument.getSecond()).deepClone();
+      LObject[] args = new LObject[prim.size() - 2];
+
+      for (int i = 2; i < prim.size(); i++) {
+        Tuple arg = (Tuple) prim.get(i);
+        // Since all children are reduced, first element is "DATA"
+        args[i - 2] = arg.getSecond();
+      }
+
+      return func.apply(args).deepClone();
+    }
+  };
+
+  public static final Operation EQUALS = new Operation() {
+    @Override
+    public Tuple reduceOnce(Tuple tuple) {
+      Tuple expA = (Tuple) tuple.getSecond();
+      Tuple expB = (Tuple) tuple.getThird();
+
+      Operation opA = (Operation) expA.getFirst();
+      Operation opB = (Operation) expB.getFirst();
+
+      if (isReducible(opA)) {
+        tuple.setSecond(reduceTupleOnce(expA));
+        return tuple;
+      }
+      if (isReducible(opB)) {
+        tuple.setThird(reduceTupleOnce(expB));
+        return tuple;
+      }
+      if (opA != opB) {
+        return Lambda.data(LBoolean.FALSE);
+      }
+      if (opA == ABS) {
+        tuple.setSecond(expA.getSecond());
+        tuple.setThird(expB.getSecond());
+        return tuple;
+      }
+      if (opA == DATA || opA == REF) {
+        return Lambda.data(LBoolean.of(expA.getSecond()
+            .equals(expB.getSecond())));
+      }
+      if (opA == CONS) {
+        if (expA.size() != expB.size()) {
+          return Lambda.data(LBoolean.FALSE);
+        }
+
+        Tuple[] equalities = new Tuple[expA.size() - 1];
+
+        for (int i = 1; i < expA.size(); i++) {
+          equalities[i - 1] = Tuple.of(EQUALS, expA.get(i), expB.get(i));
+        }
+
+        return DataFunctions.andChain(equalities);
+      }
+
+      throw new AssertionError();
     }
   };
 
   public static final Operation REF = new IrreducibleOperation("REF");
+
+  public static boolean isReducible(Operation op) {
+    return op == APP || op == GET || op == PRIM || op == EQUALS;
+  }
 
   private static class IrreducibleOperation extends Operation {
     private final String name;
@@ -138,7 +220,7 @@ public class Lambda {
 
     @Override
     public Tuple reduceOnce(Tuple tuple) {
-      throw new IllegalReductionError(name + " cannot be reduced");
+      throw new IllegalReductionError("Expression cannot be reduced " + tuple);
     }
   }
 
@@ -163,14 +245,20 @@ public class Lambda {
       }
       return exp;
     }
-    if (op == APP) {
+    if (op == PRIM) {
+      for (int i = 2; i < exp.size(); i++) {
+        exp.set(i, replaceAllReferencesToParam((Tuple) exp.get(i), id, with));
+      }
+      return exp;
+    }
+    if (op == APP || op == EQUALS) {
       exp.setSecond( //
           replaceAllReferencesToParam((Tuple) exp.getSecond(), id, with));
       exp.setThird( // 
           replaceAllReferencesToParam((Tuple) exp.getThird(), id, with));
       return exp;
     }
-    if (op == GET || op == PRIM) {
+    if (op == GET) {
       exp.setThird( // 
           replaceAllReferencesToParam((Tuple) exp.getThird(), id, with));
       return exp;
@@ -194,8 +282,21 @@ public class Lambda {
     return Tuple.of(REF, LInteger.of(i));
   }
 
-  public static Tuple prim(DataFunction func, Tuple arg) {
-    return Tuple.of(PRIM, func, arg);
+  public static Tuple prim(DataFunction func, Tuple... args) {
+    LObject[] tuple = new LObject[args.length + 2];
+
+    tuple[0] = PRIM;
+    tuple[1] = func;
+
+    for (int i = 0; i < args.length; i++) {
+      tuple[i + 2] = args[i];
+    }
+
+    return Tuple.of(tuple);
+  }
+
+  public static Tuple eq(Tuple a, Tuple b) {
+    return Tuple.of(EQUALS, a, b);
   }
 
   public static Tuple cons() {

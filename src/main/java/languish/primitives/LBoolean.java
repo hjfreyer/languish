@@ -23,7 +23,7 @@ public final class LBoolean extends DataWrapper {
   }
 
   public static LObject of(boolean b) {
-    return new LBoolean(b);
+    return b ? TRUE : FALSE;
   }
 
 }

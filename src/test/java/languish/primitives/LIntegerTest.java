@@ -5,33 +5,34 @@ import static languish.primitives.DataFunctions.ADD;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Tuple;
-import languish.testing.ExpressionTester;
-import languish.testing.ExpressionToTest;
+import languish.testing.LanguishTestList;
+import languish.testing.TestUtil;
 
 public class LIntegerTest extends TestCase {
 
-  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, cons(ref(1), ref(1))));
+  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, ref(1), ref(1)));
 
-  public enum Tests implements ExpressionToTest {
+  public enum Tests implements LanguishTestList {
     // IDENITY TESTS
     TEST_DATA(data(FIVE), //
         "[DATA 5]",
         null,
         FIVE),
 
-    TEST_SIMPLE_ADD(prim(ADD, cons(data(FIVE), data(THREE))),
-        "[PRIM ADD [CONS [DATA 5] [DATA 3]]]",
+    TEST_SIMPLE_ADD(prim(ADD, data(FIVE), data(THREE)),
+        "[PRIM ADD [DATA 5] [DATA 3]]",
         null,
         EIGHT),
 
     TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
-        "[APP [ABS [PRIM ADD [CONS [REF 1] [REF 1]]]] [DATA 4]]",
-        prim(ADD, cons(data(FOUR), data(FOUR))),
+        "[APP [ABS [PRIM ADD [REF 1] [REF 1]]] [DATA 4]]",
+        prim(ADD, data(FOUR), data(FOUR)),
         EIGHT),
 
     ;
@@ -64,9 +65,13 @@ public class LIntegerTest extends TestCase {
     public LObject getReducedCompletely() {
       return reducedCompletely;
     }
+
+    public List<?> getListContents() {
+      return null;
+    }
   }
 
   public void test() {
-    ExpressionTester.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.testExpressions(Arrays.asList(Tests.values()));
   }
 }

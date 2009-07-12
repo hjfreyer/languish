@@ -7,40 +7,40 @@ import static languish.testing.CommonExps.LOOP;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Tuple;
-import languish.primitives.LInteger;
-import languish.testing.ExpressionTester;
-import languish.testing.ExpressionToTest;
+import languish.testing.LanguishTestList;
+import languish.testing.TestUtil;
 
 public class LBooleanTest extends TestCase {
-  public enum Tests implements ExpressionToTest {
+  public enum Tests implements LanguishTestList {
     // IDENITY TESTS
     GET_TRUE(data(TRUE), //
-        "TRUE",
+        "[DATA TRUE]",
         null,
-        null),
+        TRUE),
 
     GET_FALSE(data(FALSE), //
-        "FALSE",
+        "[DATA FALSE]",
         null,
-        null),
+        FALSE),
 
     // BASIC TESTS
     LITERAL_TRUE(prim(BRANCH, data(TRUE)), //
-        "[PRIM BRANCH TRUE]",
+        "[PRIM BRANCH [DATA TRUE]]",
         BRANCH_THEN,
         null),
 
     LITERAL_FALSE(prim(BRANCH, data(FALSE)), //
-        "[PRIM BRANCH FALSE]",
+        "[PRIM BRANCH [DATA FALSE]]",
         BRANCH_ELSE,
         null),
 
     APPLICATION_ON_SELECTOR(prim(BRANCH, app(IDENT, data(TRUE))),
-        "[PRIM BRANCH [APP [ABS [REF 1]] TRUE]]",
+        "[PRIM BRANCH [APP [ABS [REF 1]] [DATA TRUE]]]",
         LITERAL_TRUE.expression,
         null),
 
@@ -82,7 +82,7 @@ public class LBooleanTest extends TestCase {
     // OVERALL
     WHOLE_SHEBANG(app(app(prim(BRANCH, data(TRUE)), app(IDENT, data(FOUR))),
         data(FIVE)), //
-        "[APP [APP [PRIM BRANCH TRUE] "
+        "[APP [APP [PRIM BRANCH [DATA TRUE]] "
             + "[APP [ABS [REF 1]] [DATA 4]]] [DATA 5]]",
         app(app(abs(abs(ref(2))), app(abs(ref(1)), data(LInteger.of(4)))),
             data(LInteger.of(5))),
@@ -91,8 +91,8 @@ public class LBooleanTest extends TestCase {
     NESTED(app(app(prim(BRANCH, //
         app(app(prim(BRANCH, data(TRUE)), data(FALSE)), data(TRUE))),
         data(FOUR)), data(FIVE)), //
-        "[APP [APP [PRIM BRANCH [APP [APP [PRIM BRANCH TRUE] FALSE] TRUE]] "
-            + "[DATA 4]] [DATA 5]]",
+        "[APP [APP [PRIM BRANCH [APP [APP [PRIM BRANCH [DATA TRUE]] "
+            + "[DATA FALSE]] [DATA TRUE]]] [DATA 4]] [DATA 5]]",
         app(app(prim(BRANCH,
             app(app(abs(abs(ref(2))), data(FALSE)), data(TRUE))), data(FOUR)),
             data(FIVE)),
@@ -128,9 +128,13 @@ public class LBooleanTest extends TestCase {
     public LObject getReducedCompletely() {
       return reducedCompletely;
     }
+
+    public List<?> getListContents() {
+      return null;
+    }
   }
 
   public void test() {
-    ExpressionTester.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.testExpressions(Arrays.asList(Tests.values()));
   }
 }

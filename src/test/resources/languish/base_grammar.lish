@@ -9,46 +9,59 @@ MACRO CDR [ABS [GET 2 [REF 1]]];;
 MACRO ADDL 
   [APP [ABS [APP [REF 1] [REF 1]]] 
     [ABS [ABS [ABS [APP [APP 
-      [PRIM BRANCH [PRIM EQUALS [CONS [DATA []] [REF 2]]]] 
+      [PRIM BRANCH [PRIM EQUALS [DATA []] [REF 2]]]
       [CONS [REF 1] [DATA []]]] 
       [CONS [APP [ABS [GET 1 [REF 1]]] [REF 2]] 
             [APP [APP [APP [REF 3] [REF 3]] 
                 [APP [ABS [GET 2 [REF 1]]] [REF 2]]] [REF 1]]]]]]]]
 ;;
 
+
 // Building Grammar 
-MACRO GRAMMAR (*EMPTY_LIST*);;
+MACRO GRAMMAR [];;
 
-MACRO GRAMMAR [APP [APP (*ADDL*) (*GRAMMAR*)]
-  [DATA 4]
-];;
+MACRO GRAMMAR [
+  [
+    "ROOT"
+    ["SEQ" [["NON_TERM" "STATEMENT"] []]]
+    [ABS [REF 1]]
+  ] 
+  (*GRAMMAR*)]
+;;
 
-//
-////MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-////(!"ROOT"!))
-////(APP (APP (~WRAP~) (!1!)) 
-////  (APP (~NON_TERM~) (!"STATEMENT"!))))
-////(WRAP (ABS +1)))
-//
-//
-////MACRO STATEMENT_MACRO 
-////(APP (APP (APP (APP (~WRAP~) (!3!)) 
-////  (APP (~TERM~) (!"MACRO"!)))
-////  (APP (~VALUE~) (!"PrimIdent"!)))
-////  (APP (~NON_TERM~) (!"EXPRESSION"!)))
-////
-//
-//
-////MACRO STATEMENT_MACRO_FUNC 
-////(WRAP (!"macro"!))
-////
-//
-//
-////MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-////(!"STATEMENT"!))
-////(*STATEMENT_MACRO*))
-////(*STATEMENT_MACRO_FUNC*))
-////
+MACRO GRAMMAR [[
+    "STATEMENT"
+    ["SEQ" [["TERM" "REDUCE"] [["NON_TERM" "LOBJECT"] []]]]
+    [ABS [ABS [CONS [DATA 0] [REF 2]]]]
+  ]
+  (*GRAMMAR*)]
+;;
+
+MACRO GRAMMAR [[
+    "STATEMENT"
+    ["SEQ" [["TERM" "SET_PARSER"] [["NON_TERM" "LOBJECT"] []]]]
+    [ABS [ABS [ABS [CONS [DATA 1] [REF 3]]]]]
+  ]
+  (*GRAMMAR*)]
+;;
+
+MACRO GRAMMAR [[
+    "STATEMENT"
+    ["SEQ" [["TERM" "SET_ENV"] [["NON_TERM" "LOBJECT"] []]]]
+    [ABS [ABS [ABS [CONS [DATA 2] [REF 3]]]]]
+  ]
+  (*GRAMMAR*)]
+;;
+
+MACRO GRAMMAR [[
+    "LOBJECT"
+    ["SEQ" [["VALUE" "PrimIdent"] []]]
+    [ABS [PRIM BUILTIN_GET [REF 1]]]
+  ]
+  (*GRAMMAR*)]
+;;
+
+
 //
 //MACRO STATEMENT_DISPLAY 
 //(APP (APP (APP (~WRAP~) (!2!)) 
@@ -235,6 +248,6 @@ MACRO GRAMMAR [APP [APP (*ADDL*) (*GRAMMAR*)]
 //(*LIT_INT_FUNC*))
 //
 //
-//SET_PARSER (APP (~INTERPRET_STATEMENT~) (*GRAMMAR*))
-//
-REDUCE [DATA 4];;
+SET_PARSER [ABS [ABS [PRIM INTERPRET_STATEMENT [DATA (*GRAMMAR*)] [REF 2] [REF 1]]]];;
+
+REDUCE APP;;

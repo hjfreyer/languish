@@ -3,13 +3,14 @@ package languish.testing;
 import static languish.testing.CommonExps.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Tuple;
 
 public class CommonExpsTest extends TestCase {
-  public enum Tests implements ExpressionToTest {
+  public enum Tests implements LanguishTestList {
 
     IDENTITY_(IDENTITY, IDENTITY_CODE),
 
@@ -48,9 +49,13 @@ public class CommonExpsTest extends TestCase {
     public LObject getReducedCompletely() {
       return null;
     }
+
+    public List<?> getListContents() {
+      return null;
+    }
   }
 
   public void test() {
-    ExpressionTester.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.testExpressions(Arrays.asList(Tests.values()));
   }
 }

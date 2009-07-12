@@ -14,7 +14,7 @@ MACRO MAP
   [ABS // FUNC
   [ABS // LIST
     [APP [APP
-    [PRIM BRANCH [PRIM EQUALS [CONS (*EMPTY_LIST*) [REF 1]]]] // if LIST == []
+    [PRIM BRANCH [EQUALS (*EMPTY_LIST*) [REF 1]]] // if LIST == []
       [DATA []]] // Then: return []
       [CONS [APP [REF 2] [APP (*CAR*) [REF 1]]] // Else return FUNC(CAR LIST) ::
             [APP [APP [APP                      // SELF(SELF, FUNC, (CDR LIST))

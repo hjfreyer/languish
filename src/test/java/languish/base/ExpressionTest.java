@@ -4,17 +4,15 @@ import static languish.base.Lambda.data;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.TestCase;
-import languish.base.LObject;
-import languish.base.Lambda;
-import languish.base.Tuple;
 import languish.testing.CommonExps;
-import languish.testing.ExpressionTester;
-import languish.testing.ExpressionToTest;
+import languish.testing.LanguishTestList;
+import languish.testing.TestUtil;
 
 public class ExpressionTest extends TestCase {
-  public enum Tests implements ExpressionToTest {
+  public enum Tests implements LanguishTestList {
     LITERAL_INT(data(FIVE), //
         "[DATA 5]",
         null,
@@ -60,9 +58,13 @@ public class ExpressionTest extends TestCase {
     public LObject getReducedCompletely() {
       return reducedCompletely;
     }
+
+    public List<?> getListContents() {
+      return null;
+    }
   }
 
   public void test() {
-    ExpressionTester.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.testExpressions(Arrays.asList(Tests.values()));
   }
 }
