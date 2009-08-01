@@ -56,7 +56,7 @@ public class InterpreterTest extends TestCase {
     res = i.processStatement("REDUCE (*THREE*)");
     assertEquals(res, TestUtil.THREE);
 
-    res = i.processStatement("REDUCE [PRIM ADD [CONS [DATA 2] (*THREE*)]]");
+    res = i.processStatement("REDUCE [PRIM [DATA ADD] [DATA 2] (*THREE*)]");
     assertEquals(res, TestUtil.FIVE);
   }
 
@@ -74,7 +74,7 @@ public class InterpreterTest extends TestCase {
 
     res =
         i.processStatement("MACRO THREE "
-            + "[ABS [PRIM ADD [CONS [REF 1] (*THREE*)]]]");
+            + "[ABS [PRIM [DATA ADD] [REF 1] (*THREE*)]]");
 
     res = i.processStatement("REDUCE [APP (*THREE*) [DATA 2]]");
     assertEquals(res, TestUtil.FIVE);

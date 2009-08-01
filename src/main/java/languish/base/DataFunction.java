@@ -2,7 +2,7 @@ package languish.base;
 
 public abstract class DataFunction extends LObject {
 
-  public abstract Tuple apply(LObject arg);
+  public abstract Tuple apply(LObject... arg);
 
   @Override
   public final LObject deepClone() {

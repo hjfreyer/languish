@@ -1,9 +1,13 @@
 package languish.testing;
 
+import java.util.List;
+
+import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Operation;
 import languish.base.Tuple;
+import languish.parsing.BuiltinParser;
 import languish.primitives.LInteger;
 
 public class TestUtil {
@@ -38,4 +42,67 @@ public class TestUtil {
     return result;
   }
 
+  public static void assertList(String msg, List<?> contents, Tuple exp) {
+
+    for (Object obj : contents) {
+      Tuple car = Lambda.app(CommonExps.CAR, exp);
+      exp = Lambda.app(CommonExps.CDR, exp);
+
+      if (obj instanceof List) {
+        assertList(msg, (List<?>) obj, car);
+      } else if (obj instanceof LObject) {
+        TestCase.assertEquals(msg, obj, Lambda.reduce(car));
+      }
+    }
+
+    TestCase.assertEquals(msg, Tuple.of(), Lambda.reduce(exp));
+  }
+
+  private static final BuiltinParser parser = new BuiltinParser();
+
+  public static void testExpressions(
+      List<? extends LanguishTestList> expressions) {
+
+    for (LanguishTestList expToTest : expressions) {
+      Tuple exp = expToTest.getExpression();
+      String code = expToTest.getCode();
+      Tuple reducedOnce = expToTest.getReducedOnce();
+      LObject reducedCompletely = expToTest.getReducedCompletely();
+      List<?> listContents = expToTest.getListContents();
+
+      if (code != null) {
+        // TOSTRING
+        TestCase.assertEquals("on test " + expToTest.name()
+            + " - getCodeForExpression() does not match code:", code, Canonizer
+            .getCodeForExpression(exp));
+
+        // PARSE
+        LObject parsed =
+            parser.parseStatementToExpression("REDUCE " + code).getSecond();
+
+        TestCase.assertEquals("on test " + expToTest.name()
+            + " - code does not parse to given expression:", parsed, exp);
+      }
+      // REDUCE ONCE
+      if (reducedOnce != null) {
+        TestCase.assertEquals("on test " + expToTest.name()
+            + " - expression does not reduce once to given value:",
+            reducedOnce, reduceTupleOnce(exp.deepClone()));
+      }
+
+      // REDUCE COMPLETELY
+      if (reducedCompletely != null) {
+        TestCase.assertEquals("on test " + expToTest.name()
+            + " - expression does not ultimately reduce to given value:",
+            reducedCompletely, Lambda.reduce(exp));
+      }
+
+      // LIST CONTENTS
+      if (listContents != null) {
+        assertList("on test " + expToTest.name()
+            + " - expression does not correspond to given list:", listContents,
+            exp);
+      }
+    }
+  }
 }

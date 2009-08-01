@@ -1,240 +1,128 @@
 
 MACRO OMEGA [ABS [APP [REF 1] [REF 1]]];;
 
-MACRO EMPTY_LIST [DATA []];;
+MACRO NULL [DATA []];;
 
-MACRO CAR [ABS [GET 1 [REF 1]]];;
-MACRO CDR [ABS [GET 2 [REF 1]]];;
+MACRO CAR [ABS [GET [DATA 1] [REF 1]]];;
+MACRO CDR [ABS [GET [DATA 2] [REF 1]]];;
 
-MACRO ADDL 
-  [APP [ABS [APP [REF 1] [REF 1]]] 
-    [ABS [ABS [ABS [APP [APP 
-      [PRIM BRANCH [PRIM EQUALS [CONS [DATA []] [REF 2]]]] 
-      [CONS [REF 1] [DATA []]]] 
-      [CONS [APP [ABS [GET 1 [REF 1]]] [REF 2]] 
-            [APP [APP [APP [REF 3] [REF 3]] 
-                [APP [ABS [GET 2 [REF 1]]] [REF 2]]] [REF 1]]]]]]]]
+MACRO CAAR [ABS [APP (*CAR*) [APP (*CAR*) [REF 1]]]];;
+MACRO CADR [ABS [APP (*CAR*) [APP (*CDR*) [REF 1]]]];;
+
+MACRO MAP_PUT 
+  [ABS // MAP
+  [ABS // KEY
+  [ABS // VAL
+    [CONS [CONS [REF 2] [REF 1]] [REF 3]]
+  ]]]
 ;;
 
+MACRO MAP_GET 
+  [ABS // SELF
+  [ABS // MAP
+  [ABS // KEY
+  [ABS // DEFAULT
+    [APP [APP [PRIM [DATA BRANCH] [EQUALS (*NULL*) [REF 3]]] // IF MAP==NULL
+      [REF 1]] // RETURN DEFAULT
+      [APP [APP [PRIM [DATA BRANCH] // elsif...
+        [EQUALS [REF 2] [APP (*CAAR*) [REF 3]]]] // top of map key = KEY
+          [APP (*CDR*) [APP (*CAR*) [REF 3]]]]  // then return top of map val
+          [APP [APP [APP [APP [REF 4]  // ELSE, recurse
+            [REF 4]] 
+            [APP (*CDR*) [REF 3]]] 
+            [REF 2]]
+            [REF 1]]]
+    ]
+  ]]]]
+;;          
+
+MACRO MAP_GET [APP (*OMEGA*) (*MAP_GET*)];;
+
 // Building Grammar 
-MACRO GRAMMAR (*EMPTY_LIST*);;
+MACRO GRAMMAR [];;
 
-MACRO GRAMMAR [APP [APP (*ADDL*) (*GRAMMAR*)]
-  [DATA 4]
-];;
+MACRO GRAMMAR [
+  [
+    "ROOT"
+    ["SEQ" [["NON_TERM" "STATEMENT"] []]]
+    [ABS [REF 1]]
+  ] 
+  (*GRAMMAR*)]
+;;
 
-//
-////MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-////(!"ROOT"!))
-////(APP (APP (~WRAP~) (!1!)) 
-////  (APP (~NON_TERM~) (!"STATEMENT"!))))
-////(WRAP (ABS +1)))
-//
-//
-////MACRO STATEMENT_MACRO 
-////(APP (APP (APP (APP (~WRAP~) (!3!)) 
-////  (APP (~TERM~) (!"MACRO"!)))
-////  (APP (~VALUE~) (!"PrimIdent"!)))
-////  (APP (~NON_TERM~) (!"EXPRESSION"!)))
-////
-//
-//
-////MACRO STATEMENT_MACRO_FUNC 
-////(WRAP (!"macro"!))
-////
-//
-//
-////MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-////(!"STATEMENT"!))
-////(*STATEMENT_MACRO*))
-////(*STATEMENT_MACRO_FUNC*))
-////
-//
-//MACRO STATEMENT_DISPLAY 
-//(APP (APP (APP (~WRAP~) (!2!)) 
-//  (APP (~TERM~) (!"EVAL"!)))
-//  (APP (~NON_TERM~) (!"EXPRESSION"!)))
-//
-//
-//MACRO STATEMENT_DISPLAY_FUNC
-//(WRAP (ABS (APP (APP (APP (~WRAP~) (!2!)) (!0!)) +1)
-//))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"STATEMENT"!))
-//(*STATEMENT_DISPLAY*))
-//(*STATEMENT_DISPLAY_FUNC*))
-//
-//
-//MACRO STATEMENT_SET_ENV
-//(APP (APP (APP (APP (~WRAP~) (!3!)) 
-//  (APP (~TERM~) (!"SET"!)))
-//  (APP (~VALUE~) (!"PrimIdent"!)))
-//  (APP (~NON_TERM~) (!"EXPRESSION"!)))
-//
-//
-//MACRO STATEMENT_SET_ENV_FUNC
-//(WRAP (ABS // This is the expression following SET_ENV
-//  (APP (APP (APP (~WRAP~) (!2!)) (!1!)) +1)
-//))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"STATEMENT"!))
-//(*STATEMENT_SET_ENV*))
-//(*STATEMENT_SET_ENV_FUNC*))
-//
-//
-//MACRO STATEMENT_SET_PARSER 
-//(APP (APP (APP (~WRAP~) (!2!)) 
-//  (APP (~TERM~) (!"SET_PARSER"!)))
-//  (APP (~NON_TERM~) (!"EXPRESSION"!)))
-//
-//
-//MACRO STATEMENT_SET_PARSER_FUNC
-//(APP (~MK_WRAPPER~) (!"set_parser"!))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"STATEMENT"!))
-//(*STATEMENT_SET_PARSER*))
-//(*STATEMENT_SET_PARSER_FUNC*))
-//
-//
-//
-//MACRO EXP_ABS
-//(APP (APP (APP (APP (~WRAP~) (!3!))
-//  (APP (~TERM~) (!"(ABS"!)))
-//  (APP (~NON_TERM~) (!"EXPRESSION"!)))
-//  (APP (~TERM~) (!")"!)))
-//
-//
-//MACRO EXP_ABS_FUNC
-//(APP (~MK_WRAPPER~) (!"abs"!))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"EXPRESSION"!))
-//(*EXP_ABS*))
-//(*EXP_ABS_FUNC*))
-//
-//
-//MACRO EXP_APP
-//(APP (APP (APP (APP (APP (~WRAP~) (!4!))
-//  (APP (~TERM~) (!"(APP"!)))
-//  (APP (~NON_TERM~) (!"EXPRESSION"!)))
-//  (APP (~NON_TERM~) (!"EXPRESSION"!)))
-//  (APP (~TERM~) (!")"!)))
-//
-//
-//MACRO EXP_APP_FUNC
-//(APP (~MK_WRAPPER~) (!"app"!))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"EXPRESSION"!))
-//(*EXP_APP*))
-//(*EXP_APP_FUNC*))
-//
-//
-//MACRO EXP_PG
-//(APP (APP (APP (APP (~WRAP~) (!3!))
-//  (APP (~TERM~) (!"(~"!)))
-//  (APP (~VALUE~) (!"PrimIdent"!)))
-//  (APP (~TERM~) (!"~)"!)))
-//
-//
-//MACRO EXP_PG_FUNC
-//(APP (~MK_WRAPPER~) (!"prim_get"!))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"EXPRESSION"!))
-//(*EXP_PG*))
-//(*EXP_PG_FUNC*))
-//
-//
-//MACRO EXP_LIT
-//(APP (APP (APP (APP (~WRAP~) (!3!))
-//  (APP (~TERM~) (!"(!"!)))
-//  (APP (~NON_TERM~) (!"LITERAL"!)))
-//  (APP (~TERM~) (!"!)"!)))
-//
-//
-//MACRO EXP_LIT_FUNC
-//(WRAP (ABS +1))
-//
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"EXPRESSION"!))
-//(*EXP_LIT*))
-//(*EXP_LIT_FUNC*))
-//
-//
-//MACRO EXP_REF
-//(APP (APP (APP (~WRAP~) (!2!))
-//  (APP (~TERM~) (!"+"!)))
-//  (APP (~VALUE~) (!"number"!)))
-//
-//
-//MACRO EXP_REF_FUNC
-//(APP (~MK_WRAPPER~) (!"ref"!))
-//
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"EXPRESSION"!))
-//(*EXP_REF*))
-//(*EXP_REF_FUNC*))
-//
-//
-//MACRO EXP_MG
-//(APP (APP (APP (APP (~WRAP~) (!3!))
-//  (APP (~TERM~) (!"(*"!)))
-//  (APP (~VALUE~) (!"PrimIdent"!)))
-//  (APP (~TERM~) (!"*)"!)))
-//
-//
-//MACRO EXP_MG_FUNC
-//(APP (~MK_WRAPPER~) (!"macro_get"!))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"EXPRESSION"!))
-//(*EXP_MG*))
-//(*EXP_MG_FUNC*))
-//
-//
-//MACRO LIT_SYMBOL
-//(APP (APP (~WRAP~) (!1!))
-//  (APP (~VALUE~) (!"string"!)))
-//
-//
-//MACRO LIT_SYMBOL_FUNC
-//(APP (~MK_WRAPPER~) (!"symbol_lit"!))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"LITERAL"!))
-//(*LIT_SYMBOL*))
-//(*LIT_SYMBOL_FUNC*))
-//
-//
-//MACRO LIT_INT
-//(APP (APP (~WRAP~) (!1!))
-//  (APP (~VALUE~) (!"number"!)))
-//
-//
-//MACRO LIT_INT_FUNC
-//(APP (~MK_BUILTIN_GET~) (!"PARSE_INT"!))
-// 
-//
-//MACRO GRAMMAR (APP (APP (APP (APP (~ADD_RULE~) (*GRAMMAR*))
-//(!"LITERAL"!))
-//(*LIT_INT*))
-//(*LIT_INT_FUNC*))
-//
-//
-//SET_PARSER (APP (~INTERPRET_STATEMENT~) (*GRAMMAR*))
-//
-REDUCE [DATA 4];;
+MACRO GRAMMAR [[
+    "STATEMENT"
+    ["SEQ" [["TERM" "REDUCE"] [["NON_TERM" "LOBJECT"] []]]]
+    [ABS [ABS [CONS [DATA 0] [REF 2]]]]
+  ]
+  (*GRAMMAR*)]
+;;
+
+MACRO GRAMMAR [[
+    "STATEMENT"
+    ["SEQ" [["TERM" "SET_PARSER"] [["NON_TERM" "LOBJECT"] []]]]
+    [ABS [ABS [CONS [DATA 1] [REF 2]]]]
+  ]
+  (*GRAMMAR*)]
+;;
+
+MACRO GRAMMAR [[
+    "STATEMENT"
+    ["SEQ" [["TERM" "SET_ENV"] [["NON_TERM" "LOBJECT"] []]]]
+    [ABS [ABS [CONS [DATA 2] [REF 2]]]]
+  ]
+  (*GRAMMAR*)]
+;;
+
+MACRO GRAMMAR [[
+    "LOBJECT"
+    ["SEQ" [["VALUE" "PrimIdent"] []]]
+    [ABS [PRIM [DATA BUILTIN_GET] [REF 1]]]
+  ]
+  (*GRAMMAR*)]
+;;
+
+MACRO ENV (*NULL*);;
+
+MACRO ENV [APP [APP [APP (*MAP_PUT*) (*ENV*)] 
+  [DATA "PARSER"]] 
+  [ABS [PRIM [DATA INTERPRET_STATEMENT]
+    [DATA (*GRAMMAR*)] [REF 1]]]]
+;;
+
+MACRO ENV [APP [APP [APP (*MAP_PUT*) (*ENV*)] 
+  [DATA "EVAL"]] 
+  [ABS [REF 1]]]
+;;
+
+SET_ENV (*ENV*);;
+
+MACRO GET_EVAL 
+  [ABS [APP [APP [APP (*MAP_GET*) [REF 1]] [DATA "EVAL"]] (*NULL*)]];;
+MACRO GET_PARSER 
+  [ABS [APP [APP [APP (*MAP_GET*) [REF 1]] [DATA "PARSER"]] (*NULL*)]];;
+
+SET_PARSER 
+  [ABS // CODE
+  [ABS // ENV
+    [APP 
+      [APP 
+        [APP (*GET_EVAL*) [REF 1]] // USE EVAL TO GET STATEMENT
+        [APP // PARSE CODE
+          [APP (*GET_PARSER*) [REF 1]]
+          [REF 2]
+        ]
+      ]
+      [REF 1]
+    ]
+  ]]
+;;
+    
+
+   
+MACRO ENV [APP [APP [APP (*MAP_PUT*) (*ENV*)] 
+  [DATA "EVAL"]] 
+  [CONS [DATA 0] [DATA 47]]]
+;;   
+
+REDUCE APP;;

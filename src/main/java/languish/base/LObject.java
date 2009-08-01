@@ -1,17 +1,18 @@
 package languish.base;
 
-import languish.primitives.LBoolean;
 import languish.testing.Canonizer;
 
 public abstract class LObject {
 
-  public static final DataFunction EQUALS = new DataFunction() {
-    @Override
-    public Tuple apply(LObject arg) {
-      Tuple pair = (Tuple) arg;
-      return Lambda.data(LBoolean.of(pair.getFirst().equals(pair.getSecond())));
-    }
-  };
+  // public static final DataFunction EQUALS = new DataFunction() {
+  // @Override
+  // public Tuple apply(LObject... args) {
+  // LObject a = args[0];
+  // LObject b = args[1];
+  //
+  // return Lambda.data(LBoolean.of(a.equals(b)));
+  // }
+  // };
 
   @Override
   public abstract boolean equals(Object obj);
