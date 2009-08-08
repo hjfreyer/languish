@@ -7,6 +7,7 @@ import languish.base.Tuple;
 import languish.base.DataFunction.SingleArgDataFunction;
 import languish.base.DataFunction.TreeDataFunction;
 import languish.base.DataFunction.TwoArgDataFunction;
+import languish.interpreter.Builtins;
 
 public class DataFunctions {
 
@@ -68,16 +69,36 @@ public class DataFunctions {
     }
   };
 
-  //
-  // public static final DataFunction BUILTIN_GET = new DataFunction() {
-  // @Override
-  // public Tuple apply(LObject... obj) {
-  // LSymbol symbol = (LSymbol) obj[0];
-  //
-  // return Lambda
-  // .data(Builtins.valueOf(symbol.stringValue()).getExpression());
-  // }
-  // };
+  public static final DataFunction BUILTIN_GET = new SingleArgDataFunction() {
+    @Override
+    public Tuple applySingle(LObject arg) {
+      LSymbol symbol = (LSymbol) arg;
+
+      return Lambda
+          .data(Builtins.valueOf(symbol.stringValue()).getExpression());
+    }
+  };
+
+  public static final DataFunction LIST_TO_TUPLES = new TreeDataFunction() {
+    @Override
+    public LObject getNull() {
+      return Tuple.of();
+    }
+
+    @Override
+    public LObject reduce(LObject arg1, LObject arg2) {
+      Tuple cdr = (Tuple) arg2;
+
+      LObject[] children = new LObject[cdr.size() + 1];
+      children[0] = arg1;
+
+      for (int i = 0; i < cdr.size(); i++) {
+        children[i + 1] = cdr.get(i);
+      }
+
+      return Tuple.of(children);
+    }
+  };
 
   private DataFunctions() {}
 }

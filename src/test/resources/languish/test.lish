@@ -1,81 +1,9 @@
 
 MACRO OMEGA [ABS [APP [REF 1] [REF 1]]];;
 
-MACRO EMPTY_LIST [DATA []];;
-
-MACRO CAR [ABS [GET 1 [REF 1]]];;
-MACRO CDR [ABS [GET 2 [REF 1]]];;
-
-MACRO PUSH [ABS [ABS [CONS [REF 1] [REF 2]]]];;
-
-// SEE CommonExps.java for annotated version
-MACRO MAP 
-  [ABS // SELF
-  [ABS // FUNC
-  [ABS // LIST
-    [APP [APP
-    [PRIM BRANCH [EQUALS (*EMPTY_LIST*) [REF 1]]] // if LIST == []
-      [DATA []]] // Then: return []
-      [CONS [APP [REF 2] [APP (*CAR*) [REF 1]]] // Else return FUNC(CAR LIST) ::
-            [APP [APP [APP                      // SELF(SELF, FUNC, (CDR LIST))
-              [REF 3] [REF 3]] [REF 2]] [APP (*CDR*) [REF 1]]]
-      ]
-    ]
-  ]]] 
-;;
-
-MACRO MAP [APP (*OMEGA*) (*MAP*)];;
-
-MACRO ADDONE [ABS [PRIM ADD [CONS [REF 1] [DATA 1]]]];;
-
-MACRO LIST [CONS [DATA 4] [CONS [DATA 5] [CONS [DATA 1] [DATA []]]]];;
-
-//REDUCE [APP [APP (*MAP*) (*ADDONE*)] (*LIST*)]
-
-MACRO OMEGA [ABS [APP [REF 1] [REF 1]]];;
-
 MACRO NULL [DATA []];;
 
-MACRO CAR [ABS [GET [DATA 1] [REF 1]]];;
-MACRO CDR [ABS [GET [DATA 2] [REF 1]]];;
+MACRO GRAMMAR [DATA [["ROOT" "FOO" ["TERM" "FOOBAR"]]]];;
 
-MACRO CAAR [ABS [APP (*CAR*) [APP (*CAR*) [REF 1]]]];;
-MACRO CADR [ABS [APP (*CAR*) [APP (*CDR*) [REF 1]]]];;
-
-MACRO MAP_PUT 
-  [ABS // MAP
-  [ABS // KEY
-  [ABS // VAL
-    [CONS [CONS [REF 2] [REF 1]] [REF 3]]
-  ]]]
-;;
-
-MACRO MAP_GET 
-  [ABS // SELF
-  [ABS // MAP
-  [ABS // KEY
-  [ABS // DEFAULT
-    [APP [APP [PRIM [DATA BRANCH] [EQUALS (*NULL*) [REF 3]]] // IF MAP==NULL
-      [REF 1]] // RETURN DEFAULT
-      [APP [APP [PRIM [DATA BRANCH] // elsif...
-        [EQUALS [REF 2] [APP (*CAAR*) [REF 3]]]] // top of map key = KEY
-          [APP (*CDR*) [APP (*CAR*) [REF 3]]]]  // then return top of map val
-          [APP [APP [APP [APP [REF 4]  // ELSE, recurse
-            [REF 4]] 
-            [APP (*CDR*) [REF 3]]] 
-            [REF 2]]
-            [REF 1]]]
-    ]
-  ]]]]
-;;          
-
-MACRO MAP_GET [APP (*OMEGA*) (*MAP_GET*)];;
-
-MACRO TEST (*NULL*);;
-
-MACRO TEST [APP [APP [APP (*MAP_PUT*) (*TEST*)] [DATA 2]] [DATA 3]];;
-MACRO TEST [APP [APP [APP (*MAP_PUT*) (*TEST*)] [DATA 5]] [DATA 6]];;
-MACRO TEST [APP [APP [APP (*MAP_PUT*) (*TEST*)] [DATA "ROCK"]] [DATA 100]];;
-
-REDUCE [APP [APP [APP (*MAP_GET*) (*TEST*)] [DATA "ROCK"]] (*NULL*)];;
-
+REDUCE [PRIM [DATA LIST_TO_TUPLE_TREE] 
+  [PRIM [DATA PARSE_STATEMENT] [CONS (*GRAMMAR*) [DATA "FOOBAR"]]]];;

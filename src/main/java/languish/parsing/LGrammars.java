@@ -1,6 +1,6 @@
 package languish.parsing;
 
-import static languish.base.Lambda.*;
+import static languish.base.Lambda.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,6 +9,7 @@ import java.util.List;
 import languish.base.DataFunction;
 import languish.base.LObject;
 import languish.base.Tuple;
+import languish.base.Util;
 import languish.primitives.LSymbol;
 
 import org.quenta.tedir.antonius.doc.StringDocument;
@@ -29,7 +30,7 @@ public class LGrammars {
 
   private LGrammars() {}
 
-  public static final DataFunction INTERPRET_STATEMENT =
+  public static final DataFunction PARSE_STATEMENT =
       new DataFunction.TwoArgDataFunction() {
         @Override
         public Tuple applyPair(LObject obj1, LObject obj2) {
@@ -41,19 +42,19 @@ public class LGrammars {
           INode root =
               parser.parse(new StringDocument(inputString.stringValue()));
 
-          return convertNode(root);
+          return encodeNode(root);
         }
       };
 
   private static class GrammarRule {
+    final String name;
     final String type;
     final HTree tree;
-    final Tuple function;
 
-    public GrammarRule(String type, HTree tree, Tuple function) {
+    private GrammarRule(String name, String type, HTree tree) {
+      this.name = name;
       this.type = type;
       this.tree = tree;
-      this.function = function;
     }
   }
 
@@ -83,17 +84,14 @@ public class LGrammars {
   private static List<GrammarRule> getRulesFromSpec(Tuple grammarSpec) {
     List<GrammarRule> rules = new ArrayList<GrammarRule>();
 
-    while (!grammarSpec.equals(Tuple.of())) {
-      Tuple rule = (Tuple) grammarSpec.getFirst();
-      grammarSpec = (Tuple) grammarSpec.getSecond();
+    for (LObject ruleTuple : grammarSpec.getContents()) {
+      Tuple rule = (Tuple) ruleTuple;
 
       LSymbol type = (LSymbol) rule.getFirst();
-      HTree tree = hTreeFromSpec((Tuple) rule.getSecond());
-      Tuple function = (Tuple) rule.getThird();
+      LSymbol name = (LSymbol) rule.getSecond();
+      HTree tree = hTreeFromSpec((Tuple) rule.getThird());
 
-      tree.tag(function);
-
-      rules.add(0, new GrammarRule(type.stringValue(), tree, function));
+      rules.add(new GrammarRule(name.stringValue(), type.stringValue(), tree));
     }
     return rules;
   }
@@ -103,7 +101,7 @@ public class LGrammars {
 
     for (GrammarRule rule : rules) {
       if (rule.type.equals(type)) {
-        result.addProduction(new Production(rule.tree).tag(rule.function));
+        result.addProduction(new Production(rule.tree).tag(rule.name));
       }
     }
 
@@ -204,35 +202,26 @@ public class LGrammars {
         || c == '$';
   }
 
-  public static Tuple convertNode(INode node) {
-    if (node.isText()) {
+  public static Tuple encodeNode(INode node) {
+    if (node.isEmpty()) {
+      return Util.listify(data(LSymbol.of("EMTPY_NODE")));
+    } else if (node.isText()) {
       return data(LSymbol.of(node.asString()));
     } else if (node.isTagged()) {
-      Tuple function = (Tuple) node.getTag();
+      LSymbol tag = LSymbol.of((String) node.getTag());
 
-      return app(function, convertNode(node.getValue()));
+      return Util.listify(data(tag), encodeNode(node.getValue()));
     } else if (node.isList()) {
       List<INode> childNodes = node.getChildren();
       Tuple[] children = new Tuple[childNodes.size()];
 
       for (int i = 0; i < children.length; i++) {
-        children[i] = convertNode(childNodes.get(i));
+        children[i] = encodeNode(childNodes.get(i));
       }
 
-      return arrayToList(children);
-
+      return Util.listify(children);
     } else {
       throw new AssertionError();
     }
-  }
-
-  private static Tuple arrayToList(Tuple[] items) {
-    Tuple result = data(Tuple.of());
-
-    for (int i = items.length - 1; i >= 0; i--) {
-      result = cons(items[i], result);
-    }
-
-    return result;
   }
 }

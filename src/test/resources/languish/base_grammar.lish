@@ -3,11 +3,8 @@ MACRO OMEGA [ABS [APP [REF 1] [REF 1]]];;
 
 MACRO NULL [DATA []];;
 
-MACRO CAR [ABS [GET [DATA 1] [REF 1]]];;
-MACRO CDR [ABS [GET [DATA 2] [REF 1]]];;
-
-MACRO CAAR [ABS [APP (*CAR*) [APP (*CAR*) [REF 1]]]];;
-MACRO CADR [ABS [APP (*CAR*) [APP (*CDR*) [REF 1]]]];;
+MACRO CAAR [ABS [CAR [CAR [REF 1]]]];;
+MACRO CADR [ABS [CAR [CDR [REF 1]]]];;
 
 MACRO MAP_PUT 
   [ABS // MAP
@@ -22,14 +19,14 @@ MACRO MAP_GET
   [ABS // MAP
   [ABS // KEY
   [ABS // DEFAULT
-    [APP [APP [PRIM [DATA BRANCH] [EQUALS (*NULL*) [REF 3]]] // IF MAP==NULL
+    [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA EQUALS] [CONS (*NULL*) [REF 3]]]] // IF MAP==NULL
       [REF 1]] // RETURN DEFAULT
       [APP [APP [PRIM [DATA BRANCH] // elsif...
-        [EQUALS [REF 2] [APP (*CAAR*) [REF 3]]]] // top of map key = KEY
-          [APP (*CDR*) [APP (*CAR*) [REF 3]]]]  // then return top of map val
+        [PRIM [DATA EQUALS] [CONS [REF 2] [APP (*CAAR*) [REF 3]]]]] // top of map key = KEY
+          [CDR [CAR [REF 3]]]]  // then return top of map val
           [APP [APP [APP [APP [REF 4]  // ELSE, recurse
             [REF 4]] 
-            [APP (*CDR*) [REF 3]]] 
+            [CDR [REF 3]]] 
             [REF 2]]
             [REF 1]]]
     ]
@@ -38,91 +35,37 @@ MACRO MAP_GET
 
 MACRO MAP_GET [APP (*OMEGA*) (*MAP_GET*)];;
 
-// Building Grammar 
-MACRO GRAMMAR [];;
-
-MACRO GRAMMAR [
-  [
-    "ROOT"
+MACRO GRAMMAR [DATA [
+  [ "ROOT"
+    "STATEMENT"
     ["SEQ" [["NON_TERM" "STATEMENT"] []]]
-    [ABS [REF 1]]
-  ] 
-  (*GRAMMAR*)]
-;;
-
-MACRO GRAMMAR [[
-    "STATEMENT"
+  ]
+  
+  [ "STATEMENT"
+    "REDUCE"
     ["SEQ" [["TERM" "REDUCE"] [["NON_TERM" "LOBJECT"] []]]]
-    [ABS [ABS [CONS [DATA 0] [REF 2]]]]
   ]
-  (*GRAMMAR*)]
-;;
 
-MACRO GRAMMAR [[
-    "STATEMENT"
+  [ "STATEMENT"
+    "SET_PARSER"
     ["SEQ" [["TERM" "SET_PARSER"] [["NON_TERM" "LOBJECT"] []]]]
-    [ABS [ABS [CONS [DATA 1] [REF 2]]]]
   ]
-  (*GRAMMAR*)]
-;;
-
-MACRO GRAMMAR [[
-    "STATEMENT"
+  
+  [ "STATEMENT"
+    "SET_ENV"
     ["SEQ" [["TERM" "SET_ENV"] [["NON_TERM" "LOBJECT"] []]]]
-    [ABS [ABS [CONS [DATA 2] [REF 2]]]]
   ]
-  (*GRAMMAR*)]
-;;
-
-MACRO GRAMMAR [[
-    "LOBJECT"
+  
+  [ "LOBJECT"
+    "PRIM_GET"
     ["SEQ" [["VALUE" "PrimIdent"] []]]
-    [ABS [PRIM [DATA BUILTIN_GET] [REF 1]]]
   ]
-  (*GRAMMAR*)]
-;;
+]];;
 
-MACRO ENV (*NULL*);;
+MACRO PARSE_NODE [
+  
+];;
 
-MACRO ENV [APP [APP [APP (*MAP_PUT*) (*ENV*)] 
-  [DATA "PARSER"]] 
-  [ABS [PRIM [DATA INTERPRET_STATEMENT]
-    [DATA (*GRAMMAR*)] [REF 1]]]]
-;;
-
-MACRO ENV [APP [APP [APP (*MAP_PUT*) (*ENV*)] 
-  [DATA "EVAL"]] 
-  [ABS [REF 1]]]
-;;
-
-SET_ENV (*ENV*);;
-
-MACRO GET_EVAL 
-  [ABS [APP [APP [APP (*MAP_GET*) [REF 1]] [DATA "EVAL"]] (*NULL*)]];;
-MACRO GET_PARSER 
-  [ABS [APP [APP [APP (*MAP_GET*) [REF 1]] [DATA "PARSER"]] (*NULL*)]];;
-
-SET_PARSER 
-  [ABS // CODE
-  [ABS // ENV
-    [APP 
-      [APP 
-        [APP (*GET_EVAL*) [REF 1]] // USE EVAL TO GET STATEMENT
-        [APP // PARSE CODE
-          [APP (*GET_PARSER*) [REF 1]]
-          [REF 2]
-        ]
-      ]
-      [REF 1]
-    ]
-  ]]
-;;
-    
-
-   
-MACRO ENV [APP [APP [APP (*MAP_PUT*) (*ENV*)] 
-  [DATA "EVAL"]] 
-  [CONS [DATA 0] [DATA 47]]]
-;;   
-
-REDUCE APP;;
+REDUCE [PRIM [DATA LIST_TO_TUPLES] 
+  [PRIM [DATA PARSE_STATEMENT] [CONS (*GRAMMAR*) [DATA "REDUCE APP"]]]];;
+ 

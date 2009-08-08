@@ -26,7 +26,7 @@ public class Lambda {
     return result;
   }
 
-  public static final Operation ABS = new IrreducibleOperation("ABS");
+  public static final Operation ABS = new IrreducibleOperation();
 
   public static final Operation APP = new Operation() {
     @Override
@@ -45,7 +45,7 @@ public class Lambda {
     }
   };
 
-  public static final Operation DATA = new IrreducibleOperation("DATA");
+  public static final Operation DATA = new IrreducibleOperation();
 
   public static final Operation CAR = new Operation() {
     @Override
@@ -75,7 +75,7 @@ public class Lambda {
     }
   };
 
-  public static final Operation CONS = new IrreducibleOperation("CONS");
+  public static final Operation CONS = new IrreducibleOperation();
 
   public static final Operation PRIM = new Operation() {
     @Override
@@ -127,19 +127,13 @@ public class Lambda {
     }
   };
 
-  public static final Operation REF = new IrreducibleOperation("REF");
+  public static final Operation REF = new IrreducibleOperation();
 
   public static boolean isReducible(LObject op) {
     return op == APP || op == CAR || op == CDR || op == PRIM;
   }
 
   private static class IrreducibleOperation extends Operation {
-    private final String name;
-
-    public IrreducibleOperation(String name) {
-      this.name = name;
-    }
-
     @Override
     public Tuple reduceOnce(Tuple tuple) {
       throw new IllegalReductionError("Expression cannot be reduced " + tuple);
@@ -196,7 +190,7 @@ public class Lambda {
     return Tuple.of(PRIM, data(func), arg);
   }
 
-  public static Tuple cons(LObject obj1, LObject obj2) {
+  public static Tuple cons(Tuple obj1, Tuple obj2) {
     return Tuple.of(CONS, obj1, obj2);
   }
 

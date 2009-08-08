@@ -33,6 +33,8 @@ public enum Builtins {
   REF(Lambda.REF),
   CONS(Lambda.CONS),
 
+  LIST_TO_TUPLES(DataFunctions.LIST_TO_TUPLES),
+
   // REDUCTION_ERROR(Lambda.REDUCTION_ERROR),
 
   // LComposite
@@ -45,7 +47,7 @@ public enum Builtins {
   //
   // // Hadrian
   // EMPTY_GRAMMAR(data(LGrammars.EMPTY_GRAMMAR)),
-  INTERPRET_STATEMENT(LGrammars.INTERPRET_STATEMENT),
+  PARSE_STATEMENT(LGrammars.PARSE_STATEMENT),
   // ADD_RULE(LGrammars.ADD_RULE),
   // // SET_NONTERMS(Wrapper.of(LMaps.EMPTY_MAP)),
   // TERM(LGrammars.TERM),

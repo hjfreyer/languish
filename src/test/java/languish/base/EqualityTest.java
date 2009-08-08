@@ -21,8 +21,8 @@ public class EqualityTest extends TestCase {
     INT_IDENTITY(data(TWO), data(TWO)),
     INT_VALUE(data(TWO), data(LInteger.of(2))),
     INT_INSIDE_APP(data(TWO), app(IDENTITY, data(LInteger.of(2)))),
-    INT_RESULT_OF_PRIM(data(FIVE), prim(DataFunctions.ADD, listify(data(TWO),
-        data(THREE)))),
+    INT_RESULT_OF_PRIM(data(FIVE), prim(DataFunctions.ADD, Util.listify(
+        data(TWO), data(THREE)))),
 
     CONS_BASIC(cons(data(TWO), data(THREE)), cons(data(TWO), data(THREE))),
     CONS_WITH_REDUCE(cons(app(IDENTITY, data(TWO)), data(THREE)), cons(

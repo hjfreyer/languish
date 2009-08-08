@@ -1,46 +1,27 @@
-package languish.primitives;
+package languish.libtesting;
 
 import static languish.base.Lambda.*;
-import static languish.primitives.DataFunctions.ADD;
-import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
 import languish.base.LObject;
-import languish.base.Lambda;
 import languish.base.Tuple;
-import languish.base.Util;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
 
-public class LIntegerTest extends TestCase {
+public class CommonTest extends TestCase{
+  public static final Tuple NULL = data(Tuple.of());
+  
+  public static final Tuple CAAR = abs(car(car(ref(1))));
+  public static final Tuple CADR = abs(car(cdr(ref(1))));
 
-  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, cons(ref(1), ref(1))));
+  public static final Tuple OMEGA = abs(app(ref(1), ref(1)));
+  public static final String OMEGA_CODE = "[ABS [APP [REF 1] [REF 1]]]";
 
   public enum Tests implements LanguishTestList {
-    TEST_DATA(data(FIVE), //
-        "[DATA 5]",
-        null,
-        FIVE),
-
-    TEST_SIMPLE_ADD(prim(ADD, cons(data(FIVE), data(THREE))),
-        "[PRIM [DATA ADD] [CONS [DATA 5] [DATA 3]]]",
-        null,
-        EIGHT),
-
-    TEST_TRIPLE_ADD(prim(ADD, Util.listify(data(FIVE), data(THREE), data(SIX))),
-        "[PRIM [DATA ADD] "
-            + "[CONS [DATA 5] [CONS [DATA 3] [CONS [DATA 6] [DATA []]]]]]",
-        null,
-        FOURTEEN),
-
-    TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
-        "[APP [ABS [PRIM [DATA ADD] [CONS [REF 1] [REF 1]]]] [DATA 4]]",
-        prim(ADD, cons(data(FOUR), data(FOUR))),
-        EIGHT),
-
+    
     ;
 
     private final Tuple expression;
@@ -80,4 +61,5 @@ public class LIntegerTest extends TestCase {
   public void test() {
     TestUtil.testExpressions(Arrays.asList(Tests.values()));
   }
+
 }
