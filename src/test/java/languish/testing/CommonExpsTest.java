@@ -19,8 +19,8 @@ public class CommonExpsTest extends TestCase {
 
     // LISTS
     EMPTY_LIST_(EMPTY_LIST, EMPTY_LIST_CODE),
-    CAR_(CAR, CAR_CODE),
-    CDR_(CDR, CDR_CODE),
+    // CAR_(CAR, CAR_CODE),
+    // CDR_(CDR, CDR_CODE),
     PUSHL_(PUSHL, PUSHL_CODE),
     ADDL_(ADDL, ADDL_CODE),
 

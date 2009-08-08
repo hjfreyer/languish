@@ -21,8 +21,8 @@ public class ExpressionBasedParser extends Parser {
     Tuple parseCall =
         app(app(expression, data(LSymbol.of(statement))), environment);
 
-    Tuple type = get(1, parseCall);
-    Tuple exp = get(2, parseCall);
+    Tuple type = car(parseCall);
+    Tuple exp = cdr(parseCall);
 
     int statementType = ((LInteger) Lambda.reduce(type)).intValue();
 

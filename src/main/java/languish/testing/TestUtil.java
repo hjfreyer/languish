@@ -45,8 +45,8 @@ public class TestUtil {
   public static void assertList(String msg, List<?> contents, Tuple exp) {
 
     for (Object obj : contents) {
-      Tuple car = Lambda.app(CommonExps.CAR, exp);
-      exp = Lambda.app(CommonExps.CDR, exp);
+      Tuple car = Lambda.car(exp);
+      exp = Lambda.cdr(exp);
 
       if (obj instanceof List) {
         assertList(msg, (List<?>) obj, car);
@@ -56,6 +56,16 @@ public class TestUtil {
     }
 
     TestCase.assertEquals(msg, Tuple.of(), Lambda.reduce(exp));
+  }
+
+  public static Tuple listify(Tuple... contents) {
+    Tuple result = Lambda.data(Tuple.of());
+
+    for (int i = contents.length - 1; i >= 0; i--) {
+      result = Lambda.cons(contents[i], result);
+    }
+
+    return result;
   }
 
   private static final BuiltinParser parser = new BuiltinParser();

@@ -29,19 +29,21 @@ public class LGrammars {
 
   private LGrammars() {}
 
-  public static final DataFunction INTERPRET_STATEMENT = new DataFunction() {
-    @Override
-    public Tuple apply(LObject... obj) {
-      Tuple grammarSpec = (Tuple) obj[0];
-      LSymbol inputString = (LSymbol) obj[1];
+  public static final DataFunction INTERPRET_STATEMENT =
+      new DataFunction.TwoArgDataFunction() {
+        @Override
+        public Tuple applyPair(LObject obj1, LObject obj2) {
+          Tuple grammarSpec = (Tuple) obj1;
+          LSymbol inputString = (LSymbol) obj2;
 
-      HadrianParser parser = renderGrammar(grammarSpec);
+          HadrianParser parser = renderGrammar(grammarSpec);
 
-      INode root = parser.parse(new StringDocument(inputString.stringValue()));
+          INode root =
+              parser.parse(new StringDocument(inputString.stringValue()));
 
-      return convertNode(root);
-    }
-  };
+          return convertNode(root);
+        }
+      };
 
   private static class GrammarRule {
     final String type;

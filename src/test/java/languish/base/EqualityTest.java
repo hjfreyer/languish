@@ -1,7 +1,8 @@
 package languish.base;
 
 import static languish.base.Lambda.*;
-import static languish.testing.CommonExps.*;
+import static languish.primitives.DataFunctions.EQUALS;
+import static languish.testing.CommonExps.IDENTITY;
 import static languish.testing.TestUtil.*;
 import junit.framework.TestCase;
 import languish.primitives.DataFunctions;
@@ -20,17 +21,15 @@ public class EqualityTest extends TestCase {
     INT_IDENTITY(data(TWO), data(TWO)),
     INT_VALUE(data(TWO), data(LInteger.of(2))),
     INT_INSIDE_APP(data(TWO), app(IDENTITY, data(LInteger.of(2)))),
-    INT_INSIDE_ABS(abs(data(TWO)), abs(data(LInteger.of(2)))),
-    INT_INSIDE_ABS_INSIDE_APP(abs(data(TWO)), app(IDENTITY, abs(data(TWO)))),
-    INT_INSIDE_ABS_INSIDE_APP_SANDWICH(abs(data(TWO)), app(IDENTITY, abs(app(
-        IDENTITY, data(TWO))))),
-    INT_RESULT_OF_PRIM(data(FIVE), prim(DataFunctions.ADD, data(TWO),
-        data(THREE))),
+    INT_RESULT_OF_PRIM(data(FIVE), prim(DataFunctions.ADD, listify(data(TWO),
+        data(THREE)))),
 
     CONS_BASIC(cons(data(TWO), data(THREE)), cons(data(TWO), data(THREE))),
     CONS_WITH_REDUCE(cons(app(IDENTITY, data(TWO)), data(THREE)), cons(
         data(TWO), app(IDENTITY, app(IDENTITY, data(THREE))))),
-    CAR_VS_CDAR(app(CAR, LIST_B), app(CAR, app(CDR, LIST_A)));
+    CAR_VS_CDAR(car(LIST_B), car(cdr(LIST_A)))
+
+    ;
 
     Tuple a;
     Tuple b;
@@ -44,7 +43,6 @@ public class EqualityTest extends TestCase {
 
   public enum DoesNotEqual {
     INT_CONSTANTS(data(TWO), data(THREE)),
-    INT_INSIDE_DOUBLE_ABS(abs(data(TWO)), abs(abs(data(LInteger.of(2))))),
 
     ;
     Tuple a;
@@ -59,16 +57,16 @@ public class EqualityTest extends TestCase {
 
   public void test() {
     for (Equals test : Equals.values()) {
-      Tuple exp = eq(test.a, test.b);
+      Tuple exp = prim(EQUALS, cons(test.a, test.b));
       assertEquals("EQUALS." + test.name(), LBoolean.TRUE, Lambda.reduce(exp));
-      Tuple exp2 = eq(test.b, test.a);
+      Tuple exp2 = prim(EQUALS, cons(test.b, test.a));
       assertEquals("EQUALS." + test.name(), LBoolean.TRUE, Lambda.reduce(exp2));
     }
 
     for (DoesNotEqual test : DoesNotEqual.values()) {
-      Tuple exp = eq(test.a, test.b);
+      Tuple exp = prim(EQUALS, cons(test.a, test.b));
       assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda.reduce(exp));
-      Tuple exp2 = eq(test.b, test.a);
+      Tuple exp2 = prim(EQUALS, cons(test.b, test.a));
       assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda.reduce(exp2));
     }
   }

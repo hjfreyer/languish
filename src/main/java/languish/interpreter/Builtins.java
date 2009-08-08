@@ -11,6 +11,7 @@ public enum Builtins {
 
   // Expression reducer
   // UNWRAP(LExpressionWrappers.UNWRAP),
+  EQUALS(DataFunctions.EQUALS),
 
   // Arithmetic
   ADD(DataFunctions.ADD),
@@ -24,11 +25,14 @@ public enum Builtins {
   ABS(Lambda.ABS),
   APP(Lambda.APP),
   DATA(Lambda.DATA),
-  GET(Lambda.GET),
+  CAR(Lambda.CAR),
+  CDR(Lambda.CDR),
+
+  // GET(Lambda.GET),
   PRIM(Lambda.PRIM),
   REF(Lambda.REF),
   CONS(Lambda.CONS),
-  EQUALS(Lambda.EQUALS),
+
   // REDUCTION_ERROR(Lambda.REDUCTION_ERROR),
 
   // LComposite
@@ -50,7 +54,7 @@ public enum Builtins {
   //  
   // Primitive Parsing
   PARSE_INT(DataFunctions.PARSE_INT),
-  BUILTIN_GET(DataFunctions.BUILTIN_GET),
+  // BUILTIN_GET(DataFunctions.BUILTIN_GET),
 
   ;
 
