@@ -12,7 +12,7 @@ import languish.primitives.LInteger;
 
 public class TestUtil {
   // public static final LUnit UNIT = LUnit.UNIT;
-  public static final Tuple NULL = Lambda.data(Tuple.of());
+  // public static final Tuple NULL = Lambda.data(Tuple.of());
 
   public static final LInteger ZERO = LInteger.of(0);
   public static final LInteger ONE = LInteger.of(1);

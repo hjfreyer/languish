@@ -1,7 +1,5 @@
 package languish.parsing;
 
-import static languish.base.Lambda.data;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +23,8 @@ import org.quenta.tedir.hadrian.Production;
 import org.quenta.tedir.hadrian.lex.DelimitedConfiguration;
 import org.quenta.tedir.hadrian.lex.ITokenizerConfigurator;
 import org.quenta.tedir.hadrian.lex.WordConfigurator;
+
+import com.hjfreyer.util.Lists;
 
 public class LGrammars {
 
@@ -203,15 +203,27 @@ public class LGrammars {
   }
 
   public static Tuple encodeNode(INode node) {
-    if (node.isEmpty()) {
-      return Util.listify(data(LSymbol.of("EMTPY_NODE")));
-    } else if (node.isText()) {
-      return data(LSymbol.of(node.asString()));
-    } else if (node.isTagged()) {
-      LSymbol tag = LSymbol.of((String) node.getTag());
+    List<?> tree = convertINodeToTree(node);
 
-      return Util.listify(data(tag), encodeNode(node.getValue()));
-    } else if (node.isList()) {
+    return Util.convertToLObjectExpression(tree);
+  }
+
+  @SuppressWarnings("unchecked")
+  private static List<?> convertINodeToTree(INode node) {
+    if (node.isEmpty()) {
+      return Lists.of("EMPTY_NODE");
+    } else if (node.isText()) {
+      return Lists.of("TEXT_NODE", node.asString());
+    } else if (node.isTagged()) {
+      String tag = (String) node.getTag();
+      List<?> children = convertINodeToTree(node.getValue());
+
+      if (children.get(0) instanceof String) {
+        children = Lists.of(children);
+      }
+
+      return Lists.of(tag, children);
+    } else if (node.isTuple() || node.isList()) {
       List<INode> childNodes = node.getChildren();
       Tuple[] children = new Tuple[childNodes.size()];
 
@@ -219,7 +231,7 @@ public class LGrammars {
         children[i] = encodeNode(childNodes.get(i));
       }
 
-      return Util.listify(children);
+      return Lists.of(children);
     } else {
       throw new AssertionError();
     }

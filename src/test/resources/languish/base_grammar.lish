@@ -6,34 +6,13 @@ MACRO NULL [DATA []];;
 MACRO CAAR [ABS [CAR [CAR [REF 1]]]];;
 MACRO CADR [ABS [CAR [CDR [REF 1]]]];;
 
-MACRO MAP_PUT 
-  [ABS // MAP
-  [ABS // KEY
-  [ABS // VAL
-    [CONS [CONS [REF 2] [REF 1]] [REF 3]]
-  ]]]
+MACRO MAP_PUT // MAP, KEY, VAL
+  [ABS [ABS [ABS [CONS [CONS [REF 2] [REF 1]] [REF 3]]]]]
 ;;
 
-MACRO MAP_GET 
-  [ABS // SELF
-  [ABS // MAP
-  [ABS // KEY
-  [ABS // DEFAULT
-    [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA EQUALS] [CONS (*NULL*) [REF 3]]]] // IF MAP==NULL
-      [REF 1]] // RETURN DEFAULT
-      [APP [APP [PRIM [DATA BRANCH] // elsif...
-        [PRIM [DATA EQUALS] [CONS [REF 2] [APP (*CAAR*) [REF 3]]]]] // top of map key = KEY
-          [CDR [CAR [REF 3]]]]  // then return top of map val
-          [APP [APP [APP [APP [REF 4]  // ELSE, recurse
-            [REF 4]] 
-            [CDR [REF 3]]] 
-            [REF 2]]
-            [REF 1]]]
-    ]
-  ]]]]
+MACRO MAP_GET // MAP, KEY, DEFAULT
+  [APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA EQUALS] [CONS [DATA []] [REF 3]]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA EQUALS] [CONS [REF 2] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]]] [CDR [CAR [REF 3]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]
 ;;          
-
-MACRO MAP_GET [APP (*OMEGA*) (*MAP_GET*)];;
 
 MACRO GRAMMAR [DATA [
   [ "ROOT"
@@ -58,14 +37,34 @@ MACRO GRAMMAR [DATA [
   
   [ "LOBJECT"
     "PRIM_GET"
-    ["SEQ" [["VALUE" "PrimIdent"] []]]
+    ["SEQ" [["VALUE" "PrimIdent"] [["VALUE" "PrimIdent"] []]]]
   ]
 ]];;
 
-MACRO PARSE_NODE [
-  
-];;
+MACRO VISITOR_MAP (*NULL*);;
 
-REDUCE [PRIM [DATA LIST_TO_TUPLES] 
-  [PRIM [DATA PARSE_STATEMENT] [CONS (*GRAMMAR*) [DATA "REDUCE APP"]]]];;
- 
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "STATEMENT"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [APP [REF 2] [CAR [REF 1]]]
+  ]]
+]
+;;
+
+MACRO PARSE_NODE 
+  [APP (*OMEGA*) // RECURSIVE
+    [ABS // SELF
+    [ABS // NODE
+      [APP [APP
+        [APP [APP [APP (*MAP_GET*) // Get visitor func 
+          (*VISITOR_MAP*)]
+          [CAR [REF 1]]]
+          (*NULL*)]
+        [REF 2]]
+        [CAR [CDR [REF 1]]]]
+    ]]
+ ];;
+
+REDUCE [PRIM [DATA LIST_TO_TUPLES] [APP (*PARSE_NODE*)
+  [PRIM [DATA PARSE_STATEMENT] [CONS (*GRAMMAR*) [DATA "REDUCE APP ABS"]]]]];;

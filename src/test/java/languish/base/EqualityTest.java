@@ -1,6 +1,7 @@
 package languish.base;
 
 import static languish.base.Lambda.*;
+import static languish.libtesting.CommonTest.NULL;
 import static languish.primitives.DataFunctions.EQUALS;
 import static languish.testing.CommonExps.IDENTITY;
 import static languish.testing.TestUtil.*;

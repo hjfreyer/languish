@@ -1,6 +1,7 @@
 package languish.primitives;
 
 import static languish.base.Lambda.*;
+import static languish.libtesting.CommonTest.NULL;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
