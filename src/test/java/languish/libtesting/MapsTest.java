@@ -32,12 +32,15 @@ public class MapsTest extends TestCase {
       app(OMEGA, // recursive
           abs(abs(abs(abs( // SELF, MAP, KEY, DEFAULT
           app(app(prim(DataFunctions.BRANCH, // IF
-              prim(DataFunctions.EQUALS, cons(NULL, ref(3)))), // MAP == NULL
+              prim(DataFunctions.IS_NULL, ref(3))), // MAP == NULL
               ref(1)), // RETURN DEFAULT, ELSE
               app(app(prim(DataFunctions.BRANCH, // IF
                   // top of map key = KEY
-                  prim(DataFunctions.EQUALS, cons(ref(2), app(CAAR, ref(3))))),
-                  car(cdr(car(ref(3))))), // then return top of map val
+                  prim(DataFunctions.DATA_EQUALS, cons(ref(2),
+                      app(CAAR, ref(3))))), car(cdr(car(ref(3))))), // then
+                  // return
+                  // top of
+                  // map val
                   app(app(app(app( // ELSE, recurse
                       ref(4), //
                       ref(4)), //
@@ -46,7 +49,7 @@ public class MapsTest extends TestCase {
                       ref(1)))))))));
 
   public static final String MAP_GET_CODE =
-      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA EQUALS] [CONS [DATA []] [REF 3]]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA EQUALS] [CONS [REF 2] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]]] [CAR [CDR [CAR [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]";
+      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA IS_NULL] [REF 3]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA DATA_EQUALS] [CONS [REF 2] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]]] [CAR [CDR [CAR [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]";
 
   @SuppressWarnings("unchecked")
   public enum Tests implements LanguishTestList {

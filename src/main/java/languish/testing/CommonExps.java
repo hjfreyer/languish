@@ -30,8 +30,8 @@ public class CommonExps {
           abs( // ============= SELF
           abs( // ============= LIST
           abs( // ============= ITEM
-          app(app(prim(DataFunctions.BRANCH, prim(DataFunctions.EQUALS, cons(
-              EMPTY_LIST, ref(2)))), // =============
+          app(app(prim(DataFunctions.BRANCH, prim(DataFunctions.DATA_EQUALS,
+              cons(EMPTY_LIST, ref(2)))), // =============
               // If
               // (LIST
               // == [])

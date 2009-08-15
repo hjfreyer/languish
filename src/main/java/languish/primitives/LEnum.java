@@ -1,10 +1,10 @@
 package languish.primitives;
 
-import languish.base.DataFunction;
 import languish.base.LObject;
 import languish.base.Lambda;
+import languish.base.PrimitiveFunction;
 import languish.base.Tuple;
-import languish.base.DataFunction.SingleArgDataFunction;
+import languish.base.PrimitiveFunction.SingleValueDataFunction;
 
 public class LEnum extends DataWrapper {
   private static long global_id = 0;
@@ -22,9 +22,9 @@ public class LEnum extends DataWrapper {
     }
   }
 
-  public static final DataFunction ENUM = new SingleArgDataFunction() {
+  public static final PrimitiveFunction ENUM = new SingleValueDataFunction() {
     @Override
-    public Tuple applySingle(LObject arg) {
+    public Tuple apply(LObject arg) {
       return Lambda.data(new LEnum(new Enum(global_id++)));
     }
   };

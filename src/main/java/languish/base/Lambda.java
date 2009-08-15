@@ -87,19 +87,14 @@ public class Lambda {
         prim.setSecond(reduceTupleOnce(func));
         return prim;
       }
+      PrimitiveFunction primFunc = (PrimitiveFunction) func.getSecond();
 
       if (isReducible(arg.getFirst())) {
         prim.setThird(reduceTupleOnce(arg));
         return prim;
-      }
-
-      DataFunction dataFunc = (DataFunction) func.getSecond();
-
-      if (arg.getFirst() == DATA) {
-        return dataFunc.applySingle(arg.getSecond()).deepClone();
-      }
-
-      if (arg.getFirst() == CONS) {
+      } else if (arg.getFirst() == DATA) {
+        return primFunc.convertLeaf(arg.getSecond()).deepClone();
+      } else if (arg.getFirst() == CONS) {
         Tuple car = (Tuple) arg.getSecond();
         Tuple cdr = (Tuple) arg.getThird();
 
@@ -111,19 +106,22 @@ public class Lambda {
           arg.setThird(reduceTupleOnce(cdr));
           return prim;
         }
-        // Recurse until all values are DATA
-        if (car.getFirst() != DATA) {
-          arg.setSecond(prim(dataFunc, car));
-          return prim;
-        }
-        if (cdr.getFirst() != DATA) {
-          arg.setThird(prim(dataFunc, cdr));
-          return prim;
-        }
-        return dataFunc.applyPair(car.getSecond(), cdr.getSecond()).deepClone();
-      }
 
-      throw new AssertionError();
+        if (car.getFirst() != DATA) {
+          arg.setSecond(prim(primFunc, car));
+          return prim;
+        }
+
+        if (cdr.getFirst() != DATA) {
+          arg.setThird(prim(primFunc, cdr));
+          return prim;
+        }
+
+        return primFunc.combineChildren(car.getSecond(), cdr.getSecond())
+            .deepClone();
+      } else {
+        throw new AssertionError();
+      }
     }
   };
 
@@ -186,7 +184,7 @@ public class Lambda {
     return Tuple.of(REF, LInteger.of(i));
   }
 
-  public static Tuple prim(DataFunction func, Tuple arg) {
+  public static Tuple prim(PrimitiveFunction func, Tuple arg) {
     return Tuple.of(PRIM, data(func), arg);
   }
 

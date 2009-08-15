@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import languish.base.DataFunction;
 import languish.base.LObject;
+import languish.base.PrimitiveFunction;
 import languish.base.Tuple;
 import languish.base.Util;
 import languish.primitives.LSymbol;
@@ -30,10 +30,10 @@ public class LGrammars {
 
   private LGrammars() {}
 
-  public static final DataFunction PARSE_STATEMENT =
-      new DataFunction.TwoArgDataFunction() {
+  public static final PrimitiveFunction PARSE_STATEMENT =
+      new PrimitiveFunction.TwoValueDataFunction() {
         @Override
-        public Tuple applyPair(LObject obj1, LObject obj2) {
+        public Tuple apply(LObject obj1, LObject obj2) {
           Tuple grammarSpec = (Tuple) obj1;
           LSymbol inputString = (LSymbol) obj2;
 

@@ -11,7 +11,7 @@ public enum Builtins {
 
   // Expression reducer
   // UNWRAP(LExpressionWrappers.UNWRAP),
-  EQUALS(DataFunctions.EQUALS),
+  DATA_EQUALS(DataFunctions.DATA_EQUALS),
 
   // Arithmetic
   ADD(DataFunctions.ADD),
@@ -33,7 +33,8 @@ public enum Builtins {
   REF(Lambda.REF),
   CONS(Lambda.CONS),
 
-  LIST_TO_TUPLES(DataFunctions.LIST_TO_TUPLES),
+  CONS_AND_DATA_TO_TUPLES(DataFunctions.CONS_AND_DATA_TO_TUPLES),
+  IS_NULL(DataFunctions.IS_NULL),
 
   // REDUCTION_ERROR(Lambda.REDUCTION_ERROR),
 
