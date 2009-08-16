@@ -4,15 +4,14 @@ import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.PrimitiveFunction;
 import languish.base.Tuple;
-import languish.base.PrimitiveFunction.NullLeafPrimitiveFunction;
-import languish.base.PrimitiveFunction.SingleValueDataFunction;
-import languish.base.PrimitiveFunction.TwoValueDataFunction;
+import languish.base.PrimitiveFunction.SingleArgDataFunction;
+import languish.base.PrimitiveFunction.TwoArgDataFunction;
 import languish.interpreter.Builtins;
 
 public class DataFunctions {
 
   // BOOLEAN STUFF
-  public static final PrimitiveFunction BRANCH = new SingleValueDataFunction() {
+  public static final PrimitiveFunction BRANCH = new SingleArgDataFunction() {
     @Override
     public Tuple apply(LObject arg) {
       return ((LBoolean) arg).booleanValue() ? BRANCH_THEN : BRANCH_ELSE;
@@ -21,14 +20,9 @@ public class DataFunctions {
   public static final Tuple BRANCH_ELSE = Lambda.abs(Lambda.abs(Lambda.ref(1)));
   public static final Tuple BRANCH_THEN = Lambda.abs(Lambda.abs(Lambda.ref(2)));
 
-  public static final PrimitiveFunction AND = new NullLeafPrimitiveFunction() {
+  public static final PrimitiveFunction AND = new TwoArgDataFunction() {
     @Override
-    public LObject getNullValue() {
-      return LBoolean.TRUE;
-    }
-
-    @Override
-    public Tuple reduce(LObject arg1, LObject arg2) {
+    public Tuple apply(LObject arg1, LObject arg2) {
       LBoolean a = (LBoolean) arg1;
       LBoolean b = (LBoolean) arg2;
 
@@ -37,14 +31,9 @@ public class DataFunctions {
   };
 
   // INTEGER STUFF
-  public static final PrimitiveFunction ADD = new NullLeafPrimitiveFunction() {
+  public static final PrimitiveFunction ADD = new TwoArgDataFunction() {
     @Override
-    public LObject getNullValue() {
-      return LInteger.of(0);
-    }
-
-    @Override
-    public Tuple reduce(LObject arg1, LObject arg2) {
+    public Tuple apply(LObject arg1, LObject arg2) {
       LInteger a = (LInteger) arg1;
       LInteger b = (LInteger) arg2;
 
@@ -54,7 +43,7 @@ public class DataFunctions {
 
   // PARSE LITERALS
   public static final PrimitiveFunction PARSE_INT =
-      new SingleValueDataFunction() {
+      new SingleArgDataFunction() {
         @Override
         public Tuple apply(LObject obj) {
           LSymbol symbol = (LSymbol) obj;
@@ -63,17 +52,24 @@ public class DataFunctions {
               .of(Integer.parseInt(symbol.stringValue())));
         }
       };
-
-  public static final PrimitiveFunction DATA_EQUALS =
-      new TwoValueDataFunction() {
-        @Override
-        public Tuple apply(LObject arg1, LObject arg2) {
-          return Lambda.data(LBoolean.of(arg1.equals(arg2)));
-        }
-      };
+  //
+  // public static final PrimitiveFunction DATA_EQUALS = new PrimitiveFunction()
+  // {
+  // @Override
+  // public Tuple apply(Tuple tuple) {
+  // if (tuple.getFirst() != Lambda.CONS) {
+  // throw new IllegalArgumentException("argument must be cons");
+  // }
+  //
+  // Tuple arg1 = (Tuple) tuple.getSecond();
+  // Tuple arg2 = (Tuple) tuple.getThird();
+  //
+  // return Lambda.data(LBoolean.of(arg1.equals(arg2)));
+  // }
+  // };
 
   public static final PrimitiveFunction BUILTIN_GET =
-      new SingleValueDataFunction() {
+      new SingleArgDataFunction() {
         @Override
         public Tuple apply(LObject arg) {
           LSymbol symbol = (LSymbol) arg;
@@ -83,30 +79,17 @@ public class DataFunctions {
         }
       };
 
-  public static final PrimitiveFunction CONS_AND_DATA_TO_TUPLES =
-      new PrimitiveFunction() {
-        @Override
-        public Tuple convertLeaf(LObject arg) {
-          return Lambda.data(arg);
-        }
-
-        @Override
-        public Tuple combineChildren(LObject arg1, LObject arg2) {
-          return Lambda.data(Tuple.of(arg1, arg2));
-        }
-      };
-
-  public static final PrimitiveFunction IS_NULL = new PrimitiveFunction() {
-    @Override
-    public Tuple convertLeaf(LObject leaf) {
-      return Lambda.data(LBoolean.of(leaf.equals(Tuple.of())));
-    }
-
-    @Override
-    public Tuple combineChildren(LObject arg1, LObject arg2) {
-      return Lambda.data(LBoolean.FALSE);
-    }
-  };
+  //
+  // public static final PrimitiveFunction IS_NULL = new PrimitiveFunction() {
+  // @Override
+  // public Tuple apply(Tuple tuple) {
+  // boolean isNull =
+  // tuple.getFirst() == Lambda.DATA
+  // && tuple.getSecond().equals(Tuple.of());
+  //
+  // return Lambda.data(LBoolean.of(isNull));
+  // }
+  // };
 
   private DataFunctions() {}
 }

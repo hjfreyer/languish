@@ -1,7 +1,6 @@
 package languish.base;
 
 import static languish.base.Lambda.*;
-import static languish.primitives.DataFunctions.DATA_EQUALS;
 import static languish.testing.CommonExps.IDENTITY;
 import static languish.testing.TestUtil.*;
 import junit.framework.TestCase;
@@ -15,8 +14,8 @@ public class EqualityTest extends TestCase {
     INT_IDENTITY(data(TWO), data(TWO)),
     INT_VALUE(data(TWO), data(LInteger.of(2))),
     INT_INSIDE_APP(data(TWO), app(IDENTITY, data(LInteger.of(2)))),
-    INT_RESULT_OF_PRIM(data(FIVE), prim(DataFunctions.ADD, Util.listify(
-        data(TWO), data(THREE)))),
+    INT_RESULT_OF_PRIM(data(FIVE), prim(DataFunctions.ADD, cons(data(TWO),
+        data(THREE)))),
 
     ;
 
@@ -46,17 +45,21 @@ public class EqualityTest extends TestCase {
 
   public void test() {
     for (Equals test : Equals.values()) {
-      Tuple exp = prim(DATA_EQUALS, cons(test.a, test.b));
-      assertEquals("EQUALS." + test.name(), LBoolean.TRUE, Lambda.reduce(exp));
-      Tuple exp2 = prim(DATA_EQUALS, cons(test.b, test.a));
-      assertEquals("EQUALS." + test.name(), LBoolean.TRUE, Lambda.reduce(exp2));
+      Tuple exp = eq(test.a, test.b);
+      assertEquals("EQUALS." + test.name(), LBoolean.TRUE, Lambda
+          .reduceToDataValue(exp));
+      Tuple exp2 = eq(test.b, test.a);
+      assertEquals("EQUALS." + test.name(), LBoolean.TRUE, Lambda
+          .reduceToDataValue(exp2));
     }
 
     for (DoesNotEqual test : DoesNotEqual.values()) {
-      Tuple exp = prim(DATA_EQUALS, cons(test.a, test.b));
-      assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda.reduce(exp));
-      Tuple exp2 = prim(DATA_EQUALS, cons(test.b, test.a));
-      assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda.reduce(exp2));
+      Tuple exp = eq(test.a, test.b);
+      assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda
+          .reduceToDataValue(exp));
+      Tuple exp2 = eq(test.b, test.a);
+      assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda
+          .reduceToDataValue(exp2));
     }
   }
 }

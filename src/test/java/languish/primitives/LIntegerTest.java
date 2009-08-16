@@ -11,7 +11,6 @@ import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Tuple;
-import languish.base.Util;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
 
@@ -30,11 +29,9 @@ public class LIntegerTest extends TestCase {
         null,
         EIGHT),
 
-    TEST_TRIPLE_ADD(prim(ADD, Util.listify(data(FIVE), data(THREE), data(SIX))),
-        "[PRIM [DATA ADD] "
-            + "[CONS [DATA 5] [CONS [DATA 3] [CONS [DATA 6] [DATA []]]]]]",
-        null,
-        FOURTEEN),
+    TEST_TRIPLE_ADD(prim(ADD, cons(data(FIVE), prim(ADD, cons(data(THREE),
+        data(SIX))))), "[PRIM [DATA ADD] [CONS [DATA 5] "
+        + "[PRIM [DATA ADD] [CONS [DATA 3] [DATA 6]]]]]", null, FOURTEEN),
 
     TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
         "[APP [ABS [PRIM [DATA ADD] [CONS [REF 1] [REF 1]]]] [DATA 4]]",

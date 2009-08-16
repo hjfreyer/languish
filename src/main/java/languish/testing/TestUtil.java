@@ -51,11 +51,11 @@ public class TestUtil {
       if (obj instanceof List) {
         assertList(msg, (List<?>) obj, car);
       } else if (obj instanceof LObject) {
-        TestCase.assertEquals(msg, obj, Lambda.reduce(car));
+        TestCase.assertEquals(msg, obj, Lambda.reduceToDataValue(car));
       }
     }
 
-    TestCase.assertEquals(msg, Tuple.of(), Lambda.reduce(exp));
+    TestCase.assertEquals(msg, Tuple.of(), Lambda.reduceToDataValue(exp));
   }
 
   private static final BuiltinParser parser = new BuiltinParser();
@@ -94,7 +94,7 @@ public class TestUtil {
       if (reducedCompletely != null) {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not ultimately reduce to given value:",
-            reducedCompletely, Lambda.reduce(exp));
+            reducedCompletely, Lambda.reduceToDataValue(exp));
       }
 
       // LIST CONTENTS

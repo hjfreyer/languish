@@ -4,7 +4,7 @@ import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.PrimitiveFunction;
 import languish.base.Tuple;
-import languish.base.PrimitiveFunction.SingleValueDataFunction;
+import languish.base.PrimitiveFunction.SingleArgDataFunction;
 
 public class LEnum extends DataWrapper {
   private static long global_id = 0;
@@ -22,7 +22,7 @@ public class LEnum extends DataWrapper {
     }
   }
 
-  public static final PrimitiveFunction ENUM = new SingleValueDataFunction() {
+  public static final PrimitiveFunction ENUM = new SingleArgDataFunction() {
     @Override
     public Tuple apply(LObject arg) {
       return Lambda.data(new LEnum(new Enum(global_id++)));

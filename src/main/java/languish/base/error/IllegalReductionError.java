@@ -1,4 +1,4 @@
-package languish.base;
+package languish.base.error;
 
 public class IllegalReductionError extends RuntimeException {
 

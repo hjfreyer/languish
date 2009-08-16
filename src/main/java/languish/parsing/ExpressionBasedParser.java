@@ -24,7 +24,7 @@ public class ExpressionBasedParser extends Parser {
     Tuple type = car(parseCall);
     Tuple exp = cdr(parseCall);
 
-    int statementType = ((LInteger) Lambda.reduce(type)).intValue();
+    int statementType = ((LInteger) Lambda.reduceToDataValue(type)).intValue();
 
     return new Statement(Statement.Type.values()[statementType], exp);
   }

@@ -9,8 +9,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 import languish.base.LObject;
+import languish.base.Lambda;
 import languish.base.Tuple;
-import languish.base.Util;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
@@ -27,12 +27,9 @@ public class CommonTest extends TestCase {
   public static final Tuple OMEGA = abs(app(ref(1), ref(1)));
   public static final String OMEGA_CODE = "[ABS [APP [REF 1] [REF 1]]]";
 
-  public static final Tuple EQUALS =
-      abs(abs(prim(DataFunctions.DATA_EQUALS, cons(prim(
-          DataFunctions.CONS_AND_DATA_TO_TUPLES, ref(2)), prim(
-          DataFunctions.CONS_AND_DATA_TO_TUPLES, ref(1))))));
+  public static final Tuple EQUALS = abs(abs(eq(ref(2), ref(1))));
   public static final String EQUALS_CODE =
-      "[ABS [ABS [PRIM [DATA DATA_EQUALS] [CONS [PRIM [DATA CONS_AND_DATA_TO_TUPLES] [REF 2]] [PRIM [DATA CONS_AND_DATA_TO_TUPLES] [REF 1]]]]]]";
+      "[ABS [ABS [EQUALS [REF 2] [REF 1]]]]";
 
   private static final Tuple LIST_A =
       cons(data(TWO), cons(data(THREE), cons(data(FIVE), NULL)));
@@ -61,7 +58,7 @@ public class CommonTest extends TestCase {
         LBoolean.TRUE),
 
     EQ_INT_RESULT_OF_PRIM(app(app(EQUALS, data(FIVE)), prim(DataFunctions.ADD,
-        Util.listify(data(TWO), data(THREE)))), //
+        Lambda.cons(data(TWO), data(THREE)))), //
         null,
         null,
         LBoolean.TRUE),

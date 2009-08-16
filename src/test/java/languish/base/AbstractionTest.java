@@ -17,26 +17,26 @@ public class AbstractionTest extends TestCase {
   private static final Tuple LOOP = Lambda.app(OMEGA, OMEGA);
 
   public void testBlob() {
-    assertEquals(THREE, Lambda.reduce(Lambda.data(THREE)));
+    assertEquals(THREE, Lambda.reduceToDataValue(Lambda.data(THREE)));
   }
 
   public void testBasicApply() {
     Tuple applyFour = Lambda.app(IDENTITY, Lambda.data(FOUR));
 
     assertEquals(Lambda.data(FOUR), TestUtil.reduceTupleOnce(applyFour));
-    assertEquals(FOUR, Lambda.reduce(applyFour));
+    assertEquals(FOUR, Lambda.reduceToDataValue(applyFour));
   }
 
   public void testArgumentChooser() {
-    assertEquals(FOUR, Lambda.reduce(Lambda.app(Lambda.app(FIRST_PICKER, Lambda
+    assertEquals(FOUR, Lambda.reduceToDataValue(Lambda.app(Lambda.app(FIRST_PICKER, Lambda
         .data(FOUR)), Lambda.data(FIVE))));
 
-    assertEquals(FIVE, Lambda.reduce(Lambda.app(Lambda.app(SECOND_PICKER,
+    assertEquals(FIVE, Lambda.reduceToDataValue(Lambda.app(Lambda.app(SECOND_PICKER,
         Lambda.data(FOUR)), Lambda.data(FIVE))));
   }
 
   public void testIrrelevantNonHalter() {
-    assertEquals(FOUR, Lambda.reduce(Lambda.app(Lambda.app(FIRST_PICKER, Lambda
+    assertEquals(FOUR, Lambda.reduceToDataValue(Lambda.app(Lambda.app(FIRST_PICKER, Lambda
         .data(FOUR)), LOOP)));
   }
 

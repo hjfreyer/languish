@@ -34,7 +34,7 @@ public class ListsTest extends TestCase {
                   app(app(app(ref(3), ref(3)), cdr(ref(2))), ref(1))))))));
 
   public static final String ADDL_CODE =
-      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [PRIM [DATA DATA_EQUALS] [CONS [PRIM [DATA CONS_AND_DATA_TO_TUPLES] [REF 2]] [PRIM [DATA CONS_AND_DATA_TO_TUPLES] [REF 1]]]]]] [DATA []]] [REF 2]]] [CONS [REF 1] [DATA []]]] [CONS [CAR [REF 2]] [APP [APP [APP [REF 3] [REF 3]] [CDR [REF 2]]] [REF 1]]]]]]]]";
+      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [EQUALS [REF 2] [REF 1]]]] [DATA []]] [REF 2]]] [CONS [REF 1] [DATA []]]] [CONS [CAR [REF 2]] [APP [APP [APP [REF 3] [REF 3]] [CDR [REF 2]]] [REF 1]]]]]]]]";
 
   public enum Tests implements LanguishTestList {
     PL_CODE(PUSHL, //

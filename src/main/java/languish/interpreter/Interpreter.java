@@ -20,7 +20,7 @@ public class Interpreter {
 
     switch (statement.getType()) {
     case REDUCE:
-      return Lambda.reduce(expression);
+      return Lambda.reduceToDataValue(expression);
     case SET_ENV:
       env = expression;
       return expression;

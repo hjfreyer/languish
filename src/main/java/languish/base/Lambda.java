@@ -1,20 +1,32 @@
 package languish.base;
 
+import languish.base.error.AlreadyReducedError;
+import languish.base.error.IllegalPrimitiveFunctionApplicationError;
+import languish.base.error.IllegalReductionError;
+import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
 
 public class Lambda {
   private Lambda() {}
 
-  public static LObject reduce(LObject exp) {
-    Tuple tuple = (Tuple) exp.deepClone();
+  public static LObject reduceToDataValue(LObject exp) {
+    Tuple reduced = reduce((Tuple) exp);
 
-    while (true) {
-      if (tuple.getFirst() == DATA) {
-        return tuple.getSecond();
-      }
+    if (reduced.getFirst() != DATA) {
+      throw new AssertionError("Argument was not data");
+    }
 
+    return reduced.getSecond();
+  }
+
+  public static Tuple reduce(Tuple exp) {
+    Tuple tuple = exp.deepClone();
+
+    while (isReducible(tuple)) {
       tuple = reduceTupleOnce(tuple);
     }
+
+    return tuple;
   }
 
   private static Tuple reduceTupleOnce(LObject tuple) {
@@ -26,7 +38,19 @@ public class Lambda {
     return result;
   }
 
-  public static final Operation ABS = new IrreducibleOperation();
+  public static final Operation ABS = new Operation() {
+    @Override
+    public Tuple reduceOnce(Tuple tuple) {
+      Tuple sub = (Tuple) tuple.getSecond();
+
+      if (isReducible(sub)) {
+        tuple.setSecond(reduceTupleOnce(sub));
+        return tuple;
+      }
+
+      throw new AlreadyReducedError(tuple);
+    }
+  };
 
   public static final Operation APP = new Operation() {
     @Override
@@ -34,9 +58,7 @@ public class Lambda {
       Tuple func = (Tuple) app.getSecond();
       Tuple arg = (Tuple) app.getThird();
 
-      LObject funcType = func.getFirst();
-
-      if (funcType != ABS) {
+      if (func.getFirst() != ABS) {
         app.setSecond(reduceTupleOnce(func));
         return app;
       }
@@ -75,7 +97,43 @@ public class Lambda {
     }
   };
 
-  public static final Operation CONS = new IrreducibleOperation();
+  public static final Operation CONS = new Operation() {
+    @Override
+    public Tuple reduceOnce(Tuple tuple) {
+      Tuple car = (Tuple) tuple.getSecond();
+      Tuple cdr = (Tuple) tuple.getThird();
+
+      if (isReducible(car)) {
+        tuple.setSecond(reduceTupleOnce(car));
+        return tuple;
+      } else if (isReducible(cdr)) {
+        tuple.setThird(reduceTupleOnce(cdr));
+        return tuple;
+      } else {
+        throw new AlreadyReducedError(tuple);
+      }
+    }
+  };
+
+  public static final Operation EQUALS = new Operation() {
+    @Override
+    public Tuple reduceOnce(Tuple tuple) {
+      Tuple arg1 = (Tuple) tuple.getSecond();
+      Tuple arg2 = (Tuple) tuple.getThird();
+
+      // TODO: do this lazier
+      if (isReducible(arg1)) {
+        tuple.setSecond(reduceTupleOnce(arg1));
+        return tuple;
+      } else if (isReducible(arg2)) {
+        tuple.setThird(reduceTupleOnce(arg2));
+        return tuple;
+      } else {
+        return data(LBoolean.of(arg1.equals(arg2)));
+      }
+
+    }
+  };
 
   public static final Operation PRIM = new Operation() {
     @Override
@@ -89,46 +147,107 @@ public class Lambda {
       }
       PrimitiveFunction primFunc = (PrimitiveFunction) func.getSecond();
 
-      if (isReducible(arg.getFirst())) {
+      if (isReducible(arg)) {
         prim.setThird(reduceTupleOnce(arg));
         return prim;
-      } else if (arg.getFirst() == DATA) {
-        return primFunc.convertLeaf(arg.getSecond()).deepClone();
-      } else if (arg.getFirst() == CONS) {
-        Tuple car = (Tuple) arg.getSecond();
-        Tuple cdr = (Tuple) arg.getThird();
-
-        if (isReducible(car.getFirst())) {
-          arg.setSecond(reduceTupleOnce(car));
-          return prim;
-        }
-        if (isReducible(cdr.getFirst())) {
-          arg.setThird(reduceTupleOnce(cdr));
-          return prim;
-        }
-
-        if (car.getFirst() != DATA) {
-          arg.setSecond(prim(primFunc, car));
-          return prim;
-        }
-
-        if (cdr.getFirst() != DATA) {
-          arg.setThird(prim(primFunc, cdr));
-          return prim;
-        }
-
-        return primFunc.combineChildren(car.getSecond(), cdr.getSecond())
-            .deepClone();
+      } else if (isPrimitive(arg)) {
+        return primFunc.applyWithCopy(arg);
       } else {
-        throw new AssertionError();
+        throw new IllegalPrimitiveFunctionApplicationError(arg);
       }
+
+      // else if (arg.getFirst() == DATA) {
+      // return primFunc.convertLeaf(arg.getSecond()).deepClone();
+      // } else if (arg.getFirst() == CONS) {
+      // Tuple car = (Tuple) arg.getSecond();
+      // Tuple cdr = (Tuple) arg.getThird();
+      //
+      // if (isReducible(car.getFirst())) {
+      // arg.setSecond(reduceTupleOnce(car));
+      // return prim;
+      // }
+      // if (isReducible(cdr.getFirst())) {
+      // arg.setThird(reduceTupleOnce(cdr));
+      // return prim;
+      // }
+      //
+      // if (car.getFirst() != DATA) {
+      // arg.setSecond(prim(primFunc, car));
+      // return prim;
+      // }
+      //
+      // if (cdr.getFirst() != DATA) {
+      // arg.setThird(prim(primFunc, cdr));
+      // return prim;
+      // }
+      //
+      // return primFunc.combineChildren(car.getSecond(), cdr.getSecond())
+      // .deepClone();
+      // } else {
+      // throw new AssertionError();
+      // }
     }
   };
 
   public static final Operation REF = new IrreducibleOperation();
 
-  public static boolean isReducible(LObject op) {
-    return op == APP || op == CAR || op == CDR || op == PRIM;
+  //
+  // public static boolean isReducible(Tuple tuple) {
+  // Operation op = (Operation) tuple.getFirst();
+  //
+  // if (op == APP || op == CAR || op == CDR) {
+  // return true;
+  // } else if (op == DATA || op == REF) {
+  // return false;
+  // } else if (op == ABS) {
+  // return isReducible((Tuple) tuple.getSecond());
+  // } else if (op == CONS) {
+  // return isReducible((Tuple) tuple.getSecond())
+  // || isReducible((Tuple) tuple.getThird());
+  // } else if (op == PRIM) {
+  // // Prim can only be reduced if its argument is reduced
+  // return isReduced((Tuple) tuple.getSecond());
+  // } else {
+  // throw new AssertionError();
+  // }
+  // }
+
+  public static boolean isReducible(Tuple tuple) {
+    Operation op = (Operation) tuple.getFirst();
+
+    if (op == APP || op == CAR || op == CDR || op == EQUALS) {
+      return true;
+    } else if (op == DATA || op == REF) {
+      return false;
+    } else if (op == ABS) {
+      return isReducible((Tuple) tuple.getSecond());
+    } else if (op == CONS) {
+      return isReducible((Tuple) tuple.getSecond())
+          || isReducible((Tuple) tuple.getThird());
+    } else if (op == PRIM) {
+      return isReducible((Tuple) tuple.getSecond())
+          || isReducible((Tuple) tuple.getThird())
+          || isPrimitive((Tuple) tuple.getThird());
+    } else {
+      throw new AssertionError();
+    }
+  }
+
+  // Is the function reduced all the way, with only CONS and DATA left?
+  public static boolean isPrimitive(Tuple tuple) {
+    Operation op = (Operation) tuple.getFirst();
+
+    if (op == DATA) {
+      return true;
+    } else if (op == CONS) {
+      return isPrimitive((Tuple) tuple.getSecond())
+          && isPrimitive((Tuple) tuple.getThird());
+    } else if (op == REF || op == ABS || op == CAR || op == CDR || op == APP
+        || op == PRIM || op == EQUALS) {
+      return false;
+    } else {
+      throw new AssertionError();
+    }
   }
 
   private static class IrreducibleOperation extends Operation {
@@ -153,7 +272,7 @@ public class Lambda {
           id + 1, with));
       return exp;
     }
-    if (op == CONS || op == APP || op == PRIM) {
+    if (op == CONS || op == APP || op == EQUALS || op == PRIM) {
       exp.setSecond( //
           replaceAllReferencesToParam((Tuple) exp.getSecond(), id, with));
       exp.setThird( //
@@ -178,6 +297,10 @@ public class Lambda {
 
   public static Tuple data(LObject obj) {
     return Tuple.of(DATA, obj);
+  }
+
+  public static Tuple eq(Tuple arg1, Tuple arg2) {
+    return Tuple.of(EQUALS, arg1, arg2);
   }
 
   public static Tuple ref(int i) {

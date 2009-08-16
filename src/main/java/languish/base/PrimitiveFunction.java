@@ -2,9 +2,12 @@ package languish.base;
 
 public abstract class PrimitiveFunction extends LObject {
 
-  public abstract Tuple convertLeaf(LObject leaf);
+  // TODO: stupid hack to copy defensively the result of any prim function.
+  public final Tuple applyWithCopy(Tuple arg) {
+    return apply(arg).deepClone();
+  }
 
-  public abstract Tuple combineChildren(LObject arg1, LObject arg2);
+  protected abstract Tuple apply(Tuple arg);
 
   @Override
   public final LObject deepClone() {
@@ -36,35 +39,43 @@ public abstract class PrimitiveFunction extends LObject {
   // public abstract Tuple apply(Tuple arg1, Tuple arg2);
   // }
 
-  public static abstract class TwoValueDataFunction extends PrimitiveFunction {
+  public static abstract class TwoArgDataFunction extends PrimitiveFunction {
     @Override
-    public final Tuple convertLeaf(LObject arg0) {
-      throw new IllegalArgumentException(
-          "function cannot be called with 1 argument");
-    }
+    public final Tuple apply(Tuple arg) {
+      if (arg.getFirst() != Lambda.CONS) {
+        throw new IllegalArgumentException(
+            "function must be called with a single CONS: " + arg);
+      }
 
-    @Override
-    public Tuple combineChildren(LObject arg1, LObject arg2) {
-      return apply(arg1, arg2);
+      Tuple arg1 = (Tuple) arg.getSecond();
+      Tuple arg2 = (Tuple) arg.getThird();
+
+      if (arg1.getFirst() != Lambda.DATA) {
+        throw new IllegalArgumentException(
+            "first element of cons must be DATA: " + arg1);
+      }
+      if (arg2.getFirst() != Lambda.DATA) {
+        throw new IllegalArgumentException(
+            "second element of cons must be DATA: " + arg2);
+      }
+
+      return apply(arg1.getSecond(), arg2.getSecond());
     }
 
     public abstract Tuple apply(LObject arg1, LObject arg2);
   }
 
-  public static abstract class SingleValueDataFunction extends
-      PrimitiveFunction {
+  public static abstract class SingleArgDataFunction extends PrimitiveFunction {
     @Override
-    public final Tuple convertLeaf(LObject arg) {
-      return apply(arg);
+    public final Tuple apply(Tuple arg) {
+      if (arg.getFirst() != Lambda.DATA) {
+        throw new IllegalArgumentException("argument must be DATA: " + arg);
+      }
+
+      return apply(arg.getSecond());
     }
 
-    @Override
-    public final Tuple combineChildren(LObject arg1, LObject arg2) {
-      throw new IllegalArgumentException(
-          "function cannot be called with multiple arguments");
-    }
-
-    public abstract Tuple apply(LObject arg1);
+    public abstract Tuple apply(LObject arg);
   }
 
   //
@@ -112,29 +123,30 @@ public abstract class PrimitiveFunction extends LObject {
   // public abstract Tuple combineChildren(LObject arg1, LObject arg2);
   // }
   //
-  public static abstract class NullLeafPrimitiveFunction extends
-      PrimitiveFunction {
+  // public static abstract class NullLeafPrimitiveFunction extends
+  // PrimitiveFunction {
+  //
+  // public abstract LObject getNullValue();
+  //
+  // public abstract Tuple reduce(LObject arg1, LObject arg2);
+  //
+  // @Override
+  // public Tuple convertLeaf(LObject arg) {
+  // if (!arg.equals(Tuple.of())) {
+  // throw new IllegalArgumentException("Leaves must be NULL");
+  // }
+  //
+  // return Lambda.data(getNullValue());
+  // }
+  //
+  // @Override
+  // public final Tuple combineChildren(LObject arg0, LObject arg1) {
+  // arg0 = arg0.equals(Tuple.of()) ? getNullValue() : arg0;
+  // arg1 = arg1.equals(Tuple.of()) ? getNullValue() : arg1;
+  //
+  // return reduce(arg0, arg1);
+  // }
+  //
+  // }
 
-    public abstract LObject getNullValue();
-
-    public abstract Tuple reduce(LObject arg1, LObject arg2);
-
-    @Override
-    public Tuple convertLeaf(LObject arg) {
-      if (!arg.equals(Tuple.of())) {
-        throw new IllegalArgumentException("Leaves must be NULL");
-      }
-
-      return Lambda.data(getNullValue());
-    }
-
-    @Override
-    public final Tuple combineChildren(LObject arg0, LObject arg1) {
-      arg0 = arg0.equals(Tuple.of()) ? getNullValue() : arg0;
-      arg1 = arg1.equals(Tuple.of()) ? getNullValue() : arg1;
-
-      return reduce(arg0, arg1);
-    }
-
-  }
 }

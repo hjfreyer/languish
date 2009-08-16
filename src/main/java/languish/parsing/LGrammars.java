@@ -31,7 +31,7 @@ public class LGrammars {
   private LGrammars() {}
 
   public static final PrimitiveFunction PARSE_STATEMENT =
-      new PrimitiveFunction.TwoValueDataFunction() {
+      new PrimitiveFunction.TwoArgDataFunction() {
         @Override
         public Tuple apply(LObject obj1, LObject obj2) {
           Tuple grammarSpec = (Tuple) obj1;
