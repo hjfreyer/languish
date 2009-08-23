@@ -16,13 +16,13 @@ public class CommonExpsTest extends TestCase {
 
     OMEGA_(OMEGA, OMEGA_CODE),
     LOOP_(LOOP, LOOP_CODE),
-
-    // LISTS
-    EMPTY_LIST_(EMPTY_LIST, EMPTY_LIST_CODE),
-    // CAR_(CAR, CAR_CODE),
-    // CDR_(CDR, CDR_CODE),
-    PUSHL_(PUSHL, PUSHL_CODE),
-    ADDL_(ADDL, ADDL_CODE),
+    //
+    // // LISTS
+    // EMPTY_LIST_(EMPTY_LIST, EMPTY_LIST_CODE),
+    // // CAR_(CAR, CAR_CODE),
+    // // CDR_(CDR, CDR_CODE),
+    // PUSHL_(PUSHL, PUSHL_CODE),
+    // ADDL_(ADDL, ADDL_CODE),
 
     ;
 

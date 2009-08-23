@@ -52,21 +52,20 @@ public class DataFunctions {
               .of(Integer.parseInt(symbol.stringValue())));
         }
       };
-  //
-  // public static final PrimitiveFunction DATA_EQUALS = new PrimitiveFunction()
-  // {
-  // @Override
-  // public Tuple apply(Tuple tuple) {
-  // if (tuple.getFirst() != Lambda.CONS) {
-  // throw new IllegalArgumentException("argument must be cons");
-  // }
-  //
-  // Tuple arg1 = (Tuple) tuple.getSecond();
-  // Tuple arg2 = (Tuple) tuple.getThird();
-  //
-  // return Lambda.data(LBoolean.of(arg1.equals(arg2)));
-  // }
-  // };
+
+  public static final PrimitiveFunction DATA_EQUALS = new PrimitiveFunction() {
+    @Override
+    public Tuple apply(Tuple tuple) {
+      if (tuple.getFirst() != Lambda.CONS) {
+        throw new IllegalArgumentException("argument must be cons");
+      }
+
+      Tuple arg1 = (Tuple) tuple.getSecond();
+      Tuple arg2 = (Tuple) tuple.getThird();
+
+      return Lambda.data(LBoolean.of(arg1.equals(arg2)));
+    }
+  };
 
   public static final PrimitiveFunction BUILTIN_GET =
       new SingleArgDataFunction() {

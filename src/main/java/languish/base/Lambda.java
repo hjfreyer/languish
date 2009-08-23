@@ -22,7 +22,7 @@ public class Lambda {
   public static Tuple reduce(Tuple exp) {
     Tuple tuple = exp.deepClone();
 
-    while (isReducible(tuple)) {
+    while (!isPrimitive(tuple)) {
       tuple = reduceTupleOnce(tuple);
     }
 
@@ -38,19 +38,20 @@ public class Lambda {
     return result;
   }
 
-  public static final Operation ABS = new Operation() {
-    @Override
-    public Tuple reduceOnce(Tuple tuple) {
-      Tuple sub = (Tuple) tuple.getSecond();
-
-      if (isReducible(sub)) {
-        tuple.setSecond(reduceTupleOnce(sub));
-        return tuple;
-      }
-
-      throw new AlreadyReducedError(tuple);
-    }
-  };
+  public static final Operation ABS = new IrreducibleOperation();
+  // public static final Operation ABS = new Operation() {
+  // @Override
+  // public Tuple reduceOnce(Tuple tuple) {
+  // Tuple sub = (Tuple) tuple.getSecond();
+  //
+  // if (isReducible(sub)) {
+  // tuple.setSecond(reduceTupleOnce(sub));
+  // return tuple;
+  // }
+  //
+  // throw new AlreadyReducedError(tuple);
+  // }
+  // };
 
   public static final Operation APP = new Operation() {
     @Override
@@ -115,25 +116,39 @@ public class Lambda {
     }
   };
 
-  public static final Operation EQUALS = new Operation() {
+  public static final Operation IS_PRIMITIVE = new Operation() {
     @Override
     public Tuple reduceOnce(Tuple tuple) {
-      Tuple arg1 = (Tuple) tuple.getSecond();
-      Tuple arg2 = (Tuple) tuple.getThird();
+      Tuple arg = (Tuple) tuple.getSecond();
 
-      // TODO: do this lazier
-      if (isReducible(arg1)) {
-        tuple.setSecond(reduceTupleOnce(arg1));
+      if (isReducible(arg)) {
+        tuple.setSecond(reduceTupleOnce(arg));
         return tuple;
-      } else if (isReducible(arg2)) {
-        tuple.setThird(reduceTupleOnce(arg2));
-        return tuple;
-      } else {
-        return data(LBoolean.of(arg1.equals(arg2)));
       }
 
+      return data(isPrimitive(arg) ? LBoolean.TRUE : LBoolean.FALSE);
     }
   };
+  //  
+  // public static final Operation EQUALS = new Operation() {
+  // @Override
+  // public Tuple reduceOnce(Tuple tuple) {
+  // Tuple arg1 = (Tuple) tuple.getSecond();
+  // Tuple arg2 = (Tuple) tuple.getThird();
+  //
+  // // TODO: do this lazier
+  // if (isReducible(arg1)) {
+  // tuple.setSecond(reduceTupleOnce(arg1));
+  // return tuple;
+  // } else if (isReducible(arg2)) {
+  // tuple.setThird(reduceTupleOnce(arg2));
+  // return tuple;
+  // } else {
+  // return data(LBoolean.of(arg1.equals(arg2)));
+  // }
+  //
+  // }
+  // };
 
   public static final Operation PRIM = new Operation() {
     @Override
@@ -215,19 +230,13 @@ public class Lambda {
   public static boolean isReducible(Tuple tuple) {
     Operation op = (Operation) tuple.getFirst();
 
-    if (op == APP || op == CAR || op == CDR || op == EQUALS) {
+    if (op == APP || op == CAR || op == CDR || op == PRIM || op == IS_PRIMITIVE) {
       return true;
-    } else if (op == DATA || op == REF) {
+    } else if (op == DATA || op == REF || op == ABS) {
       return false;
-    } else if (op == ABS) {
-      return isReducible((Tuple) tuple.getSecond());
     } else if (op == CONS) {
       return isReducible((Tuple) tuple.getSecond())
           || isReducible((Tuple) tuple.getThird());
-    } else if (op == PRIM) {
-      return isReducible((Tuple) tuple.getSecond())
-          || isReducible((Tuple) tuple.getThird())
-          || isPrimitive((Tuple) tuple.getThird());
     } else {
       throw new AssertionError();
     }
@@ -243,7 +252,7 @@ public class Lambda {
       return isPrimitive((Tuple) tuple.getSecond())
           && isPrimitive((Tuple) tuple.getThird());
     } else if (op == REF || op == ABS || op == CAR || op == CDR || op == APP
-        || op == PRIM || op == EQUALS) {
+        || op == PRIM || op == IS_PRIMITIVE) {
       return false;
     } else {
       throw new AssertionError();
@@ -272,14 +281,14 @@ public class Lambda {
           id + 1, with));
       return exp;
     }
-    if (op == CONS || op == APP || op == EQUALS || op == PRIM) {
+    if (op == CONS || op == APP || op == PRIM) {
       exp.setSecond( //
           replaceAllReferencesToParam((Tuple) exp.getSecond(), id, with));
       exp.setThird( //
           replaceAllReferencesToParam((Tuple) exp.getThird(), id, with));
       return exp;
     }
-    if (op == CAR || op == CDR) {
+    if (op == CAR || op == CDR || op == IS_PRIMITIVE) {
       exp.setSecond( //
           replaceAllReferencesToParam((Tuple) exp.getSecond(), id, with));
       return exp;
@@ -299,8 +308,8 @@ public class Lambda {
     return Tuple.of(DATA, obj);
   }
 
-  public static Tuple eq(Tuple arg1, Tuple arg2) {
-    return Tuple.of(EQUALS, arg1, arg2);
+  public static Tuple is_prim(Tuple arg) {
+    return Tuple.of(IS_PRIMITIVE, arg);
   }
 
   public static Tuple ref(int i) {

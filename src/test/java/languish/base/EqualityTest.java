@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
+import languish.testing.CommonExps;
 
 public class EqualityTest extends TestCase {
 
@@ -61,5 +62,9 @@ public class EqualityTest extends TestCase {
       assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda
           .reduceToDataValue(exp2));
     }
+  }
+
+  private Tuple eq(Tuple a, Tuple b) {
+    return app(app(CommonExps.EQUALS, a), b);
   }
 }

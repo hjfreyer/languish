@@ -1,7 +1,7 @@
 package languish.libtesting;
 
 import static languish.base.Lambda.*;
-import static languish.testing.CommonExps.IDENTITY;
+import static languish.testing.CommonExps.*;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
@@ -26,10 +26,6 @@ public class CommonTest extends TestCase {
 
   public static final Tuple OMEGA = abs(app(ref(1), ref(1)));
   public static final String OMEGA_CODE = "[ABS [APP [REF 1] [REF 1]]]";
-
-  public static final Tuple EQUALS = abs(abs(eq(ref(2), ref(1))));
-  public static final String EQUALS_CODE =
-      "[ABS [ABS [EQUALS [REF 2] [REF 1]]]]";
 
   private static final Tuple LIST_A =
       cons(data(TWO), cons(data(THREE), cons(data(FIVE), NULL)));

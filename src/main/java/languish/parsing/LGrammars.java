@@ -119,21 +119,15 @@ public class LGrammars {
     } else if (nodeType.equals("NON_TERM")) {
       return HTree.nonterm(((LSymbol) arg).stringValue());
     } else if (nodeType.equals("SEQ")) {
-      List<HTree> nodes = new ArrayList<HTree>();
-
       Tuple argTuple = (Tuple) arg;
-      while (!argTuple.equals(Tuple.of())) {
-        nodes.add(hTreeFromSpec((Tuple) argTuple.getFirst()));
-        argTuple = (Tuple) argTuple.getSecond();
+
+      HTree[] nodes = new HTree[argTuple.size()];
+
+      for (int i = 0; i < argTuple.size(); i++) {
+        nodes[i] = hTreeFromSpec((Tuple) argTuple.get(i));
       }
 
-      HTree[] nodesArray = new HTree[nodes.size()];
-
-      for (int i = 0; i < nodesArray.length; i++) {
-        nodesArray[i] = nodes.get(i);
-      }
-
-      return HTree.seq(nodesArray);
+      return HTree.seq(nodes);
     } else {
       throw new AssertionError();
     }

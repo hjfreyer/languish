@@ -14,6 +14,7 @@ import languish.base.Tuple;
 import languish.primitives.DataFunctions;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
+import languish.testing.CommonExps;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
 
@@ -25,8 +26,7 @@ public class MapsTest extends TestCase {
       abs(abs(abs( // MAP, KEY, VAL
       cons(cons(ref(2), cons(ref(1), NULL)), ref(3)))));
   public static final String MAP_PUT_CODE =
-      "[ABS [ABS [ABS [CONS [CONS [REF 2] [CONS [REF 1] [DATA []]]] "
-          + "[REF 3]]]]]";
+      "[ABS [ABS [ABS [CONS [CONS [REF 2] [CONS [REF 1] [DATA []]]] [REF 3]]]]]";
 
   public static final Tuple MAP_GET = //
       app(OMEGA, // recursive
@@ -48,7 +48,7 @@ public class MapsTest extends TestCase {
                       ref(1)))))))));
 
   public static final String MAP_GET_CODE =
-      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [EQUALS [DATA []] [REF 3]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [EQUALS [REF 2] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]] [CAR [CDR [CAR [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]";
+      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [DATA []]] [REF 3]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [REF 2]] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]] [CAR [CDR [CAR [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]";
 
   @SuppressWarnings("unchecked")
   public enum Tests implements LanguishTestList {
@@ -216,6 +216,10 @@ public class MapsTest extends TestCase {
 
   public void test() {
     TestUtil.testExpressions(Arrays.asList(Tests.values()));
+  }
+
+  private static Tuple eq(Tuple a, Tuple b) {
+    return app(app(CommonExps.EQUALS, a), b);
   }
 
 }
