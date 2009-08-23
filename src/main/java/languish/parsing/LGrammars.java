@@ -39,8 +39,8 @@ public class LGrammars {
 
           HadrianParser parser = renderGrammar(grammarSpec);
 
-          INode root =
-              parser.parse(new StringDocument(inputString.stringValue()));
+          String stringValue = STRING_FILTER.filter(inputString.stringValue());
+          INode root = parser.parse(new StringDocument(stringValue));
 
           return encodeNode(root);
         }
@@ -197,26 +197,31 @@ public class LGrammars {
   }
 
   public static Tuple encodeNode(INode node) {
-    List<?> tree = convertINodeToTree(node);
+    Object tree = convertINodeToTree(node);
 
     return Util.convertToLObjectExpression(tree);
   }
 
   @SuppressWarnings("unchecked")
-  private static List<?> convertINodeToTree(INode node) {
+  private static Object convertINodeToTree(INode node) {
     if (node.isEmpty()) {
       return Lists.of("EMPTY_NODE");
     } else if (node.isText()) {
-      return Lists.of("TEXT_NODE", node.asString());
+      return node.asString();
     } else if (node.isTagged()) {
       String tag = (String) node.getTag();
-      List<?> children = convertINodeToTree(node.getValue());
+      Object value = convertINodeToTree(node.getValue());
 
-      if (children.get(0) instanceof String) {
-        children = Lists.of(children);
+      if (value instanceof String) {
+        value = Lists.of(value);
+      } else {
+        List<?> children = (List<?>) value;
+        if (children.get(0) instanceof String) {
+          value = Lists.of(children);
+        }
       }
 
-      return Lists.of(tag, children);
+      return Lists.of(tag, value);
     } else if (node.isTuple() || node.isList()) {
       List<INode> childNodes = node.getChildren();
       Tuple[] children = new Tuple[childNodes.size()];

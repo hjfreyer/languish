@@ -2,6 +2,7 @@ package languish.interpreter;
 
 import junit.framework.TestCase;
 import languish.base.LObject;
+import languish.base.Lambda;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 import languish.testing.TestUtil;
@@ -13,7 +14,7 @@ public class InterpreterTest extends TestCase {
   public void testBasicDisplay() {
     LObject res = i.processStatement("REDUCE [DATA 5]");
 
-    assertEquals(TestUtil.FIVE, res);
+    assertEqualsData(TestUtil.FIVE, res);
   }
 
   public void testTrivialParserChange() {
@@ -26,7 +27,11 @@ public class InterpreterTest extends TestCase {
 
     res = i.processStatement("THIS IS GARBAGE!!@E#!q34!");
 
-    assertEquals(LInteger.of(42), res);
+    assertEqualsData(LInteger.of(42), res);
+  }
+
+  private void assertEqualsData(LObject expected, LObject actual) {
+    assertEquals(Lambda.data(expected), actual);
   }
 
   public void testEchoParser() {
@@ -39,45 +44,45 @@ public class InterpreterTest extends TestCase {
 
     res = i.processStatement("SET_PARSER " + echoCode);
     res = i.processStatement("");
-    assertEquals(LSymbol.of(""), res);
+    assertEqualsData(LSymbol.of(""), res);
 
     res = i.processStatement(test);
-    assertEquals(LSymbol.of(test), res);
+    assertEqualsData(LSymbol.of(test), res);
 
     res = i.processStatement(test2);
-    assertEquals(LSymbol.of(test2), res);
+    assertEqualsData(LSymbol.of(test2), res);
   }
 
   public void testMacros() {
-    Object res;
+    LObject res;
 
     res = i.processStatement("MACRO THREE [DATA 3]");
 
     res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestUtil.THREE);
+    assertEqualsData(TestUtil.THREE, res);
 
     res = i.processStatement( //
         "REDUCE [PRIM [DATA ADD] [CONS [DATA 2] (*THREE*)]]");
-    assertEquals(res, TestUtil.FIVE);
+    assertEqualsData(TestUtil.FIVE, res);
   }
 
   public void testMacrosReplace() {
-    Object res;
+    LObject res;
 
     res = i.processStatement("MACRO THREE [DATA 2]");
 
     res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestUtil.TWO);
+    assertEqualsData(TestUtil.TWO, res);
 
     res = i.processStatement("MACRO THREE [DATA 3]");
     res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestUtil.THREE);
+    assertEqualsData(TestUtil.THREE, res);
 
     res =
         i.processStatement("MACRO THREE "
             + "[ABS [PRIM [DATA ADD] [CONS [REF 1] (*THREE*)]]]");
 
     res = i.processStatement("REDUCE [APP (*THREE*) [DATA 2]]");
-    assertEquals(res, TestUtil.FIVE);
+    assertEqualsData(TestUtil.FIVE, res);
   }
 }

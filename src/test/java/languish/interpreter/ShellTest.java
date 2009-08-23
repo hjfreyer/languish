@@ -26,3 +26,16 @@ public class ShellTest extends TestCase {
     assertEquals(LInteger.of(42), s.getLast());
   }
 }
+//
+// [CONS [DATA "STATEMENT"]
+// [CONS [CONS
+//
+// [CONS [DATA "REDUCE"]
+// [CONS [CONS [CONS [DATA "PRIM_GET"]
+// [CONS [CONS [CONS [DATA "TEXT_NODE"] [CONS [DATA "APP"]
+// [DATA []]]]
+// [CONS [CONS [DATA "TEXT_NODE"] [CONS [DATA "ABS"] [DATA []]]]
+// [DATA []]]]
+// [DATA []]]] [DATA []]] [DATA []]]] [DATA []]] [DATA []]]]>
+//
+//

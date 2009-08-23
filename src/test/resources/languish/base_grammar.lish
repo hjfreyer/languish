@@ -26,22 +26,37 @@ MACRO GRAMMAR [DATA [
   
   [ "STATEMENT"
     "REDUCE"
-    ["SEQ" [["TERM" "REDUCE"] ["NON_TERM" "LOBJECT"]]]
+    ["SEQ" [["TERM" "REDUCE"] ["NON_TERM" "EXPRESSION"]]]
   ]
 
   [ "STATEMENT"
     "SET_PARSER"
-    ["SEQ" [["TERM" "SET_PARSER"] ["NON_TERM" "LOBJECT"]]]
+    ["SEQ" [["TERM" "SET_PARSER"] ["NON_TERM" "EXPRESSION"]]]
   ]
   
   [ "STATEMENT"
     "SET_ENV"
-    ["SEQ" [["TERM" "SET_ENV"] ["NON_TERM" "LOBJECT"]]]
+    ["SEQ" [["TERM" "SET_ENV"] ["NON_TERM" "EXPRESSION"]]]
   ]
   
-  [ "LOBJECT"
+  [ "EXPRESSION"
     "PRIM_GET"
-    ["SEQ" [["VALUE" "PrimIdent"] ["VALUE" "PrimIdent"]]]
+    ["SEQ" [["VALUE" "PrimIdent"]]]
+  ]
+  
+  [ "EXPRESSION"
+    "LITERAL"
+    ["SEQ" [["NON_TERM" "LITERAL"]]]
+  ]
+  
+  [ "LITERAL"
+    "SYMBOL"
+    ["SEQ" [["VALUE" "string"]]]
+  ]
+  
+  [ "LITERAL"
+    "INT"
+    ["SEQ" [["VALUE" "number"]]]
   ]
 ]];;
 
@@ -56,6 +71,48 @@ MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
 ]
 ;;
 
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "REDUCE"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [CONS [DATA 1] [APP [REF 2] [CAR [REF 1]]]]
+  ]]
+]
+;;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "PRIM_GET"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [PRIM [DATA BUILTIN_GET] [CAR [REF 1]]]
+  ]]
+]
+;;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "LITERAL"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [APP [REF 2] [CAR [REF 1]]]
+  ]]
+];;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "SYMBOL"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [CAR [REF 1]]
+  ]]
+];;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "INT"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [PRIM [DATA PARSE_INT] [CAR [REF 1]]]
+  ]]
+];;
+
 MACRO PARSE_NODE 
   [APP (*OMEGA*) // RECURSIVE
     [ABS // SELF
@@ -64,11 +121,11 @@ MACRO PARSE_NODE
         [APP [APP [APP (*MAP_GET*) // Get visitor func 
           (*VISITOR_MAP*)]
           [CAR [REF 1]]]
-          (*NULL*)]
-        [REF 2]]
+          [CAR [REF 1]]]
+        [APP [REF 2] [REF 2]]]
         [CAR [CDR [REF 1]]]]
     ]]
  ];;
 
 REDUCE [APP (*PARSE_NODE*)
-  [PRIM [DATA PARSE_STATEMENT] [CONS (*GRAMMAR*) [DATA "REDUCE APP ABS"]]]];;
+  [PRIM [DATA PARSE_STATEMENT] [CONS (*GRAMMAR*) [DATA "REDUCE \"foo\""]]]];;

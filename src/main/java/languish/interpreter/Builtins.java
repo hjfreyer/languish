@@ -59,7 +59,7 @@ public enum Builtins {
   //  
   // Primitive Parsing
   PARSE_INT(DataFunctions.PARSE_INT),
-  // BUILTIN_GET(DataFunctions.BUILTIN_GET),
+  BUILTIN_GET(DataFunctions.BUILTIN_GET),
 
   ;
 
