@@ -13,6 +13,7 @@ import languish.primitives.LSymbol;
 
 import org.quenta.tedir.antonius.doc.ITextDocument;
 import org.quenta.tedir.antonius.doc.ResourceDocument;
+import org.quenta.tedir.antonius.doc.StringDocument;
 import org.quenta.tedir.hadrian.HadrianParser;
 import org.quenta.tedir.hadrian.HadrianReader;
 import org.quenta.tedir.hadrian.INode;
@@ -51,12 +52,12 @@ public class BuiltinParser {
   public BuiltinParser() {}
 
   public static Module parseModule(String code) {
-    // ITextDocument doc = new StringDocument(code);
-    // INode node = getHadrianParser().parse(doc);
+    ITextDocument doc = new StringDocument(code);
+    INode node = getHadrianParser().parse(doc);
 
-    // String tag = node.getTag().toString();
-    // node = node.getChildren().get(0);
-    //
+    String tag = node.getTag().toString();
+    node = node.getChildren().get(0);
+
     // if (tag.equals("MACRO")) {
     // String name = node.getChildren().get(0).asString();
     // LObject exp = expressionFromINode(node.getChildren().get(1));
@@ -67,16 +68,16 @@ public class BuiltinParser {
     // result = Lambda.data(Tuple.of());
     // } else {
     // type = Statement.Module.valueOf(tag);
-    // result = expressionFromINode(node);
+    // result = ;
     // }
-    return new Module(Lambda.data(LInteger.of(42)), Lists.<String> of());
+    return new Module((Tuple) expressionFromINode(node), Lists.<String> of());
   }
 
   public static HadrianParser getHadrianParser() {
     return PrimitiveHadrianParser.INSTANCE.parser;
   }
 
-  private LObject expressionFromINode(INode inode) {
+  private static LObject expressionFromINode(INode inode) {
     if (inode.getTag().equals("LITERAL")) {
       return literalFromINode(inode.getChildren().get(0));
     } else if (inode.getTag().equals("PRIM_GET")) {
@@ -84,25 +85,26 @@ public class BuiltinParser {
     } else if (inode.getTag().equals("TUPLE")) {
       return tupleFromINode(inode.getChildren().get(0));
     } else if (inode.getTag().equals("MACRO_GET")) {
-      String macroName = inode.getChildren().get(0).asString();
+      // String macroName = inode.getChildren().get(0).asString();
+      //
+      // if (!macros.containsKey(macroName)) {
+      // throw new IllegalArgumentException("macro " + macroName +
+      // " undefined.");
+      // }
 
-      if (!macros.containsKey(macroName)) {
-        throw new IllegalArgumentException("macro " + macroName + " undefined.");
-      }
-
-      return macros.get(macroName);
+      return Lambda.data(LSymbol.of("bogus macro"));// macros.get(macroName);
     } else {
       throw new AssertionError();
     }
   }
 
-  public LObject primGetFromINode(INode node) {
+  public static LObject primGetFromINode(INode node) {
     String name = node.asString();
 
     return Builtins.valueOf(name).getExpression();
   }
 
-  private Tuple tupleFromINode(INode node) {
+  private static Tuple tupleFromINode(INode node) {
     int size = node.getChildren().size();
 
     LObject[] tuple = new LObject[size];
@@ -114,7 +116,7 @@ public class BuiltinParser {
     return Tuple.of(tuple);
   }
 
-  private LObject literalFromINode(INode inode) {
+  private static LObject literalFromINode(INode inode) {
     String type = inode.getTag().toString();
     INode content = inode.getChildren().get(0);
 
