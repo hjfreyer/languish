@@ -199,7 +199,7 @@ public class LGrammars {
   public static Tuple encodeNode(INode node) {
     Object tree = convertINodeToTree(node);
 
-    return Util.convertToLObjectExpression(tree);
+    return Util.convertJavaToPrimitive(tree);
   }
 
   @SuppressWarnings("unchecked")

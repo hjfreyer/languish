@@ -7,8 +7,11 @@ import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Operation;
 import languish.base.Tuple;
+import languish.interpreter.Module;
 import languish.parsing.BuiltinParser;
 import languish.primitives.LInteger;
+
+import com.hjfreyer.util.Lists;
 
 public class TestUtil {
   // public static final LUnit UNIT = LUnit.UNIT;
@@ -77,11 +80,15 @@ public class TestUtil {
             .getCodeForExpression(exp));
 
         // PARSE
-        LObject parsed =
-            parser.parseStatementToExpression("REDUCE " + code).getSecond();
+        Module parsed = BuiltinParser.parseModule("REDUCE " + code);
 
         TestCase.assertEquals("on test " + expToTest.name()
-            + " - code does not parse to given expression:", parsed, exp);
+            + " - code does not parse to given expression:", parsed
+            .getExpression(), exp);
+
+        TestCase.assertEquals("on test " + expToTest.name()
+            + " - module requires dependencies:", Lists.of(), parsed
+            .getDependencies());
       }
       // REDUCE ONCE
       if (reducedOnce != null) {

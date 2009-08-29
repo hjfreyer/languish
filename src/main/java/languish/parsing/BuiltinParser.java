@@ -7,22 +7,20 @@ import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Tuple;
 import languish.interpreter.Builtins;
-import languish.interpreter.Statement;
-import languish.interpreter.Statement.Type;
+import languish.interpreter.Module;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 
 import org.quenta.tedir.antonius.doc.ITextDocument;
 import org.quenta.tedir.antonius.doc.ResourceDocument;
-import org.quenta.tedir.antonius.doc.StringDocument;
 import org.quenta.tedir.hadrian.HadrianParser;
 import org.quenta.tedir.hadrian.HadrianReader;
 import org.quenta.tedir.hadrian.INode;
 import org.quenta.tedir.hadrian.MessageMonitor;
 
-import com.hjfreyer.util.Pair;
+import com.hjfreyer.util.Lists;
 
-public class BuiltinParser extends Parser {
+public class BuiltinParser {
 
   public static enum Literal {
     INT,
@@ -52,39 +50,26 @@ public class BuiltinParser extends Parser {
 
   public BuiltinParser() {}
 
-  @Override
-  public Statement parseStatement(String statement, Tuple env) {
+  public static Module parseModule(String code) {
+    // ITextDocument doc = new StringDocument(code);
+    // INode node = getHadrianParser().parse(doc);
 
-    Pair<Statement.Type, LObject> exp = parseStatementToExpression(statement);
-
-    return new Statement(exp.getFirst(), exp.getSecond());
-  }
-
-  public Pair<Statement.Type, LObject> parseStatementToExpression(
-      String statement) {
-    ITextDocument doc = new StringDocument(statement);
-
-    INode node = getHadrianParser().parse(doc);
-
-    Statement.Type type;
-    LObject result;
-
-    String tag = node.getTag().toString();
-    node = node.getChildren().get(0);
-
-    if (tag.equals("MACRO")) {
-      String name = node.getChildren().get(0).asString();
-      LObject exp = expressionFromINode(node.getChildren().get(1));
-
-      macros.put(name, exp);
-
-      type = Type.REDUCE;
-      result = Lambda.data(Tuple.of());
-    } else {
-      type = Statement.Type.valueOf(tag);
-      result = expressionFromINode(node);
-    }
-    return Pair.of(type, result);
+    // String tag = node.getTag().toString();
+    // node = node.getChildren().get(0);
+    //
+    // if (tag.equals("MACRO")) {
+    // String name = node.getChildren().get(0).asString();
+    // LObject exp = expressionFromINode(node.getChildren().get(1));
+    //
+    // macros.put(name, exp);
+    //
+    // type = Type.REDUCE;
+    // result = Lambda.data(Tuple.of());
+    // } else {
+    // type = Statement.Module.valueOf(tag);
+    // result = expressionFromINode(node);
+    // }
+    return new Module(Lambda.data(LInteger.of(42)), Lists.<String> of());
   }
 
   public static HadrianParser getHadrianParser() {

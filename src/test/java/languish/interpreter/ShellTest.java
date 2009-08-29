@@ -16,14 +16,13 @@ public class ShellTest extends TestCase {
   // assertEquals(Tuple.of(), s.getLast());
   // }
 
-  public void testBaseGrammarLish() {
+  public void testBaseGrammarLish() throws Exception {
     InputStream stream =
         getClass().getClassLoader().getResourceAsStream(
             "languish/base_grammar.lish");
 
-    Shell s = new Shell(new InputStreamReader(stream));
-
-    assertEquals(LInteger.of(42), s.getLast());
+    assertEquals(LInteger.of(42), Shell.processReadable(new InputStreamReader(
+        stream)));
   }
 }
 //

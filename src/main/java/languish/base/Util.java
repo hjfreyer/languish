@@ -3,18 +3,21 @@ package languish.base;
 import java.util.Arrays;
 import java.util.List;
 
+import languish.primitives.DataWrapper;
 import languish.primitives.LBoolean;
 import languish.primitives.LCharacter;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 
+import com.hjfreyer.util.Lists;
+
 public class Util {
 
   public static Tuple listify(Tuple... contents) {
-    return convertToLObjectExpression(Arrays.asList(contents));
+    return convertJavaToPrimitive(Arrays.asList(contents));
   }
 
-  public static Tuple convertToLObjectExpression(Object obj) {
+  public static Tuple convertJavaToPrimitive(Object obj) {
     if (obj instanceof Tuple) {
       return (Tuple) obj;
     } else if (obj instanceof LObject) {
@@ -24,7 +27,7 @@ public class Util {
 
       Tuple result = Lambda.data(Tuple.of());
       for (int i = list.size() - 1; i >= 0; i--) {
-        result = Lambda.cons(convertToLObjectExpression(list.get(i)), result);
+        result = Lambda.cons(convertJavaToPrimitive(list.get(i)), result);
       }
 
       return result;
@@ -36,6 +39,35 @@ public class Util {
       return Lambda.data(LInteger.of((Integer) obj));
     } else if (obj instanceof String) {
       return Lambda.data(LSymbol.of((String) obj));
+    } else {
+      throw new AssertionError();
+    }
+  }
+
+  public static Object convertPrimitiveToJava(Tuple tuple) {
+    if (!Lambda.isPrimitive(tuple)) {
+      throw new IllegalArgumentException("Not primitive: " + tuple);
+    }
+
+    Operation op = (Operation) tuple.getFirst();
+    if (op == Lambda.DATA) {
+      LObject data = tuple.getSecond();
+
+      if (data.equals(Tuple.of())) {
+        return null;
+      }
+
+      return ((DataWrapper) data).getJavaValue();
+    } else if (op == Lambda.CONS) {
+      Object car = convertPrimitiveToJava((Tuple) tuple.getSecond());
+      List<?> cdr = (List<?>) convertPrimitiveToJava((Tuple) tuple.getThird());
+
+      cdr = (cdr != null) ? cdr : Lists.of();
+
+      List<Object> result = Lists.of(car);
+      result.addAll(cdr);
+
+      return result;
     } else {
       throw new AssertionError();
     }

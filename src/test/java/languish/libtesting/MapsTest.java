@@ -1,7 +1,7 @@
 package languish.libtesting;
 
 import static languish.base.Lambda.*;
-import static languish.base.Util.convertToLObjectExpression;
+import static languish.base.Util.convertJavaToPrimitive;
 import static languish.libtesting.CommonTest.*;
 import static languish.testing.TestUtil.*;
 
@@ -101,8 +101,8 @@ public class MapsTest extends TestCase {
         null),
 
     GET_FROM_SINGLETON_CORRECT(app(app(app(MAP_GET,
-        convertToLObjectExpression(Lists.of(Lists.of("FIVE", 5)))),
-        data(LSymbol.of("FIVE"))), data(LSymbol.of("DEFAULT"))), //
+        convertJavaToPrimitive(Lists.of(Lists.of("FIVE", 5)))), data(LSymbol
+        .of("FIVE"))), data(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP " + MAP_GET_CODE
             + " [CONS [CONS [DATA \"FIVE\"] [CONS [DATA 5] [DATA []]]] "
             + "[DATA []]]] [DATA \"FIVE\"]] [DATA \"DEFAULT\"]]",
@@ -111,8 +111,8 @@ public class MapsTest extends TestCase {
         null),
 
     GET_FROM_SINGLETON_INCORRECT(app(app(app(MAP_GET,
-        convertToLObjectExpression(Lists.of(Lists.of("FIVE", 5)))),
-        data(LSymbol.of("BAD"))), data(LSymbol.of("DEFAULT"))), //
+        convertJavaToPrimitive(Lists.of(Lists.of("FIVE", 5)))), data(LSymbol
+        .of("BAD"))), data(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP " + MAP_GET_CODE
             + " [CONS [CONS [DATA \"FIVE\"] [CONS [DATA 5] [DATA []]]] "
             + "[DATA []]]] [DATA \"BAD\"]] [DATA \"DEFAULT\"]]",
@@ -120,7 +120,7 @@ public class MapsTest extends TestCase {
         LSymbol.of("DEFAULT"),
         null),
 
-    GET_FROM_DOUBLE_A(app(app(app(MAP_GET, convertToLObjectExpression(Lists.of(
+    GET_FROM_DOUBLE_A(app(app(app(MAP_GET, convertJavaToPrimitive(Lists.of(
         Lists.of("FIVE", 5), Lists.of("FOUR", 4)))), data(LSymbol.of("FIVE"))),
         data(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP "
@@ -132,7 +132,7 @@ public class MapsTest extends TestCase {
         LInteger.of(5),
         null),
 
-    GET_FROM_DOUBLE_B(app(app(app(MAP_GET, convertToLObjectExpression(Lists.of(
+    GET_FROM_DOUBLE_B(app(app(app(MAP_GET, convertJavaToPrimitive(Lists.of(
         Lists.of("FIVE", 5), Lists.of("FOUR", 4)))), data(LSymbol.of("FOUR"))),
         data(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP "
@@ -144,8 +144,8 @@ public class MapsTest extends TestCase {
         LInteger.of(4),
         null),
 
-    GET_FROM_OVERWRITE(app(app(app(MAP_GET, convertToLObjectExpression(Lists
-        .of(Lists.of("FOUR", 3), Lists.of("FIVE", 5), Lists.of("FOUR", 4)))),
+    GET_FROM_OVERWRITE(app(app(app(MAP_GET, convertJavaToPrimitive(Lists.of(
+        Lists.of("FOUR", 3), Lists.of("FIVE", 5), Lists.of("FOUR", 4)))),
         data(LSymbol.of("FOUR"))), data(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP " + MAP_GET_CODE + " [CONS "
             + "[CONS [DATA \"FOUR\"] [CONS [DATA 3] [DATA []]]] "

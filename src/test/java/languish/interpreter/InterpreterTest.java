@@ -9,23 +9,21 @@ import languish.testing.TestUtil;
 
 public class InterpreterTest extends TestCase {
 
-  private final Interpreter i = new Interpreter();
-
-  public void testBasicDisplay() {
-    LObject res = i.processStatement("REDUCE [DATA 5]");
+  public void testBasicDisplay() throws Exception {
+    LObject res = Interpreter.interpretStatement("REDUCE [DATA 5]", null);
 
     assertEqualsData(TestUtil.FIVE, res);
   }
 
-  public void testTrivialParserChange() {
+  public void testTrivialParserChange() throws Exception {
     LObject res;
 
     String statementToReturn = "[CONS [DATA 0] [DATA 42]]";
 
-    res = i.processStatement("SET_PARSER [ABS [ABS " //
-        + statementToReturn + "]]");
+    res = Interpreter.interpretStatement("SET_PARSER [ABS [ABS " //
+        + statementToReturn + "]]", null);
 
-    res = i.processStatement("THIS IS GARBAGE!!@E#!q34!");
+    res = Interpreter.interpretStatement("THIS IS GARBAGE!!@E#!q34!", null);
 
     assertEqualsData(LInteger.of(42), res);
   }
@@ -34,7 +32,7 @@ public class InterpreterTest extends TestCase {
     assertEquals(Lambda.data(expected), actual);
   }
 
-  public void testEchoParser() {
+  public void testEchoParser() throws Exception {
     String echoCode = "[ABS [ABS [CONS [DATA 0] [REF 2]]]]";
 
     String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
@@ -42,47 +40,48 @@ public class InterpreterTest extends TestCase {
 
     LObject res;
 
-    res = i.processStatement("SET_PARSER " + echoCode);
-    res = i.processStatement("");
+    res = Interpreter.interpretStatement("SET_PARSER " + echoCode, null);
+    res = Interpreter.interpretStatement("", null);
     assertEqualsData(LSymbol.of(""), res);
 
-    res = i.processStatement(test);
+    res = Interpreter.interpretStatement(test, null);
     assertEqualsData(LSymbol.of(test), res);
 
-    res = i.processStatement(test2);
+    res = Interpreter.interpretStatement(test2, null);
     assertEqualsData(LSymbol.of(test2), res);
   }
 
-  public void testMacros() {
+  public void testMacros() throws Exception {
     LObject res;
 
-    res = i.processStatement("MACRO THREE [DATA 3]");
+    res = Interpreter.interpretStatement("MACRO THREE [DATA 3]", null);
 
-    res = i.processStatement("REDUCE (*THREE*)");
+    res = Interpreter.interpretStatement("REDUCE (*THREE*)", null);
     assertEqualsData(TestUtil.THREE, res);
 
-    res = i.processStatement( //
-        "REDUCE [PRIM [DATA ADD] [CONS [DATA 2] (*THREE*)]]");
+    res = Interpreter.interpretStatement( //
+        "REDUCE [PRIM [DATA ADD] [CONS [DATA 2] (*THREE*)]]", null);
     assertEqualsData(TestUtil.FIVE, res);
   }
 
-  public void testMacrosReplace() {
+  public void testMacrosReplace() throws Exception {
     LObject res;
 
-    res = i.processStatement("MACRO THREE [DATA 2]");
+    res = Interpreter.interpretStatement("MACRO THREE [DATA 2]", null);
 
-    res = i.processStatement("REDUCE (*THREE*)");
+    res = Interpreter.interpretStatement("REDUCE (*THREE*)", null);
     assertEqualsData(TestUtil.TWO, res);
 
-    res = i.processStatement("MACRO THREE [DATA 3]");
-    res = i.processStatement("REDUCE (*THREE*)");
+    res = Interpreter.interpretStatement("MACRO THREE [DATA 3]", null);
+    res = Interpreter.interpretStatement("REDUCE (*THREE*)", null);
     assertEqualsData(TestUtil.THREE, res);
 
     res =
-        i.processStatement("MACRO THREE "
-            + "[ABS [PRIM [DATA ADD] [CONS [REF 1] (*THREE*)]]]");
+        Interpreter.interpretStatement("MACRO THREE "
+            + "[ABS [PRIM [DATA ADD] [CONS [REF 1] (*THREE*)]]]", null);
 
-    res = i.processStatement("REDUCE [APP (*THREE*) [DATA 2]]");
+    res =
+        Interpreter.interpretStatement("REDUCE [APP (*THREE*) [DATA 2]]", null);
     assertEqualsData(TestUtil.FIVE, res);
   }
 }

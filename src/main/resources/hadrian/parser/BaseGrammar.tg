@@ -1,0 +1,20 @@
+export <program>;
+
+token word ($file_ident) {
+  part: 'a' .. 'z' | 'A' .. 'Z' | '.';
+}
+
+token regex {
+  body -> .*
+}
+ 
+token delimiters;
+
+<program>
+  PROG -> "#!" <parser> ";;" $body
+;
+
+<parser>
+  FILE -> $file_ident
+  BUILTIN -> "__BUILTIN__"
+;
