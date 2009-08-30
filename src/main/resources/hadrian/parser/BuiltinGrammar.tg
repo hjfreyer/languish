@@ -1,4 +1,4 @@
-export <statement>;
+export <module>;
 
 token word ($number) {
   part: '0' .. '9';
@@ -14,22 +14,23 @@ token delimited ($string): "\"" .. "\"" {
   strip-delimiters: true;
 }
 
-ignore end-of-line: "//";
+ignore end-of-line: "#";
  
 token delimiters;
 
-<statement>
-  MACRO -> "MACRO" $PrimIdent <lobject>
-  REDUCE -> "REDUCE" <lobject>
-  SET_ENV -> "SET_ENV" <lobject>
-  SET_PARSER -> "SET_PARSER" <lobject>
-; 
+<module>
+  TUPLES -> <tuple> ( ";;" <tuple> ) *
+;
+
+<tuple> 
+  TUPLE -> "[" <lobject>* "]"
+;
 
 <lobject>
   PRIM_GET -> $PrimIdent
   MACRO_GET -> "(*" $PrimIdent "*)"
   LITERAL -> <literal>
-  TUPLE -> "[" <lobject>* "]"
+  -> <tuple>
 ;
 
 <literal>

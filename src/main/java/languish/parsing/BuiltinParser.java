@@ -55,22 +55,16 @@ public class BuiltinParser {
     ITextDocument doc = new StringDocument(code);
     INode node = getHadrianParser().parse(doc);
 
-    String tag = node.getTag().toString();
-    node = node.getChildren().get(0);
+    INode car = node.getValue().getChildren().get(0);
+    INode cdr = node.getValue().getChildren().get(1);
 
-    // if (tag.equals("MACRO")) {
-    // String name = node.getChildren().get(0).asString();
-    // LObject exp = expressionFromINode(node.getChildren().get(1));
-    //
-    // macros.put(name, exp);
-    //
-    // type = Type.REDUCE;
-    // result = Lambda.data(Tuple.of());
-    // } else {
-    // type = Statement.Module.valueOf(tag);
-    // result = ;
-    // }
-    return new Module((Tuple) expressionFromINode(node), Lists.<String> of());
+    Tuple env = Lambda.data(Tuple.of());
+    env = Lambda.app((Tuple) expressionFromINode(car), env);
+    for (INode child : cdr.getChildren()) {
+      env = Lambda.app((Tuple) expressionFromINode(child), env);
+    }
+
+    return new Module(env, Lists.<String> of());
   }
 
   public static HadrianParser getHadrianParser() {

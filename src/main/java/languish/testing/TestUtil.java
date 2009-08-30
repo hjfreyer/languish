@@ -80,11 +80,13 @@ public class TestUtil {
             .getCodeForExpression(exp));
 
         // PARSE
-        Module parsed = BuiltinParser.parseModule("REDUCE " + code);
+        Module parsed = BuiltinParser.parseModule(code);
 
-        TestCase.assertEquals("on test " + expToTest.name()
-            + " - code does not parse to given expression:", parsed
-            .getExpression(), exp);
+        LObject actualContent = parsed.getExpression().getSecond();
+        TestCase
+            .assertEquals("on test " + expToTest.name()
+                + " - code does not parse to given expression:", exp,
+                actualContent);
 
         TestCase.assertEquals("on test " + expToTest.name()
             + " - module requires dependencies:", Lists.of(), parsed
