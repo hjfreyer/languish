@@ -10,7 +10,7 @@ import languish.testing.TestUtil;
 public class InterpreterTest extends TestCase {
 
   public void testBasicDisplay() throws Exception {
-    LObject res = Interpreter.interpretStatement("REDUCE [DATA 5]", null);
+    LObject res = Interpreter.interpretStatement("#lang std;; \n..", null);
 
     assertEqualsData(TestUtil.FIVE, res);
   }

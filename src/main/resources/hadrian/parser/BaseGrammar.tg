@@ -1,20 +1,23 @@
-export <program>;
+export <module>;
 
-token word ($file_ident) {
-  part: 'a' .. 'z' | 'A' .. 'Z' | '.';
+token word ($filename) {
+  part: 'a' .. 'z' | 'A' .. 'Z' | '_' | '/' | '.';
+  keywords: infer;
 }
 
 token regex {
-  body -> .*
+  langdec -> "#lang std;;\\n"
 }
- 
-token delimiters;
 
-<program>
-  PROG -> "#!" <parser> ";;" $body
+token regex {
+  body -> '\.'*
+}
+
+<module>
+  TUPLES -> $langdec $body
 ;
 
-<parser>
-  FILE -> $file_ident
+<filename> 
+  FILE -> $filename
   BUILTIN -> "__BUILTIN__"
 ;
