@@ -7,11 +7,8 @@ import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Operation;
 import languish.base.Tuple;
-import languish.interpreter.Module;
 import languish.parsing.BuiltinParser;
 import languish.primitives.LInteger;
-
-import com.hjfreyer.util.Lists;
 
 public class TestUtil {
   // public static final LUnit UNIT = LUnit.UNIT;
@@ -61,8 +58,6 @@ public class TestUtil {
     TestCase.assertEquals(msg, Tuple.of(), Lambda.reduceToDataValue(exp));
   }
 
-  private static final BuiltinParser parser = new BuiltinParser();
-
   public static void testExpressions(
       List<? extends LanguishTestList> expressions) {
 
@@ -80,17 +75,10 @@ public class TestUtil {
             .getCodeForExpression(exp));
 
         // PARSE
-        Module parsed = BuiltinParser.parseModule(code);
-
-        LObject actualContent = parsed.getExpression().getSecond();
-        TestCase
-            .assertEquals("on test " + expToTest.name()
-                + " - code does not parse to given expression:", exp,
-                actualContent);
+        LObject parsed = BuiltinParser.LOBJECT.parse(code);
 
         TestCase.assertEquals("on test " + expToTest.name()
-            + " - module requires dependencies:", Lists.of(), parsed
-            .getDependencies());
+            + " - code does not parse to given expression:", exp, parsed);
       }
       // REDUCE ONCE
       if (reducedOnce != null) {

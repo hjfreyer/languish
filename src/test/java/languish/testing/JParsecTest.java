@@ -1,6 +1,7 @@
 package languish.testing;
 
 import junit.framework.TestCase;
+import languish.parsing.BuiltinParser;
 
 import org.codehaus.jparsec.OperatorTable;
 import org.codehaus.jparsec.Parser;
@@ -13,7 +14,10 @@ import org.codehaus.jparsec.functors.Unary;
 
 public class JParsecTest extends TestCase {
   public void testCalc() {
-    Calculator.CALCULATOR.parse("3+    4");
+    assertEquals(null, BuiltinParser.LINTEGER.parse("451"));
+    // assertEquals(null,
+    // Scanners.DECIMAL.or(Scanners.IDENTIFIER).parse("_23h45"));
+    // Calculator.CALCULATOR.parse("3+    4");
   }
 }
 

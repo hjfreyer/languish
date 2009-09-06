@@ -1,131 +1,78 @@
 package languish.parsing;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import languish.base.LObject;
-import languish.base.Lambda;
 import languish.base.Tuple;
 import languish.interpreter.Builtins;
-import languish.interpreter.Module;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 
-import org.quenta.tedir.antonius.doc.ITextDocument;
-import org.quenta.tedir.antonius.doc.ResourceDocument;
-import org.quenta.tedir.antonius.doc.StringDocument;
-import org.quenta.tedir.hadrian.HadrianParser;
-import org.quenta.tedir.hadrian.HadrianReader;
-import org.quenta.tedir.hadrian.INode;
-import org.quenta.tedir.hadrian.MessageMonitor;
-
-import com.hjfreyer.util.Lists;
+import org.codehaus.jparsec.Parser;
+import org.codehaus.jparsec.Parsers;
+import org.codehaus.jparsec.Scanners;
+import org.codehaus.jparsec.Terminals;
+import org.codehaus.jparsec.functors.Map;
 
 public class BuiltinParser {
 
-  public static enum Literal {
-    INT,
-    BOOL,
-    SYMBOL
+  public static final Terminals OPERATORS = Terminals.operators("[", "]");
+
+  public static final Parser<Void> DELIM =
+      Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT,
+          Scanners.WHITESPACES).skipMany();
+
+  public static final Parser<LInteger> LINTEGER =
+      Scanners.INTEGER.map(new Map<String, LInteger>() {
+        public LInteger map(String s) {
+          return LInteger.of(Integer.parseInt(s));
+        }
+
+        @Override
+        public String toString() {
+          return "LINTEGER";
+        }
+      });
+
+  public static final Parser<LSymbol> LSYMBOL =
+      Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER
+          .map(new Map<String, LSymbol>() {
+            public LSymbol map(String s) {
+              return LSymbol.of(s);
+            }
+          });
+
+  public static final Parser<LObject> BUILTIN_IDENT =
+      Scanners.IDENTIFIER.map(new Map<String, LObject>() {
+        public LObject map(String from) {
+          return Builtins.valueOf(from).getExpression();
+        }
+      });
+
+  public static final Parser<LObject> LEAF =
+      Parsers.or(LINTEGER, LSYMBOL, BUILTIN_IDENT);
+
+  public static final Parser.Reference<LObject> LOBJ_REF =
+      Parser.newReference();
+
+  public static final Parser<Tuple> TUPLE =
+      LOBJ_REF.lazy().many()
+          .between(Scanners.string("["), Scanners.string("]")).map(
+              new Map<List<LObject>, Tuple>() {
+                public Tuple map(List<LObject> from) {
+                  LObject[] objs = new LObject[from.size()];
+                  objs = from.toArray(objs);
+
+                  return Tuple.of(objs);
+                }
+              });
+
+  public static final Parser<LObject> LOBJECT =
+      LEAF.or(TUPLE).between(DELIM, DELIM);
+
+  static { // Ugh... java...
+    LOBJ_REF.set(LOBJECT);
   }
 
-  private static enum PrimitiveHadrianParser {
-    INSTANCE;
-
-    HadrianParser parser = null;
-
-    private PrimitiveHadrianParser() {
-      String docPath = "hadrian/parser/BuiltinGrammar.tg";
-      ClassLoader classLoader = BuiltinParser.class.getClassLoader();
-
-      final ITextDocument grammarDoc =
-          new ResourceDocument(docPath, classLoader);
-
-      final MessageMonitor monitor = new MessageMonitor();
-      this.parser = HadrianReader.getDefault().readParser(grammarDoc, monitor);
-      ParserUtil.failWithInternalMessages(monitor.getMessages(), grammarDoc);
-    }
-  }
-
-  private final Map<String, LObject> macros = new HashMap<String, LObject>();
-
-  public BuiltinParser() {}
-
-  public static Module parseModule(String code) {
-    ITextDocument doc = new StringDocument(code);
-    INode node = getHadrianParser().parse(doc);
-
-    INode car = node.getValue().getChildren().get(0);
-    INode cdr = node.getValue().getChildren().get(1);
-
-    Tuple env = Lambda.data(Tuple.of());
-    env = Lambda.app((Tuple) expressionFromINode(car), env);
-    for (INode child : cdr.getChildren()) {
-      env = Lambda.app((Tuple) expressionFromINode(child), env);
-    }
-
-    return new Module(env, Lists.<String> of());
-  }
-
-  public static HadrianParser getHadrianParser() {
-    return PrimitiveHadrianParser.INSTANCE.parser;
-  }
-
-  private static LObject expressionFromINode(INode inode) {
-    if (inode.getTag().equals("LITERAL")) {
-      return literalFromINode(inode.getChildren().get(0));
-    } else if (inode.getTag().equals("PRIM_GET")) {
-      return primGetFromINode(inode.getChildren().get(0));
-    } else if (inode.getTag().equals("TUPLE")) {
-      return tupleFromINode(inode.getChildren().get(0));
-    } else if (inode.getTag().equals("MACRO_GET")) {
-      // String macroName = inode.getChildren().get(0).asString();
-      //
-      // if (!macros.containsKey(macroName)) {
-      // throw new IllegalArgumentException("macro " + macroName +
-      // " undefined.");
-      // }
-
-      return Lambda.data(LSymbol.of("bogus macro"));// macros.get(macroName);
-    } else {
-      throw new AssertionError();
-    }
-  }
-
-  public static LObject primGetFromINode(INode node) {
-    String name = node.asString();
-
-    return Builtins.valueOf(name).getExpression();
-  }
-
-  private static Tuple tupleFromINode(INode node) {
-    int size = node.getChildren().size();
-
-    LObject[] tuple = new LObject[size];
-
-    for (int i = 0; i < size; i++) {
-      tuple[i] = expressionFromINode(node.getChildren().get(i));
-    }
-
-    return Tuple.of(tuple);
-  }
-
-  private static LObject literalFromINode(INode inode) {
-    String type = inode.getTag().toString();
-    INode content = inode.getChildren().get(0);
-
-    if (type.equals("SYMBOL")) {
-
-      return LSymbol.of(content.asString());
-    } else if (type.equals("INT")) {
-      String strVal = content.asString();
-
-      return LInteger.of(Integer.parseInt(strVal));
-
-    } else {
-      throw new AssertionError();
-    }
-
-    // return parseLiteral(Literal.valueOf(type), content);
-  }
+  private BuiltinParser() {}
 }
