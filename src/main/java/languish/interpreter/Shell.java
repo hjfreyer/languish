@@ -5,13 +5,14 @@ import java.util.Scanner;
 
 import languish.base.Tuple;
 
-import com.hjfreyer.util.Lists;
+import com.google.common.collect.ImmutableList;
 
 public class Shell {
 
   private final Tuple value = Tuple.of();
 
-  private Shell() {}
+  private Shell() {
+  }
 
   public static Tuple processReadable(Readable in) throws FileNotFoundException {
     StringBuilder input = new StringBuilder();
@@ -22,7 +23,7 @@ public class Shell {
     }
 
     return Interpreter.interpretStatement(input.toString(),
-        new FileSystemDependencyManager(Lists.of("languish")));
+        new FileSystemDependencyManager(ImmutableList.of("languish")));
   }
 
   public Tuple getValue() {

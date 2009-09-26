@@ -9,7 +9,7 @@ import languish.primitives.LCharacter;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 
-import com.hjfreyer.util.Lists;
+import com.google.common.collect.ImmutableList;
 
 public class Util {
 
@@ -62,9 +62,9 @@ public class Util {
       Object car = convertPrimitiveToJava((Tuple) tuple.getSecond());
       List<?> cdr = (List<?>) convertPrimitiveToJava((Tuple) tuple.getThird());
 
-      cdr = (cdr != null) ? cdr : Lists.of();
+      cdr = (cdr != null) ? cdr : ImmutableList.of();
 
-      List<Object> result = Lists.of(car);
+      List<Object> result = ImmutableList.of(car);
       result.addAll(cdr);
 
       return result;
@@ -73,5 +73,6 @@ public class Util {
     }
   }
 
-  private Util() {}
+  private Util() {
+  }
 }

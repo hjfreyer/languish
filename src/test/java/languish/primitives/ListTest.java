@@ -1,8 +1,14 @@
 package languish.primitives;
 
-import static languish.base.Lambda.*;
+import static languish.base.Lambda.car;
+import static languish.base.Lambda.cdr;
+import static languish.base.Lambda.cons;
+import static languish.base.Lambda.data;
 import static languish.libtesting.CommonTest.NULL;
-import static languish.testing.TestUtil.*;
+import static languish.testing.TestUtil.FOUR;
+import static languish.testing.TestUtil.SIX;
+import static languish.testing.TestUtil.THREE;
+import static languish.testing.TestUtil.TWO;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,61 +20,47 @@ import languish.base.Util;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
 
-import com.hjfreyer.util.Lists;
+import com.google.common.collect.ImmutableList;
 
 public class ListTest extends TestCase {
 
   public enum Tests implements LanguishTestList {
     // IDENITY TESTS
     TEST_EMPTY_LIST(data(Tuple.of()), //
-        "[DATA []]",
-        null,
-        Lists.of()),
+        "[DATA []]", null, ImmutableList.of()),
 
     SINGLE_ELEMENT_LIST(cons(data(TWO), data(Tuple.of())), //
-        "[CONS [DATA 2] [DATA []]]",
-        null,
-        Lists.of(TWO)),
+        "[CONS [DATA 2] [DATA []]]", null, ImmutableList.of(TWO)),
 
     DOUBLE_ELEMENT_LIST(cons(data(THREE), cons(data(TWO), data(Tuple.of()))), //
-        "[CONS [DATA 3] [CONS [DATA 2] [DATA []]]]",
-        null,
-        Lists.of(THREE, TWO)),
+        "[CONS [DATA 3] [CONS [DATA 2] [DATA []]]]", null, ImmutableList.of(
+            THREE, TWO)),
 
-    TRIPLE_ELEMENT_LIST(cons(data(THREE), cons(data(FOUR), cons(data(TWO),
-        data(Tuple.of())))), //
-        "[CONS [DATA 3] [CONS [DATA 4] [CONS [DATA 2] [DATA []]]]]",
-        null,
-        Lists.of(THREE, FOUR, TWO)),
+    TRIPLE_ELEMENT_LIST(
+        cons(data(THREE), cons(data(FOUR), cons(data(TWO), data(Tuple.of())))), //
+        "[CONS [DATA 3] [CONS [DATA 4] [CONS [DATA 2] [DATA []]]]]", null,
+        ImmutableList.of(THREE, FOUR, TWO)),
 
-    NESTED_LIST(cons(SINGLE_ELEMENT_LIST.expression, cons(data(SIX), data(Tuple
-        .of()))), //
-        "[CONS [CONS [DATA 2] [DATA []]] [CONS [DATA 6] [DATA []]]]",
-        null,
-        Lists.of(Lists.of(TWO), SIX)),
+    NESTED_LIST(
+        cons(SINGLE_ELEMENT_LIST.expression, cons(data(SIX), data(Tuple.of()))), //
+        "[CONS [CONS [DATA 2] [DATA []]] [CONS [DATA 6] [DATA []]]]", null,
+        ImmutableList.of(ImmutableList.of(TWO), SIX)),
 
     TEST_CAR(car(TRIPLE_ELEMENT_LIST.expression), //
-        "[CAR " + TRIPLE_ELEMENT_LIST.code + "]",
-        data(THREE),
-        null,
-        THREE),
+        "[CAR " + TRIPLE_ELEMENT_LIST.code + "]", data(THREE), null, THREE),
 
     TEST_CDR(cdr(TRIPLE_ELEMENT_LIST.expression), //
-        "[CDR " + TRIPLE_ELEMENT_LIST.code + "]",
-        Util.listify(data(FOUR), data(TWO)),
-        Lists.of(FOUR, TWO)),
+        "[CDR " + TRIPLE_ELEMENT_LIST.code + "]", Util.listify(data(FOUR),
+            data(TWO)), ImmutableList.of(FOUR, TWO)),
 
     TEST_CADR(car(cdr(TRIPLE_ELEMENT_LIST.expression)), //
-        "[CAR [CDR " + TRIPLE_ELEMENT_LIST.code + "]]",
-        car(Util.listify(data(FOUR), data(TWO))),
-        null,
-        FOUR),
+        "[CAR [CDR " + TRIPLE_ELEMENT_LIST.code + "]]", car(Util.listify(
+            data(FOUR), data(TWO))), null, FOUR),
 
-    TEST_CAAR(car(car(NESTED_LIST.expression)), //
-        "[CAR [CAR " + NESTED_LIST.code + "]]",
-        car(cons(data(TWO), NULL)),
-        null,
-        TWO),
+    TEST_CAAR(
+        car(car(NESTED_LIST.expression)), //
+        "[CAR [CAR " + NESTED_LIST.code + "]]", car(cons(data(TWO), NULL)),
+        null, TWO),
 
     ;
 

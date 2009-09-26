@@ -1,8 +1,13 @@
 package languish.base;
 
-import static languish.base.Lambda.*;
+import static languish.base.Lambda.abs;
+import static languish.base.Lambda.app;
+import static languish.base.Lambda.cons;
+import static languish.base.Lambda.data;
+import static languish.base.Lambda.ref;
 import static languish.libtesting.CommonTest.NULL;
-import static languish.testing.TestUtil.*;
+import static languish.testing.TestUtil.FIVE;
+import static languish.testing.TestUtil.FOUR;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,32 +16,26 @@ import junit.framework.TestCase;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
 
-import com.hjfreyer.util.Lists;
+import com.google.common.collect.ImmutableList;
 
 public class ConsTest extends TestCase {
   public enum Tests implements LanguishTestList {
     GET_NULL(NULL, //
-        "[DATA []]",
-        null,
-        Lists.of()),
+        "[DATA []]", null, ImmutableList.of()),
 
     GET_SINGLETON(cons(data(FIVE), NULL), //
-        "[CONS [DATA 5] [DATA []]]",
-        null,
-        Lists.of(FIVE)),
+        "[CONS [DATA 5] [DATA []]]", null, ImmutableList.of(FIVE)),
 
     GET_PAIR_WITH_SINGLE_REF(app(abs(cons(ref(1), cons(ref(1), NULL))),
         data(FOUR)), //
-        "[APP [ABS [CONS [REF 1] [CONS [REF 1] [DATA []]]]] [DATA 4]]",
-        cons(data(FOUR), cons(data(FOUR), NULL)),
-        Lists.of(FOUR, FOUR)),
+        "[APP [ABS [CONS [REF 1] [CONS [REF 1] [DATA []]]]] [DATA 4]]", cons(
+            data(FOUR), cons(data(FOUR), NULL)), ImmutableList.of(FOUR, FOUR)),
 
     GET_PAIR_WITH_DOUBLE_REF(app(app(
         abs(abs(cons(ref(1), cons(ref(2), NULL)))), data(FOUR)), data(FIVE)), //
         "[APP [APP [ABS [ABS [CONS [REF 1] [CONS [REF 2] [DATA []]]]]] "
-            + "[DATA 4]] [DATA 5]]",
-        app(abs(cons(ref(1), cons(data(FOUR), NULL))), data(FIVE)),
-        Lists.of(FIVE, FOUR)), ;
+            + "[DATA 4]] [DATA 5]]", app(abs(cons(ref(1),
+            cons(data(FOUR), NULL))), data(FIVE)), ImmutableList.of(FIVE, FOUR)), ;
 
     private final Tuple expression;
     private final String code;

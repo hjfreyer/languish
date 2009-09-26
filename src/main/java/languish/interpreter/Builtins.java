@@ -2,7 +2,6 @@ package languish.interpreter;
 
 import languish.base.LObject;
 import languish.base.Lambda;
-import languish.parsing.LGrammars;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
 
@@ -17,23 +16,16 @@ public enum Builtins {
   ADD(DataFunctions.ADD),
 
   // Boolean ops
-  TRUE(LBoolean.TRUE),
-  FALSE(LBoolean.FALSE),
-  BRANCH(DataFunctions.BRANCH),
-  AND(DataFunctions.AND),
+  TRUE(LBoolean.TRUE), FALSE(LBoolean.FALSE), BRANCH(DataFunctions.BRANCH), AND(
+      DataFunctions.AND),
 
   // Expression Operations
-  ABS(Lambda.ABS),
-  APP(Lambda.APP),
-  DATA(Lambda.DATA),
-  CAR(Lambda.CAR),
-  CDR(Lambda.CDR),
+  ABS(Lambda.ABS), APP(Lambda.APP), DATA(Lambda.DATA), CAR(Lambda.CAR), CDR(
+      Lambda.CDR),
 
   // GET(Lambda.GET),
-  PRIM(Lambda.PRIM),
-  REF(Lambda.REF),
-  CONS(Lambda.CONS),
-  IS_PRIMITIVE(Lambda.IS_PRIMITIVE),
+  PRIM(Lambda.PRIM), REF(Lambda.REF), CONS(Lambda.CONS), IS_PRIMITIVE(
+      Lambda.IS_PRIMITIVE),
 
   // CONS_AND_DATA_TO_TUPLES(DataFunctions.CONS_AND_DATA_TO_TUPLES),
   // IS_NULL(DataFunctions.IS_NULL),
@@ -50,7 +42,7 @@ public enum Builtins {
   //
   // // Hadrian
   // EMPTY_GRAMMAR(data(LGrammars.EMPTY_GRAMMAR)),
-  PARSE_STATEMENT(LGrammars.PARSE_STATEMENT),
+  // PARSE_STATEMENT(LGrammars.PARSE_STATEMENT),
   // ADD_RULE(LGrammars.ADD_RULE),
   // // SET_NONTERMS(Wrapper.of(LMaps.EMPTY_MAP)),
   // TERM(LGrammars.TERM),
@@ -58,8 +50,7 @@ public enum Builtins {
   // NON_TERM(LGrammars.NON_TERM),
   //  
   // Primitive Parsing
-  PARSE_INT(DataFunctions.PARSE_INT),
-  BUILTIN_GET(DataFunctions.BUILTIN_GET),
+  PARSE_INT(DataFunctions.PARSE_INT), BUILTIN_GET(DataFunctions.BUILTIN_GET),
 
   ;
 
