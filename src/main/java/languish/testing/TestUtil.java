@@ -7,7 +7,7 @@ import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Operation;
 import languish.base.Tuple;
-import languish.parsing.BuiltinParser;
+import languish.interpreter.BuiltinParser;
 import languish.primitives.LInteger;
 
 public class TestUtil {

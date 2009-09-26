@@ -1,7 +1,7 @@
 package languish.testing;
 
 import junit.framework.TestCase;
-import languish.parsing.BuiltinParser;
+import languish.interpreter.BuiltinParser;
 
 import org.codehaus.jparsec.OperatorTable;
 import org.codehaus.jparsec.Parser;
