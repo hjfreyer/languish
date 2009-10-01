@@ -1,38 +1,12 @@
 package languish.parsing;
 
-import java.util.List;
-
 public class ASTNode {
   private final String id;
-  private final List<?> children;
-  private final ASTNode wrapped;
-  private final String content;
+  private final Object content;
 
-  @SuppressWarnings("unchecked")
-  public ASTNode(String id, Object obj) {
-    this.id = id;
-    if (obj instanceof List<?>) {
-      children = (List<ASTNode>) obj;
-      content = null;
-      wrapped = null;
-    } else if (obj instanceof String) {
-      children = null;
-      content = (String) obj;
-      wrapped = null;
-    } else if (obj instanceof ASTNode) {
-      children = null;
-      content = null;
-      wrapped = (ASTNode) obj;
-    } else {
-      throw new IllegalArgumentException(obj + " cannot be passed to ASTNode");
-    }
-  }
-
-  public ASTNode(String id, List<?> children, ASTNode wrapped, String content) {
+  public ASTNode(String id, Object content) {
     super();
     this.id = id;
-    this.children = children;
-    this.wrapped = wrapped;
     this.content = content;
   }
 
@@ -40,21 +14,44 @@ public class ASTNode {
     return id;
   }
 
-  public List<?> getChildren() {
-    return children;
-  }
-
-  public ASTNode getWrapped() {
-    return wrapped;
-  }
-
-  public String getContent() {
+  public Object getContent() {
     return content;
   }
 
   @Override
   public String toString() {
-    return "ASTNode [children=" + children + ", content=" + content + ", id="
-        + id + ", wrapped=" + wrapped + "]";
+    return "ASTNode [content=" + content + ", id=" + id + "]";
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((content == null) ? 0 : content.hashCode());
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ASTNode other = (ASTNode) obj;
+    if (content == null) {
+      if (other.content != null)
+        return false;
+    } else if (!content.equals(other.content))
+      return false;
+    if (id == null) {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals(other.id))
+      return false;
+    return true;
+  }
+
 }

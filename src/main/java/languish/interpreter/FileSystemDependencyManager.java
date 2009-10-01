@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
+import languish.base.Tuple;
+
 public class FileSystemDependencyManager implements DependencyManager {
 
   private static final ClassLoader CLASS_LOADER =
@@ -16,7 +18,7 @@ public class FileSystemDependencyManager implements DependencyManager {
     this.paths = paths;
   }
 
-  public String getResource(String resourceName) throws FileNotFoundException {
+  public Tuple getResource(String resourceName) throws FileNotFoundException {
 
     for (String path : paths) {
       String docPath = path + '/' + resourceName;
@@ -33,7 +35,7 @@ public class FileSystemDependencyManager implements DependencyManager {
         doc.append(read.nextLine()).append('\n');
       }
 
-      return doc.toString();
+      return Interpreter.interpretStatement(doc.toString(), this);
     }
 
     throw new FileNotFoundException(resourceName);

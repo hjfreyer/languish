@@ -3,9 +3,6 @@ package languish.parsing;
 import java.util.List;
 
 import junit.framework.TestCase;
-import languish.parsing.LParser.ASTNode;
-import languish.parsing.LParser.GrammarRule;
-import languish.parsing.LParser.ParserTree;
 
 import org.codehaus.jparsec.Parser;
 

@@ -7,7 +7,8 @@ import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
 
 public class Lambda {
-  private Lambda() {}
+  private Lambda() {
+  }
 
   public static LObject reduceToDataValue(LObject exp) {
     Tuple reduced = reduce((Tuple) exp);
@@ -39,19 +40,6 @@ public class Lambda {
   }
 
   public static final Operation ABS = new IrreducibleOperation();
-  // public static final Operation ABS = new Operation() {
-  // @Override
-  // public Tuple reduceOnce(Tuple tuple) {
-  // Tuple sub = (Tuple) tuple.getSecond();
-  //
-  // if (isReducible(sub)) {
-  // tuple.setSecond(reduceTupleOnce(sub));
-  // return tuple;
-  // }
-  //
-  // throw new AlreadyReducedError(tuple);
-  // }
-  // };
 
   public static final Operation APP = new Operation() {
     @Override
@@ -129,26 +117,6 @@ public class Lambda {
       return data(isPrimitive(arg) ? LBoolean.TRUE : LBoolean.FALSE);
     }
   };
-  //  
-  // public static final Operation EQUALS = new Operation() {
-  // @Override
-  // public Tuple reduceOnce(Tuple tuple) {
-  // Tuple arg1 = (Tuple) tuple.getSecond();
-  // Tuple arg2 = (Tuple) tuple.getThird();
-  //
-  // // TODO: do this lazier
-  // if (isReducible(arg1)) {
-  // tuple.setSecond(reduceTupleOnce(arg1));
-  // return tuple;
-  // } else if (isReducible(arg2)) {
-  // tuple.setThird(reduceTupleOnce(arg2));
-  // return tuple;
-  // } else {
-  // return data(LBoolean.of(arg1.equals(arg2)));
-  // }
-  //
-  // }
-  // };
 
   public static final Operation PRIM = new Operation() {
     @Override
@@ -170,62 +138,10 @@ public class Lambda {
       } else {
         throw new IllegalPrimitiveFunctionApplicationError(arg);
       }
-
-      // else if (arg.getFirst() == DATA) {
-      // return primFunc.convertLeaf(arg.getSecond()).deepClone();
-      // } else if (arg.getFirst() == CONS) {
-      // Tuple car = (Tuple) arg.getSecond();
-      // Tuple cdr = (Tuple) arg.getThird();
-      //
-      // if (isReducible(car.getFirst())) {
-      // arg.setSecond(reduceTupleOnce(car));
-      // return prim;
-      // }
-      // if (isReducible(cdr.getFirst())) {
-      // arg.setThird(reduceTupleOnce(cdr));
-      // return prim;
-      // }
-      //
-      // if (car.getFirst() != DATA) {
-      // arg.setSecond(prim(primFunc, car));
-      // return prim;
-      // }
-      //
-      // if (cdr.getFirst() != DATA) {
-      // arg.setThird(prim(primFunc, cdr));
-      // return prim;
-      // }
-      //
-      // return primFunc.combineChildren(car.getSecond(), cdr.getSecond())
-      // .deepClone();
-      // } else {
-      // throw new AssertionError();
-      // }
     }
   };
 
   public static final Operation REF = new IrreducibleOperation();
-
-  //
-  // public static boolean isReducible(Tuple tuple) {
-  // Operation op = (Operation) tuple.getFirst();
-  //
-  // if (op == APP || op == CAR || op == CDR) {
-  // return true;
-  // } else if (op == DATA || op == REF) {
-  // return false;
-  // } else if (op == ABS) {
-  // return isReducible((Tuple) tuple.getSecond());
-  // } else if (op == CONS) {
-  // return isReducible((Tuple) tuple.getSecond())
-  // || isReducible((Tuple) tuple.getThird());
-  // } else if (op == PRIM) {
-  // // Prim can only be reduced if its argument is reduced
-  // return isReduced((Tuple) tuple.getSecond());
-  // } else {
-  // throw new AssertionError();
-  // }
-  // }
 
   public static boolean isReducible(Tuple tuple) {
     Operation op = (Operation) tuple.getFirst();
@@ -273,7 +189,8 @@ public class Lambda {
       return exp;
     }
     if (op == REF) {
-      return id == ((LInteger) exp.getSecond()).intValue() ? with.deepClone()
+      return id == ((LInteger) exp.getSecond()).intValue()
+          ? with.deepClone()
           : exp;
     }
     if (op == ABS) {

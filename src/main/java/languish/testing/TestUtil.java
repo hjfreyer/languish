@@ -75,7 +75,7 @@ public class TestUtil {
             .getCodeForExpression(exp));
 
         // PARSE
-        LObject parsed = BuiltinParser.LOBJECT.parse(code);
+        LObject parsed = BuiltinParser.SINGLE_TUPLE.parse(code);
 
         TestCase.assertEquals("on test " + expToTest.name()
             + " - code does not parse to given expression:", exp, parsed);
