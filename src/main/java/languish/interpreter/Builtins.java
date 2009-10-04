@@ -2,6 +2,7 @@ package languish.interpreter;
 
 import languish.base.LObject;
 import languish.base.Lambda;
+import languish.parsing.LParsers;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
 
@@ -42,7 +43,7 @@ public enum Builtins {
   //
   // // Hadrian
   // EMPTY_GRAMMAR(data(LGrammars.EMPTY_GRAMMAR)),
-  // PARSE_STATEMENT(LGrammars.PARSE_STATEMENT),
+  PARSE_TEXT(LParsers.PARSE_TEXT),
   // ADD_RULE(LGrammars.ADD_RULE),
   // // SET_NONTERMS(Wrapper.of(LMaps.EMPTY_MAP)),
   // TERM(LGrammars.TERM),

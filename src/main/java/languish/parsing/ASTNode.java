@@ -1,5 +1,10 @@
 package languish.parsing;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 public class ASTNode {
   private final String id;
   private final Object content;
@@ -54,4 +59,28 @@ public class ASTNode {
     return true;
   }
 
+  public List<?> toListStructure() {
+    return (List<?>) toListStructure(this);
+  }
+
+  @SuppressWarnings("unchecked")
+  private static Object toListStructure(Object obj) {
+    if (obj instanceof String) {
+      return obj;
+    }
+    if (obj instanceof List<?>) {
+      List<Object> newList = new LinkedList<Object>();
+
+      for (Object child : (List<Object>) obj) {
+        newList.add(toListStructure(child));
+      }
+
+      return newList;
+    }
+    if (obj instanceof ASTNode) {
+      ASTNode node = (ASTNode) obj;
+      return ImmutableList.of(node.id, toListStructure(obj));
+    }
+    throw new AssertionError();
+  }
 }

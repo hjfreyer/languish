@@ -1,6 +1,7 @@
 package languish.base;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import languish.primitives.DataWrapper;
@@ -64,7 +65,8 @@ public class Util {
 
       cdr = (cdr != null) ? cdr : ImmutableList.of();
 
-      List<Object> result = ImmutableList.of(car);
+      List<Object> result = new LinkedList<Object>();
+      result.add(car);
       result.addAll(cdr);
 
       return result;

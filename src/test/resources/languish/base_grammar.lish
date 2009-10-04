@@ -1,4 +1,30 @@
 
+#lang __BUILTIN__;;
+
+[CONS 
+  [DATA "VALUE"]
+  [CONS 
+    // Tokens
+    [CONS 
+      [CONS [DATA "IDENTIFIER"] 
+            [CONS [DATA "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]_)*"] [DATA []]]]
+    [DATA []]]
+  [CONS 
+    // Ignored
+    [CONS [DATA "\s+"] [DATA []]]
+  [CONS 
+    // Rules
+    [CONS 
+      [CONS [DATA "ROOT"] 
+      [CONS [DATA "IDENT"]
+      [CONS 
+        [CONS [DATA "TERM"] [CONS [DATA "IDENTIFIER"] [DATA []]]]
+      [DATA []]]]]
+     [DATA []]] 
+  [DATA []]]]]
+]
+/*=========================================    
+
 MACRO OMEGA [ABS [APP [REF 1] [REF 1]]];;
 
 MACRO NULL [DATA []];;
@@ -129,3 +155,4 @@ MACRO PARSE_NODE
 
 REDUCE [APP (*PARSE_NODE*)
   [PRIM [DATA PARSE_STATEMENT] [CONS (*GRAMMAR*) [DATA "REDUCE \"foo\""]]]];;
+*/

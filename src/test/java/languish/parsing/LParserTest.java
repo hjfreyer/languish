@@ -17,7 +17,7 @@ public class LParserTest extends TestCase {
 
     List<GrammarRule> rules =
         ImmutableList.of(new GrammarRule("ROOT", "FOODER", new ParserTree(
-            ParserTree.Op.TERM, null, "FOOO")));
+            ParserTree.Op.TERM, "FOOO")));
 
     LParser parser = new LParser(tokens, delim, rules);
 

@@ -16,7 +16,6 @@ import com.google.common.collect.Multimaps;
 import com.hjfreyer.util.Pair;
 
 public class LParser {
-
   private final List<Pair<String, String>> tokenTypes;
   private final List<String> ignored;
   private final List<GrammarRule> rules;

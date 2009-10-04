@@ -21,7 +21,7 @@ public class FileSystemDependencyManager implements DependencyManager {
   public Tuple getResource(String resourceName) throws FileNotFoundException {
 
     for (String path : paths) {
-      String docPath = path + '/' + resourceName;
+      String docPath = path + '/' + resourceName + ".lish";
       InputStream stream = CLASS_LOADER.getResourceAsStream(docPath);
 
       if (stream == null) {

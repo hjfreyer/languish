@@ -1,6 +1,7 @@
 package languish.parsing;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.codehaus.jparsec.Parser;
@@ -17,23 +18,22 @@ public class ParserTree {
   }
 
   private final Op op;
-  private final List<ParserTree> children;
-  private final String value;
+  private final Object content;
 
-  public ParserTree(Op op, List<ParserTree> children, String value) {
+  public ParserTree(Op op, Object content) {
     super();
     this.op = op;
-    this.children = children;
-    this.value = value;
+    this.content = content;
   }
 
+  @SuppressWarnings("unchecked")
   public Parser<?> toParser(
       final HashMap<String, Parser.Reference<ASTNode>> parserRefs) {
     switch (op) {
       case NONTERM :
-        return parserRefs.get(value).lazy();
+        return parserRefs.get(content).lazy();
       case TERM :
-        final String tag = value;
+        final String tag = (String) content;
         return Terminals.fragment(tag).map(new Map<String, ASTNode>() {
           public ASTNode map(String from) {
             return new ASTNode(tag, from);
@@ -46,27 +46,46 @@ public class ParserTree {
         });
       case SEQ :
         final List<Parser<?>> childParsers =
-            Lists.transform(children, new Function<ParserTree, Parser<?>>() {
-              public Parser<?> apply(ParserTree from) {
-                return from.toParser(parserRefs);
-              }
-            });
+            Lists.transform((List<ParserTree>) content,
+                new Function<ParserTree, Parser<?>>() {
+                  public Parser<?> apply(ParserTree from) {
+                    return from.toParser(parserRefs);
+                  }
+                });
         return Parsers.list(childParsers);
     }
 
     return null;
   }
 
+  @SuppressWarnings("unchecked")
+  public static ParserTree fromList(List<?> list) {
+    if (list.size() != 2) {
+      throw new IllegalArgumentException();
+    }
+
+    Op op = Op.valueOf((String) list.get(0));
+
+    switch (op) {
+      case NONTERM :
+      case TERM :
+        return new ParserTree(op, list.get(1));
+      case SEQ :
+        List<ParserTree> children = new LinkedList<ParserTree>();
+        for (List<?> child : (List<List<?>>) list.get(1)) {
+          children.add(ParserTree.fromList(child));
+        }
+        return new ParserTree(op, children);
+    }
+    throw new AssertionError();
+  }
+
   public Op getOp() {
     return op;
   }
 
-  public List<ParserTree> getChildren() {
-    return children;
-  }
-
-  public String getValue() {
-    return value;
+  public Object getContent() {
+    return content;
   }
 
 }

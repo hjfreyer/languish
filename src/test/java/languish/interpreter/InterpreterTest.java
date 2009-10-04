@@ -1,14 +1,21 @@
 package languish.interpreter;
 
+import static languish.base.Lambda.*;
 import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Tuple;
+import languish.primitives.LInteger;
+import languish.primitives.LSymbol;
 import languish.testing.TestUtil;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
 
 import com.hjfreyer.util.Pair;
 
 public class InterpreterTest extends TestCase {
+  Mockery context = new Mockery();
 
   public void testGetParserAndProgram() {
     assertEquals(Pair.of("foo", "\nblah blah blah"), Interpreter
@@ -19,46 +26,59 @@ public class InterpreterTest extends TestCase {
   }
 
   public void testBasicDisplay() throws Exception {
-    Tuple program = Interpreter.interpretStatement("[ABS [DATA 5]]", null);
+    Tuple program =
+        Interpreter
+            .interpretStatement("[CONS [DATA \"VALUE\"] [DATA 5]]", null);
 
     assertReducesToData(TestUtil.FIVE, program);
   }
 
   public void testTrivialParserChange() throws Exception {
-    LObject res;
+    final Tuple parserValue =
+        abs(cons(data(LSymbol.of("VALUE")), data(LInteger.of(5))));
 
-    String statementToReturn = "[CONS [DATA 0] [DATA 42]]";
+    final DependencyManager depman = context.mock(DependencyManager.class);
+    context.checking(new Expectations() {
+      {
+        oneOf(depman).getResource("trivialParser");
+        will(returnValue(parserValue));
+      }
+    });
 
-    res = Interpreter.interpretStatement("SET_PARSER [ABS [ABS " //
-        + statementToReturn + "]]", null);
+    Tuple res =
+        Interpreter.interpretStatement(
+            "#lang trivialParser;; THIS IS GARBAGE!!@E#!q34!", depman);
 
-    res = Interpreter.interpretStatement("THIS IS GARBAGE!!@E#!q34!", null);
-
-    // assertReducesToData(LInteger.of(42), res);
+    assertReducesToData(LInteger.of(5), res);
   }
 
   private void assertReducesToData(LObject expected, Tuple actual) {
     assertEquals(Lambda.data(expected), Lambda.reduce(actual));
   }
-  //
-  // public void testEchoParser() throws Exception {
-  // String echoCode = "[ABS [ABS [CONS [DATA 0] [REF 2]]]]";
-  //
-  // String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
-  // String test2 = "rock me am[ad]]eus!~";
-  //
-  // LObject res;
-  //
-  // res = Interpreter.interpretStatement("SET_PARSER " + echoCode, null);
-  // res = Interpreter.interpretStatement("", null);
-  // // assertReducesToData(LSymbol.of(""), res);
-  //
-  // res = Interpreter.interpretStatement(test, null);
-  // assertReducesToData(LSymbol.of(test), res);
-  //
-  // res = Interpreter.interpretStatement(test2, null);
-  // assertReducesToData(LSymbol.of(test2), res);
-  // }
+
+  public void testEchoParser() throws Exception {
+    final Tuple parserValue = abs(cons(data(LSymbol.of("VALUE")), ref(1)));
+
+    final DependencyManager depman = context.mock(DependencyManager.class);
+    context.checking(new Expectations() {
+      {
+        exactly(3).of(depman).getResource("echoParser");
+        will(returnValue(parserValue));
+      }
+    });
+
+    String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
+    String test2 = "rock me am[ad]]eus!~";
+
+    Tuple res = Interpreter.interpretStatement("#lang echoParser;;", depman);
+    assertReducesToData(LSymbol.of(""), res);
+
+    res = Interpreter.interpretStatement("#lang echoParser;;" + test, depman);
+    assertReducesToData(LSymbol.of(test), res);
+
+    res = Interpreter.interpretStatement("#lang echoParser;;" + test2, depman);
+    assertReducesToData(LSymbol.of(test2), res);
+  }
   //
   // public void testMacros() throws Exception {
   // LObject res;

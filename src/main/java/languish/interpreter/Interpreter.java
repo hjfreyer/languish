@@ -21,42 +21,52 @@ public class Interpreter {
   private Interpreter() {
   }
 
-  @SuppressWarnings("unchecked")
   public static Tuple interpretStatement(String input, DependencyManager depman)
       throws FileNotFoundException {
     Pair<String, String> parserAndProgram = getParserAndProgram(input);
     String parserName = parserAndProgram.getFirst();
     String programBody = parserAndProgram.getSecond();
 
+    Tuple resultExpression;
+
     if (parserName.equals("__BUILTIN__")) {
-      List<Tuple> statements = BuiltinParser.PROGRAM.parse(programBody);
+      resultExpression = BuiltinParser.SINGLE_TUPLE.parse(programBody);
+    } else {
+      Tuple parser = depman.getResource(parserName);
 
-      Tuple result = Lambda.data(Tuple.of());
+      resultExpression =
+          Lambda.app(parser, Lambda.data(LSymbol.of(programBody)));
+    }
+    return evaluateToValue(resultExpression, depman);
+  }
 
-      for (Tuple statement : statements) {
-        result = Lambda.app(statement, result);
+  public static Tuple evaluateToValue(Tuple tuple, DependencyManager depman)
+      throws FileNotFoundException {
+    LSymbol returnType = (LSymbol) Lambda.reduceToDataValue(Lambda.car(tuple));
+
+    if (returnType.stringValue().equals("VALUE")) {
+      return Lambda.cdr(tuple);
+    } else if (returnType.stringValue().equals("LOAD")) {
+      Tuple load = Lambda.cdr(tuple);
+
+      Tuple depList = Lambda.car(load);
+      Tuple exp = Lambda.cdr(load);
+
+      @SuppressWarnings("unchecked")
+      List<String> depsList =
+          (List<String>) Util.convertPrimitiveToJava(Lambda.reduce(depList));
+
+      List<Tuple> depValues = new ArrayList<Tuple>();
+
+      for (String depName : depsList) {
+        depValues.add(depman.getResource(depName));
       }
 
-      return result;
+      return evaluateToValue(Lambda.app(exp, Util
+          .convertJavaToPrimitive(depValues)), depman);
+    } else {
+      throw new AssertionError();
     }
-
-    Tuple parser = depman.getResource(parserName);
-
-    Tuple mainProgExp =
-        Lambda.car(Lambda.app(parser, Lambda.data(LSymbol.of(programBody))));
-    Tuple depsListExp =
-        Lambda.cdr(Lambda.app(parser, Lambda.data(LSymbol.of(programBody))));
-
-    List<Object> depsList =
-        (List<Object>) Util.convertPrimitiveToJava(Lambda.reduce(depsListExp));
-    List<Tuple> depValues = new ArrayList();
-
-    for (Object depObj : depsList) {
-      String depName = (String) depObj;
-      depValues.add(depman.getResource(depName));
-    }
-
-    return Lambda.app(mainProgExp, Util.convertJavaToPrimitive(depValues));
   }
 
   public static Pair<String, String> getParserAndProgram(String input) {

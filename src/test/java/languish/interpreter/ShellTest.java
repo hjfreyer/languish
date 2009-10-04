@@ -24,6 +24,15 @@ public class ShellTest extends TestCase {
     assertEquals(LInteger.of(42), Shell.processReadable(new InputStreamReader(
         stream)));
   }
+
+  public void testBaseParserLish() throws Exception {
+    InputStream stream =
+        getClass().getClassLoader().getResourceAsStream(
+            "languish/base_parser_test.lish");
+
+    assertEquals(LInteger.of(42), Shell.processReadable(new InputStreamReader(
+        stream)));
+  }
 }
 //
 // [CONS [DATA "STATEMENT"]
