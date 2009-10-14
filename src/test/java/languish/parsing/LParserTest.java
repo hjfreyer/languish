@@ -12,7 +12,7 @@ import com.hjfreyer.util.Pair;
 public class LParserTest extends TestCase {
   public void testFoo() {
     List<Pair<String, String>> tokens =
-        ImmutableList.of(Pair.of("foo", "FOOO"));
+        ImmutableList.of(Pair.of("FOOO", "foo"));
     List<String> delim = ImmutableList.of("\\s+");
 
     List<GrammarRule> rules =
@@ -23,6 +23,6 @@ public class LParserTest extends TestCase {
 
     Parser<ASTNode> lexer = parser.getParser();
 
-    assertEquals(null, lexer.parse("foo      \n\t "));
+    assertEquals(null, lexer.parse("food"));
   }
 }

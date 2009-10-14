@@ -7,8 +7,10 @@
     [ABS // List with Base grammar
       [CONS [DATA "VALUE"]
         [ABS // Program text
-          [PRIM [DATA PARSE_TEXT] 
-            [CONS [CAR [REF 2]] [CONS [REF 1] [DATA []]]]
+          [CONS [DATA "VALUE"]
+            [PRIM [DATA PARSE_TEXT] 
+              [CONS [CAR [REF 2]] [CONS [REF 1] [DATA []]]]
+            ]
           ]
         ]
       ]

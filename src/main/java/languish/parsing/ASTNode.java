@@ -79,7 +79,7 @@ public class ASTNode {
     }
     if (obj instanceof ASTNode) {
       ASTNode node = (ASTNode) obj;
-      return ImmutableList.of(node.id, toListStructure(obj));
+      return ImmutableList.of(node.id, toListStructure(node.content));
     }
     throw new AssertionError();
   }

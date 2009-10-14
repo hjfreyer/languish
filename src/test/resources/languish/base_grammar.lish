@@ -7,11 +7,12 @@
     // Tokens
     [CONS 
       [CONS [DATA "IDENTIFIER"] 
-            [CONS [DATA "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]_)*"] [DATA []]]]
+//            [CONS [DATA "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]_)*"] [DATA []]]]
+            [CONS [DATA "foo"] [DATA []]]]
     [DATA []]]
   [CONS 
     // Ignored
-    [CONS [DATA "\s+"] [DATA []]]
+    [CONS [DATA "\\s+"] [DATA []]]
   [CONS 
     // Rules
     [CONS 

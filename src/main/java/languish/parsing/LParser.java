@@ -1,6 +1,7 @@
 package languish.parsing;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.codehaus.jparsec.Parser;
@@ -11,20 +12,26 @@ import org.codehaus.jparsec.Tokens.Fragment;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.pattern.Patterns;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.hjfreyer.util.Canonizer;
 import com.hjfreyer.util.Pair;
 
 public class LParser {
-  private final List<Pair<String, String>> tokenTypes;
+  private List<Pair<String, String>> tokenTypes;
   private final List<String> ignored;
   private final List<GrammarRule> rules;
 
+  public void setTokenTypes(List<Pair<String, String>> tokenTypes) {
+    this.tokenTypes = tokenTypes;
+  }
+
   public LParser(List<Pair<String, String>> tokenTypes, List<String> ignored,
       List<GrammarRule> rules) {
-    this.tokenTypes = tokenTypes;
-    this.ignored = ignored;
-    this.rules = rules;
+    this.tokenTypes = ImmutableList.copyOf(tokenTypes);
+    this.ignored = ImmutableList.copyOf(ignored);
+    this.rules = ImmutableList.copyOf(rules);
   }
 
   public Parser<ASTNode> getParser() {
@@ -32,8 +39,8 @@ public class LParser {
     Parser<Void> delim = Parsers.never();
 
     for (Pair<String, String> tokenType : tokenTypes) {
-      final String regex = tokenType.getFirst();
-      final String tag = tokenType.getSecond();
+      final String tag = Canonizer.canonize(tokenType.getFirst());
+      final String regex = tokenType.getSecond();
 
       Parser<Fragment> token =
           Scanners.pattern(Patterns.regex(regex), tag).source().map(
@@ -47,21 +54,26 @@ public class LParser {
     }
 
     for (String ignoredRegex : ignored) {
-      Parser<Void> ignored =
+      Parser<Void> ignoredParser =
           Scanners.pattern(Patterns.regex(ignoredRegex), "IGNORED");
 
-      delim = delim.or(ignored);
+      delim = delim.or(ignoredParser);
     }
 
     return fromGrammarRules(rules).from(lexer, delim);
   }
 
-  public static Parser<ASTNode> fromGrammarRules(List<GrammarRule> rules) {
+  private static Parser<ASTNode> fromGrammarRules(List<GrammarRule> rules) {
+    List<String> types = new LinkedList<String>();
     Multimap<String, GrammarRule> grammarRules =
         Multimaps.newLinkedListMultimap();
 
     for (GrammarRule rule : rules) {
-      grammarRules.put(rule.getType(), rule);
+      String type = rule.getType();
+      if (!grammarRules.keySet().contains(type)) {
+        types.add(type);
+      }
+      grammarRules.put(type, rule);
     }
 
     HashMap<String, Parser<ASTNode>> parsers =
@@ -69,12 +81,12 @@ public class LParser {
     HashMap<String, Parser.Reference<ASTNode>> parserRefs =
         new HashMap<String, Parser.Reference<ASTNode>>();
 
-    for (String type : grammarRules.keySet()) {
+    for (String type : types) {
       parsers.put(type, Parsers.<ASTNode> never());
       parserRefs.put(type, Parser.<ASTNode> newReference());
     }
 
-    for (String type : grammarRules.keySet()) {
+    for (String type : types) {
       for (final GrammarRule rule : grammarRules.get(type)) {
         Parser<ASTNode> prod =
             rule.getTree().toParser(parserRefs).map(new Map<Object, ASTNode>() {
@@ -91,11 +103,61 @@ public class LParser {
       }
     }
 
-    for (String type : grammarRules.keySet()) {
+    for (String type : types) {
       parserRefs.get(type).set(parsers.get(type));
     }
 
     return parsers.get("ROOT");
+  }
+
+  public List<Pair<String, String>> getTokenTypes() {
+    return tokenTypes;
+  }
+
+  public List<String> getIgnored() {
+    return ignored;
+  }
+
+  public List<GrammarRule> getRules() {
+    return rules;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((ignored == null) ? 0 : ignored.hashCode());
+    result = prime * result + ((rules == null) ? 0 : rules.hashCode());
+    result =
+        prime * result + ((tokenTypes == null) ? 0 : tokenTypes.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    LParser other = (LParser) obj;
+    if (ignored == null) {
+      if (other.ignored != null)
+        return false;
+    } else if (!ignored.equals(other.ignored))
+      return false;
+    if (rules == null) {
+      if (other.rules != null)
+        return false;
+    } else if (!rules.equals(other.rules))
+      return false;
+    if (tokenTypes == null) {
+      if (other.tokenTypes != null)
+        return false;
+    } else if (!tokenTypes.equals(other.tokenTypes))
+      return false;
+    return true;
   }
 
 }

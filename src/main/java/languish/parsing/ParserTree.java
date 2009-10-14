@@ -10,10 +10,12 @@ import org.codehaus.jparsec.Terminals;
 import org.codehaus.jparsec.functors.Map;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.hjfreyer.util.Canonizer;
 
 public class ParserTree {
-  enum Op {
+  public enum Op {
     SEQ, NONTERM, TERM,
   }
 
@@ -23,7 +25,11 @@ public class ParserTree {
   public ParserTree(Op op, Object content) {
     super();
     this.op = op;
-    this.content = content;
+    if (content instanceof List<?>) {
+      this.content = ImmutableList.copyOf((List<?>) content);
+    } else {
+      this.content = content;
+    }
   }
 
   @SuppressWarnings("unchecked")
@@ -34,16 +40,17 @@ public class ParserTree {
         return parserRefs.get(content).lazy();
       case TERM :
         final String tag = (String) content;
-        return Terminals.fragment(tag).map(new Map<String, ASTNode>() {
-          public ASTNode map(String from) {
-            return new ASTNode(tag, from);
-          }
+        return Terminals.fragment(Canonizer.canonize(tag)).map(
+            new Map<String, ASTNode>() {
+              public ASTNode map(String from) {
+                return new ASTNode(tag, from);
+              }
 
-          @Override
-          public String toString() {
-            return "token wrapper";
-          }
-        });
+              @Override
+              public String toString() {
+                return "token wrapper";
+              }
+            });
       case SEQ :
         final List<Parser<?>> childParsers =
             Lists.transform((List<ParserTree>) content,
@@ -86,6 +93,37 @@ public class ParserTree {
 
   public Object getContent() {
     return content;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((content == null) ? 0 : content.hashCode());
+    result = prime * result + ((op == null) ? 0 : op.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    ParserTree other = (ParserTree) obj;
+    if (content == null) {
+      if (other.content != null)
+        return false;
+    } else if (!content.equals(other.content))
+      return false;
+    if (op == null) {
+      if (other.op != null)
+        return false;
+    } else if (!op.equals(other.op))
+      return false;
+    return true;
   }
 
 }
