@@ -1,0 +1,22 @@
+#lang __BUILTIN__;;
+
+[CONS [DATA "VALUE"]
+  // MAP_GET = [CAR *VALUE*]
+  [CONS
+    [APP [ABS [APP [REF 1] [REF 1]]] 
+      [ABS // Self
+      [ABS // Map
+      [ABS // Key
+      [ABS // Default Value
+        [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP 
+        [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] 
+        [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] 
+        [REF 2]]]] [DATA FALSE]]]] [DATA []]] [REF 3]]] [REF 1]] [APP [APP 
+        [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] 
+        [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]]
+        [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] 
+        [REF 2]] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]] [CAR [CDR [CAR 
+        [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] 
+        [REF 2]] [REF 1]]]]]]]]]
+  [DATA []]]
+]

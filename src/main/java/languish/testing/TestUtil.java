@@ -7,12 +7,12 @@ import languish.base.LObject;
 import languish.base.Lambda;
 import languish.base.Operation;
 import languish.base.Tuple;
-import languish.parsing.BuiltinParser;
+import languish.interpreter.BuiltinParser;
 import languish.primitives.LInteger;
 
 public class TestUtil {
   // public static final LUnit UNIT = LUnit.UNIT;
-  public static final Tuple NULL = Lambda.data(Tuple.of());
+  // public static final Tuple NULL = Lambda.data(Tuple.of());
 
   public static final LInteger ZERO = LInteger.of(0);
   public static final LInteger ONE = LInteger.of(1);
@@ -45,20 +45,18 @@ public class TestUtil {
   public static void assertList(String msg, List<?> contents, Tuple exp) {
 
     for (Object obj : contents) {
-      Tuple car = Lambda.app(CommonExps.CAR, exp);
-      exp = Lambda.app(CommonExps.CDR, exp);
+      Tuple car = Lambda.car(exp);
+      exp = Lambda.cdr(exp);
 
-      if (obj instanceof List) {
+      if (obj instanceof List<?>) {
         assertList(msg, (List<?>) obj, car);
       } else if (obj instanceof LObject) {
-        TestCase.assertEquals(msg, obj, Lambda.reduce(car));
+        TestCase.assertEquals(msg, obj, Lambda.reduceToDataValue(car));
       }
     }
 
-    TestCase.assertEquals(msg, Tuple.of(), Lambda.reduce(exp));
+    TestCase.assertEquals(msg, Tuple.of(), Lambda.reduceToDataValue(exp));
   }
-
-  private static final BuiltinParser parser = new BuiltinParser();
 
   public static void testExpressions(
       List<? extends LanguishTestList> expressions) {
@@ -77,11 +75,10 @@ public class TestUtil {
             .getCodeForExpression(exp));
 
         // PARSE
-        LObject parsed =
-            parser.parseStatementToExpression("REDUCE " + code).getSecond();
+        LObject parsed = BuiltinParser.SINGLE_TUPLE.parse(code);
 
         TestCase.assertEquals("on test " + expToTest.name()
-            + " - code does not parse to given expression:", parsed, exp);
+            + " - code does not parse to given expression:", exp, parsed);
       }
       // REDUCE ONCE
       if (reducedOnce != null) {
@@ -94,7 +91,7 @@ public class TestUtil {
       if (reducedCompletely != null) {
         TestCase.assertEquals("on test " + expToTest.name()
             + " - expression does not ultimately reduce to given value:",
-            reducedCompletely, Lambda.reduce(exp));
+            reducedCompletely, Lambda.reduceToDataValue(exp));
       }
 
       // LIST CONTENTS
@@ -104,5 +101,9 @@ public class TestUtil {
             exp);
       }
     }
+  }
+
+  public static void assertReducesToData(LObject expected, Tuple actual) {
+    TestCase.assertEquals(Lambda.data(expected), Lambda.reduce(actual));
   }
 }

@@ -4,7 +4,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import junit.framework.TestCase;
+import languish.base.Lambda;
+import languish.base.Tuple;
 import languish.primitives.LInteger;
+import languish.testing.TestUtil;
 
 public class ShellTest extends TestCase {
   // public void testTestLish() {
@@ -13,17 +16,44 @@ public class ShellTest extends TestCase {
   //
   // Shell s = new Shell(new InputStreamReader(stream));
   //
-  // // assertEquals(Tuple.of(FIVE, Tuple.of(SIX, Tuple.of(TWO, Tuple.of()))), s
-  // // .getLast());
+  // assertEquals(Tuple.of(), s.getLast());
   // }
 
-  public void testBaseGrammarLish() {
+  public void testBaseGrammarLish() throws Exception {
     InputStream stream =
         getClass().getClassLoader().getResourceAsStream(
-            "languish/base_grammar.lish");
+            "languish/statement_grammar.lish");
 
-    Shell s = new Shell(new InputStreamReader(stream));
+    Tuple grammar = Shell.processReadable(new InputStreamReader(stream));
 
-    assertEquals(LInteger.of(42), s.getLast());
+    grammar = Lambda.reduce(grammar);
+    //
+    // LParser parser =
+    // LParsers.fromListStructure((List<?>) Util
+    // .convertPrimitiveToJava(grammar));
+
+    // assertEquals(null, parser.getParser().parse("foo"));
+  }
+
+  public void testBaseParserLish() throws Exception {
+    InputStream stream =
+        getClass().getClassLoader().getResourceAsStream(
+            "languish/parser_test.lish");
+
+    Tuple value = Shell.processReadable(new InputStreamReader(stream));
+    TestUtil.assertReducesToData(LInteger.of(42), value);
   }
 }
+//
+// [CONS [DATA "STATEMENT"]
+// [CONS [CONS
+//
+// [CONS [DATA "REDUCE"]
+// [CONS [CONS [CONS [DATA "PRIM_GET"]
+// [CONS [CONS [CONS [DATA "TEXT_NODE"] [CONS [DATA "APP"]
+// [DATA []]]]
+// [CONS [CONS [DATA "TEXT_NODE"] [CONS [DATA "ABS"] [DATA []]]]
+// [DATA []]]]
+// [DATA []]]] [DATA []]] [DATA []]]] [DATA []]] [DATA []]]]>
+//
+//

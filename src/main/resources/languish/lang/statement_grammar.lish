@@ -1,0 +1,160 @@
+
+#lang __BUILTIN__;;
+
+[CONS 
+  [DATA "VALUE"]
+  [CONS 
+    // Tokens
+    [CONS 
+      [CONS [DATA "IDENTIFIER"] 
+            [CONS [DATA "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]_)*"] [DATA []]]]
+    [DATA []]]
+  [CONS 
+    // Ignored
+    [CONS [DATA "\\s+"] 
+    [DATA []]]
+  // Rules
+  [CONS 
+    /* ROOT -> IDENT */
+    [CONS 
+      [CONS [DATA "ROOT"] 
+      [CONS [DATA "IDENT"]
+      [CONS
+        [CONS [DATA "TERM"] [CONS [DATA "IDENTIFIER"] [DATA []]]]
+      [DATA []]]]]
+    [DATA []]]
+  [DATA []]]]]
+]
+/*=========================================    
+
+MACRO OMEGA [ABS [APP [REF 1] [REF 1]]];;
+
+MACRO NULL [DATA []];;
+
+MACRO CAAR [ABS [CAR [CAR [REF 1]]]];;
+MACRO CADR [ABS [CAR [CDR [REF 1]]]];;
+
+MACRO EQUALS 
+  [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]]
+;;
+  
+MACRO MAP_PUT // MAP, KEY, VAL
+  [ABS [ABS [ABS [CONS [CONS [REF 2] [CONS [REF 1] [DATA []]]] [REF 3]]]]]
+;;
+
+MACRO MAP_GET // MAP, KEY, DEFAULT
+  [APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [DATA []]] [REF 3]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [REF 2]] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]] [CAR [CDR [CAR [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]
+;;          
+
+MACRO GRAMMAR [DATA [
+  [ "ROOT"
+    "STATEMENT"
+    ["SEQ" [["NON_TERM" "STATEMENT"]]]
+  ]
+  
+  [ "STATEMENT"
+    "REDUCE"
+    ["SEQ" [["TERM" "REDUCE"] ["NON_TERM" "EXPRESSION"]]]
+  ]
+
+  [ "STATEMENT"
+    "SET_PARSER"
+    ["SEQ" [["TERM" "SET_PARSER"] ["NON_TERM" "EXPRESSION"]]]
+  ]
+  
+  [ "STATEMENT"
+    "SET_ENV"
+    ["SEQ" [["TERM" "SET_ENV"] ["NON_TERM" "EXPRESSION"]]]
+  ]
+  
+  [ "EXPRESSION"
+    "PRIM_GET"
+    ["SEQ" [["VALUE" "PrimIdent"]]]
+  ]
+  
+  [ "EXPRESSION"
+    "LITERAL"
+    ["SEQ" [["NON_TERM" "LITERAL"]]]
+  ]
+  
+  [ "LITERAL"
+    "SYMBOL"
+    ["SEQ" [["VALUE" "string"]]]
+  ]
+  
+  [ "LITERAL"
+    "INT"
+    ["SEQ" [["VALUE" "number"]]]
+  ]
+]];;
+
+MACRO VISITOR_MAP (*NULL*);;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "STATEMENT"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [APP [REF 2] [CAR [REF 1]]]
+  ]]
+]
+;;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "REDUCE"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [CONS [DATA 1] [APP [REF 2] [CAR [REF 1]]]]
+  ]]
+]
+;;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "PRIM_GET"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [PRIM [DATA BUILTIN_GET] [CAR [REF 1]]]
+  ]]
+]
+;;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "LITERAL"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [APP [REF 2] [CAR [REF 1]]]
+  ]]
+];;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "SYMBOL"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [CAR [REF 1]]
+  ]]
+];;
+
+MACRO VISITOR_MAP [APP [APP [APP (*MAP_PUT*) (*VISITOR_MAP*)]
+  [DATA "INT"]]
+  [ABS // PARSE_NODE
+  [ABS // CHILDREN
+    [PRIM [DATA PARSE_INT] [CAR [REF 1]]]
+  ]]
+];;
+
+MACRO PARSE_NODE 
+  [APP (*OMEGA*) // RECURSIVE
+    [ABS // SELF
+    [ABS // NODE
+      [APP [APP
+        [APP [APP [APP (*MAP_GET*) // Get visitor func 
+          (*VISITOR_MAP*)]
+          [CAR [REF 1]]]
+          [CAR [REF 1]]]
+        [APP [REF 2] [REF 2]]]
+        [CAR [CDR [REF 1]]]]
+    ]]
+ ];;
+
+REDUCE [APP (*PARSE_NODE*)
+  [PRIM [DATA PARSE_STATEMENT] [CONS (*GRAMMAR*) [DATA "REDUCE \"foo\""]]]];;
+*/

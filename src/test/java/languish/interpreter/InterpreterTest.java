@@ -1,82 +1,76 @@
 package languish.interpreter;
 
+import static languish.base.Lambda.*;
 import junit.framework.TestCase;
-import languish.base.LObject;
+import languish.base.Tuple;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 import languish.testing.TestUtil;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+
+import com.hjfreyer.util.Pair;
+
 public class InterpreterTest extends TestCase {
+  Mockery context = new Mockery();
 
-  private final Interpreter i = new Interpreter();
+  public void testGetParserAndProgram() {
+    assertEquals(Pair.of("foo", "\nblah blah blah"), Interpreter
+        .getParserAndProgram("#lang foo;;\nblah blah blah"));
 
-  public void testBasicDisplay() {
-    LObject res = i.processStatement("REDUCE [DATA 5]");
-
-    assertEquals(TestUtil.FIVE, res);
+    assertEquals(Pair.of("__BUILTIN__", "#lanr; \nblah blah blah\n\n  "),
+        Interpreter.getParserAndProgram("#lanr; \nblah blah blah\n\n  "));
   }
 
-  public void testTrivialParserChange() {
-    LObject res;
+  public void testBasicDisplay() throws Exception {
+    Tuple program =
+        Interpreter
+            .interpretStatement("[CONS [DATA \"VALUE\"] [DATA 5]]", null);
 
-    String statementToReturn = "[CONS [DATA 0] [DATA 42]]";
-
-    res = i.processStatement("SET_PARSER [ABS [ABS " //
-        + statementToReturn + "]]");
-
-    res = i.processStatement("THIS IS GARBAGE!!@E#!q34!");
-
-    assertEquals(LInteger.of(42), res);
+    TestUtil.assertReducesToData(TestUtil.FIVE, program);
   }
 
-  public void testEchoParser() {
-    String echoCode = "[ABS [ABS [CONS [DATA 0] [REF 2]]]]";
+  public void testTrivialParserChange() throws Exception {
+    final Tuple parserValue =
+        abs(cons(data(LSymbol.of("VALUE")), data(LInteger.of(5))));
+
+    final DependencyManager depman = context.mock(DependencyManager.class);
+    context.checking(new Expectations() {
+      {
+        oneOf(depman).getResource("trivialParser");
+        will(returnValue(parserValue));
+      }
+    });
+
+    Tuple res =
+        Interpreter.interpretStatement(
+            "#lang trivialParser;; THIS IS GARBAGE!!@E#!q34!", depman);
+
+    TestUtil.assertReducesToData(LInteger.of(5), res);
+  }
+
+  public void testEchoParser() throws Exception {
+    final Tuple parserValue = abs(cons(data(LSymbol.of("VALUE")), ref(1)));
+
+    final DependencyManager depman = context.mock(DependencyManager.class);
+    context.checking(new Expectations() {
+      {
+        exactly(3).of(depman).getResource("echoParser");
+        will(returnValue(parserValue));
+      }
+    });
 
     String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
     String test2 = "rock me am[ad]]eus!~";
 
-    LObject res;
+    Tuple res = Interpreter.interpretStatement("#lang echoParser;;", depman);
+    TestUtil.assertReducesToData(LSymbol.of(""), res);
 
-    res = i.processStatement("SET_PARSER " + echoCode);
-    res = i.processStatement("");
-    assertEquals(LSymbol.of(""), res);
+    res = Interpreter.interpretStatement("#lang echoParser;;" + test, depman);
+    TestUtil.assertReducesToData(LSymbol.of(test), res);
 
-    res = i.processStatement(test);
-    assertEquals(LSymbol.of(test), res);
-
-    res = i.processStatement(test2);
-    assertEquals(LSymbol.of(test2), res);
-  }
-
-  public void testMacros() {
-    Object res;
-
-    res = i.processStatement("MACRO THREE [DATA 3]");
-
-    res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestUtil.THREE);
-
-    res = i.processStatement("REDUCE [PRIM [DATA ADD] [DATA 2] (*THREE*)]");
-    assertEquals(res, TestUtil.FIVE);
-  }
-
-  public void testMacrosReplace() {
-    Object res;
-
-    res = i.processStatement("MACRO THREE [DATA 2]");
-
-    res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestUtil.TWO);
-
-    res = i.processStatement("MACRO THREE [DATA 3]");
-    res = i.processStatement("REDUCE (*THREE*)");
-    assertEquals(res, TestUtil.THREE);
-
-    res =
-        i.processStatement("MACRO THREE "
-            + "[ABS [PRIM [DATA ADD] [REF 1] (*THREE*)]]");
-
-    res = i.processStatement("REDUCE [APP (*THREE*) [DATA 2]]");
-    assertEquals(res, TestUtil.FIVE);
+    res = Interpreter.interpretStatement("#lang echoParser;;" + test2, depman);
+    TestUtil.assertReducesToData(LSymbol.of(test2), res);
   }
 }

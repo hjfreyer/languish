@@ -1,0 +1,13 @@
+
+#lang __BUILTIN__;;
+
+[CONS [DATA "VALUE"]                         
+  [CONS                            // Add = [CAR *VALUE*](
+    [ABS                           //   A = 2
+    [ABS                           //   B = 1):
+      [PRIM [DATA ADD]             // Add(
+        [CONS [REF 1] [REF 2]]     //   A, B)
+      ]
+    ]]
+  [DATA []]]
+]

@@ -1,43 +1,33 @@
 package languish.interpreter;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.util.Scanner;
 
-import languish.base.LObject;
 import languish.base.Tuple;
+
+import com.google.common.collect.ImmutableList;
 
 public class Shell {
 
-  private final Scanner source;
+  private final Tuple value = Tuple.of();
 
-  private final Interpreter interpreter = new Interpreter();
-
-  private LObject last = Tuple.of();
-
-  public Shell() {
-    this(new InputStreamReader(System.in));
+  private Shell() {
   }
 
-  public Shell(String filename) throws FileNotFoundException {
-    this(new FileReader(filename));
-  }
+  public static Tuple processReadable(Readable in) throws FileNotFoundException {
+    StringBuilder input = new StringBuilder();
+    Scanner scan = new Scanner(in);
 
-  public Shell(Readable in) {
-    source = new Scanner(in).useDelimiter(";;");
-
-    while (source.hasNext()) {
-      String next = source.next();
-
-      if (next.trim().length() > 0) {
-        last = interpreter.processStatement(next);
-      }
+    while (scan.hasNextLine()) {
+      input.append(scan.nextLine()).append('\n');
     }
+
+    return Interpreter.interpretStatement(input.toString(),
+        new FileSystemDependencyManager(ImmutableList.of("languish")));
   }
 
-  public LObject getLast() {
-    return last;
+  public Tuple getValue() {
+    return value;
   }
 
   public static void main(String[] args) {

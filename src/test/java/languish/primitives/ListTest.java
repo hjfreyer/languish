@@ -1,8 +1,14 @@
 package languish.primitives;
 
-import static languish.base.Lambda.*;
-import static languish.testing.CommonExps.*;
-import static languish.testing.TestUtil.*;
+import static languish.base.Lambda.car;
+import static languish.base.Lambda.cdr;
+import static languish.base.Lambda.cons;
+import static languish.base.Lambda.data;
+import static languish.lang.CommonTest.NULL;
+import static languish.testing.TestUtil.FOUR;
+import static languish.testing.TestUtil.SIX;
+import static languish.testing.TestUtil.THREE;
+import static languish.testing.TestUtil.TWO;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,73 +16,51 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.base.LObject;
 import languish.base.Tuple;
+import languish.base.Util;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
 
-import com.hjfreyer.util.Lists;
+import com.google.common.collect.ImmutableList;
 
 public class ListTest extends TestCase {
 
   public enum Tests implements LanguishTestList {
     // IDENITY TESTS
     TEST_EMPTY_LIST(data(Tuple.of()), //
-        "[DATA []]",
-        null,
-        Lists.of()),
+        "[DATA []]", null, ImmutableList.of()),
 
     SINGLE_ELEMENT_LIST(cons(data(TWO), data(Tuple.of())), //
-        "[CONS [DATA 2] [DATA []]]",
-        null,
-        Lists.of(TWO)),
+        "[CONS [DATA 2] [DATA []]]", null, ImmutableList.of(TWO)),
 
     DOUBLE_ELEMENT_LIST(cons(data(THREE), cons(data(TWO), data(Tuple.of()))), //
-        "[CONS [DATA 3] [CONS [DATA 2] [DATA []]]]",
-        null,
-        Lists.of(THREE, TWO)),
+        "[CONS [DATA 3] [CONS [DATA 2] [DATA []]]]", null, ImmutableList.of(
+            THREE, TWO)),
 
-    TRIPLE_ELEMENT_LIST(cons(data(THREE), cons(data(FOUR), cons(data(TWO),
-        data(Tuple.of())))), //
-        "[CONS [DATA 3] [CONS [DATA 4] [CONS [DATA 2] [DATA []]]]]",
-        null,
-        Lists.of(THREE, FOUR, TWO)),
+    TRIPLE_ELEMENT_LIST(
+        cons(data(THREE), cons(data(FOUR), cons(data(TWO), data(Tuple.of())))), //
+        "[CONS [DATA 3] [CONS [DATA 4] [CONS [DATA 2] [DATA []]]]]", null,
+        ImmutableList.of(THREE, FOUR, TWO)),
 
-    NESTED_LIST(cons(SINGLE_ELEMENT_LIST.expression, cons(data(SIX), data(Tuple
-        .of()))), //
-        "[CONS [CONS [DATA 2] [DATA []]] [CONS [DATA 6] [DATA []]]]",
-        null,
-        Lists.of(Lists.of(TWO), SIX)),
+    NESTED_LIST(
+        cons(SINGLE_ELEMENT_LIST.expression, cons(data(SIX), data(Tuple.of()))), //
+        "[CONS [CONS [DATA 2] [DATA []]] [CONS [DATA 6] [DATA []]]]", null,
+        ImmutableList.of(ImmutableList.of(TWO), SIX)),
 
-    TEST_CAR(app(CAR, TRIPLE_ELEMENT_LIST.expression), //
-        "[APP " + CAR_CODE + " " + TRIPLE_ELEMENT_LIST.code + "]",
-        get(1, TRIPLE_ELEMENT_LIST.expression),
-        null,
-        THREE),
+    TEST_CAR(car(TRIPLE_ELEMENT_LIST.expression), //
+        "[CAR " + TRIPLE_ELEMENT_LIST.code + "]", data(THREE), null, THREE),
 
-    TEST_CDR(app(CDR, TRIPLE_ELEMENT_LIST.expression), //
-        "[APP " + CDR_CODE + " " + TRIPLE_ELEMENT_LIST.code + "]",
-        get(2, TRIPLE_ELEMENT_LIST.expression),
-        Lists.of(FOUR, TWO)),
+    TEST_CDR(cdr(TRIPLE_ELEMENT_LIST.expression), //
+        "[CDR " + TRIPLE_ELEMENT_LIST.code + "]", Util.listify(data(FOUR),
+            data(TWO)), ImmutableList.of(FOUR, TWO)),
 
-    TEST_CADR(app(CAR, app(CDR, TRIPLE_ELEMENT_LIST.expression)), //
-        "[APP " + CAR_CODE + " [APP " + CDR_CODE + " "
-            + TRIPLE_ELEMENT_LIST.code + "]]",
-        get(1, app(CDR, TRIPLE_ELEMENT_LIST.expression)),
-        null,
-        FOUR),
+    TEST_CADR(car(cdr(TRIPLE_ELEMENT_LIST.expression)), //
+        "[CAR [CDR " + TRIPLE_ELEMENT_LIST.code + "]]", car(Util.listify(
+            data(FOUR), data(TWO))), null, FOUR),
 
-    TEST_CAAR(app(CAR, app(CAR, NESTED_LIST.expression)), //
-        "[APP " + CAR_CODE + " [APP " + CAR_CODE + " " + NESTED_LIST.code
-            + "]]",
-        get(1, app(CAR, NESTED_LIST.expression)),
-        null,
-        TWO),
-
-    TEST_BUILD_ADDL(app(app(ADDL, app(app(ADDL, EMPTY_LIST), data(TWO))),
-        data(THREE)), //
-        "[APP [APP " + ADDL_CODE + " [APP [APP " + ADDL_CODE + " "
-            + EMPTY_LIST_CODE + "] [DATA 2]]] [DATA 3]]",
-        null,
-        Lists.of(TWO, THREE)),
+    TEST_CAAR(
+        car(car(NESTED_LIST.expression)), //
+        "[CAR [CAR " + NESTED_LIST.code + "]]", car(cons(data(TWO), NULL)),
+        null, TWO),
 
     ;
 

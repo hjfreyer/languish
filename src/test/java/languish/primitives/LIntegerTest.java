@@ -16,23 +16,26 @@ import languish.testing.TestUtil;
 
 public class LIntegerTest extends TestCase {
 
-  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, ref(1), ref(1)));
+  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, cons(ref(1), ref(1))));
 
   public enum Tests implements LanguishTestList {
-    // IDENITY TESTS
     TEST_DATA(data(FIVE), //
         "[DATA 5]",
         null,
         FIVE),
 
-    TEST_SIMPLE_ADD(prim(ADD, data(FIVE), data(THREE)),
-        "[PRIM [DATA ADD] [DATA 5] [DATA 3]]",
+    TEST_SIMPLE_ADD(prim(ADD, cons(data(FIVE), data(THREE))),
+        "[PRIM [DATA ADD] [CONS [DATA 5] [DATA 3]]]",
         null,
         EIGHT),
 
+    TEST_TRIPLE_ADD(prim(ADD, cons(data(FIVE), prim(ADD, cons(data(THREE),
+        data(SIX))))), "[PRIM [DATA ADD] [CONS [DATA 5] "
+        + "[PRIM [DATA ADD] [CONS [DATA 3] [DATA 6]]]]]", null, FOURTEEN),
+
     TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
-        "[APP [ABS [PRIM [DATA ADD] [REF 1] [REF 1]]] [DATA 4]]",
-        prim(ADD, data(FOUR), data(FOUR)),
+        "[APP [ABS [PRIM [DATA ADD] [CONS [REF 1] [REF 1]]]] [DATA 4]]",
+        prim(ADD, cons(data(FOUR), data(FOUR))),
         EIGHT),
 
     ;
