@@ -23,7 +23,7 @@ public class Util {
       return (Tuple) obj;
     } else if (obj instanceof LObject) {
       return Lambda.data((LObject) obj);
-    } else if (obj instanceof List) {
+    } else if (obj instanceof List<?>) {
       List<?> list = (List<?>) obj;
 
       Tuple result = Lambda.data(Tuple.of());
