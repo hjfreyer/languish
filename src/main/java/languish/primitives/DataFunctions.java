@@ -30,6 +30,15 @@ public class DataFunctions {
     }
   };
 
+  public static final PrimitiveFunction NOT = new SingleArgDataFunction() {
+    @Override
+    public Tuple apply(LObject arg) {
+      LBoolean a = (LBoolean) arg;
+
+      return Lambda.data(LBoolean.of(!a.booleanValue()));
+    }
+  };
+
   // INTEGER STUFF
   public static final PrimitiveFunction ADD = new TwoArgDataFunction() {
     @Override
@@ -38,6 +47,16 @@ public class DataFunctions {
       LInteger b = (LInteger) arg2;
 
       return Lambda.data(LInteger.of(a.intValue() + b.intValue()));
+    }
+  };
+
+  public static final PrimitiveFunction MULTIPLY = new TwoArgDataFunction() {
+    @Override
+    public Tuple apply(LObject arg1, LObject arg2) {
+      LInteger a = (LInteger) arg1;
+      LInteger b = (LInteger) arg2;
+
+      return Lambda.data(LInteger.of(a.intValue() * b.intValue()));
     }
   };
 
@@ -90,5 +109,6 @@ public class DataFunctions {
   // }
   // };
 
-  private DataFunctions() {}
+  private DataFunctions() {
+  }
 }

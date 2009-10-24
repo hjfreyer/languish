@@ -9,27 +9,31 @@ import languish.interpreter.FileSystemDependencyManager;
 
 import com.google.common.collect.ImmutableList;
 
-public class Integers {
+public class Booleans {
   private static final DependencyManager DEPMAN =
       new FileSystemDependencyManager(ImmutableList.of("languish"));
   private static final Tuple LIB;
 
   static {
     try {
-      LIB = DEPMAN.getResource("lang/integers");
+      LIB = DEPMAN.getResource("lang/booleans");
     } catch (FileNotFoundException e) {
       throw new LanguishLoadError(e);
     }
   }
 
-  public static Tuple add() {
+  public static Tuple and() {
     return Lambda.car(LIB);
   }
 
-  public static Tuple multiply() {
+  public static Tuple or() {
     return Lambda.car(Lambda.cdr(LIB));
   }
 
-  private Integers() {
+  public static Tuple not() {
+    return Lambda.car(Lambda.cdr(Lambda.cdr(LIB)));
+  }
+
+  private Booleans() {
   }
 }

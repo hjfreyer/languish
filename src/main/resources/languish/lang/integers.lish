@@ -9,5 +9,14 @@
         [CONS [REF 1] [REF 2]]     //   A, B)
       ]
     ]]
-  [DATA []]]
+    
+  [CONS                            // Multiply = [CAR [CDR *VALUE*]](
+    [ABS                           //   A = 2
+    [ABS                           //   B = 1):
+      [PRIM [DATA MULTIPLY]        // Add(
+        [CONS [REF 1] [REF 2]]     //   A, B)
+      ]
+    ]]
+    
+  [DATA []]]]
 ]

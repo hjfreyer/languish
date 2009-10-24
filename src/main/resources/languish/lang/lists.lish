@@ -31,7 +31,7 @@
           [ABS                                         //   List = 2
           [ABS                                         //   StartingValue = 1):
             [APP [APP [PRIM [DATA BRANCH]              //     If List == Null
-              [APP [APP [CAR [CAR [REF 4]]]            //       Equals(
+              [APP [APP [CAR [CAR [REF 5]]]            //       Equals(
                 [DATA []]]                             //         Null,
                 [REF 2]]]                              //         List)
               [REF 1]]                                 //     Then: StartingValue
