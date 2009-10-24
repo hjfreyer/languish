@@ -23,6 +23,7 @@ public class LParserTest extends TestCase {
 
     Parser<ASTNode> lexer = parser.getParser();
 
-    assertEquals(null, lexer.parse("food"));
+    assertEquals(new ASTNode("FOODER", new ASTNode("FOOO", "foo")), lexer
+        .parse("foo"));
   }
 }
