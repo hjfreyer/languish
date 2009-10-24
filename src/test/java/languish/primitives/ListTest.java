@@ -4,7 +4,7 @@ import static languish.base.Lambda.car;
 import static languish.base.Lambda.cdr;
 import static languish.base.Lambda.cons;
 import static languish.base.Lambda.data;
-import static languish.libtesting.CommonTest.NULL;
+import static languish.lang.CommonTest.NULL;
 import static languish.testing.TestUtil.FOUR;
 import static languish.testing.TestUtil.SIX;
 import static languish.testing.TestUtil.THREE;

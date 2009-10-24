@@ -27,13 +27,14 @@ public class LParsers {
 
   @SuppressWarnings("unchecked")
   public static LParser fromListStructure(List<?> struct) {
-    if (struct.size() != 3) {
+    if (struct.size() != 4) {
       throw new IllegalArgumentException();
     }
 
-    List<List<String>> tokenTypesList = (List<List<String>>) struct.get(0);
-    List<String> ignored = (List<String>) struct.get(1);
-    List<List<?>> grammarRulesList = (List<List<?>>) struct.get(2);
+    String root = (String) struct.get(0);
+    List<List<String>> tokenTypesList = (List<List<String>>) struct.get(1);
+    List<String> ignored = (List<String>) struct.get(2);
+    List<List<?>> grammarRulesList = (List<List<?>>) struct.get(3);
 
     // TokenTypes
     List<Pair<String, String>> tokenTypes =
@@ -59,6 +60,6 @@ public class LParsers {
       rules.add(new GrammarRule(type, name, tree));
     }
 
-    return new LParser(tokenTypes, ignored, rules);
+    return new LParser(root, tokenTypes, ignored, rules);
   }
 }

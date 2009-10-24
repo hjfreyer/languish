@@ -48,7 +48,7 @@ public class TestUtil {
       Tuple car = Lambda.car(exp);
       exp = Lambda.cdr(exp);
 
-      if (obj instanceof List) {
+      if (obj instanceof List<?>) {
         assertList(msg, (List<?>) obj, car);
       } else if (obj instanceof LObject) {
         TestCase.assertEquals(msg, obj, Lambda.reduceToDataValue(car));

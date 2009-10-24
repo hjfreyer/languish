@@ -1,4 +1,4 @@
-package languish.libtesting;
+package languish.lang;
 
 import static languish.base.Lambda.*;
 import static languish.testing.CommonExps.OMEGA;
@@ -42,14 +42,10 @@ public class ListsTest extends TestCase {
 
   public enum Tests implements LanguishTestList {
     PL_CODE(PUSHL, //
-        PUSHL_CODE,
-        null,
-        null),
+        PUSHL_CODE, null, null),
 
     AL_CODE(ADDL, //
-        ADDL_CODE,
-        null,
-        null),
+        ADDL_CODE, null, null),
 
     ;
 

@@ -5,7 +5,7 @@ import static languish.base.Lambda.app;
 import static languish.base.Lambda.cons;
 import static languish.base.Lambda.data;
 import static languish.base.Lambda.ref;
-import static languish.libtesting.CommonTest.NULL;
+import static languish.lang.CommonTest.NULL;
 import static languish.testing.TestUtil.FIVE;
 import static languish.testing.TestUtil.FOUR;
 

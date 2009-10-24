@@ -1,4 +1,4 @@
-package languish.libtesting;
+package languish.lang;
 
 import static languish.base.Lambda.*;
 import static languish.testing.CommonExps.*;
@@ -35,58 +35,37 @@ public class CommonTest extends TestCase {
 
   public enum Tests implements LanguishTestList {
     EQ_CODE(EQUALS, //
-        EQUALS_CODE,
-        null,
-        null),
+        EQUALS_CODE, null, null),
 
     EQ_INT_IDENTITY(app(app(EQUALS, data(TWO)), data(TWO)), //
-        null,
-        null,
-        LBoolean.TRUE),
-    EQ_INT_VALUE(app(app(EQUALS, data(TWO)), data(LInteger.of(2))),
-        null,
-        null,
-        LBoolean.TRUE),
-    EQ_INT_INSIDE_APP(app(app(EQUALS, data(TWO)), app(CommonExps.IDENTITY,
-        data(LInteger.of(2)))), //
-        null,
-        null,
-        LBoolean.TRUE),
+        null, null, LBoolean.TRUE), EQ_INT_VALUE(app(app(EQUALS, data(TWO)),
+        data(LInteger.of(2))), null, null, LBoolean.TRUE), EQ_INT_INSIDE_APP(
+        app(app(EQUALS, data(TWO)), app(CommonExps.IDENTITY, data(LInteger
+            .of(2)))), //
+        null, null, LBoolean.TRUE),
 
     EQ_INT_RESULT_OF_PRIM(app(app(EQUALS, data(FIVE)), prim(DataFunctions.ADD,
         Lambda.cons(data(TWO), data(THREE)))), //
-        null,
-        null,
-        LBoolean.TRUE),
+        null, null, LBoolean.TRUE),
 
     EQ_CONS_BASIC(app(app(EQUALS, cons(data(TWO), data(THREE))), cons(
         data(TWO), data(THREE))), //
-        null,
-        null,
-        LBoolean.TRUE),
+        null, null, LBoolean.TRUE),
 
     EQ_CONS_WITH_REDUCE(app(app(EQUALS, cons(app(IDENTITY, data(TWO)),
         data(THREE))), cons(data(TWO),
         app(IDENTITY, app(IDENTITY, data(THREE))))), //
-        null,
-        null,
-        LBoolean.TRUE),
+        null, null, LBoolean.TRUE),
 
     EQ_CAR_VS_CDAR(app(app(EQUALS, car(LIST_B)), car(cdr(LIST_A))), //
-        null,
-        null,
-        LBoolean.TRUE),
+        null, null, LBoolean.TRUE),
 
     DNEQ_INT_CONSTANTS(app(app(EQUALS, data(TWO)), data(THREE)), //
-        null,
-        null,
-        LBoolean.FALSE),
+        null, null, LBoolean.FALSE),
 
     DNEQ_CONS_BASIC(app(app(EQUALS, cons(data(TWO), data(FOUR))), cons(
         data(TWO), data(THREE))), //
-        null,
-        null,
-        LBoolean.FALSE),
+        null, null, LBoolean.FALSE),
 
     ;
 

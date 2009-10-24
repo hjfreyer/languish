@@ -12,26 +12,24 @@ import org.codehaus.jparsec.Tokens.Fragment;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.pattern.Patterns;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.hjfreyer.util.Canonizer;
 import com.hjfreyer.util.Pair;
 
 public class LParser {
-  private List<Pair<String, String>> tokenTypes;
+  private final String rootRule;
+  private final List<Pair<String, String>> tokenTypes;
   private final List<String> ignored;
   private final List<GrammarRule> rules;
 
-  public void setTokenTypes(List<Pair<String, String>> tokenTypes) {
+  public LParser(String rootRule, List<Pair<String, String>> tokenTypes,
+      List<String> ignored, List<GrammarRule> rules) {
+    super();
+    this.rootRule = rootRule;
     this.tokenTypes = tokenTypes;
-  }
-
-  public LParser(List<Pair<String, String>> tokenTypes, List<String> ignored,
-      List<GrammarRule> rules) {
-    this.tokenTypes = ImmutableList.copyOf(tokenTypes);
-    this.ignored = ImmutableList.copyOf(ignored);
-    this.rules = ImmutableList.copyOf(rules);
+    this.ignored = ignored;
+    this.rules = rules;
   }
 
   public Parser<ASTNode> getParser() {
@@ -60,10 +58,11 @@ public class LParser {
       delim = delim.or(ignoredParser);
     }
 
-    return fromGrammarRules(rules).from(lexer, delim);
+    return fromGrammarRules(rootRule, rules).from(lexer, delim);
   }
 
-  private static Parser<ASTNode> fromGrammarRules(List<GrammarRule> rules) {
+  private static Parser<ASTNode> fromGrammarRules(String rootRule,
+      List<GrammarRule> rules) {
     List<String> types = new LinkedList<String>();
     Multimap<String, GrammarRule> grammarRules =
         Multimaps.newLinkedListMultimap();
@@ -107,7 +106,7 @@ public class LParser {
       parserRefs.get(type).set(parsers.get(type));
     }
 
-    return parsers.get("ROOT");
+    return parsers.get(rootRule);
   }
 
   public List<Pair<String, String>> getTokenTypes() {
@@ -120,6 +119,10 @@ public class LParser {
 
   public List<GrammarRule> getRules() {
     return rules;
+  }
+
+  public String getRootRule() {
+    return rootRule;
   }
 
   @Override

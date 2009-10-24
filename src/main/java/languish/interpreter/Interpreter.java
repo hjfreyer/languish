@@ -59,6 +59,7 @@ public class Interpreter {
       List<Tuple> depValues = new ArrayList<Tuple>();
 
       for (String depName : depsList) {
+
         depValues.add(depman.getResource(depName));
       }
 

@@ -1,21 +1,9 @@
-package languish.libtesting;
+package languish.lang;
 
-import static languish.base.Lambda.abs;
-import static languish.base.Lambda.app;
-import static languish.base.Lambda.car;
-import static languish.base.Lambda.cdr;
-import static languish.base.Lambda.cons;
-import static languish.base.Lambda.data;
-import static languish.base.Lambda.prim;
-import static languish.base.Lambda.ref;
+import static languish.base.Lambda.*;
 import static languish.base.Util.convertJavaToPrimitive;
-import static languish.libtesting.CommonTest.CAAR;
-import static languish.libtesting.CommonTest.NULL;
-import static languish.libtesting.CommonTest.OMEGA;
-import static languish.testing.TestUtil.FIVE;
-import static languish.testing.TestUtil.FOUR;
-import static languish.testing.TestUtil.NINE;
-import static languish.testing.TestUtil.THREE;
+import static languish.lang.CommonTest.*;
+import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,30 +23,32 @@ import com.google.common.collect.ImmutableList;
 public class MapsTest extends TestCase {
 
   public static final Tuple MAP_PUT = //
-  abs(abs(abs( // MAP, KEY, VAL
-  cons(cons(ref(2), cons(ref(1), NULL)), ref(3)))));
-  public static final String MAP_PUT_CODE = "[ABS [ABS [ABS [CONS [CONS [REF 2] [CONS [REF 1] [DATA []]]] [REF 3]]]]]";
+      abs(abs(abs( // MAP, KEY, VAL
+      cons(cons(ref(2), cons(ref(1), NULL)), ref(3)))));
+  public static final String MAP_PUT_CODE =
+      "[ABS [ABS [ABS [CONS [CONS [REF 2] [CONS [REF 1] [DATA []]]] [REF 3]]]]]";
 
   public static final Tuple MAP_GET = //
-  app(OMEGA, // recursive
-      abs(abs(abs(abs( // SELF, MAP, KEY, DEFAULT
-      app(app(prim(DataFunctions.BRANCH, // IF
-          eq(NULL, ref(3))), // MAP == NULL
-          ref(1)), // RETURN DEFAULT, ELSE
+      app(OMEGA, // recursive
+          abs(abs(abs(abs( // SELF, MAP, KEY, DEFAULT
           app(app(prim(DataFunctions.BRANCH, // IF
-              // top of map key = KEY
-              eq(ref(2), app(CAAR, ref(3)))), car(cdr(car(ref(3))))), // then
-              // return
-              // top of
-              // map val
-              app(app(app(app( // ELSE, recurse
-                  ref(4), //
-                  ref(4)), //
-                  cdr(ref(3))), //
-                  ref(2)), //
-                  ref(1)))))))));
+              eq(NULL, ref(3))), // MAP == NULL
+              ref(1)), // RETURN DEFAULT, ELSE
+              app(app(prim(DataFunctions.BRANCH, // IF
+                  // top of map key = KEY
+                  eq(ref(2), app(CAAR, ref(3)))), car(cdr(car(ref(3))))), // then
+                  // return
+                  // top of
+                  // map val
+                  app(app(app(app( // ELSE, recurse
+                      ref(4), //
+                      ref(4)), //
+                      cdr(ref(3))), //
+                      ref(2)), //
+                      ref(1)))))))));
 
-  public static final String MAP_GET_CODE = "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [DATA []]] [REF 3]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [REF 2]] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]] [CAR [CDR [CAR [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]";
+  public static final String MAP_GET_CODE =
+      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [DATA []]] [REF 3]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [REF 2]] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]] [CAR [CDR [CAR [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]";
 
   @SuppressWarnings("unchecked")
   public enum Tests implements LanguishTestList {

@@ -19,7 +19,7 @@ public class LParserTest extends TestCase {
         ImmutableList.of(new GrammarRule("ROOT", "FOODER", new ParserTree(
             ParserTree.Op.TERM, "FOOO")));
 
-    LParser parser = new LParser(tokens, delim, rules);
+    LParser parser = new LParser("ROOT", tokens, delim, rules);
 
     Parser<ASTNode> lexer = parser.getParser();
 

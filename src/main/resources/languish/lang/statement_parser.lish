@@ -3,13 +3,16 @@
 
 [CONS [DATA "LOAD"]
   [CONS 
-    [CONS [DATA "base_grammar"] [DATA []]]
+    [CONS [DATA "statement_grammar"] [DATA []]]
     [ABS // List with Base grammar
       [CONS [DATA "VALUE"]
         [ABS // Program text
           [CONS [DATA "VALUE"]
             [PRIM [DATA PARSE_TEXT] 
-              [CONS [CAR [REF 2]] [CONS [REF 1] [DATA []]]]
+              [CONS 
+                [CONS [DATA "ROOT"] [CAR [REF 2]]] 
+              [CONS [REF 1] 
+              [DATA []]]]
             ]
           ]
         ]
