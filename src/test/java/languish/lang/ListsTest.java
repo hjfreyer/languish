@@ -79,6 +79,13 @@ public class ListsTest extends TestCase {
         data(LSymbol.of("foo"))));
   }
 
+  public void testMemberOnlyElement() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of("foo"));
+
+    TestUtil.assertReducesToData(LBoolean.TRUE, app(app(Lists.member(), list),
+        data(LSymbol.of("foo"))));
+  }
+
   @SuppressWarnings("unchecked")
   public void testMemberShouldReturnTrue() {
     Tuple list = Util.convertJavaToPrimitive(ImmutableList.of("foo", "bar", 5));
