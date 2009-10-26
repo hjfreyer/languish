@@ -32,12 +32,20 @@ public class ParserTree {
     }
   }
 
+  private static <T> Map<T, List<T>> singleton() {
+    return new Map<T, List<T>>() {
+      public List<T> map(T from) {
+        return ImmutableList.of(from);
+      }
+    };
+  }
+
   @SuppressWarnings("unchecked")
   public Parser<?> toParser(
       final HashMap<String, Parser.Reference<ASTNode>> parserRefs) {
     switch (op) {
       case NONTERM :
-        return parserRefs.get(content).lazy();
+        return parserRefs.get(content).lazy().map(singleton());
       case TERM :
         final String tag = (String) content;
         return Terminals.fragment(Canonizer.canonize(tag)).map(
@@ -50,7 +58,7 @@ public class ParserTree {
               public String toString() {
                 return "token wrapper";
               }
-            });
+            }).map(singleton());
       case SEQ :
         final List<Parser<?>> childParsers =
             Lists.transform((List<ParserTree>) content,

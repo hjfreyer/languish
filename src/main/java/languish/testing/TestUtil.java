@@ -104,6 +104,10 @@ public class TestUtil {
   }
 
   public static void assertReducesToData(LObject expected, Tuple actual) {
-    TestCase.assertEquals(Lambda.data(expected), Lambda.reduce(actual));
+    assertReducesTo(Lambda.data(expected), actual);
+  }
+
+  public static void assertReducesTo(Tuple expected, Tuple actual) {
+    TestCase.assertEquals(expected, Lambda.reduce(actual));
   }
 }

@@ -3,27 +3,35 @@
 
 [CONS 
   [DATA "VALUE"]
-  [CONS 
-    // Tokens
+  [CONS                                    // Tokens = [CAR *VALUE*]
     [CONS 
       [CONS [DATA "IDENTIFIER"] 
             [CONS [DATA "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]_)*"] [DATA []]]]
     [DATA []]]
-  [CONS 
-    // Ignored
+  [CONS                                    // Ignored = [CAR [CDR *VALUE*]]
     [CONS [DATA "\\s+"] 
     [DATA []]]
-  // Rules
-  [CONS 
-    /* ROOT -> IDENT */
-    [CONS 
+  [CONS                                    // Rules = [CAR [CDR [CDR *VALUE*]]]
+    [CONS                                  //   ROOT -> IDENT
       [CONS [DATA "ROOT"] 
       [CONS [DATA "IDENT"]
       [CONS
         [CONS [DATA "TERM"] [CONS [DATA "IDENTIFIER"] [DATA []]]]
       [DATA []]]]]
     [DATA []]]
-  [DATA []]]]]
+  [CONS 
+    [DATA "ROOT"]
+  [CONS                                    // Semantic = [CAR [CDR [CDR [CDR *VALUE*]]]]    
+    [CONS
+      [CONS [DATA "IDENTIFIER"] [CONS [ABS [REF 1]] [DATA []]]]
+    [CONS
+      [CONS [DATA "IDENT"] [CONS 
+        [ABS 
+          [CONS [DATA "VALUE"] [REF 1]]
+        ]
+        [DATA []]]]
+    [DATA []]]]
+  [DATA []]]]]]]
 ]
 /*=========================================    
 
