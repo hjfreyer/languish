@@ -37,6 +37,9 @@ public enum Builtins {
   CONS(Lambda.CONS),
   IS_PRIMITIVE(Lambda.IS_PRIMITIVE),
 
+  // DEBUG
+  PRINT(DataFunctions.PRINT),
+
   // CONS_AND_DATA_TO_TUPLES(DataFunctions.CONS_AND_DATA_TO_TUPLES),
   // IS_NULL(DataFunctions.IS_NULL),
 

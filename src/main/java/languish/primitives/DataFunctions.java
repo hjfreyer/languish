@@ -97,7 +97,16 @@ public class DataFunctions {
         }
       };
 
-  //
+  // DEBUGGING
+
+  public static final PrimitiveFunction PRINT = new PrimitiveFunction() {
+    @Override
+    public Tuple apply(Tuple arg) {
+      System.out.println(arg);
+      return arg;
+    }
+  };
+
   // public static final PrimitiveFunction IS_NULL = new PrimitiveFunction() {
   // @Override
   // public Tuple apply(Tuple tuple) {
