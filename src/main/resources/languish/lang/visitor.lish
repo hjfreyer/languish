@@ -11,7 +11,7 @@
         [ABS                                         //   IsLeaf predicate = 2
         [ABS                                         //   Tree = 1):
           [APP [APP [PRIM [DATA BRANCH]              //     If 
-            [APP [REF 2] [REF 1]]]                   //       IsLeaf(tree):   
+            [APP [REF 2] [CAR [REF 1]]]]             //       IsLeaf(tree[0]):   
                                                      //     Then: FunctionMap[tree[0]](tree[1])
             [APP                                     //       Apply
               [APP [APP [APP [CAR [CAR [REF 5]]]     //         MapGet(

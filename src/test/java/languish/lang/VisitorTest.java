@@ -48,7 +48,7 @@ public class VisitorTest extends TestCase {
         ImmutableList.of("additup", SUM_UP), //
         ImmutableList.of("num", abs(ref(1)))));
     Tuple isLeaf =
-        abs(app(app(Data.equals(), data(LSymbol.of("num"))), car(ref(1))));
+        abs(app(app(Data.equals(), data(LSymbol.of("num"))), ref(1)));
     Tuple tree =
         Util.convertJavaToPrimitive(ImmutableList.of("additup", //
             ImmutableList.of(
@@ -70,8 +70,8 @@ public class VisitorTest extends TestCase {
         ImmutableList.of("add_42", ADD_FORTYTWO)));
     Tuple isLeaf =
         abs(app(app(Booleans.or(), app(app(Data.equals(), data(LSymbol
-            .of("num"))), car(ref(1)))), app(app(Data.equals(), data(LSymbol
-            .of("add_42"))), car(ref(1)))));
+            .of("num"))), ref(1))), app(app(Data.equals(), data(LSymbol
+            .of("add_42"))), ref(1))));
     Tuple tree =
         Util.convertJavaToPrimitive(ImmutableList.of("additup", //
             ImmutableList.of(
@@ -94,7 +94,7 @@ public class VisitorTest extends TestCase {
         ImmutableList.of("num", abs(ref(1))), //
         ImmutableList.of("add_42_to_car", ADD_FORTYTWO_TO_CAR)));
     Tuple isLeaf =
-        abs(app(app(Data.equals(), data(LSymbol.of("num"))), car(ref(1))));
+        abs(app(app(Data.equals(), data(LSymbol.of("num"))), ref(1)));
 
     Tuple branch1 = Util.convertJavaToPrimitive(ImmutableList.of("additup", //
         ImmutableList.of(ImmutableList.of("num", 4), //
