@@ -1,90 +1,124 @@
 package languish.lang;
 
 import static languish.base.Lambda.*;
-import static languish.testing.CommonExps.OMEGA;
-
-import java.util.Arrays;
-import java.util.List;
-
 import junit.framework.TestCase;
-import languish.base.LObject;
 import languish.base.Tuple;
+import languish.base.Util;
 import languish.primitives.DataFunctions;
-import languish.testing.CommonExps;
-import languish.testing.LanguishTestList;
+import languish.primitives.LBoolean;
+import languish.primitives.LInteger;
+import languish.primitives.LSymbol;
 import languish.testing.TestUtil;
+
+import com.google.common.collect.ImmutableList;
 
 public class ListsTest extends TestCase {
 
-  public static final Tuple EMPTY_LIST = data(Tuple.of());
-  public static final String EMPTY_LIST_CODE = "[DATA []]";
+  private static final Tuple ADD_ONE =
+      abs(prim(DataFunctions.ADD, cons(data(LInteger.of(1)), ref(1))));
 
-  public static final Tuple PUSHL = abs(abs(cons(ref(1), ref(2))));
-  public static final String PUSHL_CODE = "[ABS [ABS [CONS [REF 1] [REF 2]]]]";
+  public void testMapEmpty() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of());
 
-  public static final Tuple ADDL =
-      app(OMEGA, // ========= RECURSIVE
-          abs( // ============= SELF
-          abs( // ============= LIST
-          abs( // ============= ITEM
-          app(app(prim(DataFunctions.BRANCH, app(app(CommonExps.EQUALS,
-              EMPTY_LIST), ref(2))), // =============
-              // If
-              // (LIST
-              // == [])
-              cons(ref(1), EMPTY_LIST)), // Then: return [ITEM []]
-              cons(car(ref(2)), // === Else, return (CAR LIST) ::
-                  // ======================== ADDL(ADDL, (CDR LIST), ITEM)
-                  app(app(app(ref(3), ref(3)), cdr(ref(2))), ref(1))))))));
-
-  public static final String ADDL_CODE =
-      "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [DATA []]] [REF 2]]] [CONS [REF 1] [DATA []]]] [CONS [CAR [REF 2]] [APP [APP [APP [REF 3] [REF 3]] [CDR [REF 2]]] [REF 1]]]]]]]]";
-
-  public enum Tests implements LanguishTestList {
-    PL_CODE(PUSHL, //
-        PUSHL_CODE, null, null),
-
-    AL_CODE(ADDL, //
-        ADDL_CODE, null, null),
-
-    ;
-
-    private final Tuple expression;
-    private final String code;
-    private final Tuple reducedOnce;
-    private final LObject reducedCompletely;
-
-    private Tests(Tuple expression, String code, Tuple reducedOnce,
-        LObject reducedCompletely) {
-      this.expression = expression;
-      this.code = code;
-      this.reducedOnce = reducedOnce;
-      this.reducedCompletely = reducedCompletely;
-    }
-
-    public Tuple getExpression() {
-      return expression;
-    }
-
-    public String getCode() {
-      return code;
-    }
-
-    public Tuple getReducedOnce() {
-      return reducedOnce;
-    }
-
-    public LObject getReducedCompletely() {
-      return reducedCompletely;
-    }
-
-    public List<?> getListContents() {
-      return null;
-    }
+    TestUtil.assertReducesToData(Tuple.of(), app(app(Lists.map(), ADD_ONE),
+        list));
   }
 
-  public void test() {
-    TestUtil.testExpressions(Arrays.asList(Tests.values()));
+  public void testMapIntegers() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of(4, 10, 12, 3));
+
+    TestUtil.assertReducesTo(Util.convertJavaToPrimitive(ImmutableList.of(5,
+        11, 13, 4)), app(app(Lists.map(), ADD_ONE), list));
   }
 
+  @SuppressWarnings("unchecked")
+  public void testMapSingletonWrapper() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of(4, 10, 12, 3));
+
+    TestUtil.assertReducesTo(Util.convertJavaToPrimitive(ImmutableList.of(
+        ImmutableList.of(4), ImmutableList.of(10), ImmutableList.of(12),
+        ImmutableList.of(3))), app(app(Lists.map(), abs(cons(ref(1), data(Tuple
+        .of())))), list));
+  }
+
+  public void testReduceEmptyList() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of());
+
+    TestUtil.assertReducesToData(LInteger.of(1), app(app(app(Lists.reduce(),
+        data(LSymbol.of("foo"))), list), data(LInteger.of(1))));
+  }
+
+  public void testReduceSumOneElement() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of(4));
+
+    TestUtil.assertReducesToData(LInteger.of(5), app(app(app(Lists.reduce(),
+        Integers.add()), list), data(LInteger.of(1))));
+  }
+
+  public void testReduceSumManyElements() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of(4, 5, 6, 7));
+
+    TestUtil.assertReducesToData(LInteger.of(23), app(app(app(Lists.reduce(),
+        Integers.add()), list), data(LInteger.of(1))));
+  }
+
+  public void testReduceNonCommutative() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of(4, 5, 6, 7));
+
+    TestUtil.assertReducesToData(LInteger.of(4), app(app(app(Lists.reduce(),
+        abs(abs(ref(2)))), list), data(LInteger.of(1))));
+
+    TestUtil.assertReducesToData(LInteger.of(1), app(app(app(Lists.reduce(),
+        abs(abs(ref(1)))), list), data(LInteger.of(1))));
+  }
+
+  public void testMemberEmptyList() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of());
+
+    TestUtil.assertReducesToData(LBoolean.FALSE, app(app(Lists.member(), list),
+        data(LSymbol.of("foo"))));
+  }
+
+  @SuppressWarnings("unchecked")
+  public void testMemberShouldReturnTrue() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of("foo", "bar", 5));
+
+    TestUtil.assertReducesToData(LBoolean.TRUE, app(app(Lists.member(), list),
+        data(LSymbol.of("foo"))));
+  }
+
+  @SuppressWarnings("unchecked")
+  public void testMemberNonemptyShouldReturnFalse() {
+    Tuple list = Util.convertJavaToPrimitive(ImmutableList.of("foo", "bar", 5));
+
+    TestUtil.assertReducesToData(LBoolean.FALSE, app(app(Lists.member(), list),
+        data(LSymbol.of("baz"))));
+  }
+
+  public void testMemberShouldContainEmptyList() {
+    Tuple list =
+        Util.convertJavaToPrimitive(ImmutableList.of("foo", ImmutableList.of(),
+            5));
+
+    TestUtil.assertReducesToData(LBoolean.TRUE, app(app(Lists.member(), list),
+        data(Tuple.of())));
+  }
+
+  public void testMemberShouldntFindInNested() {
+    Tuple list =
+        Util.convertJavaToPrimitive(ImmutableList.of("foo", ImmutableList.of(3,
+            4), 5));
+
+    TestUtil.assertReducesToData(LBoolean.FALSE, app(app(Lists.member(), list),
+        data(LInteger.of(3))));
+  }
+
+  public void testMemberShouldContainNonEmptyList() {
+    Tuple list =
+        Util.convertJavaToPrimitive(ImmutableList.of("foo", ImmutableList.of(3,
+            4), 5));
+
+    TestUtil.assertReducesToData(LBoolean.TRUE, app(app(Lists.member(), list),
+        Util.convertJavaToPrimitive(ImmutableList.of(3, 4))));
+  }
 }

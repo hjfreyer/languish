@@ -21,7 +21,7 @@
                   [REF 2]]                         //           Function,
                   [CDR [REF 1]]]                   //           List[1:-1])
               ]                                    //       )
-            ]                                      //     EndIf
+            ]                                      //     EndIf          
           ]]]
         ]  
       [CONS                                            // Reduce = [CAR [CDR *VALUE*]](
@@ -44,8 +44,30 @@
               ]                                        //
             ]                                          //     EndIf  
           ]]]] 
-        ]      
-      [DATA []]]]
+        ] 
+      [CONS                                            // Member = [CAR [CDR [CDR *VALUE*]]](
+        [APP [ABS [APP [REF 1] [REF 1]]]               //   OMGEA
+          [ABS                                         //   Self = 3
+          [ABS                                         //   List = 2
+          [ABS                                         //   Item = 1):
+            [APP [APP [PRIM [DATA BRANCH]              //     If List == Null
+              [APP [APP [CAR [CAR [REF 4]]]            //       Equals(
+                [DATA []]]                             //         Null,
+                [REF 2]]]                              //         List)
+              [DATA FALSE]]                            //     Then: FALSE
+                                                       //     Else:
+              [APP [APP [PRIM [DATA BRANCH]            //       If List[0] == Item
+                [APP [APP [CAR [CAR [REF 4]]]          //         Equals(
+                  [CAR [REF 2]]]                       //           List[0],
+                  [REF 1]]]                            //           Item)
+                [DATA TRUE]]                           //       Then: TRUE
+                [APP [APP [APP [REF 3] [REF 3]]        //       Else: Self(Self,
+                  [CDR [REF 2]]]                       //                  List[1:-1],
+                  [REF 1]]                             //                  Item)
+              ]                                        //       EndIf  
+            ]                                          //     EndIf                                        
+          ]]]]       
+      [DATA []]]]]
     ]
   ]
 ]]

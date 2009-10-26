@@ -30,6 +30,10 @@ public class Lists {
     return Lambda.car(Lambda.cdr(LIB));
   }
 
+  public static Tuple member() {
+    return Lambda.car(Lambda.cdr(Lambda.cdr(LIB)));
+  }
+
   private Lists() {
   }
 }
