@@ -3,9 +3,9 @@ package languish.parsing;
 import java.util.List;
 
 import junit.framework.TestCase;
-import languish.base.Tuple;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.FileSystemDependencyManager;
+import languish.primitives.LSymbol;
 import languish.testing.TestUtil;
 
 import org.codehaus.jparsec.Parser;
@@ -35,7 +35,7 @@ public class LParserTest extends TestCase {
   }
 
   public void testLanguishTestFile() throws Exception {
-    TestUtil.assertReducesToData(Tuple.of(), DEPMAN
+    TestUtil.assertReducesToData(LSymbol.of("foo"), DEPMAN
         .getResource("parser/parser_test"));
   }
 }

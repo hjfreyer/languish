@@ -20,15 +20,12 @@
             [APP [APP [APP [CAR [CAR [CDR [REF 7]]]]      // VisitTree(
               [REF 2]]                                    //     Semantic,
               [ABS                                        //     Func x -> Member([token[0] for token in TokenTypes], x)
-[PRIM [DATA PRINT]
                 [APP [APP [CAR [CDR [CDR [CAR [REF 8]]]]] //       Member(
                   [APP [APP [CAR [CAR [REF 8]]]           //         Map(
                     [ABS [CAR [REF 1]]]]                  //           Func y -> y[0],
                     [REF 7]]]                             //           TokenTypes),
                 [REF 1]]                                  //         x)
-                ]
               ]]                                          //     EndFunc,
-    //    [CONS [DATA "VALUE"]
               [APP [APP [APP [APP [APP                    //
                   [CAR [CAR [CDR [CDR [REF 7]]]]]         //     ParseText(
                 [REF 6]]                                  //         TokenTypes,
@@ -37,7 +34,6 @@
                 [REF 3]]                                  //         StartingRule,
                 [REF 1]]                                  //         Text)
             ]
-           // ]
           ]]]]]]
         [DATA []]]
       ]

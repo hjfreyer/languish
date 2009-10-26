@@ -27,7 +27,7 @@
     [CONS
       [CONS [DATA "IDENT"] [CONS 
         [ABS 
-          [CONS [DATA "VALUE"] [REF 1]]
+          [CONS [DATA "VALUE"] [CAR [REF 1]]]
         ]
         [DATA []]]]
     [DATA []]]]
