@@ -5,8 +5,6 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.FileSystemDependencyManager;
-import languish.primitives.LSymbol;
-import languish.testing.TestUtil;
 
 import org.codehaus.jparsec.Parser;
 
@@ -34,8 +32,8 @@ public class LParserTest extends TestCase {
         "foo"))), lexer.parse("foo"));
   }
 
-  public void testLanguishTestFile() throws Exception {
-    TestUtil.assertReducesToData(LSymbol.of("foo"), DEPMAN
-        .getResource("parser/parser_test"));
-  }
+  // public void testLanguishTestFile() throws Exception {
+  // TestUtil.assertReducesToData(LSymbol.of("foo"), DEPMAN
+  // .getResource("parser/parser_test"));
+  // }
 }

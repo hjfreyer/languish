@@ -6,21 +6,36 @@
   [CONS                                    // Tokens = [CAR *VALUE*]
     [CONS 
       [CONS [DATA "IDENTIFIER"] 
-            [CONS [DATA "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]_)*"] [DATA []]]]
-    [DATA []]]
+            [CONS [DATA "([a-z]|[A-Z]|_)([a-z]|[A-Z]|[0-9]|_)*"] [DATA []]]]
+    [CONS 
+      [CONS [DATA "INTEGER"] 
+            [CONS [DATA "[0-9]+"] [DATA []]]]
+    [DATA []]]]
   [CONS                                    // Ignored = [CAR [CDR *VALUE*]]
     [CONS [DATA "\\s+"] 
     [DATA []]]
   [CONS                                    // Rules = [CAR [CDR [CDR *VALUE*]]]
-    [CONS                                  //   ROOT -> IDENT
-      [CONS [DATA "ROOT"] 
-      [CONS [DATA "IDENT"]
+    [CONS                                  //   STATEMENT -> LITERAL
+      [CONS [DATA "LOBJECT"] 
+      [CONS [DATA "LITERAL"]
+      [CONS
+        [CONS [DATA "NONTERM"] [CONS [DATA "LITERAL"] [DATA []]]]
+      [DATA []]]]]
+    [CONS                                  //   STATEMENT -> LITERAL
+      [CONS [DATA "LOBJECT"] 
+      [CONS [DATA "LITERAL"]
+      [CONS
+        [CONS [DATA "NONTERM"] [CONS [DATA "LITERAL"] [DATA []]]]
+      [DATA []]]]]
+    [CONS                                  //   STATEMENT -> IDENT
+      [CONS [DATA "STATEMENT"] 
+      [CONS [DATA "BUILTIN"]
       [CONS
         [CONS [DATA "TERM"] [CONS [DATA "IDENTIFIER"] [DATA []]]]
       [DATA []]]]]
-    [DATA []]]
+    [DATA []]]]]
   [CONS 
-    [DATA "ROOT"]
+    [DATA "LOBJECT"]
   [CONS                                    // Semantic = [CAR [CDR [CDR [CDR *VALUE*]]]]    
     [CONS
       [CONS [DATA "IDENTIFIER"] [CONS [ABS [REF 1]] [DATA []]]]
