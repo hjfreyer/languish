@@ -2,8 +2,8 @@ package languish.interpreter;
 
 import java.io.FileNotFoundException;
 
-import languish.base.Tuple;
+import languish.lambda.Term;
 
 public interface DependencyManager {
-  public Tuple getResource(String resourceName) throws FileNotFoundException;
+  public Term getResource(String resourceName) throws FileNotFoundException;
 }

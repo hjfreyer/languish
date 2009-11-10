@@ -3,11 +3,11 @@ package languish.testing;
 import java.util.List;
 
 import junit.framework.TestCase;
-import languish.base.LObject;
-import languish.base.Lambda;
-import languish.base.Operation;
-import languish.base.Tuple;
 import languish.interpreter.BuiltinParser;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
+import languish.lambda.Operation;
+import languish.lambda.Term;
 import languish.primitives.LInteger;
 
 public class TestUtil {
@@ -31,21 +31,21 @@ public class TestUtil {
   public static final LInteger FOURTEEN = LInteger.of(14);
   public static final LInteger FIFTEEN = LInteger.of(15);
 
-  public static final Tuple IDENT = Lambda.abs(Lambda.ref(1));
+  public static final Term IDENT = Lambda.abs(Lambda.ref(1));
 
-  public static Tuple reduceTupleOnce(LObject tuple) {
-    Tuple t = (Tuple) tuple.deepClone();
+  public static Term reduceTupleOnce(LObject tuple) {
+    Term t = (Term) tuple.deepClone();
     Operation op = (Operation) t.getFirst();
 
-    Tuple result = op.reduceOnce(t);
+    Term result = op.reduceOnce(t);
 
     return result;
   }
 
-  public static void assertList(String msg, List<?> contents, Tuple exp) {
+  public static void assertList(String msg, List<?> contents, Term exp) {
 
     for (Object obj : contents) {
-      Tuple car = Lambda.car(exp);
+      Term car = Lambda.car(exp);
       exp = Lambda.cdr(exp);
 
       if (obj instanceof List<?>) {
@@ -55,16 +55,16 @@ public class TestUtil {
       }
     }
 
-    TestCase.assertEquals(msg, Tuple.of(), Lambda.reduceToDataValue(exp));
+    TestCase.assertEquals(msg, Term.of(), Lambda.reduceToDataValue(exp));
   }
 
   public static void testExpressions(
       List<? extends LanguishTestList> expressions) {
 
     for (LanguishTestList expToTest : expressions) {
-      Tuple exp = expToTest.getExpression();
+      Term exp = expToTest.getExpression();
       String code = expToTest.getCode();
-      Tuple reducedOnce = expToTest.getReducedOnce();
+      Term reducedOnce = expToTest.getReducedOnce();
       LObject reducedCompletely = expToTest.getReducedCompletely();
       List<?> listContents = expToTest.getListContents();
 
@@ -103,11 +103,11 @@ public class TestUtil {
     }
   }
 
-  public static void assertReducesToData(LObject expected, Tuple actual) {
-    assertReducesTo(Lambda.data(expected), actual);
+  public static void assertReducesToData(LObject expected, Term actual) {
+    assertReducesTo(Lambda.primitive(expected), actual);
   }
 
-  public static void assertReducesTo(Tuple expected, Tuple actual) {
+  public static void assertReducesTo(Term expected, Term actual) {
     TestCase.assertEquals(expected, Lambda.reduce(actual));
   }
 }

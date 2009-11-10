@@ -1,9 +1,11 @@
 package languish.base;
 
-import static languish.base.Lambda.*;
+import static languish.lambda.Lambda.*;
 import static languish.testing.CommonExps.IDENTITY;
 import static languish.testing.TestUtil.*;
 import junit.framework.TestCase;
+import languish.lambda.Lambda;
+import languish.lambda.Term;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
@@ -12,18 +14,18 @@ import languish.testing.CommonExps;
 public class EqualityTest extends TestCase {
 
   public enum Equals {
-    INT_IDENTITY(data(TWO), data(TWO)),
-    INT_VALUE(data(TWO), data(LInteger.of(2))),
-    INT_INSIDE_APP(data(TWO), app(IDENTITY, data(LInteger.of(2)))),
-    INT_RESULT_OF_PRIM(data(FIVE), prim(DataFunctions.ADD, cons(data(TWO),
-        data(THREE)))),
+    INT_IDENTITY(primitive(TWO), primitive(TWO)),
+    INT_VALUE(primitive(TWO), primitive(LInteger.of(2))),
+    INT_INSIDE_APP(primitive(TWO), app(IDENTITY, primitive(LInteger.of(2)))),
+    INT_RESULT_OF_PRIM(primitive(FIVE), nativeApply(DataFunctions.ADD, cons(primitive(TWO),
+        primitive(THREE)))),
 
     ;
 
-    Tuple a;
-    Tuple b;
+    Term a;
+    Term b;
 
-    private Equals(Tuple a, Tuple b) {
+    private Equals(Term a, Term b) {
       this.a = a;
       this.b = b;
     }
@@ -31,13 +33,13 @@ public class EqualityTest extends TestCase {
   }
 
   public enum DoesNotEqual {
-    INT_CONSTANTS(data(TWO), data(THREE)),
+    INT_CONSTANTS(primitive(TWO), primitive(THREE)),
 
     ;
-    Tuple a;
-    Tuple b;
+    Term a;
+    Term b;
 
-    private DoesNotEqual(Tuple a, Tuple b) {
+    private DoesNotEqual(Term a, Term b) {
       this.a = a;
       this.b = b;
     }
@@ -46,25 +48,25 @@ public class EqualityTest extends TestCase {
 
   public void test() {
     for (Equals test : Equals.values()) {
-      Tuple exp = eq(test.a, test.b);
+      Term exp = eq(test.a, test.b);
       assertEquals("EQUALS." + test.name(), LBoolean.TRUE, Lambda
           .reduceToDataValue(exp));
-      Tuple exp2 = eq(test.b, test.a);
+      Term exp2 = eq(test.b, test.a);
       assertEquals("EQUALS." + test.name(), LBoolean.TRUE, Lambda
           .reduceToDataValue(exp2));
     }
 
     for (DoesNotEqual test : DoesNotEqual.values()) {
-      Tuple exp = eq(test.a, test.b);
+      Term exp = eq(test.a, test.b);
       assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda
           .reduceToDataValue(exp));
-      Tuple exp2 = eq(test.b, test.a);
+      Term exp2 = eq(test.b, test.a);
       assertEquals("DNE." + test.name(), LBoolean.FALSE, Lambda
           .reduceToDataValue(exp2));
     }
   }
 
-  private Tuple eq(Tuple a, Tuple b) {
+  private Term eq(Term a, Term b) {
     return app(app(CommonExps.EQUALS, a), b);
   }
 }

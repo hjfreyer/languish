@@ -2,17 +2,17 @@ package languish.lang;
 
 import java.io.FileNotFoundException;
 
-import languish.base.Lambda;
-import languish.base.Tuple;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.FileSystemDependencyManager;
+import languish.lambda.Lambda;
+import languish.lambda.Term;
 
 import com.google.common.collect.ImmutableList;
 
 public class Visitor {
   private static final DependencyManager DEPMAN =
       new FileSystemDependencyManager(ImmutableList.of("languish"));
-  private static final Tuple LIB;
+  private static final Term LIB;
 
   static {
     try {
@@ -22,7 +22,7 @@ public class Visitor {
     }
   }
 
-  public static Tuple visitTree() {
+  public static Term visitTree() {
     return Lambda.car(LIB);
   }
 

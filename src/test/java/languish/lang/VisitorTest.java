@@ -1,42 +1,42 @@
 package languish.lang;
 
-import static languish.base.Lambda.*;
+import static languish.lambda.Lambda.*;
 import junit.framework.TestCase;
-import languish.base.Tuple;
-import languish.base.Util;
+import languish.lambda.Term;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 import languish.testing.TestUtil;
+import languish.util.Util;
 
 import com.google.common.collect.ImmutableList;
 
 public class VisitorTest extends TestCase {
 
-  private static final Tuple ADD_FORTYTWO =
-      abs(prim(DataFunctions.ADD, cons(data(LInteger.of(42)), ref(1))));
+  private static final Term ADD_FORTYTWO =
+      abs(nativeApply(DataFunctions.ADD, cons(primitive(LInteger.of(42)), ref(1))));
 
-  private static final Tuple ADD_FORTYTWO_TO_CAR =
-      abs(prim(DataFunctions.ADD, cons(data(LInteger.of(42)), car(ref(1)))));
+  private static final Term ADD_FORTYTWO_TO_CAR =
+      abs(nativeApply(DataFunctions.ADD, cons(primitive(LInteger.of(42)), car(ref(1)))));
 
-  private static final Tuple SUM_UP =
-      abs(app(app(app(Lists.reduce(), Integers.add()), ref(1)), data(LInteger
+  private static final Term SUM_UP =
+      abs(app(app(app(Lists.reduce(), Integers.add()), ref(1)), primitive(LInteger
           .of(0))));
 
-  private static final Tuple PROD_UP =
+  private static final Term PROD_UP =
       abs(app(app(app(Lists.reduce(), Integers.multiply()), ref(1)),
-          data(LInteger.of(1))));
+          primitive(LInteger.of(1))));
 
   @SuppressWarnings("unchecked")
   public void testLeaf() {
-    Tuple functionMap =
+    Term functionMap =
         Util.convertJavaToPrimitive(ImmutableList.of(ImmutableList.of("func1",
             ADD_FORTYTWO)));
-    Tuple isLeaf = abs(data(LBoolean.TRUE));
-    Tuple tree = Util.convertJavaToPrimitive(ImmutableList.of("func1", 3));
+    Term isLeaf = abs(primitive(LBoolean.TRUE));
+    Term tree = Util.convertJavaToPrimitive(ImmutableList.of("func1", 3));
 
-    Tuple visitorCall =
+    Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
 
     TestUtil.assertReducesToData(LInteger.of(45), visitorCall);
@@ -44,19 +44,19 @@ public class VisitorTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   public void testSimpleTree() {
-    Tuple functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
+    Term functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
         ImmutableList.of("additup", SUM_UP), //
         ImmutableList.of("num", abs(ref(1)))));
-    Tuple isLeaf =
-        abs(app(app(Data.equals(), data(LSymbol.of("num"))), ref(1)));
-    Tuple tree =
+    Term isLeaf =
+        abs(app(app(Data.equals(), primitive(LSymbol.of("num"))), ref(1)));
+    Term tree =
         Util.convertJavaToPrimitive(ImmutableList.of("additup", //
             ImmutableList.of(
                 ImmutableList.of("num", 3), //
                 ImmutableList.of("num", 4), ImmutableList.of("num", 12),
                 ImmutableList.of("num", -2))));
 
-    Tuple visitorCall =
+    Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
 
     TestUtil.assertReducesToData(LInteger.of(17), visitorCall);
@@ -64,22 +64,22 @@ public class VisitorTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   public void testMultipleLeaves() {
-    Tuple functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
+    Term functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
         ImmutableList.of("additup", SUM_UP), //
         ImmutableList.of("num", abs(ref(1))), //
         ImmutableList.of("add_42", ADD_FORTYTWO)));
-    Tuple isLeaf =
-        abs(app(app(Booleans.or(), app(app(Data.equals(), data(LSymbol
-            .of("num"))), ref(1))), app(app(Data.equals(), data(LSymbol
+    Term isLeaf =
+        abs(app(app(Booleans.or(), app(app(Data.equals(), primitive(LSymbol
+            .of("num"))), ref(1))), app(app(Data.equals(), primitive(LSymbol
             .of("add_42"))), ref(1))));
-    Tuple tree =
+    Term tree =
         Util.convertJavaToPrimitive(ImmutableList.of("additup", //
             ImmutableList.of(
                 ImmutableList.of("add_42", 3), //
                 ImmutableList.of("num", 4), ImmutableList.of("num", 12),
                 ImmutableList.of("num", -2))));
 
-    Tuple visitorCall =
+    Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
 
     TestUtil.assertReducesToData(LInteger.of(59), visitorCall);
@@ -88,28 +88,28 @@ public class VisitorTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   public void testMultipleTiers() {
-    Tuple functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
+    Term functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
         ImmutableList.of("additup", SUM_UP), //
         ImmutableList.of("multitup", PROD_UP), //
         ImmutableList.of("num", abs(ref(1))), //
         ImmutableList.of("add_42_to_car", ADD_FORTYTWO_TO_CAR)));
-    Tuple isLeaf =
-        abs(app(app(Data.equals(), data(LSymbol.of("num"))), ref(1)));
+    Term isLeaf =
+        abs(app(app(Data.equals(), primitive(LSymbol.of("num"))), ref(1)));
 
-    Tuple branch1 = Util.convertJavaToPrimitive(ImmutableList.of("additup", //
+    Term branch1 = Util.convertJavaToPrimitive(ImmutableList.of("additup", //
         ImmutableList.of(ImmutableList.of("num", 4), //
             ImmutableList.of("num", 12))));
 
-    Tuple branch2 = Util.convertJavaToPrimitive(ImmutableList.of("num", 4));
+    Term branch2 = Util.convertJavaToPrimitive(ImmutableList.of("num", 4));
 
-    Tuple branch3 =
+    Term branch3 =
         Util.convertJavaToPrimitive(ImmutableList.of("add_42_to_car", //
             ImmutableList.of(ImmutableList.of("num", 4))));
 
-    Tuple tree = Util.convertJavaToPrimitive(ImmutableList.of("multitup", //
+    Term tree = Util.convertJavaToPrimitive(ImmutableList.of("multitup", //
         ImmutableList.of(branch1, branch2, branch3)));
 
-    Tuple visitorCall =
+    Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
 
     TestUtil.assertReducesToData(LInteger.of(2944), visitorCall);

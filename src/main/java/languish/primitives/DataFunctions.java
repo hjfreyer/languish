@@ -1,107 +1,107 @@
 package languish.primitives;
 
-import languish.base.LObject;
-import languish.base.Lambda;
-import languish.base.PrimitiveFunction;
-import languish.base.Tuple;
-import languish.base.PrimitiveFunction.SingleArgDataFunction;
-import languish.base.PrimitiveFunction.TwoArgDataFunction;
 import languish.interpreter.Builtins;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
+import languish.lambda.NativeFunction;
+import languish.lambda.Term;
+import languish.lambda.NativeFunction.SingleArgDataFunction;
+import languish.lambda.NativeFunction.TwoArgDataFunction;
 
 public class DataFunctions {
 
   // BOOLEAN STUFF
-  public static final PrimitiveFunction BRANCH = new SingleArgDataFunction() {
+  public static final NativeFunction BRANCH = new SingleArgDataFunction() {
     @Override
-    public Tuple apply(LObject arg) {
+    public Term apply(LObject arg) {
       return ((LBoolean) arg).booleanValue() ? BRANCH_THEN : BRANCH_ELSE;
     }
   };
-  public static final Tuple BRANCH_ELSE = Lambda.abs(Lambda.abs(Lambda.ref(1)));
-  public static final Tuple BRANCH_THEN = Lambda.abs(Lambda.abs(Lambda.ref(2)));
+  public static final Term BRANCH_ELSE = Lambda.abs(Lambda.abs(Lambda.ref(1)));
+  public static final Term BRANCH_THEN = Lambda.abs(Lambda.abs(Lambda.ref(2)));
 
-  public static final PrimitiveFunction AND = new TwoArgDataFunction() {
+  public static final NativeFunction AND = new TwoArgDataFunction() {
     @Override
-    public Tuple apply(LObject arg1, LObject arg2) {
+    public Term apply(LObject arg1, LObject arg2) {
       LBoolean a = (LBoolean) arg1;
       LBoolean b = (LBoolean) arg2;
 
-      return Lambda.data(LBoolean.of(a.booleanValue() && b.booleanValue()));
+      return Lambda.primitive(LBoolean.of(a.booleanValue() && b.booleanValue()));
     }
   };
 
-  public static final PrimitiveFunction NOT = new SingleArgDataFunction() {
+  public static final NativeFunction NOT = new SingleArgDataFunction() {
     @Override
-    public Tuple apply(LObject arg) {
+    public Term apply(LObject arg) {
       LBoolean a = (LBoolean) arg;
 
-      return Lambda.data(LBoolean.of(!a.booleanValue()));
+      return Lambda.primitive(LBoolean.of(!a.booleanValue()));
     }
   };
 
   // INTEGER STUFF
-  public static final PrimitiveFunction ADD = new TwoArgDataFunction() {
+  public static final NativeFunction ADD = new TwoArgDataFunction() {
     @Override
-    public Tuple apply(LObject arg1, LObject arg2) {
+    public Term apply(LObject arg1, LObject arg2) {
       LInteger a = (LInteger) arg1;
       LInteger b = (LInteger) arg2;
 
-      return Lambda.data(LInteger.of(a.intValue() + b.intValue()));
+      return Lambda.primitive(LInteger.of(a.intValue() + b.intValue()));
     }
   };
 
-  public static final PrimitiveFunction MULTIPLY = new TwoArgDataFunction() {
+  public static final NativeFunction MULTIPLY = new TwoArgDataFunction() {
     @Override
-    public Tuple apply(LObject arg1, LObject arg2) {
+    public Term apply(LObject arg1, LObject arg2) {
       LInteger a = (LInteger) arg1;
       LInteger b = (LInteger) arg2;
 
-      return Lambda.data(LInteger.of(a.intValue() * b.intValue()));
+      return Lambda.primitive(LInteger.of(a.intValue() * b.intValue()));
     }
   };
 
   // PARSE LITERALS
-  public static final PrimitiveFunction PARSE_INT =
+  public static final NativeFunction PARSE_INT =
       new SingleArgDataFunction() {
         @Override
-        public Tuple apply(LObject obj) {
+        public Term apply(LObject obj) {
           LSymbol symbol = (LSymbol) obj;
 
-          return Lambda.data(LInteger
+          return Lambda.primitive(LInteger
               .of(Integer.parseInt(symbol.stringValue())));
         }
       };
 
-  public static final PrimitiveFunction DATA_EQUALS = new PrimitiveFunction() {
+  public static final NativeFunction DATA_EQUALS = new NativeFunction() {
     @Override
-    public Tuple apply(Tuple tuple) {
+    public Term apply(Term tuple) {
       if (tuple.getFirst() != Lambda.CONS) {
         throw new IllegalArgumentException("argument must be cons");
       }
 
-      Tuple arg1 = (Tuple) tuple.getSecond();
-      Tuple arg2 = (Tuple) tuple.getThird();
+      Term arg1 = (Term) tuple.getSecond();
+      Term arg2 = (Term) tuple.getThird();
 
-      return Lambda.data(LBoolean.of(arg1.equals(arg2)));
+      return Lambda.primitive(LBoolean.of(arg1.equals(arg2)));
     }
   };
 
-  public static final PrimitiveFunction BUILTIN_GET =
+  public static final NativeFunction BUILTIN_GET =
       new SingleArgDataFunction() {
         @Override
-        public Tuple apply(LObject arg) {
+        public Term apply(LObject arg) {
           LSymbol symbol = (LSymbol) arg;
 
-          return Lambda.data(Builtins.valueOf(symbol.stringValue())
+          return Lambda.primitive(Builtins.valueOf(symbol.stringValue())
               .getExpression());
         }
       };
 
   // DEBUGGING
 
-  public static final PrimitiveFunction PRINT = new PrimitiveFunction() {
+  public static final NativeFunction PRINT = new NativeFunction() {
     @Override
-    public Tuple apply(Tuple arg) {
+    public Term apply(Term arg) {
       System.out.println(arg);
       return arg;
     }

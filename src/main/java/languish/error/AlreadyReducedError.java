@@ -1,10 +1,10 @@
-package languish.base.error;
+package languish.error;
 
-import languish.base.Tuple;
+import languish.lambda.Term;
 
 public class AlreadyReducedError extends RuntimeException {
 
-  public AlreadyReducedError(Tuple t) {
+  public AlreadyReducedError(Term t) {
     super("Already reduced: " + t);
   }
 

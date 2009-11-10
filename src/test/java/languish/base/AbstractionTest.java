@@ -3,47 +3,49 @@ package languish.base;
 import static languish.testing.CommonExps.IDENTITY;
 import static languish.testing.TestUtil.*;
 import junit.framework.TestCase;
+import languish.lambda.Lambda;
+import languish.lambda.Term;
 import languish.testing.TestUtil;
 
 public class AbstractionTest extends TestCase {
 
-  private static final Tuple FIRST_PICKER =
+  private static final Term FIRST_PICKER =
       Lambda.abs(Lambda.abs(Lambda.ref(2)));
-  private static final Tuple SECOND_PICKER =
+  private static final Term SECOND_PICKER =
       Lambda.abs(Lambda.abs(Lambda.ref(1)));
 
-  private static final Tuple OMEGA =
+  private static final Term OMEGA =
       Lambda.abs(Lambda.app(Lambda.ref(1), Lambda.ref(1)));
-  private static final Tuple LOOP = Lambda.app(OMEGA, OMEGA);
+  private static final Term LOOP = Lambda.app(OMEGA, OMEGA);
 
   public void testBlob() {
-    assertEquals(THREE, Lambda.reduceToDataValue(Lambda.data(THREE)));
+    assertEquals(THREE, Lambda.reduceToDataValue(Lambda.primitive(THREE)));
   }
 
   public void testBasicApply() {
-    Tuple applyFour = Lambda.app(IDENTITY, Lambda.data(FOUR));
+    Term applyFour = Lambda.app(IDENTITY, Lambda.primitive(FOUR));
 
-    assertEquals(Lambda.data(FOUR), TestUtil.reduceTupleOnce(applyFour));
+    assertEquals(Lambda.primitive(FOUR), TestUtil.reduceTupleOnce(applyFour));
     assertEquals(FOUR, Lambda.reduceToDataValue(applyFour));
   }
 
   public void testArgumentChooser() {
     assertEquals(FOUR, Lambda.reduceToDataValue(Lambda.app(Lambda.app(FIRST_PICKER, Lambda
-        .data(FOUR)), Lambda.data(FIVE))));
+        .primitive(FOUR)), Lambda.primitive(FIVE))));
 
     assertEquals(FIVE, Lambda.reduceToDataValue(Lambda.app(Lambda.app(SECOND_PICKER,
-        Lambda.data(FOUR)), Lambda.data(FIVE))));
+        Lambda.primitive(FOUR)), Lambda.primitive(FIVE))));
   }
 
   public void testIrrelevantNonHalter() {
     assertEquals(FOUR, Lambda.reduceToDataValue(Lambda.app(Lambda.app(FIRST_PICKER, Lambda
-        .data(FOUR)), LOOP)));
+        .primitive(FOUR)), LOOP)));
   }
 
   public void testRelevantNonHalterFunction() {
-    Tuple exp =
+    Term exp =
         TestUtil.reduceTupleOnce(Lambda.app(Lambda.app(SECOND_PICKER, Lambda
-            .data(FOUR)), LOOP));
+            .primitive(FOUR)), LOOP));
 
     assertEquals(LOOP, TestUtil.reduceTupleOnce(exp));
   }

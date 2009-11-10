@@ -2,18 +2,18 @@ package languish.testing;
 
 import java.util.List;
 
-import languish.base.LObject;
-import languish.base.Tuple;
+import languish.lambda.LObject;
+import languish.lambda.Term;
 
 public interface LanguishTestList {
 
   public String name();
 
-  public Tuple getExpression();
+  public Term getExpression();
 
   public String getCode();
 
-  public Tuple getReducedOnce();
+  public Term getReducedOnce();
 
   public LObject getReducedCompletely();
 

@@ -1,7 +1,7 @@
 package languish.interpreter;
 
-import languish.base.LObject;
-import languish.base.Lambda;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
 import languish.parsing.LParsers;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;

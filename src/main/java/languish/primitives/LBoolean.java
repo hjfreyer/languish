@@ -1,8 +1,7 @@
 package languish.primitives;
 
-import languish.base.LObject;
 
-public final class LBoolean extends DataWrapper {
+public final class LBoolean extends AbstractPrimitive {
 
   private final boolean value;
 
@@ -18,11 +17,11 @@ public final class LBoolean extends DataWrapper {
   }
 
   @Override
-  public Object getJavaValue() {
+  public Object getJavaObject() {
     return value;
   }
 
-  public static LObject of(boolean b) {
+  public static LBoolean of(boolean b) {
     return b ? TRUE : FALSE;
   }
 

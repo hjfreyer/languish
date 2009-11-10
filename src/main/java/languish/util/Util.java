@@ -1,9 +1,12 @@
-package languish.base;
+package languish.util;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import languish.lambda.Lambda;
+import languish.lambda.Operation;
+import languish.lambda.Term;
 import languish.primitives.DataWrapper;
 import languish.primitives.LBoolean;
 import languish.primitives.LCharacter;
@@ -14,38 +17,38 @@ import com.google.common.collect.ImmutableList;
 
 public class Util {
 
-  public static Tuple listify(Tuple... contents) {
+  public static Term listify(Term... contents) {
     return convertJavaToPrimitive(Arrays.asList(contents));
   }
 
-  public static Tuple convertJavaToPrimitive(Object obj) {
-    if (obj instanceof Tuple) {
-      return (Tuple) obj;
+  public static Term convertJavaToPrimitive(Object obj) {
+    if (obj instanceof Term) {
+      return (Term) obj;
     } else if (obj instanceof LObject) {
-      return Lambda.data((LObject) obj);
+      return Lambda.primitive((LObject) obj);
     } else if (obj instanceof List<?>) {
       List<?> list = (List<?>) obj;
 
-      Tuple result = Lambda.data(Tuple.of());
+      Term result = Lambda.primitive(Term.of());
       for (int i = list.size() - 1; i >= 0; i--) {
         result = Lambda.cons(convertJavaToPrimitive(list.get(i)), result);
       }
 
       return result;
     } else if (obj instanceof Boolean) {
-      return Lambda.data(LBoolean.of((Boolean) obj));
+      return Lambda.primitive(LBoolean.of((Boolean) obj));
     } else if (obj instanceof Character) {
-      return Lambda.data(LCharacter.of((Character) obj));
+      return Lambda.primitive(LCharacter.of((Character) obj));
     } else if (obj instanceof Integer) {
-      return Lambda.data(LInteger.of((Integer) obj));
+      return Lambda.primitive(LInteger.of((Integer) obj));
     } else if (obj instanceof String) {
-      return Lambda.data(LSymbol.of((String) obj));
+      return Lambda.primitive(LSymbol.of((String) obj));
     } else {
       throw new AssertionError();
     }
   }
 
-  public static Object convertPrimitiveToJava(Tuple tuple) {
+  public static Object convertPrimitiveToJava(Term tuple) {
     if (!Lambda.isPrimitive(tuple)) {
       throw new IllegalArgumentException("Not primitive: " + tuple);
     }
@@ -54,14 +57,14 @@ public class Util {
     if (op == Lambda.DATA) {
       LObject data = tuple.getSecond();
 
-      if (data.equals(Tuple.of())) {
+      if (data.equals(Term.of())) {
         return null;
       }
 
       return ((DataWrapper) data).getJavaValue();
     } else if (op == Lambda.CONS) {
-      Object car = convertPrimitiveToJava((Tuple) tuple.getSecond());
-      List<?> cdr = (List<?>) convertPrimitiveToJava((Tuple) tuple.getThird());
+      Object car = convertPrimitiveToJava((Term) tuple.getSecond());
+      List<?> cdr = (List<?>) convertPrimitiveToJava((Term) tuple.getThird());
 
       cdr = (cdr != null) ? cdr : ImmutableList.of();
 

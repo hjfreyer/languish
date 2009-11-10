@@ -1,6 +1,7 @@
 package languish.primitives;
 
-public final class LCharacter extends DataWrapper {
+
+public final class LCharacter extends AbstractPrimitive {
   private final char value;
 
   private LCharacter(char value) {
@@ -16,7 +17,7 @@ public final class LCharacter extends DataWrapper {
   }
 
   @Override
-  public Object getJavaValue() {
+  public Object getJavaObject() {
     return value;
   }
 }

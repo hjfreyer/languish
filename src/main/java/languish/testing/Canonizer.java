@@ -1,8 +1,8 @@
 package languish.testing;
 
-import languish.base.LObject;
-import languish.base.Tuple;
 import languish.interpreter.Builtins;
+import languish.lambda.LObject;
+import languish.lambda.Term;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 
@@ -15,8 +15,8 @@ public class Canonizer {
       }
     }
 
-    if (exp instanceof Tuple) {
-      Tuple tuple = (Tuple) exp;
+    if (exp instanceof Term) {
+      Term tuple = (Term) exp;
 
       StringBuilder sb = new StringBuilder();
 

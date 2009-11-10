@@ -1,7 +1,7 @@
 package languish.interpreter;
 
-import languish.base.LObject;
-import languish.base.Tuple;
+import languish.lambda.LObject;
+import languish.lambda.Term;
 
 public enum ExpressionsToTst {
 //
@@ -113,15 +113,15 @@ public enum ExpressionsToTst {
   //      
   ;
 
-  public Tuple expForm;
+  public Term expForm;
   public String codeForm;
   public boolean reduceOnce;
-  public Tuple reducedOnce;
+  public Term reducedOnce;
   public boolean reduceCompletely;
   public LObject reducedCompletely;
 
-  private ExpressionsToTst(Tuple expForm, String codeForm, boolean reduceOnce,
-      Tuple reducedOnce, boolean reduceCompletely, LObject reducedCompletely) {
+  private ExpressionsToTst(Term expForm, String codeForm, boolean reduceOnce,
+      Term reducedOnce, boolean reduceCompletely, LObject reducedCompletely) {
     this.expForm = expForm;
     this.codeForm = codeForm;
     this.reduceOnce = reduceOnce;

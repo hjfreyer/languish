@@ -1,10 +1,10 @@
-package languish.base.error;
+package languish.error;
 
-import languish.base.Tuple;
+import languish.lambda.Term;
 
 public class IllegalPrimitiveFunctionApplicationError extends RuntimeException {
 
-  public IllegalPrimitiveFunctionApplicationError(Tuple arg) {
+  public IllegalPrimitiveFunctionApplicationError(Term arg) {
     super("Argument is not primitive: " + arg);
   }
 

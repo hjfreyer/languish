@@ -1,24 +1,27 @@
 package languish.base;
 
-import static languish.base.Lambda.data;
+import static languish.lambda.Lambda.primitive;
 import static languish.testing.TestUtil.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
+import languish.lambda.Term;
 import languish.testing.CommonExps;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
 
 public class ExpressionTest extends TestCase {
   public enum Tests implements LanguishTestList {
-    LITERAL_INT(data(FIVE), //
+    LITERAL_INT(primitive(FIVE), //
         "[DATA 5]",
         null,
         FIVE),
 
-    IDENTITY(Lambda.app(IDENT, data(FOUR)), //
+    IDENTITY(Lambda.app(IDENT, primitive(FOUR)), //
         "[APP [ABS [REF 1]] [DATA 4]]",
         null,
         FOUR),
@@ -30,12 +33,12 @@ public class ExpressionTest extends TestCase {
 
     ;
 
-    private final Tuple expression;
+    private final Term expression;
     private final String code;
-    private final Tuple reducedOnce;
+    private final Term reducedOnce;
     private final LObject reducedCompletely;
 
-    private Tests(Tuple expression, String code, Tuple reducedOnce,
+    private Tests(Term expression, String code, Term reducedOnce,
         LObject reducedCompletely) {
       this.expression = expression;
       this.code = code;
@@ -43,7 +46,7 @@ public class ExpressionTest extends TestCase {
       this.reducedCompletely = reducedCompletely;
     }
 
-    public Tuple getExpression() {
+    public Term getExpression() {
       return expression;
     }
 
@@ -51,7 +54,7 @@ public class ExpressionTest extends TestCase {
       return code;
     }
 
-    public Tuple getReducedOnce() {
+    public Term getReducedOnce() {
       return reducedOnce;
     }
 

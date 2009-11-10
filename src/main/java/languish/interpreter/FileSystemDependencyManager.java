@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
-import languish.base.Tuple;
+import languish.lambda.Term;
 
 public class FileSystemDependencyManager implements DependencyManager {
 
@@ -18,7 +18,7 @@ public class FileSystemDependencyManager implements DependencyManager {
     this.paths = paths;
   }
 
-  public Tuple getResource(String resourceName) throws FileNotFoundException {
+  public Term getResource(String resourceName) throws FileNotFoundException {
 
     for (String path : paths) {
       String docPath = path + '/' + resourceName + ".lish";

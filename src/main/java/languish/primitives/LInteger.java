@@ -1,7 +1,6 @@
 package languish.primitives;
 
-
-public final class LInteger extends DataWrapper {
+public final class LInteger extends AbstractPrimitive {
   private final int value;
 
   public LInteger(int value) {
@@ -17,7 +16,7 @@ public final class LInteger extends DataWrapper {
   }
 
   @Override
-  public Object getJavaValue() {
+  public Object getJavaObject() {
     return value;
   }
 }

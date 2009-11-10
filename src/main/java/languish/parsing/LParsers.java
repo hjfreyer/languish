@@ -3,16 +3,16 @@ package languish.parsing;
 import java.util.LinkedList;
 import java.util.List;
 
-import languish.base.PrimitiveFunction;
-import languish.base.Tuple;
-import languish.base.Util;
+import languish.lambda.NativeFunction;
+import languish.lambda.Term;
+import languish.util.Util;
 
 import com.hjfreyer.util.Pair;
 
 public class LParsers {
-  public static final PrimitiveFunction PARSE_TEXT = new PrimitiveFunction() {
+  public static final NativeFunction PARSE_TEXT = new NativeFunction() {
     @Override
-    public Tuple apply(Tuple arg) {
+    public Term apply(Term arg) {
       List<?> argList = (List<?>) Util.convertPrimitiveToJava(arg);
 
       List<?> grammar = (List<?>) argList.get(0);

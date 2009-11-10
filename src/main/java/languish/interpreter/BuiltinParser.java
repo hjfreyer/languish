@@ -2,8 +2,8 @@ package languish.interpreter;
 
 import java.util.List;
 
-import languish.base.LObject;
-import languish.base.Tuple;
+import languish.lambda.LObject;
+import languish.lambda.Term;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 
@@ -67,23 +67,23 @@ public class BuiltinParser {
   public static final Parser.Reference<LObject> LOBJ_REF =
       Parser.newReference();
 
-  public static final Parser<Tuple> TUPLE =
+  public static final Parser<Term> TUPLE =
       LOBJ_REF.lazy().many()
           .between(OPERATORS.token("["), OPERATORS.token("]")).map(
-              new Map<List<LObject>, Tuple>() {
-                public Tuple map(List<LObject> from) {
+              new Map<List<LObject>, Term>() {
+                public Term map(List<LObject> from) {
                   LObject[] objs = new LObject[from.size()];
                   objs = from.toArray(objs);
 
-                  return Tuple.of(objs);
+                  return Term.of(objs);
                 }
               });
 
   public static final Parser<LObject> LOBJECT = LEAF.or(TUPLE);
 
-  public static final Parser<Tuple> SINGLE_TUPLE = TUPLE.from(LEXER);
+  public static final Parser<Term> SINGLE_TUPLE = TUPLE.from(LEXER);
 
-  public static final Parser<List<Tuple>> PROGRAM = TUPLE.many().from(LEXER);
+  public static final Parser<List<Term>> PROGRAM = TUPLE.many().from(LEXER);
 
   static { // Ugh... java...
     LOBJ_REF.set(LOBJECT);

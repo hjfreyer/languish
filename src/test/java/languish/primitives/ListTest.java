@@ -1,9 +1,6 @@
 package languish.primitives;
 
-import static languish.base.Lambda.car;
-import static languish.base.Lambda.cdr;
-import static languish.base.Lambda.cons;
-import static languish.base.Lambda.data;
+import static languish.lambda.Lambda.*;
 import static languish.lang.CommonTest.NULL;
 import static languish.testing.TestUtil.FOUR;
 import static languish.testing.TestUtil.SIX;
@@ -14,11 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
-import languish.base.LObject;
-import languish.base.Tuple;
-import languish.base.Util;
+import languish.lambda.LObject;
+import languish.lambda.Term;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
+import languish.util.Util;
 
 import com.google.common.collect.ImmutableList;
 
@@ -26,56 +23,56 @@ public class ListTest extends TestCase {
 
   public enum Tests implements LanguishTestList {
     // IDENITY TESTS
-    TEST_EMPTY_LIST(data(Tuple.of()), //
+    TEST_EMPTY_LIST(primitive(Term.of()), //
         "[DATA []]", null, ImmutableList.of()),
 
-    SINGLE_ELEMENT_LIST(cons(data(TWO), data(Tuple.of())), //
+    SINGLE_ELEMENT_LIST(cons(primitive(TWO), primitive(Term.of())), //
         "[CONS [DATA 2] [DATA []]]", null, ImmutableList.of(TWO)),
 
-    DOUBLE_ELEMENT_LIST(cons(data(THREE), cons(data(TWO), data(Tuple.of()))), //
+    DOUBLE_ELEMENT_LIST(cons(primitive(THREE), cons(primitive(TWO), primitive(Term.of()))), //
         "[CONS [DATA 3] [CONS [DATA 2] [DATA []]]]", null, ImmutableList.of(
             THREE, TWO)),
 
     TRIPLE_ELEMENT_LIST(
-        cons(data(THREE), cons(data(FOUR), cons(data(TWO), data(Tuple.of())))), //
+        cons(primitive(THREE), cons(primitive(FOUR), cons(primitive(TWO), primitive(Term.of())))), //
         "[CONS [DATA 3] [CONS [DATA 4] [CONS [DATA 2] [DATA []]]]]", null,
         ImmutableList.of(THREE, FOUR, TWO)),
 
     NESTED_LIST(
-        cons(SINGLE_ELEMENT_LIST.expression, cons(data(SIX), data(Tuple.of()))), //
+        cons(SINGLE_ELEMENT_LIST.expression, cons(primitive(SIX), primitive(Term.of()))), //
         "[CONS [CONS [DATA 2] [DATA []]] [CONS [DATA 6] [DATA []]]]", null,
         ImmutableList.of(ImmutableList.of(TWO), SIX)),
 
     TEST_CAR(car(TRIPLE_ELEMENT_LIST.expression), //
-        "[CAR " + TRIPLE_ELEMENT_LIST.code + "]", data(THREE), null, THREE),
+        "[CAR " + TRIPLE_ELEMENT_LIST.code + "]", primitive(THREE), null, THREE),
 
     TEST_CDR(cdr(TRIPLE_ELEMENT_LIST.expression), //
-        "[CDR " + TRIPLE_ELEMENT_LIST.code + "]", Util.listify(data(FOUR),
-            data(TWO)), ImmutableList.of(FOUR, TWO)),
+        "[CDR " + TRIPLE_ELEMENT_LIST.code + "]", Util.listify(primitive(FOUR),
+            primitive(TWO)), ImmutableList.of(FOUR, TWO)),
 
     TEST_CADR(car(cdr(TRIPLE_ELEMENT_LIST.expression)), //
         "[CAR [CDR " + TRIPLE_ELEMENT_LIST.code + "]]", car(Util.listify(
-            data(FOUR), data(TWO))), null, FOUR),
+            primitive(FOUR), primitive(TWO))), null, FOUR),
 
     TEST_CAAR(
         car(car(NESTED_LIST.expression)), //
-        "[CAR [CAR " + NESTED_LIST.code + "]]", car(cons(data(TWO), NULL)),
+        "[CAR [CAR " + NESTED_LIST.code + "]]", car(cons(primitive(TWO), NULL)),
         null, TWO),
 
     ;
 
-    private final Tuple expression;
+    private final Term expression;
     private final String code;
-    private final Tuple reducedOnce;
+    private final Term reducedOnce;
     private final List<?> listContents;
     private final LObject reducedCompletely;
 
-    private Tests(Tuple expression, String code, Tuple reducedOnce,
+    private Tests(Term expression, String code, Term reducedOnce,
         List<?> listContents) {
       this(expression, code, reducedOnce, listContents, null);
     }
 
-    private Tests(Tuple expression, String code, Tuple reducedOnce,
+    private Tests(Term expression, String code, Term reducedOnce,
         List<?> listContents, LObject reducedCompletely) {
       this.expression = expression;
       this.code = code;
@@ -84,7 +81,7 @@ public class ListTest extends TestCase {
       this.reducedCompletely = reducedCompletely;
     }
 
-    public Tuple getExpression() {
+    public Term getExpression() {
       return expression;
     }
 
@@ -92,7 +89,7 @@ public class ListTest extends TestCase {
       return code;
     }
 
-    public Tuple getReducedOnce() {
+    public Term getReducedOnce() {
       return reducedOnce;
     }
 

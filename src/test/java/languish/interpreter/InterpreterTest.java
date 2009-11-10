@@ -1,8 +1,8 @@
 package languish.interpreter;
 
-import static languish.base.Lambda.*;
+import static languish.lambda.Lambda.*;
 import junit.framework.TestCase;
-import languish.base.Tuple;
+import languish.lambda.Term;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 import languish.testing.TestUtil;
@@ -24,7 +24,7 @@ public class InterpreterTest extends TestCase {
   }
 
   public void testBasicDisplay() throws Exception {
-    Tuple program =
+    Term program =
         Interpreter
             .interpretStatement("[CONS [DATA \"VALUE\"] [DATA 5]]", null);
 
@@ -32,8 +32,8 @@ public class InterpreterTest extends TestCase {
   }
 
   public void testTrivialParserChange() throws Exception {
-    final Tuple parserValue =
-        abs(cons(data(LSymbol.of("VALUE")), data(LInteger.of(5))));
+    final Term parserValue =
+        abs(cons(primitive(LSymbol.of("VALUE")), primitive(LInteger.of(5))));
 
     final DependencyManager depman = context.mock(DependencyManager.class);
     context.checking(new Expectations() {
@@ -43,7 +43,7 @@ public class InterpreterTest extends TestCase {
       }
     });
 
-    Tuple res =
+    Term res =
         Interpreter.interpretStatement(
             "#lang trivialParser;; THIS IS GARBAGE!!@E#!q34!", depman);
 
@@ -51,7 +51,7 @@ public class InterpreterTest extends TestCase {
   }
 
   public void testEchoParser() throws Exception {
-    final Tuple parserValue = abs(cons(data(LSymbol.of("VALUE")), ref(1)));
+    final Term parserValue = abs(cons(primitive(LSymbol.of("VALUE")), ref(1)));
 
     final DependencyManager depman = context.mock(DependencyManager.class);
     context.checking(new Expectations() {
@@ -64,7 +64,7 @@ public class InterpreterTest extends TestCase {
     String test = "SDKFJLSKDJFLKSDF<kndslfksldf";
     String test2 = "rock me am[ad]]eus!~";
 
-    Tuple res = Interpreter.interpretStatement("#lang echoParser;;", depman);
+    Term res = Interpreter.interpretStatement("#lang echoParser;;", depman);
     TestUtil.assertReducesToData(LSymbol.of(""), res);
 
     res = Interpreter.interpretStatement("#lang echoParser;;" + test, depman);

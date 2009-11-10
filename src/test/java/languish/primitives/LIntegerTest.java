@@ -1,6 +1,6 @@
 package languish.primitives;
 
-import static languish.base.Lambda.*;
+import static languish.lambda.Lambda.*;
 import static languish.primitives.DataFunctions.ADD;
 import static languish.testing.TestUtil.*;
 
@@ -8,44 +8,44 @@ import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
-import languish.base.LObject;
-import languish.base.Lambda;
-import languish.base.Tuple;
+import languish.lambda.LObject;
+import languish.lambda.Lambda;
+import languish.lambda.Term;
 import languish.testing.LanguishTestList;
 import languish.testing.TestUtil;
 
 public class LIntegerTest extends TestCase {
 
-  public static final Tuple DOUBLE_FUNC = abs(prim(ADD, cons(ref(1), ref(1))));
+  public static final Term DOUBLE_FUNC = abs(nativeApply(ADD, cons(ref(1), ref(1))));
 
   public enum Tests implements LanguishTestList {
-    TEST_DATA(data(FIVE), //
+    TEST_DATA(primitive(FIVE), //
         "[DATA 5]",
         null,
         FIVE),
 
-    TEST_SIMPLE_ADD(prim(ADD, cons(data(FIVE), data(THREE))),
+    TEST_SIMPLE_ADD(nativeApply(ADD, cons(primitive(FIVE), primitive(THREE))),
         "[PRIM [DATA ADD] [CONS [DATA 5] [DATA 3]]]",
         null,
         EIGHT),
 
-    TEST_TRIPLE_ADD(prim(ADD, cons(data(FIVE), prim(ADD, cons(data(THREE),
-        data(SIX))))), "[PRIM [DATA ADD] [CONS [DATA 5] "
+    TEST_TRIPLE_ADD(nativeApply(ADD, cons(primitive(FIVE), nativeApply(ADD, cons(primitive(THREE),
+        primitive(SIX))))), "[PRIM [DATA ADD] [CONS [DATA 5] "
         + "[PRIM [DATA ADD] [CONS [DATA 3] [DATA 6]]]]]", null, FOURTEEN),
 
-    TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, data(FOUR)), //
+    TEST_DOUBLE(Lambda.app(DOUBLE_FUNC, primitive(FOUR)), //
         "[APP [ABS [PRIM [DATA ADD] [CONS [REF 1] [REF 1]]]] [DATA 4]]",
-        prim(ADD, cons(data(FOUR), data(FOUR))),
+        nativeApply(ADD, cons(primitive(FOUR), primitive(FOUR))),
         EIGHT),
 
     ;
 
-    private final Tuple expression;
+    private final Term expression;
     private final String code;
-    private final Tuple reducedOnce;
+    private final Term reducedOnce;
     private final LObject reducedCompletely;
 
-    private Tests(Tuple expression, String code, Tuple reducedOnce,
+    private Tests(Term expression, String code, Term reducedOnce,
         LObject reducedCompletely) {
       this.expression = expression;
       this.code = code;
@@ -53,7 +53,7 @@ public class LIntegerTest extends TestCase {
       this.reducedCompletely = reducedCompletely;
     }
 
-    public Tuple getExpression() {
+    public Term getExpression() {
       return expression;
     }
 
@@ -61,7 +61,7 @@ public class LIntegerTest extends TestCase {
       return code;
     }
 
-    public Tuple getReducedOnce() {
+    public Term getReducedOnce() {
       return reducedOnce;
     }
 

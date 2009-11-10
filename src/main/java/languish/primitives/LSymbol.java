@@ -1,6 +1,6 @@
 package languish.primitives;
 
-public final class LSymbol extends DataWrapper {
+public final class LSymbol extends AbstractPrimitive {
   private final String value;
 
   private LSymbol(String value) {
@@ -16,7 +16,7 @@ public final class LSymbol extends DataWrapper {
   }
 
   @Override
-  public Object getJavaValue() {
+  public Object getJavaObject() {
     return value;
   }
 }
