@@ -1,4 +1,4 @@
-package languish.lang;
+package languish.lib;
 
 import java.io.FileNotFoundException;
 

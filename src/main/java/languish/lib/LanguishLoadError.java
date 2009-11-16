@@ -1,4 +1,4 @@
-package languish.lang;
+package languish.lib;
 
 public class LanguishLoadError extends RuntimeException {
 

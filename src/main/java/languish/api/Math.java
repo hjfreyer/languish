@@ -1,4 +1,5 @@
-//package languish.primitives;
+package languish.api;
+
 //
 //import languish.interpreter.Builtins;
 //import languish.lambda.LObject;

@@ -3,6 +3,10 @@ package languish.parsing;
 import java.util.List;
 
 import junit.framework.TestCase;
+import languish.api.parser.ASTNode;
+import languish.api.parser.GrammarRule;
+import languish.api.parser.LParser;
+import languish.api.parser.ParserTree;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.FileSystemDependencyManager;
 

@@ -1,4 +1,4 @@
-package languish.parsing;
+package languish.api.parser;
 
 public class GrammarRule {
   private final String type;

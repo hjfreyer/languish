@@ -1,4 +1,4 @@
-package languish.lang;
+package languish.lib;
 
 import java.io.FileNotFoundException;
 
@@ -9,27 +9,21 @@ import languish.util.Lambda;
 
 import com.google.common.collect.ImmutableList;
 
-public class Integers {
+public class Data {
   private static final DependencyManager DEPMAN =
       new FileSystemDependencyManager(ImmutableList.of("languish"));
   private static final Term LIB;
 
   static {
     try {
-      LIB = DEPMAN.getResource("lang/integers");
+      LIB = DEPMAN.getResource("lang/data");
     } catch (FileNotFoundException e) {
       throw new LanguishLoadError(e);
     }
   }
 
-  public static Term add() {
+  public static Term equals() {
     return Lambda.car(LIB);
   }
 
-  public static Term multiply() {
-    return Lambda.car(Lambda.cdr(LIB));
-  }
-
-  private Integers() {
-  }
 }

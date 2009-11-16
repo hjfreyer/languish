@@ -1,4 +1,4 @@
-package languish.parsing;
+package languish.api.parser;
 
 import java.util.HashMap;
 import java.util.LinkedList;
