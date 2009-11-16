@@ -76,6 +76,6 @@ public class TermPrinter {
       return '"' + p.getJavaObject().toString() + '"';
     }
 
-    throw new IllegalArgumentException("Unknown primitive: " + p);
+    return "<UNKNOWN>";
   }
 }

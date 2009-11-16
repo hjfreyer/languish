@@ -7,6 +7,7 @@ import languish.lambda.Operation;
 import languish.lambda.Operations;
 import languish.lambda.Primitive;
 import languish.lambda.Term;
+import languish.primitives.AbstractPrimitive;
 import languish.primitives.LBoolean;
 import languish.primitives.LCharacter;
 import languish.primitives.LInteger;
@@ -38,13 +39,13 @@ public class Lambda {
   }
 
   public static Term nativeApply(final NativeFunction func, Term arg) {
-    Primitive funcPrimitive = new Primitive() {
+    Primitive funcPrimitive = new AbstractPrimitive() {
       public Object getJavaObject() {
         return func;
       }
     };
 
-    return new Term(Operations.NATIVE_APPLY, funcPrimitive, arg);
+    return new Term(Operations.NATIVE_APPLY, primitive(funcPrimitive), arg);
   }
 
   public static Term cons(Term obj1, Term obj2) {

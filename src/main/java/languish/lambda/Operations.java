@@ -120,9 +120,9 @@ public class Operations {
 
   public static final Operation NATIVE_APPLY = new Operation() {
 
-    public Term reduce(Term prim) {
-      Term func = (Term) prim.getFirst();
-      Term arg = (Term) prim.getSecond();
+    public Term reduce(Term nativeApply) {
+      Term func = (Term) nativeApply.getFirst();
+      Term arg = (Term) nativeApply.getSecond();
 
       if (func.getOperation() != PRIMITIVE) {
         return new Term(NATIVE_APPLY, func.reduce(), arg);
@@ -132,9 +132,12 @@ public class Operations {
         return new Term(NATIVE_APPLY, func, arg.reduce());
       }
 
-      NativeFunction primFunc = (NativeFunction) func.getFirst();
+      Primitive funcPrimitive = (Primitive) func.getFirst();
+      NativeFunction nativeFunc =
+          (NativeFunction) funcPrimitive.getJavaObject();
+
       JavaWrapper argObject = Lambda.convertTermToJavaObject(arg);
-      return Lambda.convertJavaObjectToTerm(primFunc.apply(argObject));
+      return Lambda.convertJavaObjectToTerm(nativeFunc.apply(argObject));
     }
 
     public boolean isReduced(Term term) {
