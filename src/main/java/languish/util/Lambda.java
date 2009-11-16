@@ -40,6 +40,7 @@ public class Lambda {
 
   public static Term nativeApply(final NativeFunction func, Term arg) {
     Primitive funcPrimitive = new AbstractPrimitive() {
+      @Override
       public Object getJavaObject() {
         return func;
       }
