@@ -4,8 +4,8 @@ import java.io.FileNotFoundException;
 
 import languish.interpreter.DependencyManager;
 import languish.interpreter.FileSystemDependencyManager;
-import languish.lambda.Lambda;
 import languish.lambda.Term;
+import languish.util.Lambda;
 
 import com.google.common.collect.ImmutableList;
 

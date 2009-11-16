@@ -1,45 +1,31 @@
-package languish.base;
+package languish.lambda;
 
-import static languish.lambda.Lambda.primitive;
-import static languish.testing.TestUtil.*;
+import static languish.testing.TestUtil.FIVE;
+import static languish.util.Lambda.primitive;
 
-import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
-import languish.lambda.Term;
-import languish.testing.CommonExps;
-import languish.testing.LanguishTestList;
+import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
+import languish.util.JavaWrapper;
 
 public class ExpressionTest extends TestCase {
-  public enum Tests implements LanguishTestList {
+  public enum Tests implements LanguishTestCase {
     LITERAL_INT(primitive(FIVE), //
-        "[DATA 5]",
+        "[PRIMITIVE 5 NULL]",
         null,
-        FIVE),
-
-    IDENTITY(Lambda.app(IDENT, primitive(FOUR)), //
-        "[APP [ABS [REF 1]] [DATA 4]]",
-        null,
-        FOUR),
-
-    LOOP(CommonExps.LOOP, //
-        "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [APP [REF 1] [REF 1]]]]",
-        CommonExps.LOOP,
-        null),
+        JavaWrapper.of(5)),
 
     ;
 
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final LObject reducedCompletely;
+    private final JavaWrapper reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        LObject reducedCompletely) {
+        JavaWrapper reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
@@ -58,7 +44,7 @@ public class ExpressionTest extends TestCase {
       return reducedOnce;
     }
 
-    public LObject getReducedCompletely() {
+    public JavaWrapper getReducedCompletely() {
       return reducedCompletely;
     }
 
@@ -68,6 +54,8 @@ public class ExpressionTest extends TestCase {
   }
 
   public void test() {
-    TestUtil.testExpressions(Arrays.asList(Tests.values()));
+    for (LanguishTestCase test : Tests.values()) {
+      TestUtil.assertLanguishTestCase(test);
+    }
   }
 }

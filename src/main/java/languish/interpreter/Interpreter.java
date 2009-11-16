@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import languish.lambda.Lambda;
 import languish.lambda.Term;
 import languish.primitives.LSymbol;
+import languish.util.Lambda;
 import languish.util.Util;
 
 import com.hjfreyer.util.Pair;
@@ -30,7 +30,7 @@ public class Interpreter {
     Term resultExpression;
 
     if (parserName.equals("__BUILTIN__")) {
-      resultExpression = BuiltinParser.SINGLE_TUPLE.parse(programBody);
+      resultExpression = TermParser.TERM.parse(programBody);
     } else {
       Term parser = depman.getResource(parserName);
 
@@ -54,7 +54,7 @@ public class Interpreter {
 
       @SuppressWarnings("unchecked")
       List<String> depsList =
-          (List<String>) Util.convertPrimitiveToJava(Lambda.reduce(depList));
+          (List<String>) Util.convertTermToJavaObject(Lambda.reduce(depList));
 
       List<Term> depValues = new ArrayList<Term>();
 
@@ -64,7 +64,7 @@ public class Interpreter {
       }
 
       return evaluateToValue(Lambda.app(exp, Util
-          .convertJavaToPrimitive(depValues)), depman);
+          .convertJavaObjectToTerm(depValues)), depman);
     } else {
       throw new AssertionError();
     }

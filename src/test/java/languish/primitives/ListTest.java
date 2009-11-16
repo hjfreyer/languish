@@ -1,11 +1,11 @@
 package languish.primitives;
 
-import static languish.lambda.Lambda.*;
 import static languish.lang.CommonTest.NULL;
 import static languish.testing.TestUtil.FOUR;
 import static languish.testing.TestUtil.SIX;
 import static languish.testing.TestUtil.THREE;
 import static languish.testing.TestUtil.TWO;
+import static languish.util.Lambda.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.lambda.LObject;
 import languish.lambda.Term;
-import languish.testing.LanguishTestList;
+import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
 import languish.util.Util;
 
@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableList;
 
 public class ListTest extends TestCase {
 
-  public enum Tests implements LanguishTestList {
+  public enum Tests implements LanguishTestCase {
     // IDENITY TESTS
     TEST_EMPTY_LIST(primitive(Term.of()), //
         "[DATA []]", null, ImmutableList.of()),
@@ -103,7 +103,7 @@ public class ListTest extends TestCase {
   }
 
   public void test() {
-    TestUtil.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.assertLanguishTestCase(Arrays.asList(Tests.values()));
   }
   //
   // public void assertListContents(Tuple list, LObject... contents) {

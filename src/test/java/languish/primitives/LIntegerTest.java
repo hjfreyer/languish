@@ -1,24 +1,24 @@
 package languish.primitives;
 
-import static languish.lambda.Lambda.*;
 import static languish.primitives.DataFunctions.ADD;
 import static languish.testing.TestUtil.*;
+import static languish.util.Lambda.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
 import languish.lambda.LObject;
-import languish.lambda.Lambda;
 import languish.lambda.Term;
-import languish.testing.LanguishTestList;
+import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
+import languish.util.Lambda;
 
 public class LIntegerTest extends TestCase {
 
   public static final Term DOUBLE_FUNC = abs(nativeApply(ADD, cons(ref(1), ref(1))));
 
-  public enum Tests implements LanguishTestList {
+  public enum Tests implements LanguishTestCase {
     TEST_DATA(primitive(FIVE), //
         "[DATA 5]",
         null,
@@ -75,6 +75,6 @@ public class LIntegerTest extends TestCase {
   }
 
   public void test() {
-    TestUtil.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.assertLanguishTestCase(Arrays.asList(Tests.values()));
   }
 }

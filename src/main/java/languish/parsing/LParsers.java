@@ -13,7 +13,7 @@ public class LParsers {
   public static final NativeFunction PARSE_TEXT = new NativeFunction() {
     @Override
     public Term apply(Term arg) {
-      List<?> argList = (List<?>) Util.convertPrimitiveToJava(arg);
+      List<?> argList = (List<?>) Util.convertTermToJavaObject(arg);
 
       List<?> grammar = (List<?>) argList.get(0);
       String text = (String) argList.get(1);
@@ -21,7 +21,7 @@ public class LParsers {
       LParser parser = fromListStructure(grammar);
       ASTNode result = parser.getParser().parse(text);
 
-      return Util.convertJavaToPrimitive(result.toListStructure());
+      return Util.convertJavaObjectToTerm(result.toListStructure());
     }
   };
 

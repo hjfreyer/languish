@@ -1,9 +1,9 @@
-package languish.base;
+package languish.lambda;
 
-import static languish.lambda.Lambda.*;
 import static languish.lang.CommonTest.NULL;
 import static languish.testing.TestUtil.FIVE;
 import static languish.testing.TestUtil.FOUR;
+import static languish.util.Lambda.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,13 +11,13 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.lambda.LObject;
 import languish.lambda.Term;
-import languish.testing.LanguishTestList;
+import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
 
 import com.google.common.collect.ImmutableList;
 
 public class ConsTest extends TestCase {
-  public enum Tests implements LanguishTestList {
+  public enum Tests implements LanguishTestCase {
     GET_NULL(NULL, //
         "[DATA []]", null, ImmutableList.of()),
 
@@ -70,6 +70,6 @@ public class ConsTest extends TestCase {
   }
 
   public void test() {
-    TestUtil.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.assertLanguishTestCase(Arrays.asList(Tests.values()));
   }
 }

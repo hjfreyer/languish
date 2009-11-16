@@ -1,6 +1,6 @@
 package languish.lang;
 
-import static languish.lambda.Lambda.*;
+import static languish.util.Lambda.*;
 import junit.framework.TestCase;
 import languish.lambda.Term;
 import languish.primitives.DataFunctions;
@@ -31,10 +31,10 @@ public class VisitorTest extends TestCase {
   @SuppressWarnings("unchecked")
   public void testLeaf() {
     Term functionMap =
-        Util.convertJavaToPrimitive(ImmutableList.of(ImmutableList.of("func1",
+        Util.convertJavaObjectToTerm(ImmutableList.of(ImmutableList.of("func1",
             ADD_FORTYTWO)));
     Term isLeaf = abs(primitive(LBoolean.TRUE));
-    Term tree = Util.convertJavaToPrimitive(ImmutableList.of("func1", 3));
+    Term tree = Util.convertJavaObjectToTerm(ImmutableList.of("func1", 3));
 
     Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
@@ -44,13 +44,13 @@ public class VisitorTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   public void testSimpleTree() {
-    Term functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
+    Term functionMap = Util.convertJavaObjectToTerm(ImmutableList.of( //
         ImmutableList.of("additup", SUM_UP), //
         ImmutableList.of("num", abs(ref(1)))));
     Term isLeaf =
         abs(app(app(Data.equals(), primitive(LSymbol.of("num"))), ref(1)));
     Term tree =
-        Util.convertJavaToPrimitive(ImmutableList.of("additup", //
+        Util.convertJavaObjectToTerm(ImmutableList.of("additup", //
             ImmutableList.of(
                 ImmutableList.of("num", 3), //
                 ImmutableList.of("num", 4), ImmutableList.of("num", 12),
@@ -64,7 +64,7 @@ public class VisitorTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   public void testMultipleLeaves() {
-    Term functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
+    Term functionMap = Util.convertJavaObjectToTerm(ImmutableList.of( //
         ImmutableList.of("additup", SUM_UP), //
         ImmutableList.of("num", abs(ref(1))), //
         ImmutableList.of("add_42", ADD_FORTYTWO)));
@@ -73,7 +73,7 @@ public class VisitorTest extends TestCase {
             .of("num"))), ref(1))), app(app(Data.equals(), primitive(LSymbol
             .of("add_42"))), ref(1))));
     Term tree =
-        Util.convertJavaToPrimitive(ImmutableList.of("additup", //
+        Util.convertJavaObjectToTerm(ImmutableList.of("additup", //
             ImmutableList.of(
                 ImmutableList.of("add_42", 3), //
                 ImmutableList.of("num", 4), ImmutableList.of("num", 12),
@@ -88,7 +88,7 @@ public class VisitorTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   public void testMultipleTiers() {
-    Term functionMap = Util.convertJavaToPrimitive(ImmutableList.of( //
+    Term functionMap = Util.convertJavaObjectToTerm(ImmutableList.of( //
         ImmutableList.of("additup", SUM_UP), //
         ImmutableList.of("multitup", PROD_UP), //
         ImmutableList.of("num", abs(ref(1))), //
@@ -96,17 +96,17 @@ public class VisitorTest extends TestCase {
     Term isLeaf =
         abs(app(app(Data.equals(), primitive(LSymbol.of("num"))), ref(1)));
 
-    Term branch1 = Util.convertJavaToPrimitive(ImmutableList.of("additup", //
+    Term branch1 = Util.convertJavaObjectToTerm(ImmutableList.of("additup", //
         ImmutableList.of(ImmutableList.of("num", 4), //
             ImmutableList.of("num", 12))));
 
-    Term branch2 = Util.convertJavaToPrimitive(ImmutableList.of("num", 4));
+    Term branch2 = Util.convertJavaObjectToTerm(ImmutableList.of("num", 4));
 
     Term branch3 =
-        Util.convertJavaToPrimitive(ImmutableList.of("add_42_to_car", //
+        Util.convertJavaObjectToTerm(ImmutableList.of("add_42_to_car", //
             ImmutableList.of(ImmutableList.of("num", 4))));
 
-    Term tree = Util.convertJavaToPrimitive(ImmutableList.of("multitup", //
+    Term tree = Util.convertJavaObjectToTerm(ImmutableList.of("multitup", //
         ImmutableList.of(branch1, branch2, branch3)));
 
     Term visitorCall =

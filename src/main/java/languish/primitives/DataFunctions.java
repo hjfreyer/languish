@@ -2,11 +2,11 @@ package languish.primitives;
 
 import languish.interpreter.Builtins;
 import languish.lambda.LObject;
-import languish.lambda.Lambda;
 import languish.lambda.NativeFunction;
 import languish.lambda.Term;
 import languish.lambda.NativeFunction.SingleArgDataFunction;
 import languish.lambda.NativeFunction.TwoArgDataFunction;
+import languish.util.Lambda;
 
 public class DataFunctions {
 
@@ -75,7 +75,7 @@ public class DataFunctions {
   public static final NativeFunction DATA_EQUALS = new NativeFunction() {
     @Override
     public Term apply(Term tuple) {
-      if (tuple.getFirst() != Lambda.CONS) {
+      if (tuple.getFirst() != languish.util.CONS) {
         throw new IllegalArgumentException("argument must be cons");
       }
 

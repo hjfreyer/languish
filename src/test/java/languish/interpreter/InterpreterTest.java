@@ -1,6 +1,6 @@
 package languish.interpreter;
 
-import static languish.lambda.Lambda.*;
+import static languish.util.Lambda.*;
 import junit.framework.TestCase;
 import languish.lambda.Term;
 import languish.primitives.LInteger;

@@ -1,10 +1,10 @@
 package languish.primitives;
 
-import static languish.lambda.Lambda.*;
 import static languish.primitives.DataFunctions.*;
 import static languish.primitives.LBoolean.*;
 import static languish.testing.CommonExps.LOOP;
 import static languish.testing.TestUtil.*;
+import static languish.util.Lambda.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,11 +12,11 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.lambda.LObject;
 import languish.lambda.Term;
-import languish.testing.LanguishTestList;
+import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
 
 public class LBooleanTest extends TestCase {
-  public enum Tests implements LanguishTestList {
+  public enum Tests implements LanguishTestCase {
     // IDENITY TESTS
     GET_TRUE(primitive(TRUE), //
         "[DATA TRUE]",
@@ -136,6 +136,6 @@ public class LBooleanTest extends TestCase {
   }
 
   public void test() {
-    TestUtil.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.assertLanguishTestCase(Arrays.asList(Tests.values()));
   }
 }

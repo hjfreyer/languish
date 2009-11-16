@@ -1,22 +1,22 @@
 package languish.lang;
 
-import static languish.lambda.Lambda.*;
 import static languish.testing.CommonExps.*;
 import static languish.testing.TestUtil.*;
+import static languish.util.Lambda.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.TestCase;
 import languish.lambda.LObject;
-import languish.lambda.Lambda;
 import languish.lambda.Term;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
 import languish.testing.CommonExps;
-import languish.testing.LanguishTestList;
+import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
+import languish.util.Lambda;
 
 public class CommonTest extends TestCase {
   public static final Term NULL = primitive(Term.of());
@@ -33,7 +33,7 @@ public class CommonTest extends TestCase {
   private static final Term LIST_B =
       cons(primitive(THREE), cons(primitive(SIX), cons(primitive(TWO), NULL)));
 
-  public enum Tests implements LanguishTestList {
+  public enum Tests implements LanguishTestCase {
     EQ_CODE(EQUALS, //
         EQUALS_CODE, null, null),
 
@@ -104,7 +104,7 @@ public class CommonTest extends TestCase {
   }
 
   public void test() {
-    TestUtil.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.assertLanguishTestCase(Arrays.asList(Tests.values()));
   }
 
 }

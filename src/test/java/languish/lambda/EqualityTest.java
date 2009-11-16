@@ -1,15 +1,15 @@
-package languish.base;
+package languish.lambda;
 
-import static languish.lambda.Lambda.*;
 import static languish.testing.CommonExps.IDENTITY;
 import static languish.testing.TestUtil.*;
+import static languish.util.Lambda.*;
 import junit.framework.TestCase;
-import languish.lambda.Lambda;
 import languish.lambda.Term;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
 import languish.primitives.LInteger;
 import languish.testing.CommonExps;
+import languish.util.Lambda;
 
 public class EqualityTest extends TestCase {
 

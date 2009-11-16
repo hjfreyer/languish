@@ -1,7 +1,9 @@
 package languish.lambda;
 
+import languish.util.JavaWrapper;
+
 public interface NativeFunction {
 
-  public Term apply(Term arg);
+  public JavaWrapper apply(JavaWrapper arg);
 
 }

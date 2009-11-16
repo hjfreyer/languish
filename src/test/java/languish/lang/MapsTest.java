@@ -1,8 +1,8 @@
 package languish.lang;
 
-import static languish.lambda.Lambda.*;
 import static languish.lang.CommonTest.*;
 import static languish.testing.TestUtil.*;
+import static languish.util.Lambda.*;
 import static languish.util.Util.convertJavaToPrimitive;
 
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import languish.primitives.DataFunctions;
 import languish.primitives.LInteger;
 import languish.primitives.LSymbol;
 import languish.testing.CommonExps;
-import languish.testing.LanguishTestList;
+import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
 
 import com.google.common.collect.ImmutableList;
@@ -51,7 +51,7 @@ public class MapsTest extends TestCase {
       "[APP [ABS [APP [REF 1] [REF 1]]] [ABS [ABS [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [DATA []]] [REF 3]]] [REF 1]] [APP [APP [PRIM [DATA BRANCH] [APP [APP [ABS [ABS [APP [APP [PRIM [DATA BRANCH] [PRIM [DATA AND] [CONS [IS_PRIMITIVE [REF 1]] [IS_PRIMITIVE [REF 2]]]]] [PRIM [DATA DATA_EQUALS] [CONS [REF 1] [REF 2]]]] [DATA FALSE]]]] [REF 2]] [APP [ABS [CAR [CAR [REF 1]]]] [REF 3]]]] [CAR [CDR [CAR [REF 3]]]]] [APP [APP [APP [APP [REF 4] [REF 4]] [CDR [REF 3]]] [REF 2]] [REF 1]]]]]]]]]";
 
   @SuppressWarnings("unchecked")
-  public enum Tests implements LanguishTestList {
+  public enum Tests implements LanguishTestCase {
     MP_CODE(MAP_PUT, //
         MAP_PUT_CODE, null, null, null),
 
@@ -87,7 +87,7 @@ public class MapsTest extends TestCase {
             + "[DATA \"DEFAULT\"]]", null, LSymbol.of("DEFAULT"), null),
 
     GET_FROM_SINGLETON_CORRECT(
-        app(app(app(MAP_GET, convertJavaToPrimitive(ImmutableList
+        app(app(app(MAP_GET, convertJavaObjectToTerm(ImmutableList
             .of(ImmutableList.of("FIVE", 5)))), primitive(LSymbol.of("FIVE"))),
             primitive(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP " + MAP_GET_CODE
@@ -96,7 +96,7 @@ public class MapsTest extends TestCase {
         LInteger.of(5), null),
 
     GET_FROM_SINGLETON_INCORRECT(app(app(app(MAP_GET,
-        convertJavaToPrimitive(ImmutableList.of(ImmutableList.of("FIVE", 5)))),
+        convertJavaObjectToTerm(ImmutableList.of(ImmutableList.of("FIVE", 5)))),
         primitive(LSymbol.of("BAD"))), primitive(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP " + MAP_GET_CODE
             + " [CONS [CONS [DATA \"FIVE\"] [CONS [DATA 5] [DATA []]]] "
@@ -104,7 +104,7 @@ public class MapsTest extends TestCase {
             .of("DEFAULT"), null),
 
     GET_FROM_DOUBLE_A(
-        app(app(app(MAP_GET, convertJavaToPrimitive(ImmutableList.of(
+        app(app(app(MAP_GET, convertJavaObjectToTerm(ImmutableList.of(
             ImmutableList.of("FIVE", 5), ImmutableList.of("FOUR", 4)))),
             primitive(LSymbol.of("FIVE"))), primitive(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP "
@@ -115,7 +115,7 @@ public class MapsTest extends TestCase {
         null),
 
     GET_FROM_DOUBLE_B(
-        app(app(app(MAP_GET, convertJavaToPrimitive(ImmutableList.of(
+        app(app(app(MAP_GET, convertJavaObjectToTerm(ImmutableList.of(
             ImmutableList.of("FIVE", 5), ImmutableList.of("FOUR", 4)))),
             primitive(LSymbol.of("FOUR"))), primitive(LSymbol.of("DEFAULT"))), //
         "[APP [APP [APP "
@@ -126,7 +126,7 @@ public class MapsTest extends TestCase {
         null),
 
     GET_FROM_OVERWRITE(
-        app(app(app(MAP_GET, convertJavaToPrimitive(ImmutableList.of(
+        app(app(app(MAP_GET, convertJavaObjectToTerm(ImmutableList.of(
             ImmutableList.of("FOUR", 3), ImmutableList.of("FIVE", 5),
             ImmutableList.of("FOUR", 4)))), primitive(LSymbol.of("FOUR"))),
             primitive(LSymbol.of("DEFAULT"))), //
@@ -194,7 +194,7 @@ public class MapsTest extends TestCase {
   }
 
   public void test() {
-    TestUtil.testExpressions(Arrays.asList(Tests.values()));
+    TestUtil.assertLanguishTestCase(Arrays.asList(Tests.values()));
   }
 
   private static Term eq(Term a, Term b) {

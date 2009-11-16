@@ -1,10 +1,10 @@
 package languish.interpreter;
 
 import languish.lambda.LObject;
-import languish.lambda.Lambda;
 import languish.parsing.LParsers;
 import languish.primitives.DataFunctions;
 import languish.primitives.LBoolean;
+import languish.util.Lambda;
 
 public enum Builtins {
   // General Ops
@@ -25,17 +25,17 @@ public enum Builtins {
   NOT(DataFunctions.NOT),
 
   // Expression Operations
-  ABS(Lambda.ABS),
-  APP(Lambda.APP),
-  DATA(Lambda.DATA),
-  CAR(Lambda.CAR),
-  CDR(Lambda.CDR),
+  ABS(languish.util.ABS),
+  APP(languish.util.APP),
+  DATA(languish.util.DATA),
+  CAR(languish.util.CAR),
+  CDR(languish.util.CDR),
 
   // GET(Lambda.GET),
-  PRIM(Lambda.PRIM),
-  REF(Lambda.REF),
-  CONS(Lambda.CONS),
-  IS_PRIMITIVE(Lambda.IS_PRIMITIVE),
+  PRIM(languish.util.PRIM),
+  REF(languish.util.REF),
+  CONS(languish.util.CONS),
+  IS_PRIMITIVE(languish.util.IS_PRIMITIVE),
 
   // DEBUG
   PRINT(DataFunctions.PRINT),

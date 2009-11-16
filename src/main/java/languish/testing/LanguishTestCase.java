@@ -1,11 +1,9 @@
 package languish.testing;
 
-import java.util.List;
-
-import languish.lambda.LObject;
 import languish.lambda.Term;
+import languish.util.JavaWrapper;
 
-public interface LanguishTestList {
+public interface LanguishTestCase {
 
   public String name();
 
@@ -15,7 +13,5 @@ public interface LanguishTestList {
 
   public Term getReducedOnce();
 
-  public LObject getReducedCompletely();
-
-  public List<?> getListContents();
+  public JavaWrapper getReducedCompletely();
 }

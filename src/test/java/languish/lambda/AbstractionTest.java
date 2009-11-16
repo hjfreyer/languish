@@ -1,11 +1,11 @@
-package languish.base;
+package languish.lambda;
 
 import static languish.testing.CommonExps.IDENTITY;
 import static languish.testing.TestUtil.*;
 import junit.framework.TestCase;
-import languish.lambda.Lambda;
 import languish.lambda.Term;
 import languish.testing.TestUtil;
+import languish.util.Lambda;
 
 public class AbstractionTest extends TestCase {
 

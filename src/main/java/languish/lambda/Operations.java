@@ -1,6 +1,8 @@
 package languish.lambda;
 
 import languish.error.AlreadyReducedError;
+import languish.util.JavaWrapper;
+import languish.util.Lambda;
 
 public class Operations {
 
@@ -30,6 +32,8 @@ public class Operations {
         return new Term(ABS, func.reduce(), arg);
       }
 
+      assert !hasReferencesGreaterThan(arg, 0);
+
       return func.replaceAllReferencesToParam(1, arg);
     }
 
@@ -54,13 +58,7 @@ public class Operations {
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       int ref_id = (Integer) term.getFirst();
 
-      if (ref_id == id) {
-        return with;
-      } else if (ref_id > id) {
-        return new Term(REF, ref_id - 1, Term.NULL);
-      } else {
-        return term;
-      }
+      return (ref_id == id) ? with : term;
     }
   };
 
@@ -78,73 +76,6 @@ public class Operations {
     }
   };
 
-  public static final Operation CONS = new Operation() {
-
-    public Term reduce(Term cons) {
-      Term car = (Term) cons.getFirst();
-      Term cdr = (Term) cons.getSecond();
-
-      if (!car.isReduced()) {
-        return new Term(CONS, car.reduce(), cdr);
-      } else if (!cdr.isReduced()) {
-        return new Term(CONS, car, cdr.reduce());
-      } else {
-        throw new AlreadyReducedError(cons);
-      }
-    }
-
-    public boolean isReduced(Term cons) {
-      Term car = (Term) cons.getFirst();
-      Term cdr = (Term) cons.getSecond();
-
-      return car.isReduced() && cdr.isReduced();
-    }
-
-    public Term replaceAllReferencesToParam(Term term, int id, Term with) {
-      return propagateReplaceReference(term, id, with);
-    }
-  };
-
-  public static final Operation CAR = new Operation() {
-    public Term reduce(Term car) {
-      Term arg = (Term) car.getFirst();
-
-      if (arg.getOperation() != CONS) {
-        return new Term(CAR, arg.reduce(), Term.NULL);
-      }
-
-      return (Term) arg.getSecond();
-    }
-
-    public boolean isReduced(Term term) {
-      return false;
-    }
-
-    public Term replaceAllReferencesToParam(Term term, int id, Term with) {
-      return propagateReplaceReference(term, id, with);
-    }
-  };
-
-  public static final Operation CDR = new Operation() {
-    public Term reduce(Term cdr) {
-      Term arg = (Term) cdr.getFirst();
-
-      if (arg.getOperation() != CONS) {
-        return new Term(CDR, arg.reduce(), Term.NULL);
-      }
-
-      return (Term) arg.getSecond();
-    }
-
-    public boolean isReduced(Term term) {
-      return false;
-    }
-
-    public Term replaceAllReferencesToParam(Term term, int id, Term with) {
-      return propagateReplaceReference(term, id, with);
-    }
-  };
-
   public static final Operation NATIVE_APPLY = new Operation() {
 
     public Term reduce(Term prim) {
@@ -153,12 +84,15 @@ public class Operations {
 
       if (func.getOperation() != PRIMITIVE) {
         return new Term(NATIVE_APPLY, func.reduce(), arg);
-      } else if (!arg.isReduced()) {
+      }
+
+      if (!arg.isReduced()) {
         return new Term(NATIVE_APPLY, func, arg.reduce());
       }
 
       NativeFunction primFunc = (NativeFunction) func.getFirst();
-      return primFunc.apply(arg);
+      JavaWrapper argObject = Lambda.convertTermToJavaObject(arg);
+      return Lambda.convertJavaObjectToTerm(primFunc.apply(argObject));
     }
 
     public boolean isReduced(Term term) {
@@ -171,7 +105,6 @@ public class Operations {
   };
 
   public static final Operation NOOP = new Operation() {
-
     public Term reduce(Term term) {
       throw new AlreadyReducedError(term);
     }
@@ -183,22 +116,49 @@ public class Operations {
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       return term;
     }
-
   };
 
-  public static final Operation BRANCH = new Operation() {
-
+  public static final Operation EQUALS = new Operation() {
     public Term reduce(Term term) {
-      Term condition = (Term) term.getFirst();
+      Term t1 = (Term) term.getFirst();
+      Term t2 = (Term) term.getSecond();
 
-      if (!condition.isReduced()) {
-        return new Term(BRANCH, condition.reduce(), Term.NULL);
+      if (!t1.isReduced()) {
+        return new Term(EQUALS, t1.reduce(), t2);
       }
 
-      final Term THEN = Lambda.abs(Lambda.abs(Lambda.ref(2)));
-      final Term ELSE = Lambda.abs(Lambda.abs(Lambda.ref(1)));
+      if (!t2.isReduced()) {
+        return new Term(EQUALS, t1, t2.reduce());
+      }
 
-      return (condition.getOperation() != NOOP) ? THEN : ELSE;
+      if (t1.getOperation() != t2.getOperation()) {
+        return Lambda.FALSE;
+      }
+
+      if (t1.getOperation() == NOOP) {
+        return Lambda.TRUE;
+      }
+
+      if (t1.getOperation() == PRIMITIVE) {
+        return t1.getFirst().equals(t2.getFirst()) ? Lambda.TRUE : Lambda.FALSE;
+      }
+
+      if (t1.getOperation() == REF) {
+        int r1 = (Integer) t1.getFirst();
+        int r2 = (Integer) t2.getFirst();
+
+        return r1 == r2 ? Lambda.TRUE : Lambda.FALSE;
+      }
+
+      if (t1.getOperation() == ABS) {
+        Term cond1 = new Term(EQUALS, Lambda.car(t1), Lambda.car(t2));
+        Term cond2 = new Term(EQUALS, Lambda.cdr(t1), Lambda.cdr(t2));
+
+        return Lambda.branch(cond1, Lambda.branch(cond2, Lambda.TRUE,
+            Lambda.FALSE), Lambda.FALSE);
+      }
+
+      throw new AssertionError("Invalid operation");
     }
 
     public boolean isReduced(Term term) {
@@ -208,7 +168,6 @@ public class Operations {
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       return propagateReplaceReference(term, id, with);
     }
-
   };
 
   public static Term propagateReplaceReference(Term term, int id, Term with) {
@@ -217,6 +176,29 @@ public class Operations {
 
     return new Term(term.getOperation(), firstTerm.replaceAllReferencesToParam(
         id, with), secondTerm.replaceAllReferencesToParam(id, with));
+  }
+
+  public static boolean hasReferencesGreaterThan(Term term, int max) {
+    Operation op = term.getOperation();
+
+    if (op == REF) {
+      return ((Integer) term.getFirst()) > max;
+    }
+
+    if (op == NOOP || op == PRIMITIVE) {
+      return false;
+    }
+
+    if (op == ABS) {
+      return hasReferencesGreaterThan((Term) term.getFirst(), max + 1);
+    }
+
+    if (op == APP || op == EQUALS || op == NATIVE_APPLY) {
+      return hasReferencesGreaterThan((Term) term.getFirst(), max)
+          || hasReferencesGreaterThan((Term) term.getSecond(), max);
+    }
+
+    throw new AssertionError("Invalid operation");
   }
 
   private Operations() {

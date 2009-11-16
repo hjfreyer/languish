@@ -1,18 +1,14 @@
 package languish.testing;
 
-import java.util.List;
-
 import junit.framework.TestCase;
-import languish.interpreter.BuiltinParser;
-import languish.lambda.LObject;
-import languish.lambda.Lambda;
-import languish.lambda.Operation;
+import languish.interpreter.TermParser;
 import languish.lambda.Term;
 import languish.primitives.LInteger;
+import languish.util.JavaWrapper;
+import languish.util.Lambda;
+import languish.util.TermPrinter;
 
 public class TestUtil {
-  // public static final LUnit UNIT = LUnit.UNIT;
-  // public static final Tuple NULL = Lambda.data(Tuple.of());
 
   public static final LInteger ZERO = LInteger.of(0);
   public static final LInteger ONE = LInteger.of(1);
@@ -33,81 +29,38 @@ public class TestUtil {
 
   public static final Term IDENT = Lambda.abs(Lambda.ref(1));
 
-  public static Term reduceTupleOnce(LObject tuple) {
-    Term t = (Term) tuple.deepClone();
-    Operation op = (Operation) t.getFirst();
+  public static void assertLanguishTestCase(LanguishTestCase testCase) {
 
-    Term result = op.reduceOnce(t);
+    String name = testCase.name();
+    Term exp = testCase.getExpression();
+    String code = testCase.getCode();
+    Term reducedOnce = testCase.getReducedOnce();
+    JavaWrapper reducedCompletely = testCase.getReducedCompletely();
 
-    return result;
-  }
+    if (code != null) {
+      // TOSTRING
+      TestCase.assertEquals("on test " + name
+          + " - getCodeForExpression() does not match code:", code, TermPrinter
+          .getCodeForTerm(exp));
 
-  public static void assertList(String msg, List<?> contents, Term exp) {
+      // PARSE
+      Term parsed = TermParser.TERM.parse(code);
 
-    for (Object obj : contents) {
-      Term car = Lambda.car(exp);
-      exp = Lambda.cdr(exp);
-
-      if (obj instanceof List<?>) {
-        assertList(msg, (List<?>) obj, car);
-      } else if (obj instanceof LObject) {
-        TestCase.assertEquals(msg, obj, Lambda.reduceToDataValue(car));
-      }
+      TestCase.assertEquals("on test " + name
+          + " - code does not parse to given expression:", exp, parsed);
+    }
+    // REDUCE ONCE
+    if (reducedOnce != null) {
+      TestCase.assertEquals("on test " + name
+          + " - expression does not reduce once to given value:", reducedOnce,
+          exp.reduce());
     }
 
-    TestCase.assertEquals(msg, Term.of(), Lambda.reduceToDataValue(exp));
-  }
-
-  public static void testExpressions(
-      List<? extends LanguishTestList> expressions) {
-
-    for (LanguishTestList expToTest : expressions) {
-      Term exp = expToTest.getExpression();
-      String code = expToTest.getCode();
-      Term reducedOnce = expToTest.getReducedOnce();
-      LObject reducedCompletely = expToTest.getReducedCompletely();
-      List<?> listContents = expToTest.getListContents();
-
-      if (code != null) {
-        // TOSTRING
-        TestCase.assertEquals("on test " + expToTest.name()
-            + " - getCodeForExpression() does not match code:", code, Canonizer
-            .getCodeForExpression(exp));
-
-        // PARSE
-        LObject parsed = BuiltinParser.SINGLE_TUPLE.parse(code);
-
-        TestCase.assertEquals("on test " + expToTest.name()
-            + " - code does not parse to given expression:", exp, parsed);
-      }
-      // REDUCE ONCE
-      if (reducedOnce != null) {
-        TestCase.assertEquals("on test " + expToTest.name()
-            + " - expression does not reduce once to given value:",
-            reducedOnce, reduceTupleOnce(exp.deepClone()));
-      }
-
-      // REDUCE COMPLETELY
-      if (reducedCompletely != null) {
-        TestCase.assertEquals("on test " + expToTest.name()
-            + " - expression does not ultimately reduce to given value:",
-            reducedCompletely, Lambda.reduceToDataValue(exp));
-      }
-
-      // LIST CONTENTS
-      if (listContents != null) {
-        assertList("on test " + expToTest.name()
-            + " - expression does not correspond to given list:", listContents,
-            exp);
-      }
+    // REDUCE COMPLETELY
+    if (reducedCompletely != null) {
+      TestCase.assertEquals("on test " + name
+          + " - expression does not ultimately reduce to given value:",
+          reducedCompletely, Lambda.convertTermToJavaObject(exp));
     }
-  }
-
-  public static void assertReducesToData(LObject expected, Term actual) {
-    assertReducesTo(Lambda.primitive(expected), actual);
-  }
-
-  public static void assertReducesTo(Term expected, Term actual) {
-    TestCase.assertEquals(expected, Lambda.reduce(actual));
   }
 }
