@@ -6,6 +6,26 @@ import languish.util.Lambda;
 
 public class Operations {
 
+  public static Operation fromName(String name) {
+    if (name.equals("ABS")) {
+      return ABS;
+    } else if (name.equals("APP")) {
+      return APP;
+    } else if (name.equals("EQUALS")) {
+      return EQUALS;
+    } else if (name.equals("NATIVE_APPLY")) {
+      return NATIVE_APPLY;
+    } else if (name.equals("NOOP")) {
+      return NOOP;
+    } else if (name.equals("PRIMITIVE")) {
+      return PRIMITIVE;
+    } else if (name.equals("REF")) {
+      return REF;
+    } else {
+      throw new IllegalArgumentException("No operation called " + name);
+    }
+  }
+
   public static final Operation ABS = new Operation() {
 
     public Term reduce(Term term) {
@@ -19,7 +39,12 @@ public class Operations {
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       Term subterm = (Term) term.getFirst();
 
-      return subterm.replaceAllReferencesToParam(id + 1, with);
+      return Lambda.abs(subterm.replaceAllReferencesToParam(id + 1, with));
+    }
+
+    @Override
+    public String toString() {
+      return "ABS";
     }
   };
 
@@ -29,12 +54,14 @@ public class Operations {
       Term arg = (Term) term.getSecond();
 
       if (func.getOperation() != ABS) {
-        return new Term(ABS, func.reduce(), arg);
+        return new Term(APP, func.reduce(), arg);
       }
 
       assert !hasReferencesGreaterThan(arg, 0);
 
-      return func.replaceAllReferencesToParam(1, arg);
+      Term absExp = (Term) func.getFirst();
+
+      return absExp.replaceAllReferencesToParam(1, arg);
     }
 
     public boolean isReduced(Term term) {
@@ -43,6 +70,11 @@ public class Operations {
 
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       return propagateReplaceReference(term, id, with);
+    }
+
+    @Override
+    public String toString() {
+      return "APP";
     }
   };
 
@@ -60,6 +92,11 @@ public class Operations {
 
       return (ref_id == id) ? with : term;
     }
+
+    @Override
+    public String toString() {
+      return "REF";
+    }
   };
 
   public static final Operation PRIMITIVE = new Operation() {
@@ -73,6 +110,11 @@ public class Operations {
 
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       return term;
+    }
+
+    @Override
+    public String toString() {
+      return "PRIMITIVE";
     }
   };
 
@@ -102,6 +144,11 @@ public class Operations {
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       return propagateReplaceReference(term, id, with);
     }
+
+    @Override
+    public String toString() {
+      return "NATIVE_APPLY";
+    }
   };
 
   public static final Operation NOOP = new Operation() {
@@ -115,6 +162,11 @@ public class Operations {
 
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       return term;
+    }
+
+    @Override
+    public String toString() {
+      return "NOOP";
     }
   };
 
@@ -167,6 +219,11 @@ public class Operations {
 
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       return propagateReplaceReference(term, id, with);
+    }
+
+    @Override
+    public String toString() {
+      return "EQUALS";
     }
   };
 

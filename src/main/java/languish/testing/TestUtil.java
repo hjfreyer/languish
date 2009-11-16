@@ -28,6 +28,9 @@ public class TestUtil {
   public static final LInteger FIFTEEN = LInteger.of(15);
 
   public static final Term IDENT = Lambda.abs(Lambda.ref(1));
+  public static final Term OMEGA =
+      Lambda.abs(Lambda.app(Lambda.ref(1), Lambda.ref(1)));
+  public static final Term LOOP = Lambda.app(OMEGA, OMEGA);
 
   public static void assertLanguishTestCase(LanguishTestCase testCase) {
 

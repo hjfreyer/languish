@@ -1,51 +1,64 @@
 package languish.lambda;
 
-import static languish.lang.CommonTest.NULL;
-import static languish.testing.TestUtil.FIVE;
-import static languish.testing.TestUtil.FOUR;
+import static languish.lambda.Term.NULL;
+import static languish.testing.TestUtil.*;
 import static languish.util.Lambda.*;
-
-import java.util.Arrays;
-import java.util.List;
-
 import junit.framework.TestCase;
-import languish.lambda.LObject;
-import languish.lambda.Term;
 import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
+import languish.util.JavaWrapper;
 
 import com.google.common.collect.ImmutableList;
 
 public class ConsTest extends TestCase {
   public enum Tests implements LanguishTestCase {
-    GET_NULL(NULL, //
-        "[DATA []]", null, ImmutableList.of()),
+    GET_NULL( //
+        NULL,
+        "NULL",
+        null,
+        JavaWrapper.of(ImmutableList.of())),
 
-    GET_SINGLETON(cons(primitive(FIVE), NULL), //
-        "[CONS [DATA 5] [DATA []]]", null, ImmutableList.of(FIVE)),
+    CREATE_SINGLETON( //
+        cons(primitive(FIVE), NULL),
+        "[ABS [APP [APP [REF 1 NULL] [PRIMITIVE 5 NULL]] NULL] NULL]",
+        null,
+        JavaWrapper.of(ImmutableList.of(5))),
 
-    GET_PAIR_WITH_SINGLE_REF(app(abs(cons(ref(1), cons(ref(1), NULL))),
-        primitive(FOUR)), //
-        "[APP [ABS [CONS [REF 1] [CONS [REF 1] [DATA []]]]] [DATA 4]]", cons(
-            primitive(FOUR), cons(primitive(FOUR), NULL)), ImmutableList.of(FOUR, FOUR)),
+    CAR_SINGLETON( //
+        car(cons(primitive(FIVE), NULL)),
+        "[APP [ABS [APP [APP [REF 1 NULL] [PRIMITIVE 5 NULL]] NULL] NULL] "
+            + "[ABS [ABS [REF 2 NULL] NULL] NULL]]",
+        app(app(abs(abs(ref(2))), primitive(FIVE)), Term.NULL),
+        JavaWrapper.of(5)),
 
-    GET_PAIR_WITH_DOUBLE_REF(app(app(
-        abs(abs(cons(ref(1), cons(ref(2), NULL)))), primitive(FOUR)), primitive(FIVE)), //
-        "[APP [APP [ABS [ABS [CONS [REF 1] [CONS [REF 2] [DATA []]]]]] "
-            + "[DATA 4]] [DATA 5]]", app(abs(cons(ref(1),
-            cons(primitive(FOUR), NULL))), primitive(FIVE)), ImmutableList.of(FIVE, FOUR)), ;
+    GET_PAIR_WITH_SINGLE_REF( //
+        app(abs(cons(ref(2), cons(ref(3), NULL))), primitive(FOUR)),
+        "[APP [ABS [ABS [APP [APP [REF 1 NULL] "
+            + "[REF 2 NULL]] [ABS [APP [APP [REF 1 NULL] "
+            + "[REF 3 NULL]] NULL] NULL]] NULL] NULL] [PRIMITIVE 4 NULL]]",
+        cons(primitive(FOUR), cons(primitive(FOUR), NULL)),
+        JavaWrapper.of(ImmutableList.of(4, 4))),
+
+    GET_PAIR_WITH_DOUBLE_REF( //
+        app(app(abs(abs(cons(ref(2), cons(ref(4), NULL)))), primitive(FOUR)),
+            primitive(FIVE)),
+        "[APP [APP [ABS [ABS [ABS [APP [APP [REF 1 NULL] [REF 2 NULL]] "
+            + "[ABS [APP [APP [REF 1 NULL] [REF 4 NULL]] NULL] NULL]] "
+            + "NULL] NULL] NULL] [PRIMITIVE 4 NULL]] [PRIMITIVE 5 NULL]]",
+        app(abs(cons(ref(2), cons(primitive(FOUR), NULL))), primitive(FIVE)),
+        JavaWrapper.of(ImmutableList.of(5, 4))), ;
 
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final List<?> listContents;
+    private final JavaWrapper reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        List<?> listContents) {
+        JavaWrapper reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
-      this.listContents = listContents;
+      this.reducedCompletely = reducedCompletely;
     }
 
     public Term getExpression() {
@@ -60,16 +73,14 @@ public class ConsTest extends TestCase {
       return reducedOnce;
     }
 
-    public List<?> getListContents() {
-      return listContents;
-    }
-
-    public LObject getReducedCompletely() {
-      return null;
+    public JavaWrapper getReducedCompletely() {
+      return reducedCompletely;
     }
   }
 
   public void test() {
-    TestUtil.assertLanguishTestCase(Arrays.asList(Tests.values()));
+    for (LanguishTestCase test : Tests.values()) {
+      TestUtil.assertLanguishTestCase(test);
+    }
   }
 }

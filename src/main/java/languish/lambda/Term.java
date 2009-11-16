@@ -1,5 +1,7 @@
 package languish.lambda;
 
+import languish.util.TermPrinter;
+
 public final class Term {
 
   public static final Term NULL = new Term(Operations.NOOP, null, null);
@@ -82,4 +84,10 @@ public final class Term {
       return false;
     return true;
   }
+
+  @Override
+  public String toString() {
+    return TermPrinter.getCodeForTerm(this);
+  }
+
 }

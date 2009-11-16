@@ -2,7 +2,7 @@ package languish.interpreter;
 
 import java.util.List;
 
-import languish.lambda.Operation;
+import languish.lambda.Operations;
 import languish.lambda.Primitive;
 import languish.lambda.Term;
 import languish.primitives.LInteger;
@@ -39,10 +39,17 @@ public class TermParser {
   public static final Parser<Token> STD_OPERATION =
       OPERATORS.token("ABS", "APP", "EQUALS", "NATIVE_APPLY", "REF");
 
+  public static final Parser<Integer> INTEGER =
+      Terminals.IntegerLiteral.PARSER.map(new Map<String, Integer>() {
+        public Integer map(String s) {
+          return Integer.parseInt(s);
+        }
+      });
+
   public static final Parser<LInteger> LINTEGER =
-      Terminals.IntegerLiteral.PARSER.map(new Map<String, LInteger>() {
-        public LInteger map(String s) {
-          return LInteger.of(Integer.parseInt(s));
+      INTEGER.map(new Map<Integer, LInteger>() {
+        public LInteger map(Integer i) {
+          return LInteger.of(i);
         }
       });
 
@@ -56,16 +63,32 @@ public class TermParser {
   public static final Parser<? extends Primitive> PRIMITIVE =
       Parsers.or(LINTEGER, LSYMBOL);
 
-  public static final Parser<Term> PRIMITIVE_TERM =
-      PRIMITIVE.between(OPERATORS.token("PRIMITIVE"), OPERATORS.token("NULL"))
-          .between(OPERATORS.token("["), OPERATORS.token("]")).map(
-              new Map<Primitive, Term>() {
-                public Term map(Primitive from) {
-                  return Lambda.primitive(from);
-                }
-              });
-
   public static final Parser.Reference<Term> TERM_REF = Parser.newReference();
+
+  public static final Parser<Term> NULL_TERM =
+      OPERATORS.token("NULL").map(new Map<Token, Term>() {
+        public Term map(Token from) {
+          return Term.NULL;
+        }
+      });
+
+  public static final Parser<Term> PRIMITIVE_TERM =
+      PRIMITIVE.between(OPERATORS.token("PRIMITIVE"), TERM_REF.lazy()).between(
+          OPERATORS.token("["), OPERATORS.token("]")).map(
+          new Map<Primitive, Term>() {
+            public Term map(Primitive from) {
+              return Lambda.primitive(from);
+            }
+          });
+
+  public static final Parser<Term> REFERENCE_TERM =
+      INTEGER.between(OPERATORS.token("REF"), TERM_REF.lazy()).between(
+          OPERATORS.token("["), OPERATORS.token("]")).map(
+          new Map<Integer, Term>() {
+            public Term map(Integer from) {
+              return Lambda.ref(from);
+            }
+          });
 
   public static final Parser<Term> TERM_PROPER =
       Parsers.list(
@@ -73,15 +96,17 @@ public class TermParser {
               .lazy())).between(OPERATORS.token("["), OPERATORS.token("]"))
           .map(new Map<List<?>, Term>() {
             public Term map(List<?> from) {
-              Operation op = (Operation) from.get(0);
+              Token opName = (Token) from.get(0);
               Term first = (Term) from.get(1);
               Term second = (Term) from.get(2);
 
-              return new Term(op, first, second);
+              return new Term(Operations.fromName(opName.toString()), first,
+                  second);
             }
           });
 
-  public static final Parser<Term> TERM_TOKEN = TERM_PROPER.or(PRIMITIVE_TERM);
+  public static final Parser<Term> TERM_TOKEN =
+      Parsers.or(TERM_PROPER, PRIMITIVE_TERM, REFERENCE_TERM, NULL_TERM);
 
   public static final Parser<Term> TERM = TERM_TOKEN.from(LEXER);
 

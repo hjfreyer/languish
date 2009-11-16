@@ -44,6 +44,8 @@ public class TermPrinter {
 
     if (op == Operations.PRIMITIVE) {
       out.append(getCodeForPrimitive((Primitive) first));
+    } else if (op == Operations.REF) {
+      out.append(first);
     } else {
       out.append(getCodeForTerm((Term) first));
     }

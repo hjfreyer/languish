@@ -2,11 +2,29 @@ package languish.util;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 public class JavaWrapper {
   private final Object object;
 
   public static JavaWrapper of(Object obj) {
-    return new JavaWrapper(obj);
+    if (obj instanceof JavaWrapper) {
+      return (JavaWrapper) obj;
+    }
+
+    if (!(obj instanceof List<?>)) {
+      return new JavaWrapper(obj);
+    }
+
+    List<?> input = (List<?>) obj;
+    List<JavaWrapper> result = Lists.newLinkedList();
+
+    for (Object element : input) {
+      result.add(JavaWrapper.of(element));
+    }
+
+    return new JavaWrapper(ImmutableList.copyOf(result));
   }
 
   @SuppressWarnings("unchecked")

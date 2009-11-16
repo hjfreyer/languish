@@ -2,20 +2,23 @@ package languish.lambda;
 
 import static languish.testing.TestUtil.FIVE;
 import static languish.util.Lambda.primitive;
-
-import java.util.List;
-
 import junit.framework.TestCase;
+import languish.primitives.LSymbol;
 import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
 import languish.util.JavaWrapper;
 
-public class ExpressionTest extends TestCase {
+public class PrimitiveTest extends TestCase {
   public enum Tests implements LanguishTestCase {
-    LITERAL_INT(primitive(FIVE), //
+    PRIMITIVE_INT(primitive(FIVE), //
         "[PRIMITIVE 5 NULL]",
         null,
         JavaWrapper.of(5)),
+
+    PRIMITIVE_STRING(primitive(LSymbol.of("FOO")), //
+        "[PRIMITIVE \"FOO\" NULL]",
+        null,
+        JavaWrapper.of("FOO")),
 
     ;
 
@@ -46,10 +49,6 @@ public class ExpressionTest extends TestCase {
 
     public JavaWrapper getReducedCompletely() {
       return reducedCompletely;
-    }
-
-    public List<?> getListContents() {
-      return null;
     }
   }
 

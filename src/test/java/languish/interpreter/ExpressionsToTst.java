@@ -1,41 +1,40 @@
 package languish.interpreter;
 
-import languish.lambda.LObject;
-import languish.lambda.Term;
 
 public enum ExpressionsToTst {
-//
-//  SINGLE_ADD(Lambda.app(Lambda.app(LIntegers.ADD, data(FIVE)), data(FOUR)), //
-//      "(APP (APP (~ADD~) (!5!)) (!4!))",
-//      false,
-//      null,
-//      true,
-//      NINE),
-//
-//  DOUBLE_ADD(prim(ADD, pair(prim(ADD, pair(data(FIVE), data(FOUR))),
-//      data(THREE)), //
-//      "(APP (APP (~ADD~) (APP (APP (~ADD~) (!5!)) (!4!))) (!3!))",
-//      false,
-//      null,
-//      true,
-//      TWELVE),
-//
-//  /** BOOLEAN TESTS **/
-//  SIMPLE_BRANCH(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
-//      data(LBoolean.TRUE)), data(FOUR)), data(FIVE)), //
-//      "(APP (APP (APP (~BRANCH~) (!TRUE!)) (!4!)) (!5!))",
-//      true,
-//      Lambda.app(Lambda.app(LBooleans.BRANCH_THEN, data(FOUR)), data(FIVE)),
-//      true,
-//      FOUR),
-//
-//  SIMPLE_BRANCH_FALSE(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
-//      data(LBoolean.FALSE)), data(FOUR)), data(FIVE)), //
-//      "(APP (APP (APP (~BRANCH~) (!FALSE!)) (!4!)) (!5!))",
-//      true,
-//      Lambda.app(Lambda.app(LBooleans.BRANCH_ELSE, data(FOUR)), data(FIVE)),
-//      true,
-//      FIVE),
+  //
+  // SINGLE_ADD(Lambda.app(Lambda.app(LIntegers.ADD, data(FIVE)), data(FOUR)),
+  // //
+  // "(APP (APP (~ADD~) (!5!)) (!4!))",
+  // false,
+  // null,
+  // true,
+  // NINE),
+  //
+  // DOUBLE_ADD(prim(ADD, pair(prim(ADD, pair(data(FIVE), data(FOUR))),
+  // data(THREE)), //
+  // "(APP (APP (~ADD~) (APP (APP (~ADD~) (!5!)) (!4!))) (!3!))",
+  // false,
+  // null,
+  // true,
+  // TWELVE),
+  //
+  // /** BOOLEAN TESTS **/
+  // SIMPLE_BRANCH(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
+  // data(LBoolean.TRUE)), data(FOUR)), data(FIVE)), //
+  // "(APP (APP (APP (~BRANCH~) (!TRUE!)) (!4!)) (!5!))",
+  // true,
+  // Lambda.app(Lambda.app(LBooleans.BRANCH_THEN, data(FOUR)), data(FIVE)),
+  // true,
+  // FOUR),
+  //
+  // SIMPLE_BRANCH_FALSE(Lambda.app(Lambda.app(Lambda.app(LBooleans.BRANCH,
+  // data(LBoolean.FALSE)), data(FOUR)), data(FIVE)), //
+  // "(APP (APP (APP (~BRANCH~) (!FALSE!)) (!4!)) (!5!))",
+  // true,
+  // Lambda.app(Lambda.app(LBooleans.BRANCH_ELSE, data(FOUR)), data(FIVE)),
+  // true,
+  // FIVE),
 
   // public void testApplicationOnBranch() {
   // Expression[] cases = new Expression[] { Application.of(IDENT, FOUR), FIVE
@@ -113,20 +112,4 @@ public enum ExpressionsToTst {
   //      
   ;
 
-  public Term expForm;
-  public String codeForm;
-  public boolean reduceOnce;
-  public Term reducedOnce;
-  public boolean reduceCompletely;
-  public LObject reducedCompletely;
-
-  private ExpressionsToTst(Term expForm, String codeForm, boolean reduceOnce,
-      Term reducedOnce, boolean reduceCompletely, LObject reducedCompletely) {
-    this.expForm = expForm;
-    this.codeForm = codeForm;
-    this.reduceOnce = reduceOnce;
-    this.reducedOnce = reducedOnce;
-    this.reduceCompletely = reduceCompletely;
-    this.reducedCompletely = reducedCompletely;
-  }
 }

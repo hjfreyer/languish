@@ -114,6 +114,8 @@ public class Lambda {
       return JavaWrapper.of(ImmutableList.copyOf(result));
     }
 
-    throw new AssertionError();
+    throw new IllegalArgumentException("term is not in a convertible state: "
+        + term);
   }
+
 }
