@@ -46,7 +46,33 @@ public class ConsTest extends TestCase {
             + "[ABS [APP [APP [REF 1 NULL] [REF 4 NULL]] NULL] NULL]] "
             + "NULL] NULL] NULL] [PRIMITIVE 4 NULL]] [PRIMITIVE 5 NULL]]",
         app(abs(cons(ref(2), cons(primitive(FOUR), NULL))), primitive(FIVE)),
-        JavaWrapper.of(ImmutableList.of(5, 4))), ;
+        JavaWrapper.of(ImmutableList.of(5, 4))),
+
+    GET_NESTED_LIST( //
+        cons(cons(primitive(FIVE), NULL), cons(primitive(FOUR), NULL)),
+        "[ABS [APP [APP [REF 1 NULL] [ABS [APP [APP [REF 1 NULL] "
+            + "[PRIMITIVE 5 NULL]] NULL] NULL]] [ABS [APP [APP [REF 1 NULL] "
+            + "[PRIMITIVE 4 NULL]] NULL] NULL]] NULL]",
+        null,
+        JavaWrapper.of(ImmutableList.of(ImmutableList.of(5), 4))),
+
+    GET_LIST_WITH_UNREDUCED_CAR( //
+        cons(app(IDENT, primitive(FIVE)), cons(primitive(FOUR), NULL)),
+        "[ABS [APP [APP [REF 1 NULL] [APP [ABS [REF 1 NULL] NULL] "
+            + "[PRIMITIVE 5 NULL]]] [ABS [APP [APP [REF 1 NULL] "
+            + "[PRIMITIVE 4 NULL]] NULL] NULL]] NULL]",
+        null,
+        JavaWrapper.of(ImmutableList.of(5, 4))),
+
+    GET_LIST_WITH_UNREDUCED_CDR( //
+        cons(primitive(FIVE), app(IDENT, cons(primitive(FOUR), NULL))),
+        "[ABS [APP [APP [REF 1 NULL] [PRIMITIVE 5 NULL]] "
+            + "[APP [ABS [REF 1 NULL] NULL] [ABS [APP [APP [REF 1 NULL] "
+            + "[PRIMITIVE 4 NULL]] NULL] NULL]]] NULL]",
+        null,
+        JavaWrapper.of(ImmutableList.of(5, 4))),
+
+    ;
 
     private final Term expression;
     private final String code;
