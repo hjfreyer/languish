@@ -1,10 +1,12 @@
-package languish.interpreter;
+package languish.interpreter.dep;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
+import languish.interpreter.DependencyManager;
+import languish.interpreter.Interpreter;
 import languish.lambda.Term;
 
 public class FileSystemDependencyManager implements DependencyManager {

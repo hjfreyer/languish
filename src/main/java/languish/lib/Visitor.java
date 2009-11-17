@@ -3,7 +3,7 @@ package languish.lib;
 import java.io.FileNotFoundException;
 
 import languish.interpreter.DependencyManager;
-import languish.interpreter.FileSystemDependencyManager;
+import languish.interpreter.dep.FileSystemDependencyManager;
 import languish.lambda.Term;
 import languish.util.Lambda;
 

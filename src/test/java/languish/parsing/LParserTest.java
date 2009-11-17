@@ -8,7 +8,7 @@ import languish.api.parser.GrammarRule;
 import languish.api.parser.LParser;
 import languish.api.parser.ParserTree;
 import languish.interpreter.DependencyManager;
-import languish.interpreter.FileSystemDependencyManager;
+import languish.interpreter.dep.FileSystemDependencyManager;
 
 import org.codehaus.jparsec.Parser;
 
