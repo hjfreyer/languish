@@ -20,7 +20,7 @@ public class FileSystemDependencyManager implements DependencyManager {
     this.paths = paths;
   }
 
-  public Term getResource(String resourceName) throws FileNotFoundException {
+  public Term getResource(String resourceName) {
 
     for (String path : paths) {
       String docPath = path + '/' + resourceName + ".lish";

@@ -1,9 +1,9 @@
 package languish.interpreter;
 
-import java.io.FileNotFoundException;
-
+import languish.error.DependencyUnavailableError;
 import languish.lambda.Term;
 
 public interface DependencyManager {
-  public Term getResource(String resourceName) throws FileNotFoundException;
+  public Term getResource(String resourceName)
+      throws DependencyUnavailableError;
 }

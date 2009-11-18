@@ -1,11 +1,11 @@
 package languish.interpreter;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import languish.error.DependencyUnavailableError;
 import languish.lambda.Term;
 import languish.primitives.LSymbol;
 import languish.util.JavaWrapper;
@@ -22,7 +22,7 @@ public class Interpreter {
   }
 
   public static Term interpretStatement(String input, DependencyManager depman)
-      throws FileNotFoundException {
+      throws DependencyUnavailableError {
     Pair<String, String> parserAndProgram = getParserAndProgram(input);
     String parserName = parserAndProgram.getFirst();
     String programBody = parserAndProgram.getSecond();
@@ -41,7 +41,7 @@ public class Interpreter {
   }
 
   public static Term evaluateToValue(Term tuple, DependencyManager depman)
-      throws FileNotFoundException {
+      throws DependencyUnavailableError {
     String returnType =
         Lambda.convertTermToJavaObject(Lambda.car(tuple)).asString();
 
