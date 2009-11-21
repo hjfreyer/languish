@@ -1,10 +1,10 @@
 package languish.interpreter.dep;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
+import languish.error.DependencyUnavailableError;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.Interpreter;
 import languish.lambda.Term;
@@ -40,6 +40,6 @@ public class FileSystemDependencyManager implements DependencyManager {
       return Interpreter.interpretStatement(doc.toString(), this);
     }
 
-    throw new FileNotFoundException(resourceName);
+    throw new DependencyUnavailableError(resourceName);
   }
 }

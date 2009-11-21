@@ -1,7 +1,6 @@
 package languish.lib;
 
-import java.io.FileNotFoundException;
-
+import languish.error.DependencyUnavailableError;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.dep.FileSystemDependencyManager;
 import languish.lambda.Term;
@@ -17,7 +16,7 @@ public class Integers {
   static {
     try {
       LIB = DEPMAN.getResource("lang/integers");
-    } catch (FileNotFoundException e) {
+    } catch (DependencyUnavailableError e) {
       throw new LanguishLoadError(e);
     }
   }
