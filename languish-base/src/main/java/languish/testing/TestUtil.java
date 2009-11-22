@@ -1,9 +1,9 @@
 package languish.testing;
 
 import junit.framework.TestCase;
+import languish.base.Primitive;
+import languish.base.Term;
 import languish.interpreter.TermParser;
-import languish.lambda.Primitive;
-import languish.lambda.Term;
 import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 import languish.util.TermPrinter;

@@ -2,7 +2,7 @@ package languish.util;
 
 import java.util.List;
 
-import languish.lambda.Primitive;
+import languish.base.Primitive;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;

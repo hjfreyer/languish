@@ -4,10 +4,10 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
+import languish.base.Term;
 import languish.error.DependencyUnavailableError;
 import languish.interpreter.BaseParser;
 import languish.interpreter.DependencyManager;
-import languish.lambda.Term;
 
 public class FileSystemDependencyManager implements DependencyManager {
 

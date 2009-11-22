@@ -1,4 +1,4 @@
-package languish.lambda;
+package languish.base;
 
 public interface Operation {
   public Term reduce(Term term);

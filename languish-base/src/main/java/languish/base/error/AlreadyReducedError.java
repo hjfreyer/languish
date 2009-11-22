@@ -1,6 +1,6 @@
-package languish.error;
+package languish.base.error;
 
-import languish.lambda.Term;
+import languish.base.Term;
 
 public class AlreadyReducedError extends RuntimeException {
 

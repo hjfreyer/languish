@@ -1,8 +1,8 @@
-package languish.lambda;
+package languish.base;
 
-import languish.error.AlreadyReducedError;
-import languish.util.PrimitiveTree;
+import languish.base.error.AlreadyReducedError;
 import languish.util.Lambda;
+import languish.util.PrimitiveTree;
 
 public class Operations {
 

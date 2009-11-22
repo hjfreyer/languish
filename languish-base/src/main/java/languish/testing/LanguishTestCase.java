@@ -1,6 +1,6 @@
 package languish.testing;
 
-import languish.lambda.Term;
+import languish.base.Term;
 import languish.util.PrimitiveTree;
 
 public interface LanguishTestCase {

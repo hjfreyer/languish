@@ -2,8 +2,8 @@ package languish.interpreter;
 
 import static languish.util.Lambda.*;
 import junit.framework.TestCase;
-import languish.lambda.Primitive;
-import languish.lambda.Term;
+import languish.base.Primitive;
+import languish.base.Term;
 import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 

@@ -1,6 +1,6 @@
 package languish.error;
 
-import languish.lambda.Term;
+import languish.base.Term;
 
 public class IllegalPrimitiveFunctionApplicationError extends RuntimeException {
 

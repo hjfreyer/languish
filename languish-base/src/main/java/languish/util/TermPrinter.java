@@ -1,9 +1,9 @@
 package languish.util;
 
-import languish.lambda.Operation;
-import languish.lambda.Operations;
-import languish.lambda.Primitive;
-import languish.lambda.Term;
+import languish.base.Operation;
+import languish.base.Operations;
+import languish.base.Primitive;
+import languish.base.Term;
 
 public class TermPrinter {
 

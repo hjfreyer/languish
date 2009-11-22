@@ -5,8 +5,8 @@ import static languish.util.Lambda.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import languish.lambda.Primitive;
-import languish.lambda.Term;
+import languish.base.Primitive;
+import languish.base.Term;
 
 import com.hjfreyer.util.Pair;
 

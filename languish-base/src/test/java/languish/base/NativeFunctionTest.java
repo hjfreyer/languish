@@ -1,9 +1,12 @@
-package languish.lambda;
+package languish.base;
 
-import static languish.lambda.Term.NULL;
+import static languish.base.Term.NULL;
 import static languish.testing.TestUtil.*;
 import static languish.util.Lambda.*;
 import junit.framework.TestCase;
+import languish.base.NativeFunction;
+import languish.base.Primitive;
+import languish.base.Term;
 import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
 import languish.util.Lambda;

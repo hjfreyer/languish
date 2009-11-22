@@ -1,4 +1,4 @@
-package languish.lambda;
+package languish.base;
 
 public class Primitive {
   private final Object wrapped;

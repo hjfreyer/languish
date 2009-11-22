@@ -2,9 +2,9 @@ package languish.interpreter;
 
 import java.util.List;
 
-import languish.lambda.Operations;
-import languish.lambda.Primitive;
-import languish.lambda.Term;
+import languish.base.Operations;
+import languish.base.Primitive;
+import languish.base.Term;
 import languish.util.Lambda;
 
 import org.codehaus.jparsec.Parser;
