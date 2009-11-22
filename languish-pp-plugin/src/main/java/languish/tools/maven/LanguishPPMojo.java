@@ -7,7 +7,7 @@ import java.io.File;
  * source files. Detailed information about the JavaCC options can be found on
  * the <a href="https://javacc.dev.java.net/">JavaCC website</a>.
  * 
- * @goal languish-pp
+ * @goal languish-preprocess
  * @phase generate-sources
  */
 public class LanguishPPMojo extends AbstractPreprocessorMojo {
@@ -75,5 +75,15 @@ public class LanguishPPMojo extends AbstractPreprocessorMojo {
    */
   protected String processSource(String sourceContents) {
     return "foo";
+  }
+
+  @Override
+  protected String getOutputExtension() {
+    return ".lish";
+  }
+
+  @Override
+  protected String getSourceExtension() {
+    return ".lish-pp";
   }
 }

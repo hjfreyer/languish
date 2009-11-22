@@ -9,6 +9,16 @@
   <artifactId>languish-lang</artifactId>
   <name>Languish Standard Library</name>
   <version>0.0.1</version>
+  <build>
+  	<plugins>
+  		<plugin>
+  			<groupId>com.hjfreyer</groupId>
+  			<artifactId>languish-pp-plugin</artifactId>
+  			<version>0.0.1</version>
+  			
+  		</plugin>
+  	</plugins>
+  </build>
   <dependencies>
   	<dependency>
   		<groupId>com.hjfreyer</groupId>

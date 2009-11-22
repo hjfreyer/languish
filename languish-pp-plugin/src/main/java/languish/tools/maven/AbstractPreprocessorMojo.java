@@ -25,6 +25,7 @@ public abstract class AbstractPreprocessorMojo extends AbstractMojo {
    *           If the tool reported a non-zero exit code.
    */
   public void execute() throws MojoExecutionException, MojoFailureException {
+    getLog().error("Executing!!!!");
     scanForSources();
     //
     // if ( grammarInfos == null )
