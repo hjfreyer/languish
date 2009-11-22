@@ -2,7 +2,7 @@ package languish.lib;
 
 import languish.base.Term;
 import languish.interpreter.DependencyManager;
-import languish.interpreter.dep.FileSystemDependencyManager;
+import languish.depman.FileSystemDependencyManager;
 import languish.interpreter.error.DependencyUnavailableError;
 import languish.util.Lambda;
 
