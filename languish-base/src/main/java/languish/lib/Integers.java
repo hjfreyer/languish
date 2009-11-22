@@ -1,9 +1,9 @@
 package languish.lib;
 
 import languish.base.Term;
-import languish.error.DependencyUnavailableError;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.dep.FileSystemDependencyManager;
+import languish.interpreter.error.DependencyUnavailableError;
 import languish.util.Lambda;
 
 import com.google.common.collect.ImmutableList;

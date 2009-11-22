@@ -3,7 +3,7 @@ package languish.interpreter;
 import java.util.List;
 
 import languish.base.Term;
-import languish.error.DependencyUnavailableError;
+import languish.interpreter.error.DependencyUnavailableError;
 import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 

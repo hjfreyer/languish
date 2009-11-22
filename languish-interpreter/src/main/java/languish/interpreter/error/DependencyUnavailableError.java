@@ -1,4 +1,4 @@
-package languish.error;
+package languish.interpreter.error;
 
 public class DependencyUnavailableError extends RuntimeException {
 
