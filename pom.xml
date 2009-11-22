@@ -9,6 +9,7 @@
 	
 	<modules>
 		<module>languish-base</module>
+		<module>languish-interpreter</module>
 	</modules>
 
 </project>

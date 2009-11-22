@@ -1,4 +1,4 @@
-package languish.interpreter.dep;
+package languish.depman;
 
 import java.io.InputStream;
 import java.util.List;
