@@ -26,6 +26,7 @@
 		<module>languish-base</module>
 		<module>languish-interpreter</module>
 		<module>languish-api</module>
+		<module>languish-lang</module>
 	</modules>
 
 </project>
