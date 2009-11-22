@@ -1,7 +1,7 @@
 package languish.testing;
 
 import languish.lambda.Term;
-import languish.util.JavaWrapper;
+import languish.util.PrimitiveTree;
 
 public interface LanguishTestCase {
 
@@ -13,5 +13,5 @@ public interface LanguishTestCase {
 
   public Term getReducedOnce();
 
-  public JavaWrapper getReducedCompletely();
+  public PrimitiveTree getReducedCompletely();
 }

@@ -4,10 +4,6 @@ import languish.lambda.Operation;
 import languish.lambda.Operations;
 import languish.lambda.Primitive;
 import languish.lambda.Term;
-import languish.primitives.LBoolean;
-import languish.primitives.LCharacter;
-import languish.primitives.LInteger;
-import languish.primitives.LSymbol;
 
 public class TermPrinter {
 
@@ -60,22 +56,22 @@ public class TermPrinter {
   }
 
   public static String getCodeForPrimitive(Primitive p) {
-    if (p instanceof LBoolean) {
-      return ((Boolean) p.getJavaObject()) ? "TRUE" : "FALSE";
+    if (p.isBoolean()) {
+      return p.asBoolean() ? "TRUE" : "FALSE";
     }
 
-    if (p instanceof LCharacter) {
+    if (p.isCharacter()) {
       return "'" + p.getJavaObject() + "'";
     }
 
-    if (p instanceof LInteger) {
-      return p.getJavaObject().toString();
+    if (p.isInteger()) {
+      return "" + p.asInteger();
     }
 
-    if (p instanceof LSymbol) {
-      return '"' + p.getJavaObject().toString() + '"';
+    if (p.isString()) {
+      return '"' + p.asString() + '"';
     }
 
-    return "<UNKNOWN>";
+    throw new AssertionError();
   }
 }

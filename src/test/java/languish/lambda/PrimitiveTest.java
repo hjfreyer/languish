@@ -3,32 +3,31 @@ package languish.lambda;
 import static languish.testing.TestUtil.FIVE;
 import static languish.util.Lambda.primitive;
 import junit.framework.TestCase;
-import languish.primitives.LSymbol;
 import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
-import languish.util.JavaWrapper;
+import languish.util.PrimitiveTree;
 
 public class PrimitiveTest extends TestCase {
   public enum Tests implements LanguishTestCase {
     PRIMITIVE_INT(primitive(FIVE), //
         "[PRIMITIVE 5 NULL]",
         null,
-        JavaWrapper.of(5)),
+        PrimitiveTree.copyOf(5)),
 
-    PRIMITIVE_STRING(primitive(LSymbol.of("FOO")), //
+    PRIMITIVE_STRING(primitive(new Primitive("FOO")), //
         "[PRIMITIVE \"FOO\" NULL]",
         null,
-        JavaWrapper.of("FOO")),
+        PrimitiveTree.copyOf("FOO")),
 
     ;
 
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final JavaWrapper reducedCompletely;
+    private final PrimitiveTree reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        JavaWrapper reducedCompletely) {
+        PrimitiveTree reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
@@ -47,7 +46,7 @@ public class PrimitiveTest extends TestCase {
       return reducedOnce;
     }
 
-    public JavaWrapper getReducedCompletely() {
+    public PrimitiveTree getReducedCompletely() {
       return reducedCompletely;
     }
   }

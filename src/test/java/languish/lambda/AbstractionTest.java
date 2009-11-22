@@ -5,8 +5,8 @@ import static languish.util.Lambda.*;
 import junit.framework.TestCase;
 import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
-import languish.util.JavaWrapper;
 import languish.util.Lambda;
+import languish.util.PrimitiveTree;
 
 public class AbstractionTest extends TestCase {
   public enum Tests implements LanguishTestCase {
@@ -14,21 +14,21 @@ public class AbstractionTest extends TestCase {
         app(IDENT, primitive(FIVE)),
         "[APP [ABS [REF 1 NULL] NULL] [PRIMITIVE 5 NULL]]",
         primitive(FIVE),
-        JavaWrapper.of(5)),
+        PrimitiveTree.of(FIVE)),
 
     ARGUMENT_CHOOSER_1( //
         app(app(TRUE, primitive(FOUR)), primitive(FIVE)),
         "[APP [APP [ABS [ABS [REF 2 NULL] NULL] NULL] "
             + "[PRIMITIVE 4 NULL]] [PRIMITIVE 5 NULL]]",
         app(abs(primitive(FOUR)), primitive(FIVE)),
-        JavaWrapper.of(4)),
+        PrimitiveTree.of(FOUR)),
 
     ARGUMENT_CHOOSER_2( //
         app(app(Lambda.FALSE, primitive(TestUtil.FOUR)), primitive(FIVE)),
         "[APP [APP [ABS [ABS [REF 1 NULL] NULL] NULL] [PRIMITIVE 4 NULL]] "
             + "[PRIMITIVE 5 NULL]]",
         app(abs(ref(1)), primitive(FIVE)),
-        JavaWrapper.of(5)),
+        PrimitiveTree.of(FIVE)),
 
     NON_HALTER( //
         TestUtil.LOOP,
@@ -43,17 +43,17 @@ public class AbstractionTest extends TestCase {
             + "[APP [ABS [APP [REF 1 NULL] [REF 1 NULL]] NULL] "
             + "[ABS [APP [REF 1 NULL] [REF 1 NULL]] NULL]]]",
         app(abs(primitive(FOUR)), TestUtil.LOOP),
-        JavaWrapper.of(4)),
+        PrimitiveTree.of(FOUR)),
 
     ;
 
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final JavaWrapper reducedCompletely;
+    private final PrimitiveTree reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        JavaWrapper reducedCompletely) {
+        PrimitiveTree reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
@@ -72,7 +72,7 @@ public class AbstractionTest extends TestCase {
       return reducedOnce;
     }
 
-    public JavaWrapper getReducedCompletely() {
+    public PrimitiveTree getReducedCompletely() {
       return reducedCompletely;
     }
   }

@@ -2,30 +2,30 @@ package languish.testing;
 
 import junit.framework.TestCase;
 import languish.interpreter.TermParser;
+import languish.lambda.Primitive;
 import languish.lambda.Term;
-import languish.primitives.LInteger;
-import languish.util.JavaWrapper;
 import languish.util.Lambda;
+import languish.util.PrimitiveTree;
 import languish.util.TermPrinter;
 
 public class TestUtil {
 
-  public static final LInteger ZERO = LInteger.of(0);
-  public static final LInteger ONE = LInteger.of(1);
-  public static final LInteger TWO = LInteger.of(2);
-  public static final LInteger THREE = LInteger.of(3);
-  public static final LInteger FOUR = LInteger.of(4);
-  public static final LInteger FIVE = LInteger.of(5);
-  public static final LInteger SIX = LInteger.of(6);
-  public static final LInteger SEVEN = LInteger.of(7);
-  public static final LInteger EIGHT = LInteger.of(8);
-  public static final LInteger NINE = LInteger.of(9);
-  public static final LInteger TEN = LInteger.of(10);
-  public static final LInteger ELEVEN = LInteger.of(11);
-  public static final LInteger TWELVE = LInteger.of(12);
-  public static final LInteger THIRTEEN = LInteger.of(13);
-  public static final LInteger FOURTEEN = LInteger.of(14);
-  public static final LInteger FIFTEEN = LInteger.of(15);
+  public static final Primitive ZERO = new Primitive(0);
+  public static final Primitive ONE = new Primitive(1);
+  public static final Primitive TWO = new Primitive(2);
+  public static final Primitive THREE = new Primitive(3);
+  public static final Primitive FOUR = new Primitive(4);
+  public static final Primitive FIVE = new Primitive(5);
+  public static final Primitive SIX = new Primitive(6);
+  public static final Primitive SEVEN = new Primitive(7);
+  public static final Primitive EIGHT = new Primitive(8);
+  public static final Primitive NINE = new Primitive(9);
+  public static final Primitive TEN = new Primitive(10);
+  public static final Primitive ELEVEN = new Primitive(11);
+  public static final Primitive TWELVE = new Primitive(12);
+  public static final Primitive THIRTEEN = new Primitive(13);
+  public static final Primitive FOURTEEN = new Primitive(14);
+  public static final Primitive FIFTEEN = new Primitive(15);
 
   public static final Term IDENT = Lambda.abs(Lambda.ref(1));
   public static final Term OMEGA =
@@ -38,7 +38,7 @@ public class TestUtil {
     Term exp = testCase.getExpression();
     String code = testCase.getCode();
     Term reducedOnce = testCase.getReducedOnce();
-    JavaWrapper reducedCompletely = testCase.getReducedCompletely();
+    PrimitiveTree reducedCompletely = testCase.getReducedCompletely();
 
     if (code != null) {
       // TOSTRING

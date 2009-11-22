@@ -4,23 +4,22 @@ import static languish.lambda.Term.NULL;
 import static languish.testing.TestUtil.*;
 import static languish.util.Lambda.*;
 import junit.framework.TestCase;
-import languish.primitives.LInteger;
 import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
-import languish.util.JavaWrapper;
 import languish.util.Lambda;
+import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;
 
 public class NativeFunctionTest extends TestCase {
   public static NativeFunction TRIVIAL = new NativeFunction() {
-    public JavaWrapper apply(JavaWrapper arg) {
-      return JavaWrapper.of(42);
+    public PrimitiveTree apply(PrimitiveTree arg) {
+      return PrimitiveTree.copyOf(42);
     }
   };
 
   public static NativeFunction IDENTITY = new NativeFunction() {
-    public JavaWrapper apply(JavaWrapper arg) {
+    public PrimitiveTree apply(PrimitiveTree arg) {
       return arg;
     }
   };
@@ -29,50 +28,50 @@ public class NativeFunctionTest extends TestCase {
     TRIVIAL_NATIVE_FUNC( //
         nativeApply(TRIVIAL, NULL),
         null,
-        primitive(LInteger.of(42)),
-        JavaWrapper.of(42)),
+        primitive(new Primitive(42)),
+        PrimitiveTree.copyOf(42)),
 
     TRIVIAL_NATIVE_WITH_REDUCE( //
         nativeApply(TRIVIAL, app(abs(primitive(FOUR)), NULL)),
         null,
         nativeApply(TRIVIAL, primitive(FOUR)),
-        JavaWrapper.of(42)),
+        PrimitiveTree.copyOf(42)),
 
     TRIVIAL_NATIVE_WITH_LIST( //
         Lambda.nativeApply(TRIVIAL, cons(primitive(THREE), cons(
             primitive(FOUR), NULL))),
         null,
-        Lambda.primitive(LInteger.of(42)),
-        JavaWrapper.of(42)),
+        Lambda.primitive(new Primitive(42)),
+        PrimitiveTree.copyOf(42)),
 
     IDENT_NATIVE_FUNC( //
         nativeApply(IDENTITY, NULL),
         null,
         NULL,
-        JavaWrapper.of(ImmutableList.of())),
+        PrimitiveTree.copyOf(ImmutableList.of())),
 
     IDENT_NATIVE_WITH_REDUCE( //
         nativeApply(IDENTITY, app(abs(primitive(FOUR)), NULL)),
         null,
         nativeApply(IDENTITY, primitive(FOUR)),
-        JavaWrapper.of(4)),
+        PrimitiveTree.copyOf(4)),
 
     IDENT_NATIVE_WITH_LIST( //
         Lambda.nativeApply(IDENTITY, cons(primitive(THREE), cons(
             primitive(FOUR), NULL))),
         null,
         cons(primitive(THREE), cons(primitive(FOUR), NULL)),
-        JavaWrapper.of(ImmutableList.of(3, 4))),
+        PrimitiveTree.copyOf(ImmutableList.of(3, 4))),
 
     ;
 
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final JavaWrapper reducedCompletely;
+    private final PrimitiveTree reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        JavaWrapper reducedCompletely) {
+        PrimitiveTree reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
@@ -91,7 +90,7 @@ public class NativeFunctionTest extends TestCase {
       return reducedOnce;
     }
 
-    public JavaWrapper getReducedCompletely() {
+    public PrimitiveTree getReducedCompletely() {
       return reducedCompletely;
     }
   }

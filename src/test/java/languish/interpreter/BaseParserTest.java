@@ -2,10 +2,10 @@ package languish.interpreter;
 
 import static languish.util.Lambda.*;
 import junit.framework.TestCase;
+import languish.lambda.Primitive;
 import languish.lambda.Term;
-import languish.primitives.LSymbol;
-import languish.util.JavaWrapper;
 import languish.util.Lambda;
+import languish.util.PrimitiveTree;
 
 import org.jmock.Mockery;
 
@@ -27,7 +27,7 @@ public class BaseParserTest extends TestCase {
         BaseParser
             .parseFromString("#lang __BUILTIN__;; [PRIMITIVE \"Returned as-is\" NULL]");
 
-    assertEquals(JavaWrapper.of("Returned as-is"), Lambda
+    assertEquals(PrimitiveTree.of(new Primitive("Returned as-is")), Lambda
         .convertTermToJavaObject(res));
   }
 
@@ -35,11 +35,11 @@ public class BaseParserTest extends TestCase {
     Term res = BaseParser //
         .parseFromString("#lang fooParser;; blah blah blah");
 
-    Term depList = cons(primitive(LSymbol.of("fooParser")), Term.NULL);
+    Term depList = cons(primitive(new Primitive("fooParser")), Term.NULL);
     Term programApplication =
-        abs(app(ref(1), primitive(LSymbol.of(" blah blah blah"))));
+        abs(app(ref(1), primitive(new Primitive(" blah blah blah"))));
 
-    Term expected = cons(primitive(LSymbol.of("LOAD")), //
+    Term expected = cons(primitive(new Primitive("LOAD")), //
         cons(depList, cons(programApplication, Term.NULL)));
 
     assertEquals(expected, res);

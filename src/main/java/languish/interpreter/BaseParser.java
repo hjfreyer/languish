@@ -5,8 +5,8 @@ import static languish.util.Lambda.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import languish.lambda.Primitive;
 import languish.lambda.Term;
-import languish.primitives.LSymbol;
 
 import com.hjfreyer.util.Pair;
 
@@ -25,11 +25,11 @@ public class BaseParser {
     if (parserName.equals("__BUILTIN__")) {
       resultExpression = TermParser.TERM.parse(programBody);
     } else {
-      Term depList = cons(primitive(LSymbol.of(parserName)), Term.NULL);
+      Term depList = cons(primitive(new Primitive(parserName)), Term.NULL);
       Term programApplication =
-          abs(app(ref(1), primitive(LSymbol.of(programBody))));
+          abs(app(ref(1), primitive(new Primitive(programBody))));
 
-      resultExpression = cons(primitive(LSymbol.of("LOAD")), //
+      resultExpression = cons(primitive(new Primitive("LOAD")), //
           cons(depList, cons(programApplication, Term.NULL)));
     }
 

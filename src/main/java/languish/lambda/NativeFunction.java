@@ -1,9 +1,9 @@
 package languish.lambda;
 
-import languish.util.JavaWrapper;
+import languish.util.PrimitiveTree;
 
 public interface NativeFunction {
 
-  public JavaWrapper apply(JavaWrapper arg);
+  public PrimitiveTree apply(PrimitiveTree arg);
 
 }

@@ -5,8 +5,6 @@ import java.util.List;
 import languish.lambda.Operations;
 import languish.lambda.Primitive;
 import languish.lambda.Term;
-import languish.primitives.LInteger;
-import languish.primitives.LSymbol;
 import languish.util.Lambda;
 
 import org.codehaus.jparsec.Parser;
@@ -46,22 +44,14 @@ public class TermParser {
         }
       });
 
-  public static final Parser<LInteger> LINTEGER =
-      INTEGER.map(new Map<Integer, LInteger>() {
-        public LInteger map(Integer i) {
-          return LInteger.of(i);
-        }
-      });
-
-  public static final Parser<LSymbol> LSYMBOL =
-      Terminals.StringLiteral.PARSER.map(new Map<String, LSymbol>() {
-        public LSymbol map(String s) {
-          return LSymbol.of(s);
-        }
-      });
+  public static final Parser<String> STRING = Terminals.StringLiteral.PARSER;
 
   public static final Parser<? extends Primitive> PRIMITIVE =
-      Parsers.or(LINTEGER, LSYMBOL);
+      Parsers.or(INTEGER, STRING).map(new Map<Object, Primitive>() {
+        public Primitive map(Object from) {
+          return new Primitive(from);
+        }
+      });
 
   public static final Parser.Reference<Term> TERM_REF = Parser.newReference();
 

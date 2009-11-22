@@ -1,7 +1,7 @@
 package languish.lambda;
 
 import languish.error.AlreadyReducedError;
-import languish.util.JavaWrapper;
+import languish.util.PrimitiveTree;
 import languish.util.Lambda;
 
 public class Operations {
@@ -136,7 +136,7 @@ public class Operations {
       NativeFunction nativeFunc =
           (NativeFunction) funcPrimitive.getJavaObject();
 
-      JavaWrapper argObject = Lambda.convertTermToJavaObject(arg);
+      PrimitiveTree argObject = Lambda.convertTermToJavaObject(arg);
       return Lambda.convertJavaObjectToTerm(nativeFunc.apply(argObject));
     }
 
