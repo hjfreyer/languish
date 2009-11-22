@@ -3,7 +3,7 @@ package languish.testing;
 import junit.framework.TestCase;
 import languish.base.Primitive;
 import languish.base.Term;
-import languish.interpreter.TermParser;
+import languish.util.TermParser;
 import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 import languish.util.TermPrinter;
@@ -46,7 +46,7 @@ public class TestUtil {
           + " - getCodeForExpression() does not match code:", code, TermPrinter
           .getCodeForTerm(exp));
 
-      // PARSE
+      // PARSE 
       Term parsed = TermParser.TERM.parse(code);
 
       TestCase.assertEquals("on test " + name

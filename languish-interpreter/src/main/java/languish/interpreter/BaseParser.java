@@ -1,5 +1,6 @@
 package languish.interpreter;
 
+import languish.util.TermParser;
 import static languish.util.Lambda.*;
 
 import java.util.regex.Matcher;

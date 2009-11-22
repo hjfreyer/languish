@@ -1,11 +1,10 @@
-package languish.interpreter;
+package languish.util;
 
 import java.util.List;
 
 import languish.base.Operations;
 import languish.base.Primitive;
 import languish.base.Term;
-import languish.util.Lambda;
 
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
