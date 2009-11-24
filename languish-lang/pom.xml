@@ -8,17 +8,24 @@
   <groupId>com.hjfreyer</groupId>
   <artifactId>languish-lang</artifactId>
   <name>Languish Standard Library</name>
-  <version>0.0.1</version>
-  <build>
-  	<plugins>
-  		<plugin>
-  			<groupId>com.hjfreyer</groupId>
-  			<artifactId>languish-pp-plugin</artifactId>
-  			<version>0.0.1</version>
-  			
-  		</plugin>
-  	</plugins>
-  </build>
+	<version>0.0.1</version>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.hjfreyer</groupId>
+				<artifactId>languish-pp-plugin</artifactId>
+				<version>0.0.1</version>
+				<executions>
+					<execution>
+						<id>lish-pp</id>
+						<goals>
+							<goal>languish-preprocess</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
   <dependencies>
   	<dependency>
   		<groupId>com.hjfreyer</groupId>
