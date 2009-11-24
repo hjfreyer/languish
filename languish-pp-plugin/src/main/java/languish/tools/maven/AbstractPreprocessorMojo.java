@@ -1,6 +1,13 @@
 package languish.tools.maven;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -16,6 +23,10 @@ public abstract class AbstractPreprocessorMojo extends AbstractMojo {
 
   protected abstract String getOutputExtension();
 
+  protected abstract String process(String in);
+
+  protected abstract int getStaleMillis();
+
   /**
    * Execute the tool.
    * 
@@ -25,54 +36,42 @@ public abstract class AbstractPreprocessorMojo extends AbstractMojo {
    *           If the tool reported a non-zero exit code.
    */
   public void execute() throws MojoExecutionException, MojoFailureException {
-    getLog().error("Executing!!!!");
-    scanForSources();
-    //
-    // if ( grammarInfos == null )
-    // {
-    // getLog().info( "Skipping non-existing source directory: " +
-    // getSourceDirectory() );
-    // return;
-    // }
-    // else if ( grammarInfos.length <= 0 )
-    // {
-    // getLog().info( "Skipping - all parsers are up to date" );
-    // }
-    // else
-    // {
-    // determineNonGeneratedSourceRoots();
-    //
-    // if ( StringUtils.isEmpty( grammarEncoding ) )
-    // {
-    // getLog().warn(
-    // "File encoding for grammars has not been configured"
-    // + ", using platform default encoding, i.e. build is platform dependent!"
-    // );
-    // }
-    //
-    // for ( int i = 0; i < grammarInfos.length; i++ )
-    // {
-    // processGrammar( grammarInfos[i] );
-    // }
-    //
-    // getLog().info( "Processed " + grammarInfos.length + " grammar" + (
-    // grammarInfos.length != 1 ? "s" : "" ) );
-    // }
-    //
-    // Collection compileSourceRoots = new LinkedHashSet( Arrays.asList(
-    // getCompileSourceRoots() ) );
-    // for ( Iterator it = compileSourceRoots.iterator(); it.hasNext(); )
-    // {
-    // addSourceRoot( (File) it.next() );
-    // }
+    Map<File, File> sources = getSources();
+
+    for (File source : sources.keySet()) {
+      getLog().info("Processing " + source);
+
+      File target = sources.get(source);
+
+      try {
+        target.getParentFile().mkdirs();
+
+        Reader reader = new FileReader(source);
+        Writer writer = new FileWriter(target);
+
+        char[] sourceContents = new char[(int) source.length()];
+        reader.read(sourceContents);
+
+        String targetContents = process(new String(sourceContents));
+
+        writer.write(targetContents);
+        writer.close();
+      } catch (IOException e) {
+        getLog().error(e);
+        throw new MojoFailureException("Failed while processing file: "
+            + source);
+      }
+    }
   }
 
-  private void scanForSources() throws MojoExecutionException {
+  private Map<File, File> getSources() throws MojoExecutionException {
+    Map<File, File> result = new HashMap<File, File>();
+
     if (!getSourceDirectory().isDirectory()) {
-      return;
+      return result;
     }
 
-    getLog().debug("Scanning for grammars: " + getSourceDirectory());
+    getLog().debug("Scanning for source files: " + getSourceDirectory());
     try {
       DirectoryScanner scanner = new DirectoryScanner();
       scanner.setFollowSymlinks(true);
@@ -81,39 +80,32 @@ public abstract class AbstractPreprocessorMojo extends AbstractMojo {
 
       scanner.scan();
 
-      String[] includedFiles = scanner.getIncludedFiles();
-      for (int i = 0; i < includedFiles.length; i++) {
-        String includedFile = includedFiles[i];
-        getLog().info("Found: " + includedFile);
+      for (String sourceFilename : scanner.getIncludedFiles()) {
+        if (!sourceFilename.endsWith(getSourceExtension())) {
+          continue;
+        }
 
-        // if ( this.getOutputDirectory() != null )
-        // {
-        // File sourceFile = grammarInfo.getGrammarFile();
-        // File[] targetFiles = getTargetFiles( this.outputDirectory,
-        // includedFile, grammarInfo );
-        // for ( int j = 0; j < targetFiles.length; j++ )
-        // {
-        // File targetFile = targetFiles[j];
-        // if ( !targetFile.exists()
-        // || targetFile.lastModified() + this.staleMillis <
-        // sourceFile.lastModified() )
-        // {
-        // this.includedGrammars.add( grammarInfo );
-        // break;
-        // }
-        // }
-        // }
-        // else
-        // {
-        // this.includedGrammars.add( grammarInfo );
-        // }
+        String filebase =
+            sourceFilename.substring(0, sourceFilename.length()
+                - getSourceExtension().length());
+
+        File sourceFile = new File(getSourceDirectory(), sourceFilename);
+        File targetFile =
+            new File(getOutputDirectory(), filebase + getOutputExtension());
+
+        if (!targetFile.exists()
+            || targetFile.lastModified() + getStaleMillis() < sourceFile
+                .lastModified()) {
+          result.put(sourceFile, targetFile);
+        }
       }
     } catch (Exception e) {
       throw new MojoExecutionException("Failed to scan for grammars: "
           + getSourceDirectory(), e);
     }
-    // getLog().debug( "Found grammars: " + Arrays.asList( grammarInfos ) );
+    getLog().debug("Found files: " + result);
 
+    return result;
   }
 
 }

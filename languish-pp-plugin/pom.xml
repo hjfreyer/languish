@@ -63,5 +63,10 @@
       <version>3.8.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>com.hjfreyer</groupId>
+    	<artifactId>languish-pp</artifactId>
+    	<version>0.0.1</version>
+    </dependency>
   </dependencies>
 </project>

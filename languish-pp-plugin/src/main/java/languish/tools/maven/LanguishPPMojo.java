@@ -1,6 +1,9 @@
 package languish.tools.maven;
 
 import java.io.File;
+import java.io.IOException;
+
+import languish.tools.preprocessor.Preprocessor;
 
 /**
  * Parses a JavaCC grammar file (<code>*.jj</code>) and transforms it to Java
@@ -59,6 +62,7 @@ public class LanguishPPMojo extends AbstractPreprocessorMojo {
   /**
    * {@inheritDoc}
    */
+  @Override
   protected int getStaleMillis() {
     return this.staleMillis;
   }
@@ -72,9 +76,12 @@ public class LanguishPPMojo extends AbstractPreprocessorMojo {
 
   /**
    * {@inheritDoc}
+   * 
+   * @throws IOException
    */
-  protected String processSource(String sourceContents) {
-    return "foo";
+  @Override
+  protected String process(String input) {
+    return Preprocessor.process(input);
   }
 
   @Override
