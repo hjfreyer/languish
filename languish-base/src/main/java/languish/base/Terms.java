@@ -1,17 +1,13 @@
-package languish.util;
+package languish.base;
 
 import java.util.List;
 
-import languish.base.NativeFunction;
-import languish.base.Operation;
-import languish.base.Operations;
-import languish.base.Primitive;
-import languish.base.Term;
+import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-public class Lambda {
+public class Terms {
 
   public static final Term TRUE = abs(abs(ref(2)));
 
@@ -54,7 +50,7 @@ public class Lambda {
     return app(app(condition, thenTerm), elseTerm);
   }
 
-  private Lambda() {
+  private Terms() {
   }
 
   public static Term convertJavaObjectToTerm(PrimitiveTree obj) {
@@ -63,7 +59,7 @@ public class Lambda {
 
       Term result = Term.NULL;
       for (int i = list.size() - 1; i >= 0; i--) {
-        result = Lambda.cons(convertJavaObjectToTerm(list.get(i)), result);
+        result = Terms.cons(convertJavaObjectToTerm(list.get(i)), result);
       }
 
       return result;
@@ -87,9 +83,9 @@ public class Lambda {
     }
 
     if (op == Operations.ABS) {
-      PrimitiveTree car = convertTermToJavaObject(Lambda.car(term));
+      PrimitiveTree car = convertTermToJavaObject(Terms.car(term));
       List<PrimitiveTree> cdr =
-          convertTermToJavaObject(Lambda.cdr(term)).asList();
+          convertTermToJavaObject(Terms.cdr(term)).asList();
 
       List<PrimitiveTree> result = Lists.newLinkedList();
 

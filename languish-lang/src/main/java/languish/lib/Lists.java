@@ -1,10 +1,10 @@
 package languish.lib;
 
+import languish.base.Terms;
 import languish.base.Term;
 import languish.depman.FileSystemDependencyManager;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.error.DependencyUnavailableError;
-import languish.util.Lambda;
 
 import com.google.common.collect.ImmutableList;
 
@@ -22,15 +22,15 @@ public class Lists {
   }
 
   public static Term map() {
-    return Lambda.car(LIB);
+    return Terms.car(LIB);
   }
 
   public static Term reduce() {
-    return Lambda.car(Lambda.cdr(LIB));
+    return Terms.car(Terms.cdr(LIB));
   }
 
   public static Term member() {
-    return Lambda.car(Lambda.cdr(Lambda.cdr(LIB)));
+    return Terms.car(Terms.cdr(Terms.cdr(LIB)));
   }
 
   private Lists() {

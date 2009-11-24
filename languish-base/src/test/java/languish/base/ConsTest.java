@@ -1,8 +1,8 @@
 package languish.base;
 
+import static languish.base.Terms.*;
 import static languish.base.Term.NULL;
 import static languish.testing.TestUtil.*;
-import static languish.util.Lambda.*;
 import junit.framework.TestCase;
 import languish.base.Term;
 import languish.testing.LanguishTestCase;

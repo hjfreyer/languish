@@ -1,7 +1,7 @@
 package languish.base;
 
+import static languish.base.Terms.primitive;
 import static languish.testing.TestUtil.FIVE;
-import static languish.util.Lambda.primitive;
 import junit.framework.TestCase;
 import languish.base.Primitive;
 import languish.base.Term;

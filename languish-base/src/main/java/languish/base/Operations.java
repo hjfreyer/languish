@@ -1,7 +1,6 @@
 package languish.base;
 
 import languish.base.error.AlreadyReducedError;
-import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 
 public class Operations {
@@ -39,7 +38,7 @@ public class Operations {
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       Term subterm = (Term) term.getFirst();
 
-      return Lambda.abs(subterm.replaceAllReferencesToParam(id + 1, with));
+      return Terms.abs(subterm.replaceAllReferencesToParam(id + 1, with));
     }
 
     @Override
@@ -136,8 +135,8 @@ public class Operations {
       NativeFunction nativeFunc =
           (NativeFunction) funcPrimitive.getJavaObject();
 
-      PrimitiveTree argObject = Lambda.convertTermToJavaObject(arg);
-      return Lambda.convertJavaObjectToTerm(nativeFunc.apply(argObject));
+      PrimitiveTree argObject = Terms.convertTermToJavaObject(arg);
+      return Terms.convertJavaObjectToTerm(nativeFunc.apply(argObject));
     }
 
     public boolean isReduced(Term term) {
@@ -187,30 +186,30 @@ public class Operations {
       }
 
       if (t1.getOperation() != t2.getOperation()) {
-        return Lambda.FALSE;
+        return Terms.FALSE;
       }
 
       if (t1.getOperation() == NOOP) {
-        return Lambda.TRUE;
+        return Terms.TRUE;
       }
 
       if (t1.getOperation() == PRIMITIVE) {
-        return t1.getFirst().equals(t2.getFirst()) ? Lambda.TRUE : Lambda.FALSE;
+        return t1.getFirst().equals(t2.getFirst()) ? Terms.TRUE : Terms.FALSE;
       }
 
       if (t1.getOperation() == REF) {
         int r1 = (Integer) t1.getFirst();
         int r2 = (Integer) t2.getFirst();
 
-        return r1 == r2 ? Lambda.TRUE : Lambda.FALSE;
+        return r1 == r2 ? Terms.TRUE : Terms.FALSE;
       }
 
       if (t1.getOperation() == ABS) {
-        Term cond1 = new Term(EQUALS, Lambda.car(t1), Lambda.car(t2));
-        Term cond2 = new Term(EQUALS, Lambda.cdr(t1), Lambda.cdr(t2));
+        Term cond1 = new Term(EQUALS, Terms.car(t1), Terms.car(t2));
+        Term cond2 = new Term(EQUALS, Terms.cdr(t1), Terms.cdr(t2));
 
-        return Lambda.branch(cond1, Lambda.branch(cond2, Lambda.TRUE,
-            Lambda.FALSE), Lambda.FALSE);
+        return Terms.branch(cond1, Terms.branch(cond2, Terms.TRUE,
+            Terms.FALSE), Terms.FALSE);
       }
 
       throw new AssertionError("Invalid operation");

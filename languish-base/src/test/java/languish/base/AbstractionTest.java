@@ -1,12 +1,11 @@
 package languish.base;
 
+import static languish.base.Terms.*;
 import static languish.testing.TestUtil.*;
-import static languish.util.Lambda.*;
 import junit.framework.TestCase;
 import languish.base.Term;
 import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
-import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 
 public class AbstractionTest extends TestCase {
@@ -25,7 +24,7 @@ public class AbstractionTest extends TestCase {
         PrimitiveTree.of(FOUR)),
 
     ARGUMENT_CHOOSER_2( //
-        app(app(Lambda.FALSE, primitive(TestUtil.FOUR)), primitive(FIVE)),
+        app(app(Terms.FALSE, primitive(TestUtil.FOUR)), primitive(FIVE)),
         "[APP [APP [ABS [ABS [REF 1 NULL] NULL] NULL] [PRIMITIVE 4 NULL]] "
             + "[PRIMITIVE 5 NULL]]",
         app(abs(ref(1)), primitive(FIVE)),
@@ -39,7 +38,7 @@ public class AbstractionTest extends TestCase {
         null),
 
     IRRELEVANT_NON_HALTER( //
-        app(app(Lambda.TRUE, primitive(TestUtil.FOUR)), TestUtil.LOOP),
+        app(app(Terms.TRUE, primitive(TestUtil.FOUR)), TestUtil.LOOP),
         "[APP [APP [ABS [ABS [REF 2 NULL] NULL] NULL] [PRIMITIVE 4 NULL]] "
             + "[APP [ABS [APP [REF 1 NULL] [REF 1 NULL]] NULL] "
             + "[ABS [APP [REF 1 NULL] [REF 1 NULL]] NULL]]]",

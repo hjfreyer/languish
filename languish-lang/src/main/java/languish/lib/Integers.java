@@ -1,10 +1,10 @@
 package languish.lib;
 
+import languish.base.Terms;
 import languish.base.Term;
 import languish.depman.FileSystemDependencyManager;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.error.DependencyUnavailableError;
-import languish.util.Lambda;
 
 import com.google.common.collect.ImmutableList;
 
@@ -22,11 +22,11 @@ public class Integers {
   }
 
   public static Term add() {
-    return Lambda.car(LIB);
+    return Terms.car(LIB);
   }
 
   public static Term multiply() {
-    return Lambda.car(Lambda.cdr(LIB));
+    return Terms.car(Terms.cdr(LIB));
   }
 
   private Integers() {

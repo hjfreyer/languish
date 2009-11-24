@@ -1,10 +1,10 @@
 package languish.interpreter;
 
-import static languish.util.Lambda.*;
+import static languish.base.Terms.*;
 import junit.framework.TestCase;
+import languish.base.Terms;
 import languish.base.Primitive;
 import languish.base.Term;
-import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 
 import org.jmock.Mockery;
@@ -27,7 +27,7 @@ public class BaseParserTest extends TestCase {
         BaseParser
             .parseFromString("#lang __BUILTIN__;; [PRIMITIVE \"Returned as-is\" NULL]");
 
-    assertEquals(PrimitiveTree.of(new Primitive("Returned as-is")), Lambda
+    assertEquals(PrimitiveTree.of(new Primitive("Returned as-is")), Terms
         .convertTermToJavaObject(res));
   }
 

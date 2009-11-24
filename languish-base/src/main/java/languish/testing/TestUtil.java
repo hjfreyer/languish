@@ -1,10 +1,10 @@
 package languish.testing;
 
 import junit.framework.TestCase;
+import languish.base.Terms;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.util.TermParser;
-import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 import languish.util.TermPrinter;
 
@@ -27,10 +27,10 @@ public class TestUtil {
   public static final Primitive FOURTEEN = new Primitive(14);
   public static final Primitive FIFTEEN = new Primitive(15);
 
-  public static final Term IDENT = Lambda.abs(Lambda.ref(1));
+  public static final Term IDENT = Terms.abs(Terms.ref(1));
   public static final Term OMEGA =
-      Lambda.abs(Lambda.app(Lambda.ref(1), Lambda.ref(1)));
-  public static final Term LOOP = Lambda.app(OMEGA, OMEGA);
+      Terms.abs(Terms.app(Terms.ref(1), Terms.ref(1)));
+  public static final Term LOOP = Terms.app(OMEGA, OMEGA);
 
   public static void assertLanguishTestCase(LanguishTestCase testCase) {
 
@@ -63,7 +63,7 @@ public class TestUtil {
     if (reducedCompletely != null) {
       TestCase.assertEquals("on test " + name
           + " - expression does not ultimately reduce to given value:",
-          reducedCompletely, Lambda.convertTermToJavaObject(exp));
+          reducedCompletely, Terms.convertTermToJavaObject(exp));
     }
   }
 }

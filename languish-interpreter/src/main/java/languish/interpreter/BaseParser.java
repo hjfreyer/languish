@@ -1,7 +1,7 @@
 package languish.interpreter;
 
 import languish.util.TermParser;
-import static languish.util.Lambda.*;
+import static languish.base.Terms.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

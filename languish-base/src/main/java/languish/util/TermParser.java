@@ -2,6 +2,7 @@ package languish.util;
 
 import java.util.List;
 
+import languish.base.Terms;
 import languish.base.Operations;
 import languish.base.Primitive;
 import languish.base.Term;
@@ -66,7 +67,7 @@ public class TermParser {
           OPERATORS.token("["), OPERATORS.token("]")).map(
           new Map<Primitive, Term>() {
             public Term map(Primitive from) {
-              return Lambda.primitive(from);
+              return Terms.primitive(from);
             }
           });
 
@@ -75,7 +76,7 @@ public class TermParser {
           OPERATORS.token("["), OPERATORS.token("]")).map(
           new Map<Integer, Term>() {
             public Term map(Integer from) {
-              return Lambda.ref(from);
+              return Terms.ref(from);
             }
           });
 

@@ -1,15 +1,14 @@
 package languish.base;
 
+import static languish.base.Terms.*;
 import static languish.base.Term.NULL;
 import static languish.testing.TestUtil.*;
-import static languish.util.Lambda.*;
 import junit.framework.TestCase;
 import languish.base.NativeFunction;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.testing.LanguishTestCase;
 import languish.testing.TestUtil;
-import languish.util.Lambda;
 import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;
@@ -41,10 +40,10 @@ public class NativeFunctionTest extends TestCase {
         PrimitiveTree.copyOf(42)),
 
     TRIVIAL_NATIVE_WITH_LIST( //
-        Lambda.nativeApply(TRIVIAL, cons(primitive(THREE), cons(
+        Terms.nativeApply(TRIVIAL, cons(primitive(THREE), cons(
             primitive(FOUR), NULL))),
         null,
-        Lambda.primitive(new Primitive(42)),
+        Terms.primitive(new Primitive(42)),
         PrimitiveTree.copyOf(42)),
 
     IDENT_NATIVE_FUNC( //
@@ -60,7 +59,7 @@ public class NativeFunctionTest extends TestCase {
         PrimitiveTree.copyOf(4)),
 
     IDENT_NATIVE_WITH_LIST( //
-        Lambda.nativeApply(IDENTITY, cons(primitive(THREE), cons(
+        Terms.nativeApply(IDENTITY, cons(primitive(THREE), cons(
             primitive(FOUR), NULL))),
         null,
         cons(primitive(THREE), cons(primitive(FOUR), NULL)),

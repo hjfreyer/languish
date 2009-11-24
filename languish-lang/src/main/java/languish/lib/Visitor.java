@@ -1,10 +1,10 @@
 package languish.lib;
 
+import languish.base.Terms;
 import languish.base.Term;
 import languish.interpreter.DependencyManager;
 import languish.depman.FileSystemDependencyManager;
 import languish.interpreter.error.DependencyUnavailableError;
-import languish.util.Lambda;
 
 import com.google.common.collect.ImmutableList;
 
@@ -22,7 +22,7 @@ public class Visitor {
   }
 
   public static Term visitTree() {
-    return Lambda.car(LIB);
+    return Terms.car(LIB);
   }
 
   private Visitor() {
