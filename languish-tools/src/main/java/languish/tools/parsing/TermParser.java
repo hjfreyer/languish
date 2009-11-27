@@ -2,10 +2,10 @@ package languish.tools.parsing;
 
 import java.util.List;
 
-import languish.base.Terms;
 import languish.base.Operations;
 import languish.base.Primitive;
 import languish.base.Term;
+import languish.base.Terms;
 
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
@@ -31,8 +31,10 @@ public class TermParser {
       Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT,
           Scanners.WHITESPACES).skipMany();
 
-  public static final Parser<List<Token>> LEXER =
-      Parsers.or(STRING_LIT, INTEGER_LIT, OPERATORS.tokenizer()).lexer(DELIM);
+  public static final Parser<Object> TOKENS =
+      Parsers.or(STRING_LIT, INTEGER_LIT, OPERATORS.tokenizer());
+
+  public static final Parser<List<Token>> LEXER = TOKENS.lexer(DELIM);
 
   public static final Parser<Token> STD_OPERATION =
       OPERATORS.token("ABS", "APP", "EQUALS", "NATIVE_APPLY", "REF");

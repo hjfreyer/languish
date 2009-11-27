@@ -30,6 +30,7 @@
     <module>languish-pp-plugin</module>
     <module>languish-tools</module>
     <module>languish-base-tests</module>
+    <module>languish-parsing</module>
 	</modules>
 
 </project>
