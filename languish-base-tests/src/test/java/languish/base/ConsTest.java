@@ -2,11 +2,11 @@ package languish.base;
 
 import static languish.base.Terms.*;
 import static languish.base.Term.NULL;
-import static languish.testing.TestUtil.*;
+import static languish.tools.testing.TestUtil.*;
 import junit.framework.TestCase;
 import languish.base.Term;
-import languish.testing.LanguishTestCase;
-import languish.testing.TestUtil;
+import languish.tools.testing.LanguishTestCase;
+import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;

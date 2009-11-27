@@ -1,4 +1,4 @@
-package languish.testing;
+package languish.tools.testing;
 
 import languish.base.Term;
 import languish.util.PrimitiveTree;

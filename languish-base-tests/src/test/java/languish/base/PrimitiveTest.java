@@ -1,12 +1,12 @@
 package languish.base;
 
 import static languish.base.Terms.primitive;
-import static languish.testing.TestUtil.FIVE;
+import static languish.tools.testing.TestUtil.FIVE;
 import junit.framework.TestCase;
 import languish.base.Primitive;
 import languish.base.Term;
-import languish.testing.LanguishTestCase;
-import languish.testing.TestUtil;
+import languish.tools.testing.LanguishTestCase;
+import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
 
 public class PrimitiveTest extends TestCase {

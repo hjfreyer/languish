@@ -76,6 +76,22 @@ public class Primitive {
 
   @Override
   public String toString() {
-    return "Primitive [wrapped=" + wrapped + "]";
+    if (isBoolean()) {
+      return asBoolean() ? "TRUE" : "FALSE";
+    }
+
+    if (isCharacter()) {
+      return "'" + asCharacter() + "'";
+    }
+
+    if (isInteger()) {
+      return "" + asInteger();
+    }
+
+    if (isString()) {
+      return '"' + asString() + '"';
+    }
+    
+    return "<UNKNOWN>";
   }
 }

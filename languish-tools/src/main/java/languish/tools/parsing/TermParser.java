@@ -1,4 +1,4 @@
-package languish.util;
+package languish.tools.parsing;
 
 import java.util.List;
 

@@ -1,12 +1,11 @@
-package languish.testing;
+package languish.tools.testing;
 
 import junit.framework.TestCase;
-import languish.base.Terms;
 import languish.base.Primitive;
 import languish.base.Term;
-import languish.util.TermParser;
+import languish.base.Terms;
+import languish.tools.parsing.TermParser;
 import languish.util.PrimitiveTree;
-import languish.util.TermPrinter;
 
 public class TestUtil {
 
@@ -43,10 +42,10 @@ public class TestUtil {
     if (code != null) {
       // TOSTRING
       TestCase.assertEquals("on test " + name
-          + " - getCodeForExpression() does not match code:", code, TermPrinter
-          .getCodeForTerm(exp));
+          + " - getCodeForExpression() does not match code:", code, exp
+          .toString());
 
-      // PARSE 
+      // PARSE
       Term parsed = TermParser.TERM.parse(code);
 
       TestCase.assertEquals("on test " + name

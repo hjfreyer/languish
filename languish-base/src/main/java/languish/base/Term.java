@@ -1,7 +1,5 @@
 package languish.base;
 
-import languish.util.TermPrinter;
-
 public final class Term {
 
   public static final Term NULL = new Term(Operations.NOOP, null, null);
@@ -87,7 +85,37 @@ public final class Term {
 
   @Override
   public String toString() {
-    return TermPrinter.getCodeForTerm(this);
+    if (this == Term.NULL) {
+      return "NULL";
+    }
+
+    StringBuilder out = new StringBuilder();
+
+    Operation op = this.getOperation();
+    Object first = this.getFirst();
+    Object second = this.getSecond();
+
+    out.append('[');
+
+    if (op == Operations.ABS) {
+      out.append("ABS");
+    } else if (op == Operations.APP) {
+      out.append("APP");
+    } else if (op == Operations.EQUALS) {
+      out.append("EQUALS");
+    } else if (op == Operations.NATIVE_APPLY) {
+      out.append("NATIVE_APPLY");
+    } else if (op == Operations.NOOP) {
+      throw new AssertionError("Non null term with NOOP: " + op);
+    } else if (op == Operations.PRIMITIVE) {
+      out.append("PRIMITIVE");
+    } else if (op == Operations.REF) {
+      out.append("REF");
+    }
+
+    out.append(' ').append(first).append(' ').append(second).append(']');
+
+    return out.toString();
   }
 
 }
