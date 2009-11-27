@@ -6,7 +6,6 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.hjfreyer</groupId>
-  <artifactId>languish-pp</artifactId>
-  <name>Languish Preprocessor</name>
+  <artifactId>languish-tools</artifactId>
   <version>0.0.1</version>
 </project>

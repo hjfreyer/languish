@@ -23,12 +23,12 @@
     </plugins>
   </build>
 	<modules>
-		<module>languish-base</module>
-		<module>languish-interpreter</module>
-		<module>languish-api</module>
+    <module>languish-base</module>
+    <module>languish-interpreter</module>
+    <module>languish-api</module>
     <module>languish-lang</module>
-    <module>languish-pp</module>
     <module>languish-pp-plugin</module>
+    <module>languish-tools</module>
 	</modules>
 
 </project>
