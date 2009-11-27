@@ -8,6 +8,7 @@
   <groupId>com.hjfreyer</groupId>
   <artifactId>languish-pp-plugin</artifactId>
   <packaging>maven-plugin</packaging>
+  <name>Languish Preprocessor Maven Plugin</name>
   <version>0.0.1</version>
   
   <dependencies>

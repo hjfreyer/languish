@@ -7,6 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.hjfreyer</groupId>
   <artifactId>languish-base-tests</artifactId>
+  <name>Languish Base Tests</name>
   <version>0.0.1</version>
   
   <dependencies>

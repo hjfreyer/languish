@@ -7,6 +7,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.hjfreyer</groupId>
   <artifactId>languish-tools</artifactId>
+  <name>Languish Tools</name>
   <version>0.0.1</version>
 
 <dependencies>

@@ -15,7 +15,7 @@ public class AbstractionTest extends TestCase {
         "[APP [ABS [REF 1 NULL] NULL] [PRIMITIVE 5 NULL]]",
         primitive(FIVE),
         PrimitiveTree.of(FIVE)),
-
+ 
     ARGUMENT_CHOOSER_1( //
         app(app(TRUE, primitive(FOUR)), primitive(FIVE)),
         "[APP [APP [ABS [ABS [REF 2 NULL] NULL] NULL] "
