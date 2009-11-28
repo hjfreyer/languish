@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 
 public class TermParserTest extends TestCase {
   public void testNull() {
-    PrimitiveTree ast = TermParser.TERM_GRAMMAR.getParser().parse("NULL");
+    PrimitiveTree ast = TermParser.TERM_GRAMMAR.getAstParser().parse("NULL");
 
     List<?> expected = ImmutableList.of("NULL_TERM", "NULL");
 
@@ -18,7 +18,7 @@ public class TermParserTest extends TestCase {
 
   public void testStringPrimtive() {
     PrimitiveTree ast =
-        TermParser.TERM_GRAMMAR.getParser()
+        TermParser.TERM_GRAMMAR.getAstParser()
             .parse("[PRIMITIVE \"foobar\" NULL]");
 
     List<?> expected =
@@ -34,7 +34,7 @@ public class TermParserTest extends TestCase {
 
   public void testIntPrimtive() {
     PrimitiveTree ast =
-        TermParser.TERM_GRAMMAR.getParser().parse("[PRIMITIVE 42 NULL]");
+        TermParser.TERM_GRAMMAR.getAstParser().parse("[PRIMITIVE 42 NULL]");
 
     List<?> expected =
         ImmutableList.of("PRIMITIVE_TERM", ImmutableList.of(

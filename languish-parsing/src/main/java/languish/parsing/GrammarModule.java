@@ -34,7 +34,7 @@ public class GrammarModule {
     this.rules = rules;
   }
 
-  public Parser<PrimitiveTree> getParser() {
+  public Parser<PrimitiveTree> getAstParser() {
     return getTokenLevelParser(rootRule, rules).from(
         getTokenizer(tokenTypes),
         getDelimiterParser(ignored));

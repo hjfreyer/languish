@@ -73,7 +73,7 @@ public class TermParser {
           .copyOf(Iterables.concat(OPERATIONS, PRIMITIVES, TERMS)));
 
   public static Parser<Term> getTermParser() {
-    return TERM_GRAMMAR.getParser().map(new Map<PrimitiveTree, Term>() {
+    return TERM_GRAMMAR.getAstParser().map(new Map<PrimitiveTree, Term>() {
       @Override
       public Term map(PrimitiveTree from) {
         return TermSemantic.termFromAST(from);
