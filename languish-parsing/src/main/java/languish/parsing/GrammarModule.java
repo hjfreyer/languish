@@ -15,6 +15,7 @@ import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.pattern.Patterns;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.hjfreyer.util.Pair;
@@ -38,6 +39,18 @@ public class GrammarModule {
     return getTokenLevelParser(rootRule, rules).from(
         getTokenizer(tokenTypes),
         getDelimiterParser(ignored));
+  }
+
+  public GrammarModule extend(GrammarModule other) {
+    String rootRule = this.rootRule;
+    List<Pair<String, String>> tokenTypes = ImmutableList.copyOf( //
+        Iterables.concat(this.tokenTypes, other.tokenTypes));
+    List<String> ignored =
+        ImmutableList.copyOf(Iterables.concat(this.ignored, other.ignored));
+    List<Production> rules =
+        ImmutableList.copyOf(Iterables.concat(this.rules, other.rules));
+
+    return new GrammarModule(rootRule, tokenTypes, ignored, rules);
   }
 
   static Parser<Fragment> getTokenizer(List<Pair<String, String>> tokenTypes) {
