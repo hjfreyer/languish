@@ -36,11 +36,11 @@ public class GrammarModule {
   }
 
   public Parser<PrimitiveTree> getParser() {
-    return getTokenLevelParser(rootRule, rules).from(getLexer(tokenTypes),
+    return getTokenLevelParser(rootRule, rules).from(getTokenizer(tokenTypes),
         getDelimiterParser(ignored));
   }
 
-  private static Parser<Fragment> getLexer(List<Pair<String, String>> tokenTypes) {
+  static Parser<Fragment> getTokenizer(List<Pair<String, String>> tokenTypes) {
     Parser<Fragment> lexer = Parsers.never();
 
     for (Pair<String, String> tokenType : tokenTypes) {
@@ -61,7 +61,7 @@ public class GrammarModule {
     return lexer;
   }
 
-  private static Parser<Void> getDelimiterParser(List<String> ignored) {
+  static Parser<Void> getDelimiterParser(List<String> ignored) {
     Parser<Void> delim = Parsers.never();
 
     for (String ignoredRegex : ignored) {
@@ -74,7 +74,7 @@ public class GrammarModule {
     return delim;
   }
 
-  private static Parser<PrimitiveTree> getTokenLevelParser(String rootRule,
+  static Parser<PrimitiveTree> getTokenLevelParser(String rootRule,
       List<Production> rules) {
 
     Multimap<String, Production> rulesMap = Multimaps.newLinkedListMultimap();
