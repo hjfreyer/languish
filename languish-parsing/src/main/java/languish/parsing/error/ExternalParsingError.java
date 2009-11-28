@@ -1,4 +1,4 @@
-package languish.parsing;
+package languish.parsing.error;
 
 public class ExternalParsingError extends RuntimeException {
 

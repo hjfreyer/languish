@@ -17,14 +17,14 @@ import com.google.common.collect.Multimaps;
 import com.hjfreyer.util.Canonizer;
 import com.hjfreyer.util.Pair;
 
-public class LParser {
+public class GrammarModule {
   private final String rootRule;
   private final List<Pair<String, String>> tokenTypes;
   private final List<String> ignored;
-  private final List<GrammarRule> rules;
+  private final List<Production> rules;
 
-  public LParser(String rootRule, List<Pair<String, String>> tokenTypes,
-      List<String> ignored, List<GrammarRule> rules) {
+  public GrammarModule(String rootRule, List<Pair<String, String>> tokenTypes,
+      List<String> ignored, List<Production> rules) {
     super();
     this.rootRule = rootRule;
     this.tokenTypes = tokenTypes;
@@ -62,13 +62,13 @@ public class LParser {
   }
 
   private static Parser<ASTNode> fromGrammarRules(String rootRule,
-      List<GrammarRule> rules) {
+      List<Production> rules) {
     List<String> types = new LinkedList<String>();
-    Multimap<String, GrammarRule> grammarRules =
+    Multimap<String, Production> grammarRules =
         Multimaps.newLinkedListMultimap();
 
-    for (GrammarRule rule : rules) {
-      String type = rule.getType();
+    for (Production rule : rules) {
+      String type = rule.getNonterminal();
       if (!grammarRules.keySet().contains(type)) {
         types.add(type);
       }
@@ -86,18 +86,20 @@ public class LParser {
     }
 
     for (String type : types) {
-      for (final GrammarRule rule : grammarRules.get(type)) {
+      for (final Production rule : grammarRules.get(type)) {
         Parser<ASTNode> prod =
-            rule.getTree().toParser(parserRefs).map(new Map<Object, ASTNode>() {
-              public ASTNode map(Object from) {
-                return new ASTNode(rule.getName(), from);
-              }
+            rule.getExpression().toParser(parserRefs).map(
+                new Map<Object, ASTNode>() {
+                  public ASTNode map(Object from) {
+                    return null;
+                    // return new ASTNode(rule.getName(), from);
+                  }
 
-              @Override
-              public String toString() {
-                return rule.getName() + " wrapper";
-              }
-            });
+                  @Override
+                  public String toString() {
+                    return rule.getName() + " wrapper";
+                  }
+                });
         parsers.put(type, parsers.get(type).or(prod));
       }
     }
@@ -117,7 +119,7 @@ public class LParser {
     return ignored;
   }
 
-  public List<GrammarRule> getRules() {
+  public List<Production> getRules() {
     return rules;
   }
 
@@ -144,7 +146,7 @@ public class LParser {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    LParser other = (LParser) obj;
+    GrammarModule other = (GrammarModule) obj;
     if (ignored == null) {
       if (other.ignored != null)
         return false;

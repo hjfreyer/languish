@@ -15,11 +15,11 @@ public class LParserTest extends TestCase {
         ImmutableList.of(Pair.of("FOOO", "foo"));
     List<String> delim = ImmutableList.of("\\s+");
 
-    List<GrammarRule> rules =
-        ImmutableList.of(new GrammarRule("ROOT", "FOODER", new ParserTree(
-            ParserTree.Op.TERM, "FOOO")));
+    List<Production> rules =
+        ImmutableList.of(new Production("ROOT", "FOODER", new Expression(
+            Expression.Op.TERM, "FOOO")));
 
-    LParser parser = new LParser("ROOT", tokens, delim, rules);
+    GrammarModule parser = new GrammarModule("ROOT", tokens, delim, rules);
 
     Parser<ASTNode> lexer = parser.getParser();
 

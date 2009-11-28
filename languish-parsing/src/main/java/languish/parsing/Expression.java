@@ -14,7 +14,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Canonizer;
 
-public class ParserTree {
+public class Expression {
   public enum Op {
     SEQ, NONTERM, TERM,
   }
@@ -22,7 +22,7 @@ public class ParserTree {
   private final Op op;
   private final Object content;
 
-  public ParserTree(Op op, Object content) {
+  public Expression(Op op, Object content) {
     super();
     this.op = op;
     if (content instanceof List<?>) {
@@ -61,9 +61,9 @@ public class ParserTree {
             }).map(singleton());
       case SEQ :
         final List<Parser<?>> childParsers =
-            Lists.transform((List<ParserTree>) content,
-                new Function<ParserTree, Parser<?>>() {
-                  public Parser<?> apply(ParserTree from) {
+            Lists.transform((List<Expression>) content,
+                new Function<Expression, Parser<?>>() {
+                  public Parser<?> apply(Expression from) {
                     return from.toParser(parserRefs);
                   }
                 });
@@ -74,7 +74,7 @@ public class ParserTree {
   }
 
   @SuppressWarnings("unchecked")
-  public static ParserTree fromList(List<?> list) {
+  public static Expression fromList(List<?> list) {
     if (list.size() != 2) {
       throw new IllegalArgumentException();
     }
@@ -84,13 +84,13 @@ public class ParserTree {
     switch (op) {
       case NONTERM :
       case TERM :
-        return new ParserTree(op, list.get(1));
+        return new Expression(op, list.get(1));
       case SEQ :
-        List<ParserTree> children = new LinkedList<ParserTree>();
+        List<Expression> children = new LinkedList<Expression>();
         for (List<?> child : (List<List<?>>) list.get(1)) {
-          children.add(ParserTree.fromList(child));
+          children.add(Expression.fromList(child));
         }
-        return new ParserTree(op, children);
+        return new Expression(op, children);
     }
     throw new AssertionError();
   }
@@ -120,7 +120,7 @@ public class ParserTree {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    ParserTree other = (ParserTree) obj;
+    Expression other = (Expression) obj;
     if (content == null) {
       if (other.content != null)
         return false;

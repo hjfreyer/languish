@@ -3,13 +3,15 @@ package languish.parsing;
 import java.util.LinkedList;
 import java.util.List;
 
+import languish.util.PrimitiveTree;
+
 import com.google.common.collect.ImmutableList;
 
 public class ASTNode {
   private final String id;
-  private final Object content;
+  private final PrimitiveTree content;
 
-  public ASTNode(String id, Object content) {
+  public ASTNode(String id, PrimitiveTree content) {
     super();
     this.id = id;
     this.content = content;
