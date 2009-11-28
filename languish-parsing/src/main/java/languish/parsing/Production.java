@@ -28,8 +28,10 @@ public class Production {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((name == null) ? 0 : name.hashCode());
-    result = prime * result + ((expression == null) ? 0 : expression.hashCode());
-    result = prime * result + ((nonterminal == null) ? 0 : nonterminal.hashCode());
+    result =
+        prime * result + ((expression == null) ? 0 : expression.hashCode());
+    result =
+        prime * result + ((nonterminal == null) ? 0 : nonterminal.hashCode());
     return result;
   }
 

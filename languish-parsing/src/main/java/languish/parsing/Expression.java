@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import languish.base.Primitive;
+import languish.util.PrimitiveTree;
+
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
 import org.codehaus.jparsec.Terminals;
@@ -32,45 +35,69 @@ public class Expression {
     }
   }
 
-  private static <T> Map<T, List<T>> singleton() {
-    return new Map<T, List<T>>() {
-      public List<T> map(T from) {
-        return ImmutableList.of(from);
+  //
+  // private static Map<PrimitiveTree, PrimitiveTree> singleton() {
+  //
+  // return new Map<PrimitiveTree, PrimitiveTree>() {
+  // @Override
+  // public PrimitiveTree map(PrimitiveTree from) {
+  // return PrimitiveTree.of(ImmutableList.of(from));
+  //
+  // }
+  // };
+  // }
+
+  private static <T> Map<T, Primitive> toPrimitive() {
+    return new Map<T, Primitive>() {
+      @Override
+      public Primitive map(T from) {
+        return new Primitive(from);
+      }
+    };
+  }
+
+  private static Map<List<PrimitiveTree>, PrimitiveTree> listToPrimitiveTree() {
+    return new Map<List<PrimitiveTree>, PrimitiveTree>() {
+      @Override
+      public PrimitiveTree map(List<PrimitiveTree> from) {
+        return PrimitiveTree.of(from);
+      }
+    };
+  }
+
+  private static Map<Primitive, PrimitiveTree> primitiveToPrimitiveTree() {
+    return new Map<Primitive, PrimitiveTree>() {
+      @Override
+      public PrimitiveTree map(Primitive from) {
+        return PrimitiveTree.of(from);
       }
     };
   }
 
   @SuppressWarnings("unchecked")
-  public Parser<?> toParser(
-      final HashMap<String, Parser.Reference<ASTNode>> parserRefs) {
+  public Parser<PrimitiveTree> toParser(
+      final HashMap<String, Parser.Reference<PrimitiveTree>> parserRefs) {
     switch (op) {
       case NONTERM :
-        return parserRefs.get(content).lazy().map(singleton());
+        final String nontermName = (String) content;
+        return parserRefs.get(nontermName).lazy();
       case TERM :
         final String tag = (String) content;
-        return Terminals.fragment(Canonizer.canonize(tag)).map(
-            new Map<String, ASTNode>() {
-              public ASTNode map(String from) {
-                return new ASTNode(tag, from);
-              }
-
-              @Override
-              public String toString() {
-                return "token wrapper";
-              }
-            }).map(singleton());
+        return Terminals.fragment(Canonizer.canonize(tag)).map(toPrimitive())
+            .map(primitiveToPrimitiveTree());
       case SEQ :
-        final List<Parser<?>> childParsers =
-            Lists.transform((List<Expression>) content,
-                new Function<Expression, Parser<?>>() {
-                  public Parser<?> apply(Expression from) {
+        List<Expression> subExpressions = (List<Expression>) content;
+        List<Parser<PrimitiveTree>> childParsers =
+            Lists.transform(subExpressions,
+                new Function<Expression, Parser<PrimitiveTree>>() {
+                  public Parser<PrimitiveTree> apply(Expression from) {
                     return from.toParser(parserRefs);
                   }
                 });
-        return Parsers.list(childParsers);
+        return Parsers.list(childParsers).map(listToPrimitiveTree());
     }
 
-    return null;
+    throw new AssertionError();
   }
 
   @SuppressWarnings("unchecked")

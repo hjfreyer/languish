@@ -1,8 +1,10 @@
 package languish.parsing;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
+
+import languish.base.Primitive;
+import languish.util.PrimitiveTree;
 
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
@@ -12,6 +14,7 @@ import org.codehaus.jparsec.Tokens.Fragment;
 import org.codehaus.jparsec.functors.Map;
 import org.codehaus.jparsec.pattern.Patterns;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.hjfreyer.util.Canonizer;
@@ -32,9 +35,13 @@ public class GrammarModule {
     this.rules = rules;
   }
 
-  public Parser<ASTNode> getParser() {
+  public Parser<PrimitiveTree> getParser() {
+    return getTokenLevelParser(rootRule, rules).from(getLexer(tokenTypes),
+        getDelimiterParser(ignored));
+  }
+
+  private static Parser<Fragment> getLexer(List<Pair<String, String>> tokenTypes) {
     Parser<Fragment> lexer = Parsers.never();
-    Parser<Void> delim = Parsers.never();
 
     for (Pair<String, String> tokenType : tokenTypes) {
       final String tag = Canonizer.canonize(tokenType.getFirst());
@@ -51,6 +58,12 @@ public class GrammarModule {
       lexer = lexer.or(token);
     }
 
+    return lexer;
+  }
+
+  private static Parser<Void> getDelimiterParser(List<String> ignored) {
+    Parser<Void> delim = Parsers.never();
+
     for (String ignoredRegex : ignored) {
       Parser<Void> ignoredParser =
           Scanners.pattern(Patterns.regex(ignoredRegex), "IGNORED");
@@ -58,57 +71,61 @@ public class GrammarModule {
       delim = delim.or(ignoredParser);
     }
 
-    return fromGrammarRules(rootRule, rules).from(lexer, delim);
+    return delim;
   }
 
-  private static Parser<ASTNode> fromGrammarRules(String rootRule,
+  private static Parser<PrimitiveTree> getTokenLevelParser(String rootRule,
       List<Production> rules) {
-    List<String> types = new LinkedList<String>();
-    Multimap<String, Production> grammarRules =
-        Multimaps.newLinkedListMultimap();
+
+    Multimap<String, Production> rulesMap = Multimaps.newLinkedListMultimap();
 
     for (Production rule : rules) {
-      String type = rule.getNonterminal();
-      if (!grammarRules.keySet().contains(type)) {
-        types.add(type);
-      }
-      grammarRules.put(type, rule);
+      rulesMap.put(rule.getNonterminal(), rule);
     }
 
-    HashMap<String, Parser<ASTNode>> parsers =
-        new HashMap<String, Parser<ASTNode>>();
-    HashMap<String, Parser.Reference<ASTNode>> parserRefs =
-        new HashMap<String, Parser.Reference<ASTNode>>();
+    HashMap<String, Parser<PrimitiveTree>> nontermParsers =
+        new HashMap<String, Parser<PrimitiveTree>>();
+    HashMap<String, Parser.Reference<PrimitiveTree>> parserRefs =
+        new HashMap<String, Parser.Reference<PrimitiveTree>>();
 
-    for (String type : types) {
-      parsers.put(type, Parsers.<ASTNode> never());
-      parserRefs.put(type, Parser.<ASTNode> newReference());
+    for (String type : rulesMap.keySet()) {
+      nontermParsers.put(type, Parsers.<PrimitiveTree> never());
+      parserRefs.put(type, Parser.<PrimitiveTree> newReference());
     }
 
-    for (String type : types) {
-      for (final Production rule : grammarRules.get(type)) {
-        Parser<ASTNode> prod =
-            rule.getExpression().toParser(parserRefs).map(
-                new Map<Object, ASTNode>() {
-                  public ASTNode map(Object from) {
-                    return null;
-                    // return new ASTNode(rule.getName(), from);
-                  }
-
-                  @Override
-                  public String toString() {
-                    return rule.getName() + " wrapper";
-                  }
-                });
-        parsers.put(type, parsers.get(type).or(prod));
+    for (String type : rulesMap.keySet()) {
+      for (final Production production : rulesMap.get(type)) {
+        Parser<PrimitiveTree> ruleParser =
+            production.getExpression().toParser(parserRefs);
+        Parser<PrimitiveTree> productionParser =
+            ruleParser.map(wrapWithName(production.getName()));
+        nontermParsers.put(type, nontermParsers.get(type).or(productionParser));
       }
     }
 
-    for (String type : types) {
-      parserRefs.get(type).set(parsers.get(type));
+    for (String type : rulesMap.keySet()) {
+      parserRefs.get(type).set(nontermParsers.get(type));
     }
 
-    return parsers.get(rootRule);
+    return nontermParsers.get(rootRule);
+  }
+
+  private static Map<PrimitiveTree, PrimitiveTree> wrapWithName(
+      final String ruleName) {
+    return new Map<PrimitiveTree, PrimitiveTree>() {
+      public PrimitiveTree map(PrimitiveTree from) {
+        Primitive name = new Primitive(ruleName);
+        List<PrimitiveTree> wrapper =
+            ImmutableList.of(PrimitiveTree.of(name), from);
+
+        return PrimitiveTree.of(wrapper);
+      }
+
+      @Override
+      public String toString() {
+        return ruleName + " wrapper";
+      }
+    };
   }
 
   public List<Pair<String, String>> getTokenTypes() {
