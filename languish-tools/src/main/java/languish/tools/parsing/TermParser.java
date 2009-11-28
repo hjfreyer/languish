@@ -2,108 +2,83 @@ package languish.tools.parsing;
 
 import java.util.List;
 
-import languish.base.Operations;
-import languish.base.Primitive;
 import languish.base.Term;
-import languish.base.Terms;
+import languish.parsing.Expression;
+import languish.parsing.GrammarModule;
+import languish.parsing.Production;
+import languish.util.PrimitiveTree;
 
 import org.codehaus.jparsec.Parser;
-import org.codehaus.jparsec.Parsers;
-import org.codehaus.jparsec.Scanners;
-import org.codehaus.jparsec.Terminals;
-import org.codehaus.jparsec.Token;
-import org.codehaus.jparsec.Tokens.Fragment;
 import org.codehaus.jparsec.functors.Map;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.hjfreyer.util.Pair;
 
 public class TermParser {
-  public static final Terminals OPERATORS =
-      Terminals.operators("[", "]", "ABS", "APP", "EQUALS", "NATIVE_APPLY",
-          "NOOP", "PRIMITIVE", "REF", "NULL");
+  @SuppressWarnings("unchecked")
+  public static final List<Pair<String, String>> TOKEN_PAIRS =
+      ImmutableList.of( //
+          Pair.of("[", "\\["),
+          Pair.of("]", "\\]"),
+          Pair.of("ABS", "ABS"),
+          Pair.of("APP", "APP"),
+          Pair.of("EQUALS", "EQUALS"),
+          Pair.of("NATIVE_APPLY", "NATIVE_APPLY"),
+          Pair.of("PRIMITIVE", "PRIMITIVE"),
+          Pair.of("REF", "REF"),
+          Pair.of("NULL", "NULL"),
+          Pair.of("STRING_LIT", "\"(((\\\\.)|[^\"\\\\])*)\""),
+          Pair.of("INTEGER_LIT", "[0-9]+"));
 
-  public static final Parser<String> STRING_LIT =
-      Terminals.StringLiteral.DOUBLE_QUOTE_TOKENIZER;
-  public static final Parser<Fragment> INTEGER_LIT =
-      Terminals.IntegerLiteral.TOKENIZER;
+  // TODO(hjfreyer): Add block comment
+  public static final List<String> DELIM = ImmutableList.of("\\s*", "//.*$");
 
-  public static final Parser<Void> DELIM =
-      Parsers.or(Scanners.JAVA_LINE_COMMENT, Scanners.JAVA_BLOCK_COMMENT,
-          Scanners.WHITESPACES).skipMany();
+  public static final List<Production> OPERATIONS =
+      ImmutableList.of( //
+          new Production("OPERATION", "ABS_OP", Expression.term("ABS")),
+          new Production("OPERATION", "APP_OP", Expression.term("APP")),
+          new Production("OPERATION", "EQUALS_OP", Expression.term("EQUALS")),
+          new Production("OPERATION", "NATIVE_APPLY_OP", Expression
+              .term("NATIVE_APPLY")));
 
-  public static final Parser<Object> TOKENS =
-      Parsers.or(STRING_LIT, INTEGER_LIT, OPERATORS.tokenizer());
+  public static final List<Production> PRIMITIVES = ImmutableList.of( //
+      new Production("PRIM_LIT", "STRING", Expression.term("STRING_LIT")),
+      new Production("PRIM_LIT", "INTEGER", Expression.term("INTEGER_LIT")));
 
-  public static final Parser<List<Token>> LEXER = TOKENS.lexer(DELIM);
+  public static final List<Production> TERMS = ImmutableList.of( //
+      new Production("TERM", "NULL_TERM", Expression.term("NULL")),
+      new Production("TERM", "PRIMITIVE_TERM", Expression.seq( //
+          Expression.term("["),
+          Expression.term("PRIMITIVE"),
+          Expression.nonterm("PRIM_LIT"),
+          Expression.nonterm("TERM"),
+          Expression.term("]"))),
+      new Production("TERM", "REF_TERM", Expression.seq( //
+          Expression.term("["),
+          Expression.term("REF"),
+          Expression.term("INTEGER_LIT"),
+          Expression.nonterm("TERM"),
+          Expression.term("]"))),
+      new Production("TERM", "TERM_PROPER", Expression.seq( //
+          Expression.term("["),
+          Expression.nonterm("OPERATION"),
+          Expression.nonterm("TERM"),
+          Expression.nonterm("TERM"),
+          Expression.term("]"))));
 
-  public static final Parser<Token> STD_OPERATION =
-      OPERATORS.token("ABS", "APP", "EQUALS", "NATIVE_APPLY", "REF");
+  @SuppressWarnings("unchecked")
+  public static final GrammarModule TERM_GRAMMAR =
+      new GrammarModule("TERM", TOKEN_PAIRS, DELIM, ImmutableList
+          .copyOf(Iterables.concat(OPERATIONS, PRIMITIVES, TERMS)));
 
-  public static final Parser<Integer> INTEGER =
-      Terminals.IntegerLiteral.PARSER.map(new Map<String, Integer>() {
-        public Integer map(String s) {
-          return Integer.parseInt(s);
-        }
-      });
-
-  public static final Parser<String> STRING = Terminals.StringLiteral.PARSER;
-
-  public static final Parser<? extends Primitive> PRIMITIVE =
-      Parsers.or(INTEGER, STRING).map(new Map<Object, Primitive>() {
-        public Primitive map(Object from) {
-          return new Primitive(from);
-        }
-      });
-
-  public static final Parser.Reference<Term> TERM_REF = Parser.newReference();
-
-  public static final Parser<Term> NULL_TERM =
-      OPERATORS.token("NULL").map(new Map<Token, Term>() {
-        public Term map(Token from) {
-          return Term.NULL;
-        }
-      });
-
-  public static final Parser<Term> PRIMITIVE_TERM =
-      PRIMITIVE.between(OPERATORS.token("PRIMITIVE"), TERM_REF.lazy()).between(
-          OPERATORS.token("["), OPERATORS.token("]")).map(
-          new Map<Primitive, Term>() {
-            public Term map(Primitive from) {
-              return Terms.primitive(from);
-            }
-          });
-
-  public static final Parser<Term> REFERENCE_TERM =
-      INTEGER.between(OPERATORS.token("REF"), TERM_REF.lazy()).between(
-          OPERATORS.token("["), OPERATORS.token("]")).map(
-          new Map<Integer, Term>() {
-            public Term map(Integer from) {
-              return Terms.ref(from);
-            }
-          });
-
-  public static final Parser<Term> TERM_PROPER =
-      Parsers.list(
-          ImmutableList.<Parser<?>> of(STD_OPERATION, TERM_REF.lazy(), TERM_REF
-              .lazy())).between(OPERATORS.token("["), OPERATORS.token("]"))
-          .map(new Map<List<?>, Term>() {
-            public Term map(List<?> from) {
-              Token opName = (Token) from.get(0);
-              Term first = (Term) from.get(1);
-              Term second = (Term) from.get(2);
-
-              return new Term(Operations.fromName(opName.toString()), first,
-                  second);
-            }
-          });
-
-  public static final Parser<Term> TERM_TOKEN =
-      Parsers.or(TERM_PROPER, PRIMITIVE_TERM, REFERENCE_TERM, NULL_TERM);
-
-  public static final Parser<Term> TERM = TERM_TOKEN.from(LEXER);
-
-  static { // Ugh... java...
-    TERM_REF.set(TERM_TOKEN);
+  public static Parser<Term> getTermParser() {
+    return TERM_GRAMMAR.getParser().map(new Map<PrimitiveTree, Term>() {
+      @Override
+      public Term map(PrimitiveTree from) {
+        return TermSemantic.termFromAST(from);
+      }
+    });
   }
 
   private TermParser() {

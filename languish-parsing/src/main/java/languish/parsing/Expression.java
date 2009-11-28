@@ -1,5 +1,6 @@
 package languish.parsing;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,6 @@ import org.codehaus.jparsec.functors.Map;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.hjfreyer.util.Canonizer;
 
 public class Expression {
   public enum Op {
@@ -33,6 +33,18 @@ public class Expression {
     } else {
       this.content = content;
     }
+  }
+
+  public static Expression seq(Expression... content) {
+    return new Expression(Op.SEQ, ImmutableList.copyOf(Arrays.asList(content)));
+  }
+
+  public static Expression nonterm(String content) {
+    return new Expression(Op.NONTERM, content);
+  }
+
+  public static Expression term(String content) {
+    return new Expression(Op.TERM, content);
   }
 
   //
@@ -83,12 +95,13 @@ public class Expression {
         return parserRefs.get(nontermName).lazy();
       case TERM :
         final String tag = (String) content;
-        return Terminals.fragment(Canonizer.canonize(tag)).map(toPrimitive())
-            .map(primitiveToPrimitiveTree());
+        return Terminals.fragment(tag.intern()).map(toPrimitive()).map(
+            primitiveToPrimitiveTree());
       case SEQ :
         List<Expression> subExpressions = (List<Expression>) content;
         List<Parser<PrimitiveTree>> childParsers =
-            Lists.transform(subExpressions,
+            Lists.transform(
+                subExpressions,
                 new Function<Expression, Parser<PrimitiveTree>>() {
                   public Parser<PrimitiveTree> apply(Expression from) {
                     return from.toParser(parserRefs);

@@ -46,23 +46,27 @@ public class TestUtil {
           .toString());
 
       // PARSE
-      Term parsed = TermParser.TERM.parse(code);
+      Term parsed = TermParser.getTermParser().parse(code);
 
       TestCase.assertEquals("on test " + name
           + " - code does not parse to given expression:", exp, parsed);
     }
     // REDUCE ONCE
     if (reducedOnce != null) {
-      TestCase.assertEquals("on test " + name
-          + " - expression does not reduce once to given value:", reducedOnce,
+      TestCase.assertEquals(
+          "on test " + name
+              + " - expression does not reduce once to given value:",
+          reducedOnce,
           exp.reduce());
     }
 
     // REDUCE COMPLETELY
     if (reducedCompletely != null) {
-      TestCase.assertEquals("on test " + name
-          + " - expression does not ultimately reduce to given value:",
-          reducedCompletely, Terms.convertTermToJavaObject(exp));
+      TestCase.assertEquals(
+          "on test " + name
+              + " - expression does not ultimately reduce to given value:",
+          reducedCompletely,
+          Terms.convertTermToJavaObject(exp));
     }
   }
 }

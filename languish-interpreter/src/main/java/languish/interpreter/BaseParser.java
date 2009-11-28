@@ -24,7 +24,7 @@ public class BaseParser {
     Term resultExpression;
 
     if (parserName.equals("__BUILTIN__")) {
-      resultExpression = TermParser.TERM.parse(programBody);
+      resultExpression = TermParser.getTermParser().parse(programBody);
     } else {
       Term depList = cons(primitive(new Primitive(parserName)), Term.NULL);
       Term programApplication =

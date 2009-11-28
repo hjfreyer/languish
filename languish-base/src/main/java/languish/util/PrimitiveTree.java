@@ -81,6 +81,6 @@ public class PrimitiveTree {
 
   @Override
   public String toString() {
-    return "PrimitiveTree [object=" + object + "]";
+    return object.toString();
   }
 }

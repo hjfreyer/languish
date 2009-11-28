@@ -17,7 +17,6 @@ import org.codehaus.jparsec.pattern.Patterns;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
-import com.hjfreyer.util.Canonizer;
 import com.hjfreyer.util.Pair;
 
 public class GrammarModule {
@@ -36,7 +35,8 @@ public class GrammarModule {
   }
 
   public Parser<PrimitiveTree> getParser() {
-    return getTokenLevelParser(rootRule, rules).from(getTokenizer(tokenTypes),
+    return getTokenLevelParser(rootRule, rules).from(
+        getTokenizer(tokenTypes),
         getDelimiterParser(ignored));
   }
 
@@ -44,7 +44,7 @@ public class GrammarModule {
     Parser<Fragment> lexer = Parsers.never();
 
     for (Pair<String, String> tokenType : tokenTypes) {
-      final String tag = Canonizer.canonize(tokenType.getFirst());
+      final String tag = tokenType.getFirst().intern();
       final String regex = tokenType.getSecond();
 
       Parser<Fragment> token =
