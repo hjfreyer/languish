@@ -75,7 +75,7 @@ public class Tree<T> {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Tree other = (Tree) obj;
+    Tree<?> other = (Tree<?>) obj;
     if (node == null) {
       if (other.node != null)
         return false;
