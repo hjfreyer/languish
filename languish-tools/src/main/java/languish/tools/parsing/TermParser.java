@@ -40,8 +40,8 @@ public class TermParser {
       Production.seq("OPERATION", "NATIVE_APPLY_OP", "NATIVE_APPLY"));
 
   public static final List<Production> PRIMITIVES = ImmutableList.of( //
-      Production.seq("PRIM_LIT", "STRING", "STRING_LIT"),
-      Production.seq("PRIM_LIT", "INTEGER", "INTEGER_LIT"));
+      Production.seq("PRIM_LIT", "STRING_PRIM", "STRING_LIT"),
+      Production.seq("PRIM_LIT", "INTEGER_PRIM", "INTEGER_LIT"));
 
   public static final List<Production> TERMS = ImmutableList.of( //
       Production.seq("TERM", "NULL_TERM", "NULL"),
@@ -73,7 +73,7 @@ public class TermParser {
     return TERM_GRAMMAR.getAstParser().map(new Map<Tree<String>, Term>() {
       @Override
       public Term map(Tree<String> from) {
-        return TermSemantic.TERM_SEMANTIC.process(from);
+        return (Term) TermSemantic.TERM_SEMANTIC.process(from);
       }
     });
   }

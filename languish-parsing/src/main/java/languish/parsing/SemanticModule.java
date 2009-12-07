@@ -3,45 +3,54 @@ package languish.parsing;
 import java.util.List;
 import java.util.Map;
 
+import languish.parsing.error.SemanticError;
+
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Tree;
 
-public class SemanticModule<T> {
-  private final Map<String, Function<String, T>> leafRules;
-  private final Map<String, Function<List<T>, T>> inodeRules;
+public class SemanticModule {
+  private final Map<String, Function<String, ?>> leafRules;
+  private final Map<String, Function<List<?>, ?>> inodeRules;
 
-  public T process(Tree<String> ast) {
+  public Object process(Tree<String> ast) {
     String ruleName = ast.asList().get(0).asLeaf();
     Tree<String> arg = ast.asList().get(1);
 
     if (arg.isLeaf()) {
+      if (!leafRules.containsKey(ruleName)) {
+        throw new SemanticError("Rule " + ruleName + " not defined.");
+      }
       return leafRules.get(ruleName).apply(arg.asLeaf());
     }
 
-    List<T> processed =
-        Lists.transform(arg.asList(), new Function<Tree<String>, T>() {
+    List<?> processed =
+        Lists.transform(arg.asList(), new Function<Tree<String>, ?>() {
           @Override
-          public T apply(Tree<String> arg) {
+          public Object apply(Tree<String> arg) {
             return process(arg);
           }
         });
 
+    if (!inodeRules.containsKey(ruleName)) {
+      throw new SemanticError("Rule " + ruleName + " not defined.");
+    }
+
     return inodeRules.get(ruleName).apply(processed);
   }
 
-  public SemanticModule(Map<String, Function<String, T>> leafRules,
-      Map<String, Function<List<T>, T>> inodeRules) {
+  public SemanticModule(Map<String, Function<String, ?>> leafRules,
+      Map<String, Function<List<?>, ?>> inodeRules) {
     super();
     this.leafRules = leafRules;
     this.inodeRules = inodeRules;
   }
 
-  public Map<String, Function<String, T>> getLeafRules() {
+  public Map<String, Function<String, ?>> getLeafRules() {
     return leafRules;
   }
 
-  public Map<String, Function<List<T>, T>> getInodeRules() {
+  public Map<String, Function<List<?>, ?>> getInodeRules() {
     return inodeRules;
   }
 

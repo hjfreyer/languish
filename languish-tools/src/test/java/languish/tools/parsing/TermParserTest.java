@@ -26,7 +26,7 @@ public class TermParserTest extends TestCase {
     List<?> expected = ImmutableList.of("PRIMITIVE_TERM", ImmutableList.of( //
         ImmutableList.of("[", "["),
         ImmutableList.of("PRIMITIVE", "PRIMITIVE"),
-        ImmutableList.of("STRING", ImmutableList.of( //
+        ImmutableList.of("STRING_PRIM", ImmutableList.of( //
             ImmutableList.of("STRING_LIT", "\"foobar\""))),
         ImmutableList.of("NULL_TERM", ImmutableList.of( //
             ImmutableList.of("NULL", "NULL"))),
@@ -43,7 +43,7 @@ public class TermParserTest extends TestCase {
     List<?> expected = ImmutableList.of("PRIMITIVE_TERM", ImmutableList.of( //
         ImmutableList.of("[", "["),
         ImmutableList.of("PRIMITIVE", "PRIMITIVE"),
-        ImmutableList.of("INTEGER", ImmutableList.of( //
+        ImmutableList.of("INTEGER_PRIM", ImmutableList.of( //
             ImmutableList.of("INTEGER_LIT", "42"))),
         ImmutableList.of("NULL_TERM", ImmutableList.of( //
             ImmutableList.of("NULL", "NULL"))),
