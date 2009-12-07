@@ -1,6 +1,27 @@
 package com.hjfreyer.util;
 
+import com.google.common.base.Function;
+
 public class Pair<A, B> {
+
+  public static <A, B> Function<Pair<A, B>, A> first() {
+    return new Function<Pair<A, B>, A>() {
+      @Override
+      public A apply(Pair<A, B> arg) {
+        return arg.getFirst();
+      }
+    };
+  }
+
+  public static <A, B> Function<Pair<A, B>, B> second() {
+    return new Function<Pair<A, B>, B>() {
+      @Override
+      public B apply(Pair<A, B> arg) {
+        return arg.getSecond();
+      }
+    };
+  }
+
   private final A first;
   private final B second;
 
