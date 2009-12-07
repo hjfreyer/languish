@@ -1,5 +1,6 @@
 package languish.util;
 
+import java.util.Arrays;
 import java.util.List;
 
 import languish.base.Primitive;
@@ -16,6 +17,10 @@ public class PrimitiveTree {
 
   public static PrimitiveTree of(List<PrimitiveTree> list) {
     return new PrimitiveTree(list);
+  }
+
+  public static PrimitiveTree of(PrimitiveTree... list) {
+    return of(Arrays.asList(list));
   }
 
   @SuppressWarnings("unchecked")

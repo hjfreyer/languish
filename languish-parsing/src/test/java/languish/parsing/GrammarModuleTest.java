@@ -13,6 +13,7 @@ import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Pair;
+import com.hjfreyer.util.Tree;
 
 public class GrammarModuleTest extends TestCase {
 
@@ -59,10 +60,29 @@ public class GrammarModuleTest extends TestCase {
     Parser<List<Token>> lexer = tokenizer.lexer(delimParser);
 
     List<String> actual =
-        Lists.transform(lexer.parse("foo fooooooo      foooo"),
+        Lists.transform(
+            lexer.parse("foo fooooooo      foooo"),
             Functions.TO_STRING);
 
     assertEquals(ImmutableList.of("foo", "fooooooo", "foooo"), actual);
+  }
+
+  public void testRegexLexerOptionalSpace() {
+    List<Pair<String, String>> tokens =
+        ImmutableList.of(Pair.of("FOOO", "fo*o"));
+    List<String> delim = ImmutableList.of("\\s*");
+
+    Parser<Void> delimParser = GrammarModule.getDelimiterParser(delim);
+    Parser<Fragment> tokenizer = GrammarModule.getTokenizer(tokens);
+
+    Parser<List<Token>> lexer = tokenizer.lexer(delimParser);
+
+    List<String> actual =
+        Lists.transform(
+            lexer.parse("foofooooooo      foooofo"),
+            Functions.TO_STRING);
+
+    assertEquals(ImmutableList.of("foo", "fooooooo", "foooo", "fo"), actual);
   }
 
   public void testLexerReject() {
@@ -97,5 +117,144 @@ public class GrammarModuleTest extends TestCase {
         Lists.transform(lexer.parse("foo bar      foooo"), Functions.TO_STRING);
 
     assertEquals(ImmutableList.of("foo", "bar", "foooo"), actual);
+  }
+
+  @SuppressWarnings("unchecked")
+  public void testCalculatorLexer() {
+    List<Pair<String, String>> tokens = ImmutableList.of( //
+        Pair.of("INT", "[0-9]+"),
+        Pair.of("+", "\\+"),
+        Pair.of("-", "-"),
+        Pair.of("*", "\\*"),
+        Pair.of("/", "/"),
+        Pair.of("(", "\\("),
+        Pair.of(")", "\\)"));
+    List<String> delim = ImmutableList.of("\\s*");
+
+    Parser<Void> delimParser = GrammarModule.getDelimiterParser(delim);
+    Parser<Fragment> tokenizer = GrammarModule.getTokenizer(tokens);
+
+    Parser<List<Token>> lexer = tokenizer.lexer(delimParser);
+
+    List<String> actual =
+        Lists.transform(lexer.parse("(3+42) * 16  /3+2"), Functions.TO_STRING);
+
+    assertEquals(ImmutableList.of(
+        "(",
+        "3",
+        "+",
+        "42",
+        ")",
+        "*",
+        "16",
+        "/",
+        "3",
+        "+",
+        "2"), actual);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static final List<Pair<String, String>> CALC_TOKENS =
+      ImmutableList.of( //
+          Pair.of("INT", "[0-9]+"),
+          Pair.of("+", "\\+"),
+          Pair.of("-", "-"),
+          Pair.of("*", "\\*"),
+          Pair.of("/", "/"),
+          Pair.of("(", "\\("),
+          Pair.of(")", "\\)"));
+  public static final List<String> CALC_DELIM = ImmutableList.of("\\s*");
+
+  public static final List<Production> CALC_RULES =
+      ImmutableList.of(
+          Production.seq("EXPR", "EXPR", "FACTOR", "EXPR_TAIL"),
+          Production.seq("EXPR_TAIL", "SUM", "+", "FACTOR", "EXPR_TAIL"),
+          Production.seq("EXPR_TAIL", "DIFF", "-", "FACTOR", "EXPR_TAIL"),
+          Production.seq("EXPR_TAIL", "EMPTY_EXPR_TAIL"),
+          Production.seq("FACTOR", "FACTOR", "TERM", "FACTOR_TAIL"),
+          Production.seq("FACTOR_TAIL", "PROD", "*", "TERM", "FACTOR_TAIL"),
+          Production.seq("FACTOR_TAIL", "QUOT", "/", "TERM", "FACTOR_TAIL"),
+          Production.seq("FACTOR_TAIL", "EMPTY_FACTOR_TAIL"),
+          Production.seq("TERM", "LITERAL", "INT"),
+          Production.seq("TERM", "PAREN", "(", "EXPR", ")"));
+
+  public static final GrammarModule CALC_GRAMMAR =
+      new GrammarModule("EXPR", CALC_TOKENS, CALC_DELIM, CALC_RULES);
+
+  @SuppressWarnings("unchecked")
+  public void testCalculatorGrammarLiteral() {
+    Tree<String> expected =
+        Tree.copyOf(ImmutableList.of("EXPR", ImmutableList.of( //
+            ImmutableList.of("FACTOR", ImmutableList.of( //
+                ImmutableList.of("LITERAL", ImmutableList.of( //
+                    ImmutableList.of("INT", "123"))),
+                ImmutableList.of("EMPTY_FACTOR_TAIL", ImmutableList.of()))),
+            ImmutableList.of("EMPTY_EXPR_TAIL", ImmutableList.of()))));
+
+    assertEquals(expected, CALC_GRAMMAR.getAstParser().parse("123"));
+  }
+
+  @SuppressWarnings("unchecked")
+  public void testCalculatorGrammarSum() {
+
+    Tree<String> expected =
+        Tree.inode(Tree.leaf("EXPR"), Tree.inode( //
+            Tree.inode(Tree.leaf("FACTOR"), Tree.inode( //
+                Tree.inode(Tree.leaf("LITERAL"), Tree.inode( //
+                    Tree.inode(Tree.leaf("INT"), Tree.leaf("123")))),
+                Tree.inode(Tree.leaf("EMPTY_FACTOR_TAIL"), Tree
+                    .<String> inode()))),
+            Tree.inode(Tree.leaf("SUM"), Tree
+                .inode( //
+                    Tree.inode(Tree.leaf("+"), Tree.leaf("+")),
+                    Tree.inode(Tree.leaf("FACTOR"), Tree.inode( //
+                        Tree.inode(Tree.leaf("LITERAL"), Tree.inode( //
+                            Tree.inode(Tree.leaf("INT"), Tree.leaf("345")))),
+                        Tree.inode(Tree.leaf("EMPTY_FACTOR_TAIL"), Tree
+                            .<String> inode()))),
+                    Tree.inode(Tree.leaf("EMPTY_EXPR_TAIL"), Tree
+                        .<String> inode())))));
+
+    assertEquals(expected, CALC_GRAMMAR.getAstParser().parse("123+345"));
+  }
+
+  @SuppressWarnings("unchecked")
+  public void testCalculatorGrammar() {
+    Tree<String> expected =
+        Tree.inode(Tree.leaf("EXPR"), Tree.inode(Tree.inode(
+            Tree.leaf("FACTOR"),
+            Tree.inode(Tree.inode(Tree.leaf("PAREN"), Tree.inode(Tree.inode(
+                Tree.leaf("("),
+                Tree.leaf("(")), Tree.inode(Tree.leaf("EXPR"), Tree.inode(Tree
+                .inode(Tree.leaf("FACTOR"), Tree.inode(Tree.inode(Tree
+                    .leaf("LITERAL"), Tree.inode(Tree.inode(
+                    Tree.leaf("INT"),
+                    Tree.leaf("3")))), Tree.inode(Tree
+                    .leaf("EMPTY_FACTOR_TAIL"), Tree.<String> inode()))), Tree
+                .inode(Tree.leaf("SUM"), Tree.inode(Tree.inode(
+                    Tree.leaf("+"),
+                    Tree.leaf("+")), Tree.inode(Tree.leaf("FACTOR"), Tree
+                    .inode(Tree.inode(Tree.leaf("LITERAL"), Tree.inode(Tree
+                        .inode(Tree.leaf("INT"), Tree.leaf("42")))), Tree
+                        .inode(Tree.leaf("EMPTY_FACTOR_TAIL"), Tree
+                            .<String> inode()))), Tree.inode(Tree
+                    .leaf("EMPTY_EXPR_TAIL"), Tree.<String> inode()))))), Tree
+                .inode(Tree.leaf(")"), Tree.leaf(")")))), Tree.inode(Tree
+                .leaf("PROD"), Tree.inode(Tree.inode(Tree.leaf("*"), Tree
+                .leaf("*")), Tree.inode(Tree.leaf("LITERAL"), Tree.inode(Tree
+                .inode(Tree.leaf("INT"), Tree.leaf("16")))), Tree.inode(Tree
+                .leaf("QUOT"), Tree.inode(Tree.inode(Tree.leaf("/"), Tree
+                .leaf("/")), Tree.inode(Tree.leaf("LITERAL"), Tree.inode(Tree
+                .inode(Tree.leaf("INT"), Tree.leaf("3")))), Tree.inode(Tree
+                .leaf("EMPTY_FACTOR_TAIL"), Tree.<String> inode()))))))), Tree
+            .inode(Tree.leaf("SUM"), Tree.inode(Tree.inode(Tree.leaf("+"), Tree
+                .leaf("+")), Tree.inode(Tree.leaf("FACTOR"), Tree.inode(Tree
+                .inode(Tree.leaf("LITERAL"), Tree.inode(Tree.inode(Tree
+                    .leaf("INT"), Tree.leaf("2")))), Tree.inode(Tree
+                .leaf("EMPTY_FACTOR_TAIL"), Tree.<String> inode()))), Tree
+                .inode(Tree.leaf("EMPTY_EXPR_TAIL"), Tree.<String> inode())))));
+
+    assertEquals(expected, CALC_GRAMMAR.getAstParser().parse(
+        "(3+42) * 16  /3+2"));
   }
 }

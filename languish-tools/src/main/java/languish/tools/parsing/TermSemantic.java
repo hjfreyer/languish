@@ -5,9 +5,12 @@ import languish.base.Operations;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
+import languish.parsing.SemanticModule;
 import languish.util.PrimitiveTree;
 
 public class TermSemantic {
+
+  public static SemanticModule<Term> TERM_SEMANTIC = null;
 
   public static Term termFromAST(PrimitiveTree prim) {
     return visitTerm(prim);

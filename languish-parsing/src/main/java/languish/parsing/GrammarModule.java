@@ -3,12 +3,10 @@ package languish.parsing;
 import java.util.HashMap;
 import java.util.List;
 
-import languish.base.Primitive;
-import languish.util.PrimitiveTree;
-
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
 import org.codehaus.jparsec.Scanners;
+import org.codehaus.jparsec.Terminals;
 import org.codehaus.jparsec.Tokens;
 import org.codehaus.jparsec.Tokens.Fragment;
 import org.codehaus.jparsec.functors.Map;
@@ -16,9 +14,11 @@ import org.codehaus.jparsec.pattern.Patterns;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.hjfreyer.util.Pair;
+import com.hjfreyer.util.Tree;
 
 public class GrammarModule {
   private final String rootRule;
@@ -35,10 +35,11 @@ public class GrammarModule {
     this.rules = rules;
   }
 
-  public Parser<PrimitiveTree> getAstParser() {
-    return getTokenLevelParser(rootRule, rules).from(
-        getTokenizer(tokenTypes),
-        getDelimiterParser(ignored));
+  public Parser<Tree<String>> getAstParser() {
+    return getTokenLevelParser(
+        rootRule,
+        Lists.transform(tokenTypes, Pair.<String, String> first()),
+        rules).from(getTokenizer(tokenTypes), getDelimiterParser(ignored));
   }
 
   public GrammarModule extend(GrammarModule other) {
@@ -87,8 +88,8 @@ public class GrammarModule {
     return delim;
   }
 
-  static Parser<PrimitiveTree> getTokenLevelParser(String rootRule,
-      List<Production> rules) {
+  static Parser<Tree<String>> getTokenLevelParser(String rootRule,
+      List<String> tokenNames, List<Production> rules) {
 
     Multimap<String, Production> rulesMap = Multimaps.newLinkedListMultimap();
 
@@ -96,49 +97,41 @@ public class GrammarModule {
       rulesMap.put(rule.getNonterminal(), rule);
     }
 
-    HashMap<String, Parser<PrimitiveTree>> nontermParsers =
-        new HashMap<String, Parser<PrimitiveTree>>();
-    HashMap<String, Parser.Reference<PrimitiveTree>> parserRefs =
-        new HashMap<String, Parser.Reference<PrimitiveTree>>();
+    HashMap<String, Parser<Tree<String>>> nontermParsers =
+        new HashMap<String, Parser<Tree<String>>>();
+    HashMap<String, Parser.Reference<Tree<String>>> parserRefs =
+        new HashMap<String, Parser.Reference<Tree<String>>>();
 
     for (String type : rulesMap.keySet()) {
-      nontermParsers.put(type, Parsers.<PrimitiveTree> never());
-      parserRefs.put(type, Parser.<PrimitiveTree> newReference());
+      nontermParsers.put(type, Parsers.<Tree<String>> never());
+      parserRefs.put(type, Parser.<Tree<String>> newReference());
+    }
+
+    for (final String tokenName : tokenNames) {
+      nontermParsers.put(tokenName, Terminals.fragment(tokenName.intern()).map(
+          new Map<String, Tree<String>>() {
+
+            @SuppressWarnings("unchecked")
+            public Tree<String> map(String from) {
+              return Tree.inode(Tree.leaf(tokenName), Tree.leaf(from));
+            }
+          }));
+
+      parserRefs.put(tokenName, Parser.<Tree<String>> newReference());
     }
 
     for (String type : rulesMap.keySet()) {
       for (final Production production : rulesMap.get(type)) {
-        Parser<PrimitiveTree> ruleParser =
-            production.getExpression().toParser(parserRefs);
-        Parser<PrimitiveTree> productionParser =
-            ruleParser.map(wrapWithName(production.getName()));
+        Parser<Tree<String>> productionParser = production.toParser(parserRefs);
         nontermParsers.put(type, nontermParsers.get(type).or(productionParser));
       }
     }
 
-    for (String type : rulesMap.keySet()) {
+    for (String type : nontermParsers.keySet()) {
       parserRefs.get(type).set(nontermParsers.get(type));
     }
 
     return nontermParsers.get(rootRule);
-  }
-
-  private static Map<PrimitiveTree, PrimitiveTree> wrapWithName(
-      final String ruleName) {
-    return new Map<PrimitiveTree, PrimitiveTree>() {
-      public PrimitiveTree map(PrimitiveTree from) {
-        Primitive name = new Primitive(ruleName);
-        List<PrimitiveTree> wrapper =
-            ImmutableList.of(PrimitiveTree.of(name), from);
-
-        return PrimitiveTree.of(wrapper);
-      }
-
-      @Override
-      public String toString() {
-        return ruleName + " wrapper";
-      }
-    };
   }
 
   public List<Pair<String, String>> getTokenTypes() {

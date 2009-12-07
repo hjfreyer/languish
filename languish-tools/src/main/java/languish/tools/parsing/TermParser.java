@@ -3,10 +3,8 @@ package languish.tools.parsing;
 import java.util.List;
 
 import languish.base.Term;
-import languish.parsing.Expression;
 import languish.parsing.GrammarModule;
 import languish.parsing.Production;
-import languish.util.PrimitiveTree;
 
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.functors.Map;
@@ -14,6 +12,7 @@ import org.codehaus.jparsec.functors.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.hjfreyer.util.Pair;
+import com.hjfreyer.util.Tree;
 
 public class TermParser {
   @SuppressWarnings("unchecked")
@@ -34,38 +33,36 @@ public class TermParser {
   // TODO(hjfreyer): Add block comment
   public static final List<String> DELIM = ImmutableList.of("\\s*", "//.*$");
 
-  public static final List<Production> OPERATIONS =
-      ImmutableList.of( //
-          new Production("OPERATION", "ABS_OP", Expression.term("ABS")),
-          new Production("OPERATION", "APP_OP", Expression.term("APP")),
-          new Production("OPERATION", "EQUALS_OP", Expression.term("EQUALS")),
-          new Production("OPERATION", "NATIVE_APPLY_OP", Expression
-              .term("NATIVE_APPLY")));
+  public static final List<Production> OPERATIONS = ImmutableList.of( //
+      Production.seq("OPERATION", "ABS_OP", "ABS"),
+      Production.seq("OPERATION", "APP_OP", "APP"),
+      Production.seq("OPERATION", "EQUALS_OP", "EQUALS"),
+      Production.seq("OPERATION", "NATIVE_APPLY_OP", "NATIVE_APPLY"));
 
   public static final List<Production> PRIMITIVES = ImmutableList.of( //
-      new Production("PRIM_LIT", "STRING", Expression.term("STRING_LIT")),
-      new Production("PRIM_LIT", "INTEGER", Expression.term("INTEGER_LIT")));
+      Production.seq("PRIM_LIT", "STRING", "STRING_LIT"),
+      Production.seq("PRIM_LIT", "INTEGER", "INTEGER_LIT"));
 
   public static final List<Production> TERMS = ImmutableList.of( //
-      new Production("TERM", "NULL_TERM", Expression.term("NULL")),
-      new Production("TERM", "PRIMITIVE_TERM", Expression.seq( //
-          Expression.term("["),
-          Expression.term("PRIMITIVE"),
-          Expression.nonterm("PRIM_LIT"),
-          Expression.nonterm("TERM"),
-          Expression.term("]"))),
-      new Production("TERM", "REF_TERM", Expression.seq( //
-          Expression.term("["),
-          Expression.term("REF"),
-          Expression.term("INTEGER_LIT"),
-          Expression.nonterm("TERM"),
-          Expression.term("]"))),
-      new Production("TERM", "TERM_PROPER", Expression.seq( //
-          Expression.term("["),
-          Expression.nonterm("OPERATION"),
-          Expression.nonterm("TERM"),
-          Expression.nonterm("TERM"),
-          Expression.term("]"))));
+      Production.seq("TERM", "NULL_TERM", "NULL"),
+      Production.seq("TERM", "PRIMITIVE_TERM", //
+          "[",
+          "PRIMITIVE",
+          "PRIM_LIT",
+          "TERM",
+          "]"),
+      Production.seq("TERM", "REF_TERM", //
+          "[",
+          "REF",
+          "INTEGER_LIT",
+          "TERM",
+          "]"),
+      Production.seq("TERM", "TERM_PROPER", //
+          "[",
+          "OPERATION",
+          "TERM",
+          "TERM",
+          "]"));
 
   @SuppressWarnings("unchecked")
   public static final GrammarModule TERM_GRAMMAR =
@@ -73,10 +70,10 @@ public class TermParser {
           .copyOf(Iterables.concat(OPERATIONS, PRIMITIVES, TERMS)));
 
   public static Parser<Term> getTermParser() {
-    return TERM_GRAMMAR.getAstParser().map(new Map<PrimitiveTree, Term>() {
+    return TERM_GRAMMAR.getAstParser().map(new Map<Tree<String>, Term>() {
       @Override
-      public Term map(PrimitiveTree from) {
-        return TermSemantic.termFromAST(from);
+      public Term map(Tree<String> from) {
+        return TermSemantic.TERM_SEMANTIC.process(from);
       }
     });
   }
