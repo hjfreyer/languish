@@ -1,14 +1,12 @@
 
-#lang __BUILTIN__;;
-
-[CONS [DATA "VALUE"]
+[CONS [PRIMITIVE "VALUE"]
   [CONS                                  // ParseText = [CAR *VALUE*] (
     [ABS                                 //     TokenTypes = 5,
     [ABS                                 //     Ignored = 4,
     [ABS                                 //     Rules = 3,
     [ABS                                 //     StartingRule = 2,
     [ABS                                 //     Text = 1):
-      [PRIM [DATA PARSE_TEXT] 
+      [NATIVE_APPLY [PRIMITIVE "PARSE_TEXT"] 
         [CONS 
           [CONS 
             [REF 2]
@@ -18,12 +16,12 @@
             [REF 4]
           [CONS 
             [REF 3]
-          [DATA []]]]]]
+          NULL]]]]
         [CONS 
           [REF 1]
-        [DATA []]]]
+        NULL]]
       ]
     ]]]]]
-  [DATA []]]
+  NULL]
 ]
           

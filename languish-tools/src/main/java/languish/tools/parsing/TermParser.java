@@ -31,7 +31,7 @@ public class TermParser {
           Pair.of("INTEGER_LIT", "[0-9]+"));
 
   // TODO(hjfreyer): Add block comment
-  public static final List<String> DELIM = ImmutableList.of("\\s*", "//.*$");
+  public static final List<String> DELIM = ImmutableList.of("(\\s|//[^\n]*)*");
 
   public static final List<Production> OPERATIONS = ImmutableList.of( //
       Production.seq("OPERATION", "ABS_OP", "ABS"),

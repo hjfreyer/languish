@@ -1,11 +1,9 @@
 
-#lang __BUILTIN__;;
-
-[CONS [DATA "VALUE"]                         
+[CONS [PRIMITIVE "VALUE"]                         
   [CONS                            // Add = [CAR *VALUE*](
     [ABS                           //   A = 2
     [ABS                           //   B = 1):
-      [PRIM [DATA ADD]             // Add(
+      [PRIM [PRIMITIVE ADD]             // Add(
         [CONS [REF 1] [REF 2]]     //   A, B)
       ]
     ]]
@@ -13,10 +11,10 @@
   [CONS                            // Multiply = [CAR [CDR *VALUE*]](
     [ABS                           //   A = 2
     [ABS                           //   B = 1):
-      [PRIM [DATA MULTIPLY]        // Add(
+      [PRIM [PRIMITIVE MULTIPLY]        // Add(
         [CONS [REF 1] [REF 2]]     //   A, B)
       ]
     ]]
     
-  [DATA []]]]
+  NULL]]
 ]

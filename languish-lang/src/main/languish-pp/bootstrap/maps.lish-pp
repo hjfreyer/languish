@@ -1,6 +1,6 @@
-#lang __BUILTIN__;;
 
-[CONS [DATA "VALUE"]
+
+[CONS [PRIMITIVE "VALUE"]
   // MAP_GET = [CAR *VALUE*]
   [CONS
     [APP [ABS [APP [REF 1] [REF 1]]] 

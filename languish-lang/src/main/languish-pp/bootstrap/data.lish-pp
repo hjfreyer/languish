@@ -1,18 +1,1 @@
-
-#lang __BUILTIN__;;
-
-[CONS [DATA "VALUE"]                         // TODO: Fix data equality
-  [CONS                                      // Equals = [CAR *VALUE*](
-    [ABS                                     //   A = 2
-    [ABS                                     //   B = 1):
-      [APP [APP [PRIM [DATA BRANCH]          // If
-        [PRIM [DATA AND]                     // Both
-          [CONS [IS_PRIMITIVE [REF 1]]       // Are primitive
-                [IS_PRIMITIVE [REF 2]]]]]    //
-                                             // Then:
-        [PRIM [DATA DATA_EQUALS]             //   Are they equal?
-          [CONS [REF 1] [REF 2]]]]           //   
-        [DATA FALSE]]                        // Else: False
-    ]]
-  [DATA []]]
-]
+NULL

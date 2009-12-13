@@ -1,13 +1,12 @@
 
-#lang __BUILTIN__;;
 
-[CONS [DATA "LOAD"]
+[CONS [PRIMITIVE "LOAD"]
   [CONS 
-    [CONS [DATA "parser/statement_grammar"] 
-    [CONS [DATA "parser/parser"] 
-    [DATA []]]]
+    [CONS [PRIMITIVE "parser/statement_grammar"] 
+    [CONS [PRIMITIVE "parser/parser"] 
+    NULL]]
     [ABS        
-      [CONS [DATA "VALUE"]
+      [CONS [PRIMITIVE "VALUE"]
         [ABS                                                      // Program text
           [APP [APP [APP [APP [APP [APP [CAR [CAR [CDR [REF 2]]]] // ParseText(
             [CAR [CAR [REF 2]]]]                                  //     TokenTypes,    

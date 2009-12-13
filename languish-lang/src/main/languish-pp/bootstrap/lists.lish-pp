@@ -1,19 +1,16 @@
-#lang __BUILTIN__;;
 
-[CONS [DATA "LOAD"] [CONS
-  [CONS [DATA "lang/data"] [DATA []]]
+
+[CONS [PRIMITIVE "LOAD"] [CONS
+  [CONS [PRIMITIVE "lang/PRIMITIVE"] NULL]
   [ABS // Loads MapUtils
-    [CONS [DATA "VALUE"]
+    [CONS [PRIMITIVE "VALUE"]
       [CONS                                        // Map = [CAR *VALUE*](
         [APP [ABS [APP [REF 1] [REF 1]]]           //   OMGEA
           [ABS                                     //   Self = 3
           [ABS                                     //   Function = 2
           [ABS                                     //   List = 1):
-            [APP [APP [PRIM [DATA BRANCH]          //     If List == Null
-              [APP [APP [CAR [CAR [REF 4]]]        //       Equals(
-                [DATA []]]                         //         Null,
-                [REF 1]]]                          //         List)
-              [DATA []]]                           //     Then: Null
+            [APP [APP [EQUALS [REF 1] NULL] //         Null,
+              NULL]                                //     Then: Null
                                                    //     Else: Function(List[0])::Map(List[1:-1])
               [CONS                                //       cons(
                 [APP [REF 2] [CAR [REF 1]]]        //         Function(List[0]),
@@ -30,9 +27,9 @@
           [ABS                                         //   Function = 3
           [ABS                                         //   List = 2
           [ABS                                         //   StartingValue = 1):
-            [APP [APP [PRIM [DATA BRANCH]              //     If List == Null
+            [APP [APP [PRIM [PRIMITIVE BRANCH]              //     If List == Null
               [APP [APP [CAR [CAR [REF 5]]]            //       Equals(
-                [DATA []]]                             //         Null,
+                NULL]                             //         Null,
                 [REF 2]]]                              //         List)
               [REF 1]]                                 //     Then: StartingValue
                                                        //
@@ -50,24 +47,24 @@
           [ABS                                         //   Self = 3
           [ABS                                         //   List = 2
           [ABS                                         //   Item = 1):
-            [APP [APP [PRIM [DATA BRANCH]              //     If List == Null
+            [APP [APP [PRIM [PRIMITIVE BRANCH]              //     If List == Null
               [APP [APP [CAR [CAR [REF 4]]]            //       Equals(
-                [DATA []]]                             //         Null,
+                NULL]                             //         Null,
                 [REF 2]]]                              //         List)
-              [DATA FALSE]]                            //     Then: FALSE
+              [PRIMITIVE FALSE]]                            //     Then: FALSE
                                                        //     Else:
-              [APP [APP [PRIM [DATA BRANCH]            //       If List[0] == Item
+              [APP [APP [PRIM [PRIMITIVE BRANCH]            //       If List[0] == Item
                 [APP [APP [CAR [CAR [REF 4]]]          //         Equals(
                   [CAR [REF 2]]]                       //           List[0],
                   [REF 1]]]                            //           Item)
-                [DATA TRUE]]                           //       Then: TRUE
+                [PRIMITIVE TRUE]]                           //       Then: TRUE
                 [APP [APP [APP [REF 3] [REF 3]]        //       Else: Self(Self,
                   [CDR [REF 2]]]                       //                  List[1:-1],
                   [REF 1]]                             //                  Item)
               ]                                        //       EndIf  
             ]                                          //     EndIf                                        
           ]]]]       
-      [DATA []]]]]
+      NULL]]]
     ]
   ]
 ]]

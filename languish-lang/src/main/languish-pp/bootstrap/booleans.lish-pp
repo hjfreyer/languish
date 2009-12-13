@@ -1,21 +1,19 @@
 
-#lang __BUILTIN__;;
-
-[CONS [DATA "VALUE"]
+[CONS [PRIMITIVE "VALUE"]
   [CONS                                      // And = [CAR *VALUE*](
     [ABS                                     //   A = 2
     [ABS                                     //   B = 1):
-      [PRIM [DATA AND]                     
+      [NATIVE_APPLY [PRIMITIVE "AND"]                     
         [CONS [REF 1] [REF 2]]]
     ]]
     
   [CONS                                      // Or = [CAR [CDR *VALUE*]](
     [ABS                                     //   A = 2
     [ABS                                     //   B = 1):
-      [PRIM [DATA NOT]
-        [PRIM [DATA AND]                     
-          [CONS [PRIM [DATA NOT] [REF 1]] 
-                [PRIM [DATA NOT] [REF 2]]
+      [NATIVE_APPLY [PRIMITIVE "NOT"]
+        [NATIVE_APPLY [PRIMITIVE "AND"]                     
+          [CONS [NATIVE_APPLY [PRIMITIVE "NOT"] [REF 1]] 
+                [NATIVE_APPLY [PRIMITIVE "NOT"] [REF 2]]
           ]
         ]
       ]
@@ -23,7 +21,7 @@
     
   [CONS                                      // Not = [CAR [CDR [CDR *VALUE*]]](
     [ABS                                     //   A = 1):
-      [PRIM [DATA NOT] [REF 1]]
+      [NATIVE_APPLY [PRIMITIVE "NOT"] [REF 1]]
     ]
-  [DATA []]]]]
+  NULL]]]
 ]

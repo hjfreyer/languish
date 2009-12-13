@@ -1,30 +1,29 @@
-#lang __BUILTIN__;;
 
-[CONS [DATA "LOAD"] [CONS
-  [CONS [DATA "lang/maps"] [CONS [DATA "lang/lists"] [DATA []]]]
+[CONS [PRIMITIVE "LOAD"] [CONS
+  [CONS [PRIMITIVE "lang/maps"] [CONS [PRIMITIVE "lang/lists"] NULL]]
   [ABS // Loads MapUtils
-    [CONS [DATA "VALUE"]
+    [CONS [PRIMITIVE "VALUE"]
     [CONS                                            // VisitTree = [CAR *REF*] (
       [APP [ABS [APP [REF 1] [REF 1]]]               //   OMEGA
         [ABS                                         //   Self = 4
         [ABS                                         //   FunctionMap = 3
         [ABS                                         //   IsLeaf predicate = 2
         [ABS                                         //   Tree = 1):
-          [APP [APP [PRIM [DATA BRANCH]              //     If 
+          [APP [APP [PRIM [PRIMITIVE BRANCH]              //     If 
             [APP [REF 2] [CAR [REF 1]]]]             //       IsLeaf(tree[0]):   
                                                      //     Then: FunctionMap[tree[0]](tree[1])
             [APP                                     //       Apply
               [APP [APP [APP [CAR [CAR [REF 5]]]     //         MapGet(
                 [REF 3]]                             //           FunctionMap,
                 [CAR [REF 1]]]                       //           tree[0],
-                [DATA []]]                           //           Null)
+                NULL]                           //           Null)
               [CAR [CDR [REF 1]]]]]                  //       to tree(1)
                                                      //     Else: FunctionMap[tree[0]](Map(VisitTree, tree[1]))
             [APP                                     //       Apply
               [APP [APP [APP [CAR [CAR [REF 5]]]     //         MapGet(
                 [REF 3]]                             //           FunctionMap,
                 [CAR [REF 1]]]                       //           tree[0],
-                [DATA []]                            //           Null)
+                NULL                            //           Null)
               ]                                      //       to
               [APP [APP [CAR [CAR [CDR [REF 5]]]]    //         Map(
                 [APP [APP [APP [REF 4] [REF 4]]      //           Self(Self,
@@ -36,7 +35,7 @@
           ]
         ]]]]
       ]   
-    [DATA []]]
+    NULL]
     ]
   ]]
 ]

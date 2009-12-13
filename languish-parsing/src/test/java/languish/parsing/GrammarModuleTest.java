@@ -67,6 +67,38 @@ public class GrammarModuleTest extends TestCase {
     assertEquals(ImmutableList.of("foo", "fooooooo", "foooo"), actual);
   }
 
+  public void testLexerLineEndComment() {
+    List<Pair<String, String>> tokens =
+        ImmutableList.of(Pair.of("FOOO", "foo"));
+    List<String> delim = ImmutableList.of("\\s*//[^\n]*\\s*", "\\s+");
+
+    Parser<Void> delimParser = GrammarModule.getDelimiterParser(delim);
+    Parser<Fragment> tokenizer = GrammarModule.getTokenizer(tokens);
+
+    Parser<List<Token>> lexer = tokenizer.lexer(delimParser);
+
+    List<String> actual =
+        Lists.transform(
+            lexer.parse("foo foo //Commented \n     foo"),
+            Functions.TO_STRING);
+
+    assertEquals(ImmutableList.of("foo", "foo", "foo"), actual);
+
+    actual =
+        Lists.transform(
+            lexer.parse("foo foo //Commented \n \n   \n    foo"),
+            Functions.TO_STRING);
+
+    assertEquals(ImmutableList.of("foo", "foo", "foo"), actual);
+
+    actual =
+        Lists.transform(
+            lexer.parse("foo foo //Commented    foo"),
+            Functions.TO_STRING);
+
+    assertEquals(ImmutableList.of("foo", "foo"), actual);
+  }
+
   public void testRegexLexerOptionalSpace() {
     List<Pair<String, String>> tokens =
         ImmutableList.of(Pair.of("FOOO", "fo*o"));
