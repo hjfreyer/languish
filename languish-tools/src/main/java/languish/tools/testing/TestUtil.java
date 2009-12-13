@@ -69,4 +69,8 @@ public class TestUtil {
           Terms.convertTermToJavaObject(exp));
     }
   }
+
+  public static void assertReducesToData(PrimitiveTree expected, Term actual) {
+    TestCase.assertEquals(expected, Terms.convertTermToJavaObject(actual));
+  }
 }
