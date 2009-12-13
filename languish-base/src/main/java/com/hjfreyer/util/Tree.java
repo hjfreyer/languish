@@ -3,11 +3,12 @@ package com.hjfreyer.util;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.base.Functions;
 import com.google.common.base.Join;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-public class Tree<T> {
+public class Tree<T> implements Reprable {
   private final Object node;
 
   public static <T> Tree<T> leaf(T prim) {
@@ -87,9 +88,20 @@ public class Tree<T> {
   @Override
   public String toString() {
     if (isLeaf()) {
-      return "Tree.leaf(" + node + ")";
+      return node.toString();
     }
 
-    return "Tree.inode(" + Join.join(", ", asList()) + ")";
+    List<String> children = Lists.transform(asList(), Functions.TO_STRING);
+    return "[" + Join.join(", ", children) + "]";
+  }
+
+  @Override
+  public String repr() {
+    if (isLeaf()) {
+      return "Tree.leaf(" + Repr.repr(node) + ")";
+    }
+
+    List<String> reprs = Lists.transform(asList(), Repr.TO_REPR);
+    return "Tree.inode(" + Join.join(", ", reprs) + ")";
   }
 }
