@@ -10,8 +10,8 @@ import com.google.common.collect.Lists;
 import com.hjfreyer.util.Tree;
 
 public class SemanticModule {
-  private final Map<String, Function<String, ?>> leafRules;
-  private final Map<String, Function<List<?>, ?>> inodeRules;
+  private final Map<String, Function<String, Object>> leafRules;
+  private final Map<String, Function<List<Object>, Object>> inodeRules;
 
   public Object process(Tree<String> ast) {
     String ruleName = ast.asList().get(0).asLeaf();
@@ -24,8 +24,8 @@ public class SemanticModule {
       return leafRules.get(ruleName).apply(arg.asLeaf());
     }
 
-    List<?> processed =
-        Lists.transform(arg.asList(), new Function<Tree<String>, ?>() {
+    List<Object> processed =
+        Lists.transform(arg.asList(), new Function<Tree<String>, Object>() {
           @Override
           public Object apply(Tree<String> arg) {
             return process(arg);
@@ -39,18 +39,18 @@ public class SemanticModule {
     return inodeRules.get(ruleName).apply(processed);
   }
 
-  public SemanticModule(Map<String, Function<String, ?>> leafRules,
-      Map<String, Function<List<?>, ?>> inodeRules) {
+  public SemanticModule(Map<String, Function<String, Object>> leafRules,
+      Map<String, Function<List<Object>, Object>> inodeRules) {
     super();
     this.leafRules = leafRules;
     this.inodeRules = inodeRules;
   }
 
-  public Map<String, Function<String, ?>> getLeafRules() {
+  public Map<String, Function<String, Object>> getLeafRules() {
     return leafRules;
   }
 
-  public Map<String, Function<List<?>, ?>> getInodeRules() {
+  public Map<String, Function<List<Object>, Object>> getInodeRules() {
     return inodeRules;
   }
 

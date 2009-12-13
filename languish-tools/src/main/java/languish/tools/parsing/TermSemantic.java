@@ -15,64 +15,64 @@ import com.google.common.collect.ImmutableMap;
 
 public class TermSemantic {
 
-  private static final Map<String, Function<List<?>, ?>> PRIMITIVES_RULES =
-      ImmutableMap.<String, Function<List<?>, ?>> builder() //
-          .put("STRING_PRIM", new Function<List<?>, ?>() {
+  private static final Map<String, Function<List<Object>, Object>> PRIMITIVES_RULES =
+      ImmutableMap.<String, Function<List<Object>, Object>> builder() //
+          .put("STRING_PRIM", new Function<List<Object>, Object>() {
             @Override
-            public Object apply(List<?> arg) {
+            public Object apply(List<Object> arg) {
               return new Primitive(arg.get(0));
             }
-          }).put("INTEGER_PRIM", new Function<List<?>, ?>() {
+          }).put("INTEGER_PRIM", new Function<List<Object>, Object>() {
             @Override
-            public Object apply(List<?> arg) {
+            public Object apply(List<Object> arg) {
               return new Primitive(arg.get(0));
             }
           }).build();
 
-  private static final Map<String, Function<List<?>, ?>> OPERATIONS_RULES =
-      ImmutableMap.<String, Function<List<?>, ?>> builder() //
-          .put("ABS_OP", new Function<List<?>, ?>() {
+  private static final Map<String, Function<List<Object>, Object>> OPERATIONS_RULES =
+      ImmutableMap.<String, Function<List<Object>, Object>> builder() //
+          .put("ABS_OP", new Function<List<Object>, Object>() {
 
             @Override
-            public Object apply(List<?> arg) {
+            public Object apply(List<Object> arg) {
               return Operations.ABS;
             }
-          }).put("APP_OP", new Function<List<?>, ?>() {
+          }).put("APP_OP", new Function<List<Object>, Object>() {
 
             @Override
-            public Object apply(List<?> arg) {
+            public Object apply(List<Object> arg) {
               return Operations.APP;
             }
           }).build();
 
-  private static final Map<String, Function<List<?>, ?>> TERMS_RULES =
-      ImmutableMap.<String, Function<List<?>, ?>> builder() //
-          .put("NULL_TERM", new Function<List<?>, ?>() {
+  private static final Map<String, Function<List<Object>, Object>> TERMS_RULES =
+      ImmutableMap.<String, Function<List<Object>, Object>> builder() //
+          .put("NULL_TERM", new Function<List<Object>, Object>() {
 
             @Override
-            public Object apply(List<?> arg) {
+            public Object apply(List<Object> arg) {
               return Term.NULL;
             }
 
-          }).put("REF_TERM", new Function<List<?>, ?>() {
+          }).put("REF_TERM", new Function<List<Object>, Object>() {
 
             @Override
-            public Object apply(List<?> arg) {
+            public Object apply(List<Object> arg) {
               Integer num = (Integer) arg.get(2);
               return Terms.ref(num);
             }
 
-          }).put("PRIMITIVE_TERM", new Function<List<?>, ?>() {
+          }).put("PRIMITIVE_TERM", new Function<List<Object>, Object>() {
             @Override
-            public Object apply(List<?> arg) {
+            public Object apply(List<Object> arg) {
               Primitive prim = (Primitive) arg.get(2);
 
               return Terms.primitive(prim);
             }
-          }).put("TERM_PROPER", new Function<List<?>, ?>() {
+          }).put("TERM_PROPER", new Function<List<Object>, Object>() {
 
             @Override
-            public Object apply(List<?> arg) {
+            public Object apply(List<Object> arg) {
               Operation op = (Operation) arg.get(1);
               Term first = (Term) arg.get(2);
               Term second = (Term) arg.get(3);
@@ -81,20 +81,20 @@ public class TermSemantic {
             }
           }).build();
 
-  private static final Map<String, Function<List<?>, ?>> TERM_INODES =
-      ImmutableMap.<String, Function<List<?>, ?>> builder().putAll(
+  private static final Map<String, Function<List<Object>, Object>> TERM_INODES =
+      ImmutableMap.<String, Function<List<Object>, Object>> builder().putAll(
           PRIMITIVES_RULES).putAll(OPERATIONS_RULES).putAll(TERMS_RULES)
           .build();
 
-  private static final Map<String, Function<String, ?>> TERM_LEAVES =
-      ImmutableMap.<String, Function<String, ?>> builder() //
-          .put("STRING_LIT", new Function<String, ?>() {
+  private static final Map<String, Function<String, Object>> TERM_LEAVES =
+      ImmutableMap.<String, Function<String, Object>> builder() //
+          .put("STRING_LIT", new Function<String, Object>() {
             @Override
             public Object apply(String arg) {
               return arg.substring(1, arg.length() - 1) //
                   .replaceAll("\\\\(.)", "\\1");
             }
-          }).put("INTEGER_LIT", new Function<String, ?>() {
+          }).put("INTEGER_LIT", new Function<String, Object>() {
             @Override
             public Object apply(String arg) {
               return Integer.parseInt(arg);
