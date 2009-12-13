@@ -44,16 +44,15 @@ public abstract class AbstractPreprocessorMojo extends AbstractMojo {
       File target = sources.get(source);
 
       try {
-        target.getParentFile().mkdirs();
-
         Reader reader = new FileReader(source);
-        Writer writer = new FileWriter(target);
 
         char[] sourceContents = new char[(int) source.length()];
         reader.read(sourceContents);
 
         String targetContents = process(new String(sourceContents));
 
+        target.getParentFile().mkdirs();
+        Writer writer = new FileWriter(target);
         writer.write(targetContents);
         writer.close();
       } catch (IOException e) {
