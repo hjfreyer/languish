@@ -1,15 +1,10 @@
-
-
-[CONS [PRIMITIVE "LOAD"] [CONS
-  [CONS [PRIMITIVE "lang/PRIMITIVE"] NULL]
-  [ABS // Loads MapUtils
-    [CONS [PRIMITIVE "VALUE"]
+[CONS [PRIMITIVE "VALUE"]
       [CONS                                        // Map = [CAR *VALUE*](
         [APP [ABS [APP [REF 1] [REF 1]]]           //   OMGEA
           [ABS                                     //   Self = 3
           [ABS                                     //   Function = 2
           [ABS                                     //   List = 1):
-            [APP [APP [EQUALS [REF 1] NULL] //         Null,
+            [APP [APP [EQUALS [REF 1] NULL]        //     If List == Null
               NULL]                                //     Then: Null
                                                    //     Else: Function(List[0])::Map(List[1:-1])
               [CONS                                //       cons(
@@ -56,5 +51,3 @@
           ]]]]       
       NULL]]]
     ]
-  ]
-]]
