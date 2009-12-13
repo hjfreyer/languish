@@ -27,12 +27,8 @@
           [ABS                                         //   Function = 3
           [ABS                                         //   List = 2
           [ABS                                         //   StartingValue = 1):
-            [APP [APP [PRIM [PRIMITIVE BRANCH]              //     If List == Null
-              [APP [APP [CAR [CAR [REF 5]]]            //       Equals(
-                NULL]                             //         Null,
-                [REF 2]]]                              //         List)
+            [APP [APP [EQUALS NULL [REF 2]]            //     If List == Null
               [REF 1]]                                 //     Then: StartingValue
-                                                       //
               [APP [APP [REF 3] [CAR [REF 2]]]         //     Else: Function(List[0], 
                 [APP [APP [APP [APP [REF 4] [REF 4]]   //                    Self(Self, 
                   [REF 3]]                             //                         Function, 
@@ -47,17 +43,11 @@
           [ABS                                         //   Self = 3
           [ABS                                         //   List = 2
           [ABS                                         //   Item = 1):
-            [APP [APP [PRIM [PRIMITIVE BRANCH]              //     If List == Null
-              [APP [APP [CAR [CAR [REF 4]]]            //       Equals(
-                NULL]                             //         Null,
-                [REF 2]]]                              //         List)
-              [PRIMITIVE FALSE]]                            //     Then: FALSE
+            [APP [APP [EQUALS NULL [REF 2]]            //     If List == Null
+         [PRIMITIVE FALSE]]                            //     Then: FALSE
                                                        //     Else:
-              [APP [APP [PRIM [PRIMITIVE BRANCH]            //       If List[0] == Item
-                [APP [APP [CAR [CAR [REF 4]]]          //         Equals(
-                  [CAR [REF 2]]]                       //           List[0],
-                  [REF 1]]]                            //           Item)
-                [PRIMITIVE TRUE]]                           //       Then: TRUE
+              [APP [APP [EQUALS [CAR [REF 2]] [REF 1]] //       If List[0] == Item
+                [PRIMITIVE TRUE]]                      //       Then: TRUE
                 [APP [APP [APP [REF 3] [REF 3]]        //       Else: Self(Self,
                   [CDR [REF 2]]]                       //                  List[1:-1],
                   [REF 1]]                             //                  Item)

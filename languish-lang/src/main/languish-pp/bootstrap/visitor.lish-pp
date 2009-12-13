@@ -9,21 +9,23 @@
         [ABS                                         //   FunctionMap = 3
         [ABS                                         //   IsLeaf predicate = 2
         [ABS                                         //   Tree = 1):
-          [APP [APP [PRIM [PRIMITIVE BRANCH]              //     If 
-            [APP [REF 2] [CAR [REF 1]]]]             //       IsLeaf(tree[0]):   
+          [APP [APP [EQUALS                          //     If 
+            [APP [REF 2] [CAR [REF 1]]] 
+	    [PRIMITIVE TRUE]]                        //       IsLeaf(tree[0]):  
                                                      //     Then: FunctionMap[tree[0]](tree[1])
             [APP                                     //       Apply
               [APP [APP [APP [CAR [CAR [REF 5]]]     //         MapGet(
                 [REF 3]]                             //           FunctionMap,
                 [CAR [REF 1]]]                       //           tree[0],
-                NULL]                           //           Null)
+                NULL]                                //           Null)
               [CAR [CDR [REF 1]]]]]                  //       to tree(1)
-                                                     //     Else: FunctionMap[tree[0]](Map(VisitTree, tree[1]))
+                                                     //     Else: FunctionMap[tree[0]](
+ 						     //	    	      Map(VisitTree, tree[1]))
             [APP                                     //       Apply
               [APP [APP [APP [CAR [CAR [REF 5]]]     //         MapGet(
                 [REF 3]]                             //           FunctionMap,
                 [CAR [REF 1]]]                       //           tree[0],
-                NULL                            //           Null)
+                NULL                                 //           Null)
               ]                                      //       to
               [APP [APP [CAR [CAR [CDR [REF 5]]]]    //         Map(
                 [APP [APP [APP [REF 4] [REF 4]]      //           Self(Self,

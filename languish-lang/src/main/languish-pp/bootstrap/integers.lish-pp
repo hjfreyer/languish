@@ -3,7 +3,7 @@
   [CONS                            // Add = [CAR *VALUE*](
     [ABS                           //   A = 2
     [ABS                           //   B = 1):
-      [PRIM [PRIMITIVE ADD]             // Add(
+      [NATIVE_APPLY [PRIMITIVE "ADD"]             // Add(
         [CONS [REF 1] [REF 2]]     //   A, B)
       ]
     ]]
@@ -11,7 +11,7 @@
   [CONS                            // Multiply = [CAR [CDR *VALUE*]](
     [ABS                           //   A = 2
     [ABS                           //   B = 1):
-      [PRIM [PRIMITIVE MULTIPLY]        // Add(
+      [NATIVE_APPLY [PRIMITIVE "MULTIPLY"]        // Add(
         [CONS [REF 1] [REF 2]]     //   A, B)
       ]
     ]]
