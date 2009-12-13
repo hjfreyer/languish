@@ -1,7 +1,7 @@
 package languish.lib;
 
-import languish.base.Terms;
 import languish.base.Term;
+import languish.base.Terms;
 import languish.depman.FileSystemDependencyManager;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.error.DependencyUnavailableError;
@@ -15,7 +15,7 @@ public class Lists {
 
   static {
     try {
-      LIB = DEPMAN.getResource("lang/lists");
+      LIB = DEPMAN.getResource("bootstrap/lists");
     } catch (DependencyUnavailableError e) {
       throw new LanguishLoadError(e);
     }
