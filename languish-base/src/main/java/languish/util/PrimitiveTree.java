@@ -8,6 +8,7 @@ import languish.base.Primitive;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+// TODO replace with Tree<Primitive>
 public class PrimitiveTree {
   private final Object object;
 
