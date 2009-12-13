@@ -11,7 +11,7 @@ import languish.tools.preprocessor.Preprocessor;
  * the <a href="https://javacc.dev.java.net/">JavaCC website</a>.
  * 
  * @goal languish-preprocess
- * @phase generate-sources
+ * @phase generate-resources
  */
 public class LanguishPPMojo extends AbstractPreprocessorMojo {
 
@@ -31,7 +31,7 @@ public class LanguishPPMojo extends AbstractPreprocessorMojo {
    * compiling and packaging.
    * 
    * @parameter expression="${outputDirectory}"
-   *            default-value="${project.build.directory}/generated-sources/languish"
+   *            default-value="${project.build.directory}/generated-resources/languish"
    */
   private File outputDirectory;
 

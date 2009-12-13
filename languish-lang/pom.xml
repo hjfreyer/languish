@@ -25,6 +25,12 @@
 				</executions>
 			</plugin>
 		</plugins>
+		
+    <resources>
+      <resource>
+        <directory>target/generated-resources</directory>
+      </resource>
+    </resources>
 	</build>
   <dependencies>
   	<dependency>
@@ -32,10 +38,15 @@
   		<artifactId>languish-base</artifactId>
   		<version>0.0.1</version>
   	</dependency>
-  	<dependency>
-  		<groupId>com.hjfreyer</groupId>
-  		<artifactId>languish-interpreter</artifactId>
-  		<version>0.0.1</version>
-  	</dependency>
+    <dependency>
+      <groupId>com.hjfreyer</groupId>
+      <artifactId>languish-interpreter</artifactId>
+      <version>0.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.hjfreyer</groupId>
+      <artifactId>languish-api</artifactId>
+      <version>0.0.1</version>
+    </dependency>
   </dependencies>
 </project>
