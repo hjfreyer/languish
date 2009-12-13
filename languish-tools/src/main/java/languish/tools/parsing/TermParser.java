@@ -74,7 +74,7 @@ public class TermParser {
   @SuppressWarnings("unchecked")
   public static final GrammarModule TERM_GRAMMAR =
       new GrammarModule("TERM", TOKEN_PAIRS, DELIM, ImmutableList
-          .copyOf(Iterables.concat(OPERATIONS, PRIMITIVES, TERMS)));
+          .copyOf(Iterables.concat(OPERATIONS, BOOLEAN_LIT, PRIMITIVES, TERMS)));
 
   public static Parser<Term> getTermParser() {
     return TERM_GRAMMAR.getAstParser().map(new Map<Tree<String>, Term>() {
