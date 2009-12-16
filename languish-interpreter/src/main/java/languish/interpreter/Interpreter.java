@@ -2,8 +2,8 @@ package languish.interpreter;
 
 import java.util.List;
 
-import languish.base.Terms;
 import languish.base.Term;
+import languish.base.Terms;
 import languish.interpreter.error.DependencyUnavailableError;
 import languish.util.PrimitiveTree;
 
@@ -15,14 +15,14 @@ public class Interpreter {
         Terms.convertTermToJavaObject(Terms.car(module)).asPrimitive()
             .asString();
 
-    Term moduleArgument = Terms.cdr(module);
+    Term moduleArgument = Terms.car(Terms.cdr(module));
 
     if (moduleCommand.equals("VALUE")) {
       return moduleArgument;
     } else if (moduleCommand.equals("LOAD")) {
       List<PrimitiveTree> depNameList =
           Terms.convertTermToJavaObject(Terms.car(moduleArgument)).asList();
-      Term moduleValue = Terms.cdr(moduleArgument);
+      Term moduleValue = Terms.car(Terms.cdr(moduleArgument));
 
       Term depList = Term.NULL;
 

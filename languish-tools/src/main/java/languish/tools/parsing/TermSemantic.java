@@ -11,6 +11,7 @@ import languish.base.Terms;
 import languish.parsing.SemanticModule;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 public class TermSemantic {
@@ -27,6 +28,16 @@ public class TermSemantic {
             public Object apply(List<Object> arg) {
               return new Primitive(arg.get(0));
             }
+          }).put("TRUE_LIT", new Function<List<Object>, Object>() {
+            @Override
+            public Object apply(List<Object> arg) {
+              return new Primitive(true);
+            }
+          }).put("FALSE_LIT", new Function<List<Object>, Object>() {
+            @Override
+            public Object apply(List<Object> arg) {
+              return new Primitive(false);
+            }
           }).build();
 
   private static final Map<String, Function<List<Object>, Object>> OPERATIONS_RULES =
@@ -42,6 +53,18 @@ public class TermSemantic {
             @Override
             public Object apply(List<Object> arg) {
               return Operations.APP;
+            }
+          }).put("NATIVE_APPLY_OP", new Function<List<Object>, Object>() {
+
+            @Override
+            public Object apply(List<Object> arg) {
+              return Operations.NATIVE_APPLY;
+            }
+          }).put("EQUALS_OP", new Function<List<Object>, Object>() {
+
+            @Override
+            public Object apply(List<Object> arg) {
+              return Operations.EQUALS;
             }
           }).build();
 
@@ -81,13 +104,20 @@ public class TermSemantic {
             }
           }).build();
 
+  private static final List<String> UNWRAP_RULES =
+      ImmutableList.of("BOOLEAN_PRIM");
+
   private static final Map<String, Function<List<Object>, Object>> TERM_INODES =
       ImmutableMap.<String, Function<List<Object>, Object>> builder().putAll(
           PRIMITIVES_RULES).putAll(OPERATIONS_RULES).putAll(TERMS_RULES)
-          .build();
+          .putAll(SemanticModule.getUnwrapRules(UNWRAP_RULES)).build();
+
+  private static final List<String> IDENTITY_LEAVES =
+      ImmutableList.of("[", "]");
 
   private static final Map<String, Function<String, Object>> TERM_LEAVES =
-      ImmutableMap.<String, Function<String, Object>> builder() //
+      ImmutableMap.<String, Function<String, Object>> builder()
+          //
           .put("STRING_LIT", new Function<String, Object>() {
             @Override
             public Object apply(String arg) {
@@ -99,71 +129,12 @@ public class TermSemantic {
             public Object apply(String arg) {
               return Integer.parseInt(arg);
             }
-          }).build();
+
+          }).putAll(SemanticModule.getIdentityLeafRules(IDENTITY_LEAVES))
+          .build();
 
   public static SemanticModule TERM_SEMANTIC =
       new SemanticModule(TERM_LEAVES, TERM_INODES);
-
-  //
-  // public static Term termFromAST(PrimitiveTree prim) {
-  // return visitTerm(prim);
-  // }
-  //
-  // public static Term visitTerm(PrimitiveTree prim) {
-  // String name = prim.asList().get(0).asPrimitive().asString();
-  // PrimitiveTree children = prim.asList().get(1);
-  // if (name.equals("NULL_TERM")) {
-  // return Term.NULL;
-  // } else if (name.equals("PRIMITIVE_TERM")) {
-  // return visitPrimitive(children.asList().get(2));
-  // } else if (name.equals("REF_TERM")) {
-  // return Terms.ref(Integer.parseInt(children.asList().get(2).asPrimitive()
-  // .asString()));
-  // } else if (name.equals("TERM_PROPER")) {
-  // Operation op = visitOperation(children.asList().get(1));
-  // Term first = visitTerm(children.asList().get(2));
-  // Term second = visitTerm(children.asList().get(3));
-  //
-  // return new Term(op, first, second);
-  // } else {
-  // throw new IllegalArgumentException();
-  // }
-  // }
-  //
-  // public static Operation visitOperation(PrimitiveTree prim) {
-  // String name = prim.asList().get(0).asPrimitive().asString();
-  //
-  // if (name.equals("ABS_OP")) {
-  // return Operations.ABS;
-  // } else if (name.equals("APP_OP")) {
-  // return Operations.APP;
-  // } else if (name.equals("EQUALS_OP")) {
-  // return Operations.EQUALS;
-  // } else if (name.equals("NATIVE_APPLY_OP")) {
-  // return Operations.NATIVE_APPLY;
-  // } else {
-  // throw new IllegalArgumentException();
-  // }
-  // }
-  //
-  // public static Term visitPrimitive(PrimitiveTree prim) {
-  // String name = prim.asList().get(0).asPrimitive().asString();
-  // PrimitiveTree children = prim.asList().get(1);
-  //
-  // if (name.equals("STRING")) {
-  // String unescaped = children.asPrimitive().asString();
-  //
-  // String escaped = unescaped.substring(1, unescaped.length() - 1) //
-  // .replaceAll("\\\\(.)", "\\1");
-  //
-  // return Terms.primitive(new Primitive(escaped));
-  // } else if (name.equals("INTEGER")) {
-  // return Terms.primitive(new Primitive(Integer.parseInt(children
-  // .asPrimitive().asString())));
-  // } else {
-  // throw new IllegalArgumentException();
-  // }
-  // }
 
   private TermSemantic() {
   }

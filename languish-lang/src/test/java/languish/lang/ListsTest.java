@@ -1,11 +1,13 @@
 package languish.lang;
 
 import static languish.base.Terms.*;
+import static languish.tools.testing.TestUtil.*;
 import junit.framework.TestCase;
 import languish.api.MathFunctions;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
+import languish.lib.Integers;
 import languish.lib.Lists;
 import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
@@ -14,17 +16,35 @@ import com.google.common.collect.ImmutableList;
 
 public class ListsTest extends TestCase {
 
+  private static final Term SUM_REDUCE = app(Lists.reduce(), Integers.add());
+
   private static final Term ADD_ONE =
       abs(nativeApply(MathFunctions.ADD, cons(
           primitive(new Primitive(1)),
-          ref(1))));
+          cons(ref(3), Term.NULL))));
 
   public void testMapEmpty() {
-    Term list = Terms.convertJavaObjectToTerm(PrimitiveTree.of());
+    Term list = Term.NULL;
 
     TestUtil.assertReducesToData(PrimitiveTree.of(), app(app(
         Lists.map(),
         ADD_ONE), list));
+  }
+
+  public void testAddOne() {
+    TestUtil.assertReducesToData(PrimitiveTree.of(TestUtil.FIVE), app(
+        ADD_ONE,
+        primitive(TestUtil.FOUR)));
+  }
+
+  public void testSingleMap() {
+    Term list =
+        Terms
+            .convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(4)));
+
+    TestUtil.assertReducesToData(
+        PrimitiveTree.copyOf(ImmutableList.of(5)),
+        app(app(Lists.map(), ADD_ONE), list));
   }
 
   public void testMapIntegers() {
@@ -57,31 +77,36 @@ public class ListsTest extends TestCase {
         ImmutableList.of(12),
         ImmutableList.of(3))), app(app(
         Lists.map(),
-        abs(cons(ref(1), Term.NULL))), list));
+        abs(cons(ref(2), Term.NULL))), list));
   }
-  //
-  // public void testReduceEmptyList() {
-  // Term list = Util.convertJavaObjectToTerm(PrimitiveTree.of());
-  //
-  // TestUtil.assertReducesToData(LInteger.of(1), app(app(app(
-  // Lists.reduce(),
-  // primitive(LSymbol.of("foo"))), list), primitive(LInteger.of(1))));
-  // }
-  //
-  // public void testReduceSumOneElement() {
-  // Term list = Util.convertJavaObjectToTerm(ImmutableList.of(4));
-  //
-  // TestUtil.assertReducesToData(LInteger.of(5), app(app(app(
-  // Lists.reduce(),
-  // Integers.add()), list), primitive(LInteger.of(1))));
-  // }
-  //
+
+  public void testReduceEmptyList() {
+    Term list = Term.NULL;
+
+    TestUtil.assertReducesToData(PrimitiveTree.copyOf(1), app(app(app(Lists
+        .reduce(), Term.NULL), list), primitive(TestUtil.ONE)));
+  }
+
+  public void testReduceSumOneElement() {
+    Term list = Terms.convertJavaObjectToTerm( //
+        PrimitiveTree.copyOf(ImmutableList.of(4)));
+
+    TestUtil.assertReducesToData(PrimitiveTree.of(FIVE), app(app(
+        SUM_REDUCE,
+        list), primitive(ONE)));
+  }
+
   // public void testReduceSumManyElements() {
-  // Term list = Util.convertJavaObjectToTerm(ImmutableList.of(4, 5, 6, 7));
+  // Term list =
+  // Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+  // 4,
+  // 5,
+  // 6,
+  // 7)));
   //
-  // TestUtil.assertReducesToData(LInteger.of(23), app(app(app(
-  // Lists.reduce(),
-  // Integers.add()), list), primitive(LInteger.of(1))));
+  // TestUtil.assertReducesToData(PrimitiveTree.copyOf(23), app(app(
+  // SUM_REDUCE,
+  // list), primitive(ONE)));
   // }
   //
   // public void testReduceNonCommutative() {

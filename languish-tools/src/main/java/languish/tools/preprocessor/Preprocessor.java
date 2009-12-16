@@ -1,9 +1,13 @@
 package languish.tools.preprocessor;
 
+import com.hjfreyer.util.Tree;
+
 public class Preprocessor {
 
   public static String process(String input) {
-    return PreprocessorGrammar.GRAMMAR.getAstParser().parse(input).toString();
+    Tree<String> ast = PreprocessorGrammar.GRAMMAR.getAstParser().parse(input);
+
+    return PreprocessorSemantic.PREPROCESSOR_SEMANTIC.process(ast).toString();
   }
 
   private Preprocessor() {

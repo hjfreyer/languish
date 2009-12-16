@@ -37,7 +37,6 @@ public class Operations {
 
     public Term replaceAllReferencesToParam(Term term, int id, Term with) {
       Term subterm = (Term) term.getFirst();
-
       return Terms.abs(subterm.replaceAllReferencesToParam(id + 1, with));
     }
 
@@ -208,8 +207,10 @@ public class Operations {
         Term cond1 = new Term(EQUALS, Terms.car(t1), Terms.car(t2));
         Term cond2 = new Term(EQUALS, Terms.cdr(t1), Terms.cdr(t2));
 
-        return Terms.branch(cond1, Terms.branch(cond2, Terms.TRUE,
-            Terms.FALSE), Terms.FALSE);
+        return Terms.branch(
+            cond1,
+            Terms.branch(cond2, Terms.TRUE, Terms.FALSE),
+            Terms.FALSE);
       }
 
       throw new AssertionError("Invalid operation");
@@ -234,7 +235,8 @@ public class Operations {
     Term secondTerm = (Term) term.getSecond();
 
     return new Term(term.getOperation(), firstTerm.replaceAllReferencesToParam(
-        id, with), secondTerm.replaceAllReferencesToParam(id, with));
+        id,
+        with), secondTerm.replaceAllReferencesToParam(id, with));
   }
 
   public static boolean hasReferencesGreaterThan(Term term, int max) {

@@ -1,7 +1,7 @@
 package languish.lib;
 
-import languish.base.Terms;
 import languish.base.Term;
+import languish.base.Terms;
 import languish.depman.FileSystemDependencyManager;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.error.DependencyUnavailableError;
@@ -15,7 +15,7 @@ public class Integers {
 
   static {
     try {
-      LIB = DEPMAN.getResource("lang/integers");
+      LIB = DEPMAN.getResource("bootstrap/integers");
     } catch (DependencyUnavailableError e) {
       throw new LanguishLoadError(e);
     }
