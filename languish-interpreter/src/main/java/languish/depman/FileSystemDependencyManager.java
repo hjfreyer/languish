@@ -7,6 +7,7 @@ import java.util.Scanner;
 import languish.base.Term;
 import languish.interpreter.BaseParser;
 import languish.interpreter.DependencyManager;
+import languish.interpreter.Interpreter;
 import languish.interpreter.error.DependencyUnavailableError;
 
 public class FileSystemDependencyManager implements DependencyManager {
@@ -37,7 +38,8 @@ public class FileSystemDependencyManager implements DependencyManager {
         doc.append(read.nextLine()).append('\n');
       }
 
-      return BaseParser.parseFromString(doc.toString());
+      return Interpreter.reduceModule(BaseParser
+          .parseFromString(doc.toString()), this);
     }
 
     throw new DependencyUnavailableError(resourceName);
