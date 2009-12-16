@@ -44,4 +44,10 @@ public class FileSystemDependencyManager implements DependencyManager {
 
     throw new DependencyUnavailableError(resourceName);
   }
+
+  @Override
+  public boolean hasResource(String resourceName) {
+    // TODO Auto-generated method stub
+    return false;
+  }
 }
