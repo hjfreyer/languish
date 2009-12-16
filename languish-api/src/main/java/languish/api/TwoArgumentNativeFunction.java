@@ -8,7 +8,7 @@ public abstract class TwoArgumentNativeFunction implements NativeFunction {
   @Override
   public final PrimitiveTree apply(PrimitiveTree arg) {
     Primitive first = arg.asList().get(0).asPrimitive();
-    Primitive second = arg.asList().get(0).asPrimitive();
+    Primitive second = arg.asList().get(1).asPrimitive();
 
     return apply(first, second);
   }
