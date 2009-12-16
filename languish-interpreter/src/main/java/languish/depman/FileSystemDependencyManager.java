@@ -47,7 +47,6 @@ public class FileSystemDependencyManager implements DependencyManager {
 
   @Override
   public boolean hasResource(String resourceName) {
-    // TODO Auto-generated method stub
-    return false;
+    return CLASS_LOADER.getResource(resourceName) != null;
   }
 }
