@@ -1,8 +1,12 @@
 package languish.api;
 
+import java.util.Map;
+
 import languish.base.NativeFunction;
 import languish.base.Primitive;
 import languish.util.PrimitiveTree;
+
+import com.google.common.collect.ImmutableMap;
 
 public class MathFunctions {
 
@@ -50,6 +54,11 @@ public class MathFunctions {
               .parseInt(obj.asString())));
         }
       };
+
+  public static final Map<String, ? extends NativeFunction> FUNCTION_MAP =
+      ImmutableMap.<String, NativeFunction> builder().put("math/add", ADD).put(
+          "math/multiply",
+          MULTIPLY).build();
 
   // public static final NativeFunction DATA_EQUALS = new NativeFunction() {
   // @Override

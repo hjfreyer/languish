@@ -1,13 +1,26 @@
 package languish.interpreter;
 
-import java.util.List;
-
 import languish.base.Term;
 import languish.base.Terms;
+import languish.base.error.AlreadyReducedError;
 import languish.interpreter.error.DependencyUnavailableError;
-import languish.util.PrimitiveTree;
 
 public class Interpreter {
+
+  public static Term reduceModuleCompletely(Term module,
+      DependencyManager depman) {
+    while (true) {
+      String moduleCommand =
+          Terms.convertTermToJavaObject(Terms.car(module)).asPrimitive()
+              .asString();
+
+      if (moduleCommand.equals("VALUE")) {
+        return Terms.car(Terms.cdr(module));
+      }
+
+      module = reduceModule(module, depman);
+    }
+  }
 
   public static Term reduceModule(Term module, DependencyManager depman)
       throws DependencyUnavailableError {
@@ -18,21 +31,14 @@ public class Interpreter {
     Term moduleArgument = Terms.car(Terms.cdr(module));
 
     if (moduleCommand.equals("VALUE")) {
-      return moduleArgument;
+      throw new AlreadyReducedError(module);
     } else if (moduleCommand.equals("LOAD")) {
-      List<PrimitiveTree> depNameList =
-          Terms.convertTermToJavaObject(Terms.car(moduleArgument)).asList();
+      String depName =
+          Terms.convertTermToJavaObject(Terms.car(moduleArgument))
+              .asPrimitive().asString();
       Term moduleValue = Terms.car(Terms.cdr(moduleArgument));
 
-      Term depList = Term.NULL;
-
-      for (int i = depNameList.size() - 1; i >= 0; i--) {
-        String depName = depNameList.get(i).asPrimitive().asString();
-
-        depList = Terms.cons(depman.getResource(depName), depList);
-      }
-
-      return Terms.app(moduleValue, depList);
+      return Terms.app(moduleValue, depman.getResource(depName));
     } else {
       throw new AssertionError();
     }
