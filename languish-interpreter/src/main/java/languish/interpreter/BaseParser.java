@@ -1,6 +1,5 @@
 package languish.interpreter;
 
-import languish.tools.parsing.TermParser;
 import static languish.base.Terms.*;
 
 import java.util.regex.Matcher;
@@ -8,6 +7,7 @@ import java.util.regex.Pattern;
 
 import languish.base.Primitive;
 import languish.base.Term;
+import languish.tools.parsing.TermParser;
 
 import com.hjfreyer.util.Pair;
 
@@ -26,12 +26,13 @@ public class BaseParser {
     if (parserName.equals("__BUILTIN__")) {
       resultExpression = TermParser.getTermParser().parse(programBody);
     } else {
-      Term depList = cons(primitive(new Primitive(parserName)), Term.NULL);
+      Term depName = primitive(new Primitive(parserName));
       Term programApplication =
           abs(app(ref(1), primitive(new Primitive(programBody))));
 
-      resultExpression = cons(primitive(new Primitive("LOAD")), //
-          cons(depList, cons(programApplication, Term.NULL)));
+      Term moduleArg = cons(depName, cons(programApplication, Term.NULL));
+      resultExpression =
+          cons(primitive(new Primitive("LOAD")), cons(moduleArg, Term.NULL));
     }
 
     return resultExpression;

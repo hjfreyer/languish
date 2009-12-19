@@ -7,7 +7,6 @@ import java.util.Scanner;
 import languish.base.Term;
 import languish.interpreter.BaseParser;
 import languish.interpreter.DependencyManager;
-import languish.interpreter.Interpreter;
 import languish.interpreter.error.DependencyUnavailableError;
 
 public class FileSystemDependencyManager implements DependencyManager {
@@ -38,8 +37,7 @@ public class FileSystemDependencyManager implements DependencyManager {
         doc.append(read.nextLine()).append('\n');
       }
 
-      return Interpreter.reduceModule(BaseParser
-          .parseFromString(doc.toString()), this);
+      return BaseParser.parseFromString(doc.toString());
     }
 
     throw new DependencyUnavailableError(resourceName);
@@ -47,6 +45,13 @@ public class FileSystemDependencyManager implements DependencyManager {
 
   @Override
   public boolean hasResource(String resourceName) {
-    return CLASS_LOADER.getResource(resourceName) != null;
+    for (String path : paths) {
+      String docPath = path + '/' + resourceName + ".lish";
+
+      if (CLASS_LOADER.getResource(docPath) != null) {
+        return true;
+      }
+    }
+    return false;
   }
 }

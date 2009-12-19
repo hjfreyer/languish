@@ -36,12 +36,12 @@ public class BaseParserTest extends TestCase {
     Term res = BaseParser //
         .parseFromString("#lang fooParser;; blah blah blah");
 
-    Term depList = cons(primitive(new Primitive("fooParser")), Term.NULL);
+    Term depName = primitive(new Primitive("fooParser"));
     Term programApplication =
         abs(app(ref(1), primitive(new Primitive(" blah blah blah"))));
 
     Term expected = cons(primitive(new Primitive("LOAD")), //
-        cons(depList, cons(programApplication, Term.NULL)));
+        cons(cons(depName, cons(programApplication, Term.NULL)), Term.NULL));
 
     assertEquals(expected, res);
   }
