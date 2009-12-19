@@ -8,9 +8,10 @@ import languish.interpreter.error.DependencyUnavailableError;
 
 public class ChainedDependencyManager implements DependencyManager {
 
-  private final List<DependencyManager> dependencyManagers;
+  private final List<? extends DependencyManager> dependencyManagers;
 
-  public ChainedDependencyManager(List<DependencyManager> dependencyManagers) {
+  public ChainedDependencyManager(
+      List<? extends DependencyManager> dependencyManagers) {
     this.dependencyManagers = dependencyManagers;
   }
 
