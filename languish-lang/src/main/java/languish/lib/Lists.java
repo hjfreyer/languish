@@ -4,6 +4,8 @@ import languish.base.Term;
 import languish.base.Terms;
 import languish.depman.FileSystemDependencyManager;
 import languish.interpreter.DependencyManager;
+import languish.interpreter.Interpreter;
+import languish.interpreter.Modules;
 import languish.interpreter.error.DependencyUnavailableError;
 
 import com.google.common.collect.ImmutableList;
@@ -15,7 +17,10 @@ public class Lists {
 
   static {
     try {
-      LIB = DEPMAN.getResource("bootstrap/lists");
+      LIB =
+          Interpreter.reduceModuleCompletely(
+              Modules.load("bootstrap/lists"),
+              DEPMAN);
     } catch (DependencyUnavailableError e) {
       throw new LanguishLoadError(e);
     }
