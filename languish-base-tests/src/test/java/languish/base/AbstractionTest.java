@@ -3,7 +3,6 @@ package languish.base;
 import static languish.base.Terms.*;
 import static languish.tools.testing.TestUtil.*;
 import junit.framework.TestCase;
-import languish.base.Term;
 import languish.tools.testing.LanguishTestCase;
 import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
@@ -11,11 +10,11 @@ import languish.util.PrimitiveTree;
 public class AbstractionTest extends TestCase {
   public enum Tests implements LanguishTestCase {
     BASIC_APPLY( // 
-        app(IDENT, primitive(FIVE)),
+        app(IDENT, primObj(5)),
         "[APP [ABS [REF 1 NULL] NULL] [PRIMITIVE 5 NULL]]",
-        primitive(FIVE),
+        primObj(5),
         PrimitiveTree.of(FIVE)),
- 
+
     ARGUMENT_CHOOSER_1( //
         app(app(TRUE, primitive(FOUR)), primitive(FIVE)),
         "[APP [APP [ABS [ABS [REF 2 NULL] NULL] NULL] "

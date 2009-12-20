@@ -25,6 +25,10 @@ public class Terms {
     return new Term(Operations.PRIMITIVE, prim, Term.NULL);
   }
 
+  public static Term primObj(Object obj) {
+    return new Term(Operations.PRIMITIVE, new Primitive(obj), Term.NULL);
+  }
+
   public static Term ref(int i) {
     return new Term(Operations.REF, i, Term.NULL);
   }
