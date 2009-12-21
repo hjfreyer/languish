@@ -1,9 +1,12 @@
 package languish.lib;
 
-import languish.base.Terms;
+import static languish.base.Terms.*;
 import languish.base.Term;
-import languish.interpreter.DependencyManager;
+import languish.base.Terms;
 import languish.depman.FileSystemDependencyManager;
+import languish.interpreter.DependencyManager;
+import languish.interpreter.Interpreter;
+import languish.interpreter.Modules;
 import languish.interpreter.error.DependencyUnavailableError;
 
 import com.google.common.collect.ImmutableList;
@@ -15,7 +18,10 @@ public class Visitor {
 
   static {
     try {
-      LIB = DEPMAN.getResource("lang/visitor");
+      LIB =
+          Interpreter.reduceModuleCompletely(
+              Modules.load("bootstrap/visitor", abs(ref(1))),
+              DEPMAN);
     } catch (DependencyUnavailableError e) {
       throw new LanguishLoadError(e);
     }
