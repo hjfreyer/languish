@@ -1,33 +1,54 @@
 package languish.interpreter;
 
+import static languish.base.Terms.*;
+import static org.easymock.EasyMock.*;
 import junit.framework.TestCase;
+import languish.base.Term;
+import languish.base.Terms;
+import languish.tools.testing.TestUtil;
+import languish.util.PrimitiveTree;
 
 import org.jmock.Mockery;
+
+import com.google.common.collect.ImmutableList;
 
 public class InterpreterTest extends TestCase {
   Mockery context = new Mockery();
 
-  public void testFoo() {
+  @SuppressWarnings("unchecked")
+  public void testBasicValue() throws Exception {
+    Term program =
+        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+            "VALUE",
+            5)));
+
+    TestUtil.assertReducesToData(PrimitiveTree.copyOf(5), Interpreter
+        .reduceModuleCompletely(program, null));
   }
-  //
-  // public void testGetParserAndProgram() {
-  // assertEquals(Pair.of("foo", "\nblah blah blah"), Interpreter
-  // .getParserAndProgram("#lang foo;;\nblah blah blah"));
-  //
-  // assertEquals(Pair.of("__BUILTIN__", "#lanr; \nblah blah blah\n\n  "),
-  // Interpreter.getParserAndProgram("#lanr; \nblah blah blah\n\n  "));
-  // }
-  //
-  // //
-  // // public void testBasicDisplay() throws Exception {
-  // // Term program =
-  // // Interpreter
-  // // .interpretStatement("[CONS [DATA \"VALUE\"] [DATA 5]]", null);
-  // //
-  // // assertEquals(JavaWrapper.of(5),
-  // Lambda.convertTermToJavaObject(program));
-  // // }
-  //
+
+  public void testLoad() throws Exception {
+    Term nestedProg =
+        abs(cons(primObj("VALUE"), cons(
+            cons(ref(4), cons(ref(5), Term.NULL)),
+            Term.NULL)));
+
+    Term program =
+        cons(primObj("LOAD"), cons(cons(primObj("depname"), cons(
+            nestedProg,
+            Term.NULL)), Term.NULL));
+
+    DependencyManager mockDepMan = createMock(DependencyManager.class);
+
+    Term dep = cons(primObj("VALUE"), cons(primObj(5), Term.NULL));
+    expect(mockDepMan.getResource("depname")).andReturn(dep);
+    replay(mockDepMan);
+
+    TestUtil.assertReducesToData(
+        PrimitiveTree.copyOf(ImmutableList.of(5, 5)),
+        Interpreter.reduceModuleCompletely(program, mockDepMan));
+
+    verify(mockDepMan);
+  }
   // public void testTrivialParserChange() throws Exception {
   // final Term parserValue =
   // abs(cons(primitive(LSymbol.of("VALUE")), primitive(LInteger.of(5))));

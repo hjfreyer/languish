@@ -32,13 +32,30 @@ public class Interpreter {
 
     if (moduleCommand.equals("VALUE")) {
       throw new AlreadyReducedError(module);
+    } else if (moduleCommand.equals("REDUCE_AND_APPLY")) {
+      Term subModule = Terms.car(moduleArgument);
+      Term subFunction = Terms.car(Terms.cdr(moduleArgument));
+
+      String subModuleCommand =
+          Terms.convertTermToJavaObject(Terms.car(subModule)).asPrimitive()
+              .asString();
+      Term subModuleArgument = Terms.car(Terms.cdr(subModule));
+
+      if (subModuleCommand.equals("VALUE")) {
+        return Terms.app(subFunction, subModuleArgument);
+      }
+
+      Term reduced = reduceModule(subModule, depman);
+
+      return Modules.reduceAndApply(reduced, subFunction);
     } else if (moduleCommand.equals("LOAD")) {
       String depName =
           Terms.convertTermToJavaObject(Terms.car(moduleArgument))
               .asPrimitive().asString();
-      Term moduleValue = Terms.car(Terms.cdr(moduleArgument));
+      Term depValue = depman.getResource(depName);
 
-      return Terms.app(moduleValue, depman.getResource(depName));
+      Term moduleValue = Terms.car(Terms.cdr(moduleArgument));
+      return Modules.reduceAndApply(depValue, moduleValue);
     } else {
       throw new AssertionError();
     }
