@@ -1,6 +1,5 @@
 package languish.lib;
 
-import static languish.base.Terms.*;
 import languish.base.Term;
 import languish.base.Terms;
 import languish.depman.FileSystemDependencyManager;
@@ -19,9 +18,8 @@ public class Maps {
   static {
     try {
       LIB =
-          Interpreter.reduceModuleCompletely(
-              Modules.load("bootstrap/maps", abs(ref(1))),
-              DEPMAN);
+          Interpreter.reduceModuleCompletely(Modules
+              .loadAndReturn("bootstrap/maps"), DEPMAN);
     } catch (DependencyUnavailableError e) {
       throw new LanguishLoadError(e);
     }

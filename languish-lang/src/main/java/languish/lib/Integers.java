@@ -1,6 +1,5 @@
 package languish.lib;
 
-import static languish.base.Terms.*;
 import languish.base.Term;
 import languish.base.Terms;
 import languish.interpreter.Interpreter;
@@ -15,7 +14,7 @@ public class Integers {
     try {
       LIB =
           Interpreter.reduceModuleCompletely(
-              Modules.load("bootstrap/integers", abs(ref(1))),
+              Modules.loadAndReturn("bootstrap/integers"),
               LibTestUtil.STANDARD_INCLUDE);
     } catch (DependencyUnavailableError e) {
       throw new LanguishLoadError(e);

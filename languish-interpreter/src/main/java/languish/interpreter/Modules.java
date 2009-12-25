@@ -1,6 +1,6 @@
 package languish.interpreter;
 
-import static languish.base.Terms.cons;
+import static languish.base.Terms.*;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
@@ -17,6 +17,10 @@ public class Modules {
         cons(cons(Terms.primitive(new Primitive(depname)), cons(
             function,
             Term.NULL)), Term.NULL));
+  }
+
+  public static Term loadAndReturn(String depname) {
+    return Modules.load(depname, abs(Modules.value(ref(3))));
   }
 
   public static Term reduceAndApply(Term reduce, Term function) {
