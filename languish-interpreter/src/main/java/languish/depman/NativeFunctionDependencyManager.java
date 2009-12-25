@@ -6,6 +6,7 @@ import languish.base.NativeFunction;
 import languish.base.Term;
 import languish.base.Terms;
 import languish.interpreter.DependencyManager;
+import languish.interpreter.Modules;
 import languish.interpreter.error.DependencyUnavailableError;
 
 public class NativeFunctionDependencyManager implements DependencyManager {
@@ -28,7 +29,8 @@ public class NativeFunctionDependencyManager implements DependencyManager {
     NativeFunction nativeFunc =
         functions.get(resourceName.substring(prefix.length()));
 
-    return Terms.abs(Terms.nativeApply(nativeFunc, Terms.ref(1)));
+    return Modules
+        .value(Terms.abs(Terms.nativeApply(nativeFunc, Terms.ref(1))));
   }
 
   @Override
