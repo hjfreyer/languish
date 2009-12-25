@@ -47,25 +47,53 @@ public class VisitorTest extends TestCase {
         .visitTree(), functionMap), isLeaf), tree));
   }
 
-  // @SuppressWarnings("unchecked")
-  // public void testSimpleTree() {
-  // Term functionMap = Util.convertJavaObjectToTerm(ImmutableList.of( //
-  // ImmutableList.of("additup", SUM_UP), //
-  // ImmutableList.of("num", abs(ref(1)))));
-  // Term isLeaf =
-  // abs(app(app(Data.equals(), primitive(LSymbol.of("num"))), ref(1)));
-  // Term tree =
-  // Util.convertJavaObjectToTerm(ImmutableList.of("additup", //
-  // ImmutableList.of(
-  // ImmutableList.of("num", 3), //
-  // ImmutableList.of("num", 4), ImmutableList.of("num", 12),
-  // ImmutableList.of("num", -2))));
-  //
-  // Term visitorCall =
-  // app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
-  //
-  // TestUtil.assertReducesToData(LInteger.of(17), visitorCall);
-  // }
+  @SuppressWarnings("unchecked")
+  public void testSimpleTree() {
+    Term func1 = cons(primObj("additup"), cons(SUM_UP, Term.NULL));
+    Term func2 = cons(primObj("num"), cons(abs(ref(1)), Term.NULL));
+
+    Term functionMap = cons(func1, cons(func2, Term.NULL));
+    Term isLeaf =
+        abs(app(
+            app(Terms.equals(Terms.primObj("num"), ref(1)), primObj(true)),
+            primObj(false)));
+    Term tree =
+        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+            "additup", //
+            ImmutableList.of(ImmutableList.of("num", 3), //
+                ImmutableList.of("num", 4),
+                ImmutableList.of("num", 12),
+                ImmutableList.of("num", -2)))));
+
+    Term visitorCall =
+        app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
+
+    TestUtil.assertReducesToData(PrimitiveTree.copyOf(17), visitorCall);
+  }
+
+  @SuppressWarnings("unchecked")
+  public void testSimpleTree2() {
+    Term func1 = cons(primObj("proditup"), cons(PROD_UP, Term.NULL));
+    Term func2 = cons(primObj("num"), cons(abs(ref(1)), Term.NULL));
+
+    Term functionMap = cons(func1, cons(func2, Term.NULL));
+    Term isLeaf =
+        abs(app(
+            app(Terms.equals(Terms.primObj("num"), ref(1)), primObj(true)),
+            primObj(false)));
+    Term tree =
+        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+            "proditup", //
+            ImmutableList.of(ImmutableList.of("num", 3), //
+                ImmutableList.of("num", 4),
+                ImmutableList.of("num", 12),
+                ImmutableList.of("num", -2)))));
+
+    Term visitorCall =
+        app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
+
+    TestUtil.assertReducesToData(PrimitiveTree.copyOf(-288), visitorCall);
+  }
   //
   // @SuppressWarnings("unchecked")
   // public void testMultipleLeaves() {
