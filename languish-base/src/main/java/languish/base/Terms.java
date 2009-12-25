@@ -54,6 +54,10 @@ public class Terms {
     return app(obj, FALSE);
   }
 
+  public static Term equals(Term first, Term second) {
+    return new Term(Operations.EQUALS, first, second);
+  }
+
   public static Term branch(Term condition, Term thenTerm, Term elseTerm) {
     return app(app(condition, thenTerm), elseTerm);
   }
