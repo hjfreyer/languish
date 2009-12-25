@@ -18,19 +18,20 @@
       [ABS                                 //     IsLeaf      = 2
       [ABS                                 //     Tree        = 1):
         [APP [APP [EQUALS                  //   If IsLeaf(tree[0]):  
-	    [APP [REF 2] [CAR [REF 1]]] 
+	          [APP [REF 2] [CAR [REF 1]]] 
             [PRIMITIVE TRUE]]
                                            //   Then: FunctionMap[Tree[0]](Tree[1])
-	  [APP                             //     Apply:
-	    [APP [APP [APP [CAR [REF 8]]   //       MapGet(
-  	        [REF 3]]                   //         FunctionMap,
-		[CAR [REF 1]]]             //         Tree[0],
-  	        NULL]                      //         NULL),
-  	    [CAR [CDR [REF 1]]]            //     To: Tree[1]
-	  ]
+	        [APP                             //     Apply:
+	          [APP [APP [APP 
+	              [CAR [CDR [REF 8]]]        //       MapGet(
+  	            [REF 3]]                   //         FunctionMap,
+            		[CAR [REF 1]]]             //         Tree[0],
+  	            NULL]                      //         NULL),
+  	        [CAR [CDR [REF 1]]]            //     To: Tree[1]
+	        ]
         ]                                  //   Else:
-	  NULL 
-	]
+          NULL 
+	      ]
       ]]]]]
     NULL]
   NULL]]
