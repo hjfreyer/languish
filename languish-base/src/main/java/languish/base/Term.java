@@ -111,6 +111,10 @@ public final class Term {
       out.append("PRIMITIVE");
     } else if (op == Operations.REF) {
       out.append("REF");
+    } else if (op == Operations.PRINT) {
+      out.append("PRINT");
+    } else {
+      throw new IllegalArgumentException("Unknown Operation: " + op);
     }
 
     out.append(' ').append(first).append(' ').append(second).append(']');

@@ -26,6 +26,7 @@ public class TermParser {
           Pair.of("NATIVE_APPLY", "NATIVE_APPLY"),
           Pair.of("PRIMITIVE", "PRIMITIVE"),
           Pair.of("REF", "REF"),
+          Pair.of("PRINT", "PRINT"),
           Pair.of("NULL", "NULL"),
           Pair.of("TRUE", "TRUE"),
           Pair.of("FALSE", "FALSE"),
@@ -39,6 +40,7 @@ public class TermParser {
       Production.seq("OPERATION", "ABS_OP", "ABS"),
       Production.seq("OPERATION", "APP_OP", "APP"),
       Production.seq("OPERATION", "EQUALS_OP", "EQUALS"),
+      Production.seq("OPERATION", "PRINT_OP", "PRINT"),
       Production.seq("OPERATION", "NATIVE_APPLY_OP", "NATIVE_APPLY"));
 
   public static final List<Production> BOOLEAN_LIT = ImmutableList.of( //

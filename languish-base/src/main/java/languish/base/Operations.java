@@ -20,6 +20,8 @@ public class Operations {
       return PRIMITIVE;
     } else if (name.equals("REF")) {
       return REF;
+    } else if (name.equals("PRINT")) {
+      return PRINT;
     } else {
       throw new IllegalArgumentException("No operation called " + name);
     }
@@ -238,7 +240,7 @@ public class Operations {
         return Terms.print(subterm.reduce());
       }
 
-      System.out.println(Terms.convertTermToJavaObject(subterm));
+      System.out.println(subterm);
       return subterm;
     }
 
@@ -280,7 +282,7 @@ public class Operations {
       return hasReferencesGreaterThan((Term) term.getFirst(), max + 1);
     }
 
-    if (op == APP || op == EQUALS || op == NATIVE_APPLY) {
+    if (op == APP || op == EQUALS || op == NATIVE_APPLY || op == PRINT) {
       return hasReferencesGreaterThan((Term) term.getFirst(), max)
           || hasReferencesGreaterThan((Term) term.getSecond(), max);
     }

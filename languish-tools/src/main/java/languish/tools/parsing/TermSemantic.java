@@ -60,6 +60,12 @@ public class TermSemantic {
             public Object apply(List<Object> arg) {
               return Operations.NATIVE_APPLY;
             }
+          }).put("PRINT_OP", new Function<List<Object>, Object>() {
+
+            @Override
+            public Object apply(List<Object> arg) {
+              return Operations.PRINT;
+            }
           }).put("EQUALS_OP", new Function<List<Object>, Object>() {
 
             @Override
