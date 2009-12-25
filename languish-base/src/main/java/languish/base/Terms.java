@@ -38,6 +38,10 @@ public class Terms {
         arg);
   }
 
+  public static Term print(Term term) {
+    return new Term(Operations.PRINT, term, Term.NULL);
+  }
+
   public static Term cons(Term obj1, Term obj2) {
     return abs(app(app(ref(1), obj1), obj2));
   }

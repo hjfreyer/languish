@@ -230,6 +230,32 @@ public class Operations {
     }
   };
 
+  public static final Operation PRINT = new Operation() {
+    public Term reduce(Term term) {
+      Term subterm = (Term) term.getFirst();
+
+      if (!subterm.isReduced()) {
+        return Terms.print(subterm.reduce());
+      }
+
+      System.out.println(Terms.convertTermToJavaObject(subterm));
+      return subterm;
+    }
+
+    public boolean isReduced(Term term) {
+      return false;
+    }
+
+    public Term replaceAllReferencesToParam(Term term, int id, Term with) {
+      return propagateReplaceReference(term, id, with);
+    }
+
+    @Override
+    public String toString() {
+      return "PRINT";
+    }
+  };
+
   public static Term propagateReplaceReference(Term term, int id, Term with) {
     Term firstTerm = (Term) term.getFirst();
     Term secondTerm = (Term) term.getSecond();
