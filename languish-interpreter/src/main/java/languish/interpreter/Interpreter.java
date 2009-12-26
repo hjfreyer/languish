@@ -11,7 +11,7 @@ public class Interpreter {
       DependencyManager depman) {
     while (true) {
       String moduleCommand =
-          Terms.convertTermToJavaObject(Terms.car(module)).asPrimitive()
+          Terms.convertTermToJavaObject(Terms.car(module)).asLeaf()
               .asString();
 
       if (moduleCommand.equals("VALUE")) {
@@ -25,7 +25,7 @@ public class Interpreter {
   public static Term reduceModule(Term module, DependencyManager depman)
       throws DependencyUnavailableError {
     String moduleCommand =
-        Terms.convertTermToJavaObject(Terms.car(module)).asPrimitive()
+        Terms.convertTermToJavaObject(Terms.car(module)).asLeaf()
             .asString();
 
     Term moduleArgument = Terms.car(Terms.cdr(module));
@@ -37,7 +37,7 @@ public class Interpreter {
       Term subFunction = Terms.car(Terms.cdr(moduleArgument));
 
       String subModuleCommand =
-          Terms.convertTermToJavaObject(Terms.car(subModule)).asPrimitive()
+          Terms.convertTermToJavaObject(Terms.car(subModule)).asLeaf()
               .asString();
       Term subModuleArgument = Terms.car(Terms.cdr(subModule));
 
@@ -51,7 +51,7 @@ public class Interpreter {
     } else if (moduleCommand.equals("LOAD")) {
       String depName =
           Terms.convertTermToJavaObject(Terms.car(moduleArgument))
-              .asPrimitive().asString();
+              .asLeaf().asString();
       Term depValue = depman.getResource(depName);
 
       Term moduleValue = Terms.car(Terms.cdr(moduleArgument));

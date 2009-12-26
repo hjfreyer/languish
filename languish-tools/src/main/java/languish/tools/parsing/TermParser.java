@@ -12,7 +12,7 @@ import org.codehaus.jparsec.functors.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.hjfreyer.util.Pair;
-import com.hjfreyer.util.Tree;
+import com.hjfreyer.util.Tree;import languish.base.Primitive;
 
 public class TermParser {
   @SuppressWarnings("unchecked")

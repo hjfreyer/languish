@@ -1,27 +1,25 @@
 package languish.base;
 
-import static languish.base.Terms.*;
 import static languish.base.Term.NULL;
+import static languish.base.Terms.*;
 import static languish.tools.testing.TestUtil.*;
 import junit.framework.TestCase;
-import languish.base.NativeFunction;
-import languish.base.Primitive;
-import languish.base.Term;
 import languish.tools.testing.LanguishTestCase;
 import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;
+import com.hjfreyer.util.Tree;
 
 public class NativeFunctionTest extends TestCase {
   public static NativeFunction TRIVIAL = new NativeFunction() {
-    public PrimitiveTree apply(PrimitiveTree arg) {
+    public Tree<Primitive> apply(Tree<Primitive> arg) {
       return PrimitiveTree.copyOf(42);
     }
   };
 
   public static NativeFunction IDENTITY = new NativeFunction() {
-    public PrimitiveTree apply(PrimitiveTree arg) {
+    public Tree<Primitive> apply(Tree<Primitive> arg) {
       return arg;
     }
   };
@@ -41,7 +39,8 @@ public class NativeFunctionTest extends TestCase {
 
     TRIVIAL_NATIVE_WITH_LIST( //
         Terms.nativeApply(TRIVIAL, cons(primitive(THREE), cons(
-            primitive(FOUR), NULL))),
+            primitive(FOUR),
+            NULL))),
         null,
         Terms.primitive(new Primitive(42)),
         PrimitiveTree.copyOf(42)),
@@ -60,7 +59,8 @@ public class NativeFunctionTest extends TestCase {
 
     IDENT_NATIVE_WITH_LIST( //
         Terms.nativeApply(IDENTITY, cons(primitive(THREE), cons(
-            primitive(FOUR), NULL))),
+            primitive(FOUR),
+            NULL))),
         null,
         cons(primitive(THREE), cons(primitive(FOUR), NULL)),
         PrimitiveTree.copyOf(ImmutableList.of(3, 4))),
@@ -70,10 +70,10 @@ public class NativeFunctionTest extends TestCase {
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final PrimitiveTree reducedCompletely;
+    private final Tree<Primitive> reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        PrimitiveTree reducedCompletely) {
+        Tree<Primitive> reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
@@ -92,7 +92,7 @@ public class NativeFunctionTest extends TestCase {
       return reducedOnce;
     }
 
-    public PrimitiveTree getReducedCompletely() {
+    public Tree<Primitive> getReducedCompletely() {
       return reducedCompletely;
     }
   }

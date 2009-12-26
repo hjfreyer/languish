@@ -6,6 +6,7 @@ import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.hjfreyer.util.Tree;
 
 public class Terms {
 
@@ -65,9 +66,9 @@ public class Terms {
   private Terms() {
   }
 
-  public static Term convertJavaObjectToTerm(PrimitiveTree obj) {
+  public static Term convertJavaObjectToTerm(Tree<Primitive> obj) {
     if (obj.isList()) {
-      List<PrimitiveTree> list = obj.asList();
+      List<Tree<Primitive>> list = obj.asList();
 
       Term result = Term.NULL;
       for (int i = list.size() - 1; i >= 0; i--) {
@@ -75,14 +76,14 @@ public class Terms {
       }
 
       return result;
-    } else if (obj.isPrimitive()) {
-      return primitive(obj.asPrimitive());
+    } else if (obj.isLeaf()) {
+      return primitive(obj.asLeaf());
     }
 
     throw new AssertionError();
   }
 
-  public static PrimitiveTree convertTermToJavaObject(Term term) {
+  public static Tree<Primitive> convertTermToJavaObject(Term term) {
     term = term.reduceCompletely();
 
     Operation op = term.getOperation();
@@ -95,11 +96,11 @@ public class Terms {
     }
 
     if (op == Operations.ABS) {
-      PrimitiveTree car = convertTermToJavaObject(Terms.car(term));
-      List<PrimitiveTree> cdr =
+      Tree<Primitive> car = convertTermToJavaObject(Terms.car(term));
+      List<Tree<Primitive>> cdr =
           convertTermToJavaObject(Terms.cdr(term)).asList();
 
-      List<PrimitiveTree> result = Lists.newLinkedList();
+      List<Tree<Primitive>> result = Lists.newLinkedList();
 
       result.add(car);
       result.addAll(cdr);

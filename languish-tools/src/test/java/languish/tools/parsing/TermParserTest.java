@@ -5,7 +5,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.google.common.collect.ImmutableList;
-import com.hjfreyer.util.Tree;
+import com.hjfreyer.util.Tree;import languish.base.Primitive;
 
 public class TermParserTest extends TestCase {
   @SuppressWarnings("unchecked")

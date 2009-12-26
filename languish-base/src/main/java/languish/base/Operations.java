@@ -1,7 +1,7 @@
 package languish.base;
 
 import languish.base.error.AlreadyReducedError;
-import languish.util.PrimitiveTree;
+import com.hjfreyer.util.Tree;import languish.base.Primitive;
 
 public class Operations {
 
@@ -136,7 +136,7 @@ public class Operations {
       NativeFunction nativeFunc =
           (NativeFunction) funcPrimitive.getJavaObject();
 
-      PrimitiveTree argObject = Terms.convertTermToJavaObject(arg);
+      Tree<Primitive> argObject = Terms.convertTermToJavaObject(arg);
       return Terms.convertJavaObjectToTerm(nativeFunc.apply(argObject));
     }
 

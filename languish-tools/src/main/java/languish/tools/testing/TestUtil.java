@@ -5,7 +5,8 @@ import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
 import languish.tools.parsing.TermParser;
-import languish.util.PrimitiveTree;
+
+import com.hjfreyer.util.Tree;
 
 public class TestUtil {
 
@@ -37,7 +38,7 @@ public class TestUtil {
     Term exp = testCase.getExpression();
     String code = testCase.getCode();
     Term reducedOnce = testCase.getReducedOnce();
-    PrimitiveTree reducedCompletely = testCase.getReducedCompletely();
+    Tree<Primitive> reducedCompletely = testCase.getReducedCompletely();
 
     if (code != null) {
       // TOSTRING
@@ -70,7 +71,7 @@ public class TestUtil {
     }
   }
 
-  public static void assertReducesToData(PrimitiveTree expected, Term actual) {
+  public static void assertReducesToData(Tree<Primitive> expected, Term actual) {
     TestCase.assertEquals(expected, Terms.convertTermToJavaObject(actual));
   }
 }

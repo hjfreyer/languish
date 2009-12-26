@@ -1,9 +1,9 @@
 package languish.base;
 
-import languish.util.PrimitiveTree;
+import com.hjfreyer.util.Tree;
 
 public interface NativeFunction {
 
-  public PrimitiveTree apply(PrimitiveTree arg);
+  public Tree<Primitive> apply(Tree<Primitive> arg);
 
 }

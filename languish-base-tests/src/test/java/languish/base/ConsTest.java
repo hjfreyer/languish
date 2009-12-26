@@ -1,15 +1,15 @@
 package languish.base;
 
-import static languish.base.Terms.*;
 import static languish.base.Term.NULL;
+import static languish.base.Terms.*;
 import static languish.tools.testing.TestUtil.*;
 import junit.framework.TestCase;
-import languish.base.Term;
 import languish.tools.testing.LanguishTestCase;
 import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;
+import com.hjfreyer.util.Tree;
 
 public class ConsTest extends TestCase {
   public enum Tests implements LanguishTestCase {
@@ -41,7 +41,8 @@ public class ConsTest extends TestCase {
         PrimitiveTree.copyOf(ImmutableList.of(4, 4))),
 
     GET_PAIR_WITH_DOUBLE_REF( //
-        app(app(abs(abs(cons(ref(2), cons(ref(4), NULL)))), primitive(FOUR)),
+        app(
+            app(abs(abs(cons(ref(2), cons(ref(4), NULL)))), primitive(FOUR)),
             primitive(FIVE)),
         "[APP [APP [ABS [ABS [ABS [APP [APP [REF 1 NULL] [REF 2 NULL]] "
             + "[ABS [APP [APP [REF 1 NULL] [REF 4 NULL]] NULL] NULL]] "
@@ -78,10 +79,10 @@ public class ConsTest extends TestCase {
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final PrimitiveTree reducedCompletely;
+    private final Tree<Primitive> reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        PrimitiveTree reducedCompletely) {
+        Tree<Primitive> reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
@@ -100,7 +101,7 @@ public class ConsTest extends TestCase {
       return reducedOnce;
     }
 
-    public PrimitiveTree getReducedCompletely() {
+    public Tree<Primitive> getReducedCompletely() {
       return reducedCompletely;
     }
   }

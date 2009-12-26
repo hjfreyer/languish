@@ -46,6 +46,10 @@ public class Tree<T> implements Reprable {
     return !(node instanceof List<?>);
   }
 
+  public boolean isList() {
+    return (node instanceof List<?>);
+  }
+
   @SuppressWarnings("unchecked")
   public List<Tree<T>> asList() {
     return (List<Tree<T>>) node;

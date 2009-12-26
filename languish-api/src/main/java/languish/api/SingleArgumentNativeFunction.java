@@ -2,14 +2,15 @@ package languish.api;
 
 import languish.base.NativeFunction;
 import languish.base.Primitive;
-import languish.util.PrimitiveTree;
+
+import com.hjfreyer.util.Tree;
 
 public abstract class SingleArgumentNativeFunction implements NativeFunction {
 
   @Override
-  public final PrimitiveTree apply(PrimitiveTree arg) {
-    return apply(arg.asPrimitive());
+  public final Tree<Primitive> apply(Tree<Primitive> arg) {
+    return apply(arg.asLeaf());
   }
 
-  public abstract PrimitiveTree apply(Primitive arg);
+  public abstract Tree<Primitive> apply(Primitive arg);
 }

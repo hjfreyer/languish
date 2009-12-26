@@ -3,11 +3,11 @@ package languish.base;
 import static languish.base.Terms.primitive;
 import static languish.tools.testing.TestUtil.FIVE;
 import junit.framework.TestCase;
-import languish.base.Primitive;
-import languish.base.Term;
 import languish.tools.testing.LanguishTestCase;
 import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
+
+import com.hjfreyer.util.Tree;
 
 public class PrimitiveTest extends TestCase {
   public enum Tests implements LanguishTestCase {
@@ -26,10 +26,10 @@ public class PrimitiveTest extends TestCase {
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final PrimitiveTree reducedCompletely;
+    private final Tree<Primitive> reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        PrimitiveTree reducedCompletely) {
+        Tree<Primitive> reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
@@ -48,7 +48,7 @@ public class PrimitiveTest extends TestCase {
       return reducedOnce;
     }
 
-    public PrimitiveTree getReducedCompletely() {
+    public Tree<Primitive> getReducedCompletely() {
       return reducedCompletely;
     }
   }

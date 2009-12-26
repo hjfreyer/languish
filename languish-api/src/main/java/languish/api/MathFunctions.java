@@ -7,13 +7,14 @@ import languish.base.Primitive;
 import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableMap;
+import com.hjfreyer.util.Tree;
 
 public class MathFunctions {
 
   // BOOLEAN STUFF
   public static final NativeFunction AND = new TwoArgumentNativeFunction() {
     @Override
-    public PrimitiveTree apply(Primitive arg1, Primitive arg2) {
+    public Tree<Primitive> apply(Primitive arg1, Primitive arg2) {
       return PrimitiveTree.of(new Primitive(arg1.asBoolean()
           && arg2.asBoolean()));
     }
@@ -21,7 +22,7 @@ public class MathFunctions {
 
   public static final NativeFunction NOT = new SingleArgumentNativeFunction() {
     @Override
-    public PrimitiveTree apply(Primitive arg1) {
+    public Tree<Primitive> apply(Primitive arg1) {
       return PrimitiveTree.of(new Primitive(!arg1.asBoolean()));
     }
   };
@@ -29,7 +30,7 @@ public class MathFunctions {
   // INTEGER STUFF
   public static final NativeFunction ADD = new TwoArgumentNativeFunction() {
     @Override
-    public PrimitiveTree apply(Primitive arg1, Primitive arg2) {
+    public Tree<Primitive> apply(Primitive arg1, Primitive arg2) {
       return PrimitiveTree
           .of(new Primitive(arg1.asInteger() + arg2.asInteger()));
     }
@@ -38,7 +39,7 @@ public class MathFunctions {
   public static final NativeFunction MULTIPLY =
       new TwoArgumentNativeFunction() {
         @Override
-        public PrimitiveTree apply(Primitive arg1, Primitive arg2) {
+        public Tree<Primitive> apply(Primitive arg1, Primitive arg2) {
           return PrimitiveTree.of(new Primitive(arg1.asInteger()
               * arg2.asInteger()));
         }
@@ -48,7 +49,7 @@ public class MathFunctions {
   public static final NativeFunction PARSE_INT =
       new SingleArgumentNativeFunction() {
         @Override
-        public PrimitiveTree apply(Primitive obj) {
+        public Tree<Primitive> apply(Primitive obj) {
 
           return PrimitiveTree.of(new Primitive(Integer
               .parseInt(obj.asString())));

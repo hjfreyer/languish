@@ -7,6 +7,8 @@ import languish.tools.testing.LanguishTestCase;
 import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
 
+import com.hjfreyer.util.Tree;
+
 public class AbstractionTest extends TestCase {
   public enum Tests implements LanguishTestCase {
     BASIC_APPLY( // 
@@ -49,10 +51,10 @@ public class AbstractionTest extends TestCase {
     private final Term expression;
     private final String code;
     private final Term reducedOnce;
-    private final PrimitiveTree reducedCompletely;
+    private final Tree<Primitive> reducedCompletely;
 
     private Tests(Term expression, String code, Term reducedOnce,
-        PrimitiveTree reducedCompletely) {
+        Tree<Primitive> reducedCompletely) {
       this.expression = expression;
       this.code = code;
       this.reducedOnce = reducedOnce;
@@ -71,7 +73,7 @@ public class AbstractionTest extends TestCase {
       return reducedOnce;
     }
 
-    public PrimitiveTree getReducedCompletely() {
+    public Tree<Primitive> getReducedCompletely() {
       return reducedCompletely;
     }
   }

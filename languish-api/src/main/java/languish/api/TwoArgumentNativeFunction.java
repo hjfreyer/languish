@@ -2,16 +2,17 @@ package languish.api;
 
 import languish.base.NativeFunction;
 import languish.base.Primitive;
-import languish.util.PrimitiveTree;
+
+import com.hjfreyer.util.Tree;
 
 public abstract class TwoArgumentNativeFunction implements NativeFunction {
   @Override
-  public final PrimitiveTree apply(PrimitiveTree arg) {
-    Primitive first = arg.asList().get(0).asPrimitive();
-    Primitive second = arg.asList().get(1).asPrimitive();
+  public final Tree<Primitive> apply(Tree<Primitive> arg) {
+    Primitive first = arg.asList().get(0).asLeaf();
+    Primitive second = arg.asList().get(1).asLeaf();
 
     return apply(first, second);
   }
 
-  protected abstract PrimitiveTree apply(Primitive arg1, Primitive arg2);
+  protected abstract Tree<Primitive> apply(Primitive arg1, Primitive arg2);
 }

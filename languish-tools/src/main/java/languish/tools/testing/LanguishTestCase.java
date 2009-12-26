@@ -1,7 +1,9 @@
 package languish.tools.testing;
 
+import languish.base.Primitive;
 import languish.base.Term;
-import languish.util.PrimitiveTree;
+
+import com.hjfreyer.util.Tree;
 
 public interface LanguishTestCase {
 
@@ -13,5 +15,5 @@ public interface LanguishTestCase {
 
   public Term getReducedOnce();
 
-  public PrimitiveTree getReducedCompletely();
+  public Tree<Primitive> getReducedCompletely();
 }
