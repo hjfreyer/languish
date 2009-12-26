@@ -26,9 +26,8 @@ public class ListsTest extends TestCase {
 
   public void testMapEmpty() {
     Term list = Term.NULL;
-    Tree<Primitive>[] list1 = {};
 
-    TestUtil.assertReducesToData(Tree.inode(list1), app(app(
+    TestUtil.assertReducesToData(Tree.<Primitive> empty(), app(app(
         Lists.map(),
         ADD_ONE), list));
   }
@@ -41,12 +40,11 @@ public class ListsTest extends TestCase {
 
   public void testSingleMap() {
     Term list =
-        Terms
-            .convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(4)));
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(4)));
 
-    TestUtil.assertReducesToData(
-        PrimitiveTree.from(ImmutableList.of(5)),
-        app(app(Lists.map(), ADD_ONE), list));
+    TestUtil.assertReducesToData(PrimitiveTree.from(ImmutableList.of(5)), app(
+        app(Lists.map(), ADD_ONE),
+        list));
   }
 
   public void testMapIntegers() {
@@ -93,9 +91,9 @@ public class ListsTest extends TestCase {
     Term list = Terms.convertJavaObjectToTerm( //
         PrimitiveTree.from(ImmutableList.of(4)));
 
-    TestUtil.assertReducesToData(Tree.leaf(FIVE), app(app(
-        SUM_REDUCE,
-        list), primitive(ONE)));
+    TestUtil.assertReducesToData(Tree.leaf(FIVE), app(
+        app(SUM_REDUCE, list),
+        primitive(ONE)));
   }
 
   public void testReduceSumManyElements() {

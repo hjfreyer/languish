@@ -2,9 +2,6 @@ package languish.lang;
 
 import static languish.base.Terms.*;
 import static languish.tools.testing.TestUtil.FOUR;
-
-import com.hjfreyer.util.Tree;
-
 import junit.framework.TestCase;
 import languish.base.Primitive;
 import languish.base.Term;
@@ -12,6 +9,8 @@ import languish.base.Terms;
 import languish.lib.Maps;
 import languish.tools.testing.TestUtil;
 import languish.util.PrimitiveTree;
+
+import com.hjfreyer.util.Tree;
 
 public class MapsTest extends TestCase {
 
@@ -79,14 +78,17 @@ public class MapsTest extends TestCase {
     TestUtil.assertReducesToData(PrimitiveTree.from("four"), app(app(app(Maps
         .get(), map), Terms.primObj(4)), Terms.primObj(0)));
 
-    TestUtil.assertReducesToData(PrimitiveTree.from(2), app(app(app(Maps
-        .get(), map), Terms.primObj("two")), Terms.primObj(0)));
+    TestUtil.assertReducesToData(PrimitiveTree.from(2), app(app(app(
+        Maps.get(),
+        map), Terms.primObj("two")), Terms.primObj(0)));
 
-    TestUtil.assertReducesToData(PrimitiveTree.from(0), app(app(app(Maps
-        .get(), map), Terms.primObj("five")), Terms.primObj(0)));
+    TestUtil.assertReducesToData(PrimitiveTree.from(0), app(app(app(
+        Maps.get(),
+        map), Terms.primObj("five")), Terms.primObj(0)));
 
-    TestUtil.assertReducesToData(PrimitiveTree.from(4), app(app(app(Maps
-        .get(), map), Terms.primObj("five")), Terms.primObj(4)));
+    TestUtil.assertReducesToData(PrimitiveTree.from(4), app(app(app(
+        Maps.get(),
+        map), Terms.primObj("five")), Terms.primObj(4)));
   }
 
   public void testOverwrite() {
@@ -101,8 +103,9 @@ public class MapsTest extends TestCase {
     map =
         app(app(app(Maps.put(), map), Terms.primObj("two")), Terms.primObj(3));
 
-    TestUtil.assertReducesToData(PrimitiveTree.from(3), app(app(app(Maps
-        .get(), map), Terms.primObj("two")), Terms.primObj(0)));
+    TestUtil.assertReducesToData(PrimitiveTree.from(3), app(app(app(
+        Maps.get(),
+        map), Terms.primObj("two")), Terms.primObj(0)));
   }
 
   public void testNullKey() {
@@ -110,19 +113,17 @@ public class MapsTest extends TestCase {
 
     map = app(app(app(Maps.put(), map), Term.NULL), Terms.primObj(2));
 
-    TestUtil.assertReducesToData(PrimitiveTree.from(2), app(app(app(Maps
-        .get(), map), Term.NULL), Terms.primObj(0)));
+    TestUtil.assertReducesToData(PrimitiveTree.from(2), app(app(app(
+        Maps.get(),
+        map), Term.NULL), Terms.primObj(0)));
   }
 
   public void testNullValue() {
     Term map = Term.NULL;
 
     map = app(app(app(Maps.put(), map), Terms.primObj("nil")), Term.NULL);
-    Tree<Primitive>[] list = {};
-
-    TestUtil.assertReducesToData(Tree.inode(list), app(app(app(
-        Maps.get(),
-        map), Terms.primObj("nil")), Terms.primObj(0)));
+    TestUtil.assertReducesToData(Tree.<Primitive> empty(), app(app(app(Maps
+        .get(), map), Terms.primObj("nil")), Terms.primObj(0)));
   }
 
   public void testValueAbs() {

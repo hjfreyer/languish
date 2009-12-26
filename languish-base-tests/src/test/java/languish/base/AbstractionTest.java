@@ -5,7 +5,6 @@ import static languish.tools.testing.TestUtil.*;
 import junit.framework.TestCase;
 import languish.tools.testing.LanguishTestCase;
 import languish.tools.testing.TestUtil;
-import languish.util.PrimitiveTree;
 
 import com.hjfreyer.util.Tree;
 
@@ -15,21 +14,21 @@ public class AbstractionTest extends TestCase {
         app(IDENT, primObj(5)),
         "[APP [ABS [REF 1 NULL] NULL] [PRIMITIVE 5 NULL]]",
         primObj(5),
-        PrimitiveTree.of(FIVE)),
+        Tree.leaf(FIVE)),
 
     ARGUMENT_CHOOSER_1( //
         app(app(TRUE, primitive(FOUR)), primitive(FIVE)),
         "[APP [APP [ABS [ABS [REF 2 NULL] NULL] NULL] "
             + "[PRIMITIVE 4 NULL]] [PRIMITIVE 5 NULL]]",
         app(abs(primitive(FOUR)), primitive(FIVE)),
-        PrimitiveTree.of(FOUR)),
+        Tree.leaf(FOUR)),
 
     ARGUMENT_CHOOSER_2( //
         app(app(Terms.FALSE, primitive(TestUtil.FOUR)), primitive(FIVE)),
         "[APP [APP [ABS [ABS [REF 1 NULL] NULL] NULL] [PRIMITIVE 4 NULL]] "
             + "[PRIMITIVE 5 NULL]]",
         app(abs(ref(1)), primitive(FIVE)),
-        PrimitiveTree.of(FIVE)),
+        Tree.leaf(FIVE)),
 
     NON_HALTER( //
         TestUtil.LOOP,
@@ -44,7 +43,7 @@ public class AbstractionTest extends TestCase {
             + "[APP [ABS [APP [REF 1 NULL] [REF 1 NULL]] NULL] "
             + "[ABS [APP [REF 1 NULL] [REF 1 NULL]] NULL]]]",
         app(abs(primitive(FOUR)), TestUtil.LOOP),
-        PrimitiveTree.of(FOUR)),
+        Tree.leaf(FOUR)),
 
     ;
 
