@@ -18,6 +18,9 @@ public class VisitorTest extends TestCase {
   private static final Term ADD_FORTYTWO =
       abs(app(app(Integers.add(), primObj(42)), ref(1)));
 
+  private static final Term ADD_FORTYTWO_TO_CAR =
+      abs(app(ADD_FORTYTWO, car(ref(1))));
+
   private static final Term SUM_UP =
       abs(app(app(app(Lists.reduce(), Integers.add()), ref(1)), primObj(0)));
 
@@ -94,57 +97,74 @@ public class VisitorTest extends TestCase {
 
     TestUtil.assertReducesToData(PrimitiveTree.copyOf(-288), visitorCall);
   }
-  //
-  // @SuppressWarnings("unchecked")
-  // public void testMultipleLeaves() {
-  // Term functionMap = Util.convertJavaObjectToTerm(ImmutableList.of( //
-  // ImmutableList.of("additup", SUM_UP), //
-  // ImmutableList.of("num", abs(ref(1))), //
-  // ImmutableList.of("add_42", ADD_FORTYTWO)));
-  // Term isLeaf =
-  // abs(app(app(Booleans.or(), app(app(Data.equals(), primitive(LSymbol
-  // .of("num"))), ref(1))), app(app(Data.equals(), primitive(LSymbol
-  // .of("add_42"))), ref(1))));
-  // Term tree =
-  // Util.convertJavaObjectToTerm(ImmutableList.of("additup", //
-  // ImmutableList.of(
-  // ImmutableList.of("add_42", 3), //
-  // ImmutableList.of("num", 4), ImmutableList.of("num", 12),
-  // ImmutableList.of("num", -2))));
-  //
-  // Term visitorCall =
-  // app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
-  //
-  // TestUtil.assertReducesToData(LInteger.of(59), visitorCall);
-  //
-  // }
-  //
-  // @SuppressWarnings("unchecked")
-  // public void testMultipleTiers() {
-  // Term functionMap = Util.convertJavaObjectToTerm(ImmutableList.of( //
-  // ImmutableList.of("additup", SUM_UP), //
-  // ImmutableList.of("multitup", PROD_UP), //
-  // ImmutableList.of("num", abs(ref(1))), //
-  // ImmutableList.of("add_42_to_car", ADD_FORTYTWO_TO_CAR)));
-  // Term isLeaf =
-  // abs(app(app(Data.equals(), primitive(LSymbol.of("num"))), ref(1)));
-  //
-  // Term branch1 = Util.convertJavaObjectToTerm(ImmutableList.of("additup", //
-  // ImmutableList.of(ImmutableList.of("num", 4), //
-  // ImmutableList.of("num", 12))));
-  //
-  // Term branch2 = Util.convertJavaObjectToTerm(ImmutableList.of("num", 4));
-  //
-  // Term branch3 =
-  // Util.convertJavaObjectToTerm(ImmutableList.of("add_42_to_car", //
-  // ImmutableList.of(ImmutableList.of("num", 4))));
-  //
-  // Term tree = Util.convertJavaObjectToTerm(ImmutableList.of("multitup", //
-  // ImmutableList.of(branch1, branch2, branch3)));
-  //
-  // Term visitorCall =
-  // app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
-  //
-  // TestUtil.assertReducesToData(LInteger.of(2944), visitorCall);
-  // }
+
+  @SuppressWarnings("unchecked")
+  public void testMultipleLeaves() {
+    Term func1 = cons(primObj("additup"), cons(SUM_UP, Term.NULL));
+    Term func2 = cons(primObj("num"), cons(abs(ref(1)), Term.NULL));
+    Term func3 = cons(primObj("add_42"), cons(ADD_FORTYTWO, Term.NULL));
+
+    Term functionMap = cons(func1, cons(func2, cons(func3, Term.NULL)));
+
+    Term isLeaf =
+        abs(app(app(
+            Terms.equals(Terms.primObj("additup"), ref(1)),
+            primObj(false)), primObj(true)));
+
+    Term tree =
+        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+            "additup",
+            ImmutableList.of(ImmutableList.of("add_42", 3), //
+                ImmutableList.of("num", 4),
+                ImmutableList.of("num", 12),
+                ImmutableList.of("num", -2)))));
+
+    Term visitorCall =
+        app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
+
+    TestUtil.assertReducesToData(PrimitiveTree.copyOf(59), visitorCall);
+
+  }
+
+  @SuppressWarnings("unchecked")
+  public void testMultipleTiers() {
+    Term func1 = cons(primObj("additup"), cons(SUM_UP, Term.NULL));
+    Term func2 = cons(primObj("proditup"), cons(PROD_UP, Term.NULL));
+    Term func3 = cons(primObj("num"), cons(abs(ref(1)), Term.NULL));
+    Term func4 =
+        cons(primObj("add_42_to_car"), cons(ADD_FORTYTWO_TO_CAR, Term.NULL));
+
+    Term functionMap =
+        cons(func1, cons(func2, cons(func3, cons(func4, Term.NULL))));
+
+    Term isLeaf =
+        abs(app(
+            app(Terms.equals(Terms.primObj("num"), ref(1)), primObj(true)),
+            primObj(false)));
+
+    Term branch1 =
+        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+            "additup", //
+            ImmutableList.of(ImmutableList.of("num", 4), //
+                ImmutableList.of("num", 12)))));
+
+    Term branch2 =
+        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+            "num",
+            4)));
+
+    Term branch3 =
+        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+            "add_42_to_car", //
+            ImmutableList.of(ImmutableList.of("num", 4)))));
+
+    Term fork = cons(branch1, cons(branch2, cons(branch3, Term.NULL)));
+
+    Term tree = cons(primObj("proditup"), cons(fork, Term.NULL));
+
+    Term visitorCall =
+        app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
+
+    TestUtil.assertReducesToData(PrimitiveTree.copyOf(2944), visitorCall);
+  }
 }
