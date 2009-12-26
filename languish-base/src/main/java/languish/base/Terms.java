@@ -88,7 +88,7 @@ public class Terms {
 
     Operation op = term.getOperation();
     if (op == Operations.NOOP) {
-      return PrimitiveTree.of(ImmutableList.<PrimitiveTree> of());
+      return Tree.<Primitive> empty();
     }
 
     if (op == Operations.PRIMITIVE) {

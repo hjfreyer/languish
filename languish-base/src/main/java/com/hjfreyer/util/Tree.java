@@ -15,6 +15,10 @@ public class Tree<T> implements Reprable {
     return new Tree<T>(prim);
   }
 
+  public static <T> Tree<T> empty() {
+    return new Tree<T>(ImmutableList.<T> of());
+  }
+
   public static <T> Tree<T> inode(List<Tree<T>> list) {
     return new Tree<T>(list);
   }
