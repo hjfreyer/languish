@@ -3,7 +3,7 @@ package languish.tools.preprocessor;
 import java.util.List;
 
 import languish.parsing.GrammarModule;
-import languish.parsing.Production;
+import languish.parsing.Sequence;
 import languish.tools.parsing.TermParser;
 
 import com.google.common.collect.ImmutableList;
@@ -17,11 +17,11 @@ public class PreprocessorGrammar {
       Pair.of("CAR", "CAR"),
       Pair.of("CDR", "CDR"));
 
-  public static final List<Production> RULES =
+  public static final List<Sequence> RULES =
       ImmutableList
           .of( //
-              Production.seq("TERM", "ABS_TERM", "[", "ABS", "TERM", "]"),
-              Production.seq(
+              Sequence.of("TERM", "ABS_TERM", "[", "ABS", "TERM", "]"),
+              Sequence.of(
                   "TERM",
                   "CONS_TERM",
                   "[",
@@ -29,16 +29,16 @@ public class PreprocessorGrammar {
                   "TERM",
                   "TERM",
                   "]"),
-              Production.seq("TERM", "CAR_TERM", "[", "CAR", "TERM", "]"),
-              Production.seq("TERM", "CDR_TERM", "[", "CDR", "TERM", "]"),
-              Production.seq(
+              Sequence.of("TERM", "CAR_TERM", "[", "CAR", "TERM", "]"),
+              Sequence.of("TERM", "CDR_TERM", "[", "CDR", "TERM", "]"),
+              Sequence.of(
                   "TERM",
                   "SHORT_PRIM_TERM",
                   "[",
                   "PRIMITIVE",
                   "PRIM_LIT",
                   "]"),
-              Production.seq(
+              Sequence.of(
                   "TERM",
                   "SHORT_REF_TERM",
                   "[",

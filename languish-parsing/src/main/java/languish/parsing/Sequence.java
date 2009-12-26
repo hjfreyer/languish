@@ -12,46 +12,32 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Tree;
 
-public class Production {
-
-  public enum Type {
-    SEQ,
-  }
+public class Sequence {
 
   private final String nonterminal;
   private final String name;
-  private final Type type;
   private final List<String> content;
 
-  public Production(String nonterminal, String name, Type type,
-      List<String> content) {
-    super();
+  public Sequence(String nonterminal, String name, List<String> content) {
     this.nonterminal = nonterminal;
     this.name = name;
-    this.type = type;
     this.content = content;
   }
 
   public Parser<Tree<String>> toParser(
       final HashMap<String, Parser.Reference<Tree<String>>> refs) {
-    Parser<Tree<String>> result;
 
-    switch (type) {
-      case SEQ :
-        List<String> subExpressions = content;
-        List<Parser<Tree<String>>> childParsers =
-            Lists.transform(
-                subExpressions,
-                new Function<String, Parser<Tree<String>>>() {
-                  public Parser<Tree<String>> apply(String from) {
-                    return refs.get(from).lazy();
-                  }
-                });
-        result = Parsers.list(childParsers).map(listToTree());
-        break;
-      default :
-        throw new AssertionError();
-    }
+    List<String> subExpressions = content;
+    List<Parser<Tree<String>>> childParsers =
+        Lists.transform(
+            subExpressions,
+            new Function<String, Parser<Tree<String>>>() {
+              public Parser<Tree<String>> apply(String from) {
+                return refs.get(from).lazy();
+              }
+            });
+
+    Parser<Tree<String>> result = Parsers.list(childParsers).map(listToTree());
 
     return result.map(new Map<Tree<String>, Tree<String>>() {
       @SuppressWarnings("unchecked")
@@ -62,13 +48,12 @@ public class Production {
     });
   }
 
-  public static Production seq(String nonterm, String name,
-      List<String> sequence) {
-    return new Production(nonterm, name, Type.SEQ, sequence);
+  public static Sequence of(String nonterm, String name, List<String> sequence) {
+    return new Sequence(nonterm, name, sequence);
   }
 
-  public static Production seq(String nonterm, String name, String... sequence) {
-    return seq(nonterm, name, Arrays.asList(sequence));
+  public static Sequence of(String nonterm, String name, String... sequence) {
+    return of(nonterm, name, Arrays.asList(sequence));
   }
 
   private static Map<List<Tree<String>>, Tree<String>> listToTree() {
@@ -88,10 +73,6 @@ public class Production {
     return name;
   }
 
-  public Type getType() {
-    return type;
-  }
-
   public Object getContent() {
     return content;
   }
@@ -104,7 +85,6 @@ public class Production {
     result = prime * result + ((name == null) ? 0 : name.hashCode());
     result =
         prime * result + ((nonterminal == null) ? 0 : nonterminal.hashCode());
-    result = prime * result + ((type == null) ? 0 : type.hashCode());
     return result;
   }
 
@@ -116,7 +96,7 @@ public class Production {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Production other = (Production) obj;
+    Sequence other = (Sequence) obj;
     if (content == null) {
       if (other.content != null)
         return false;
@@ -132,18 +112,13 @@ public class Production {
         return false;
     } else if (!nonterminal.equals(other.nonterminal))
       return false;
-    if (type == null) {
-      if (other.type != null)
-        return false;
-    } else if (!type.equals(other.type))
-      return false;
     return true;
   }
 
   @Override
   public String toString() {
-    return "Production [content=" + content + ", name=" + name
-        + ", nonterminal=" + nonterminal + ", type=" + type + "]";
+    return "Sequence [content=" + content + ", name=" + name + ", nonterminal="
+        + nonterminal + "]";
   }
 
 }

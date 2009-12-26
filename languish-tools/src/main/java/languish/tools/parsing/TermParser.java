@@ -4,7 +4,7 @@ import java.util.List;
 
 import languish.base.Term;
 import languish.parsing.GrammarModule;
-import languish.parsing.Production;
+import languish.parsing.Sequence;
 
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.functors.Map;
@@ -36,37 +36,37 @@ public class TermParser {
   // TODO(hjfreyer): Add block comment
   public static final List<String> DELIM = ImmutableList.of("(\\s|//[^\n]*)*");
 
-  public static final List<Production> OPERATIONS = ImmutableList.of( //
-      Production.seq("OPERATION", "ABS_OP", "ABS"),
-      Production.seq("OPERATION", "APP_OP", "APP"),
-      Production.seq("OPERATION", "EQUALS_OP", "EQUALS"),
-      Production.seq("OPERATION", "PRINT_OP", "PRINT"),
-      Production.seq("OPERATION", "NATIVE_APPLY_OP", "NATIVE_APPLY"));
+  public static final List<Sequence> OPERATIONS = ImmutableList.of( //
+      Sequence.of("OPERATION", "ABS_OP", "ABS"),
+      Sequence.of("OPERATION", "APP_OP", "APP"),
+      Sequence.of("OPERATION", "EQUALS_OP", "EQUALS"),
+      Sequence.of("OPERATION", "PRINT_OP", "PRINT"),
+      Sequence.of("OPERATION", "NATIVE_APPLY_OP", "NATIVE_APPLY"));
 
-  public static final List<Production> BOOLEAN_LIT = ImmutableList.of( //
-      Production.seq("BOOLEAN_LIT", "TRUE_LIT", "TRUE"),
-      Production.seq("BOOLEAN_LIT", "FALSE_LIT", "FALSE"));
+  public static final List<Sequence> BOOLEAN_LIT = ImmutableList.of( //
+      Sequence.of("BOOLEAN_LIT", "TRUE_LIT", "TRUE"),
+      Sequence.of("BOOLEAN_LIT", "FALSE_LIT", "FALSE"));
 
-  public static final List<Production> PRIMITIVES = ImmutableList.of( //
-      Production.seq("PRIM_LIT", "STRING_PRIM", "STRING_LIT"),
-      Production.seq("PRIM_LIT", "INTEGER_PRIM", "INTEGER_LIT"),
-      Production.seq("PRIM_LIT", "BOOLEAN_PRIM", "BOOLEAN_LIT"));
+  public static final List<Sequence> PRIMITIVES = ImmutableList.of( //
+      Sequence.of("PRIM_LIT", "STRING_PRIM", "STRING_LIT"),
+      Sequence.of("PRIM_LIT", "INTEGER_PRIM", "INTEGER_LIT"),
+      Sequence.of("PRIM_LIT", "BOOLEAN_PRIM", "BOOLEAN_LIT"));
 
-  public static final List<Production> TERMS = ImmutableList.of( //
-      Production.seq("TERM", "NULL_TERM", "NULL"),
-      Production.seq("TERM", "PRIMITIVE_TERM", //
+  public static final List<Sequence> TERMS = ImmutableList.of( //
+      Sequence.of("TERM", "NULL_TERM", "NULL"),
+      Sequence.of("TERM", "PRIMITIVE_TERM", //
           "[",
           "PRIMITIVE",
           "PRIM_LIT",
           "TERM",
           "]"),
-      Production.seq("TERM", "REF_TERM", //
+      Sequence.of("TERM", "REF_TERM", //
           "[",
           "REF",
           "INTEGER_LIT",
           "TERM",
           "]"),
-      Production.seq("TERM", "TERM_PROPER", //
+      Sequence.of("TERM", "TERM_PROPER", //
           "[",
           "OPERATION",
           "TERM",

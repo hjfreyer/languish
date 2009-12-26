@@ -197,18 +197,18 @@ public class GrammarModuleTest extends TestCase {
           Pair.of(")", "\\)"));
   public static final List<String> CALC_DELIM = ImmutableList.of("\\s*");
 
-  public static final List<Production> CALC_RULES =
+  public static final List<Sequence> CALC_RULES =
       ImmutableList.of(
-          Production.seq("EXPR", "EXPR", "FACTOR", "EXPR_TAIL"),
-          Production.seq("EXPR_TAIL", "SUM", "+", "FACTOR", "EXPR_TAIL"),
-          Production.seq("EXPR_TAIL", "DIFF", "-", "FACTOR", "EXPR_TAIL"),
-          Production.seq("EXPR_TAIL", "EMPTY_EXPR_TAIL"),
-          Production.seq("FACTOR", "FACTOR", "TERM", "FACTOR_TAIL"),
-          Production.seq("FACTOR_TAIL", "PROD", "*", "TERM", "FACTOR_TAIL"),
-          Production.seq("FACTOR_TAIL", "QUOT", "/", "TERM", "FACTOR_TAIL"),
-          Production.seq("FACTOR_TAIL", "EMPTY_FACTOR_TAIL"),
-          Production.seq("TERM", "LITERAL", "INT"),
-          Production.seq("TERM", "PAREN", "(", "EXPR", ")"));
+          Sequence.of("EXPR", "EXPR", "FACTOR", "EXPR_TAIL"),
+          Sequence.of("EXPR_TAIL", "SUM", "+", "FACTOR", "EXPR_TAIL"),
+          Sequence.of("EXPR_TAIL", "DIFF", "-", "FACTOR", "EXPR_TAIL"),
+          Sequence.of("EXPR_TAIL", "EMPTY_EXPR_TAIL"),
+          Sequence.of("FACTOR", "FACTOR", "TERM", "FACTOR_TAIL"),
+          Sequence.of("FACTOR_TAIL", "PROD", "*", "TERM", "FACTOR_TAIL"),
+          Sequence.of("FACTOR_TAIL", "QUOT", "/", "TERM", "FACTOR_TAIL"),
+          Sequence.of("FACTOR_TAIL", "EMPTY_FACTOR_TAIL"),
+          Sequence.of("TERM", "LITERAL", "INT"),
+          Sequence.of("TERM", "PAREN", "(", "EXPR", ")"));
 
   public static final GrammarModule CALC_GRAMMAR =
       new GrammarModule("EXPR", CALC_TOKENS, CALC_DELIM, CALC_RULES);

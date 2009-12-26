@@ -24,10 +24,10 @@ public class GrammarModule {
   private final String rootRule;
   private final List<Pair<String, String>> tokenTypes;
   private final List<String> ignored;
-  private final List<Production> rules;
+  private final List<Sequence> rules;
 
   public GrammarModule(String rootRule, List<Pair<String, String>> tokenTypes,
-      List<String> ignored, List<Production> rules) {
+      List<String> ignored, List<Sequence> rules) {
     super();
     this.rootRule = rootRule;
     this.tokenTypes = tokenTypes;
@@ -48,7 +48,7 @@ public class GrammarModule {
         Iterables.concat(this.tokenTypes, other.tokenTypes));
     List<String> ignored =
         ImmutableList.copyOf(Iterables.concat(this.ignored, other.ignored));
-    List<Production> rules =
+    List<Sequence> rules =
         ImmutableList.copyOf(Iterables.concat(this.rules, other.rules));
 
     return new GrammarModule(rootRule, tokenTypes, ignored, rules);
@@ -89,11 +89,11 @@ public class GrammarModule {
   }
 
   static Parser<Tree<String>> getTokenLevelParser(String rootRule,
-      List<String> tokenNames, List<Production> rules) {
+      List<String> tokenNames, List<Sequence> rules) {
 
-    Multimap<String, Production> rulesMap = Multimaps.newLinkedListMultimap();
+    Multimap<String, Sequence> rulesMap = Multimaps.newLinkedListMultimap();
 
-    for (Production rule : rules) {
+    for (Sequence rule : rules) {
       rulesMap.put(rule.getNonterminal(), rule);
     }
 
@@ -121,7 +121,7 @@ public class GrammarModule {
     }
 
     for (String type : rulesMap.keySet()) {
-      for (final Production production : rulesMap.get(type)) {
+      for (final Sequence production : rulesMap.get(type)) {
         Parser<Tree<String>> productionParser = production.toParser(parserRefs);
         nontermParsers.put(type, nontermParsers.get(type).or(productionParser));
       }
@@ -142,7 +142,7 @@ public class GrammarModule {
     return ignored;
   }
 
-  public List<Production> getRules() {
+  public List<Sequence> getRules() {
     return rules;
   }
 
