@@ -4,7 +4,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 public class Trees {
-  public static <A, B> Tree<B> transform(Function<A, B> function, Tree<A> from) {
+  public static <A, B> Tree<B> transform(Tree<A> from, Function<A, B> function) {
     if (from.isLeaf()) {
       return Tree.leaf(function.apply(from.asLeaf()));
     }
@@ -15,7 +15,7 @@ public class Trees {
         from.asList(),
         new Function<Tree<A>, Tree<B>>() {
           public Tree<B> apply(Tree<A> from) {
-            return transform(finalFunc, from);
+            return transform(from, finalFunc);
           }
         }));
   }
