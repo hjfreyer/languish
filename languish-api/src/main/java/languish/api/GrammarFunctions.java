@@ -1,6 +1,7 @@
 package languish.api;
 
 import java.util.List;
+import java.util.Map;
 
 import languish.base.NativeFunction;
 import languish.base.Primitive;
@@ -8,12 +9,14 @@ import languish.parsing.GrammarModule;
 import languish.parsing.Sequence;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Pair;
 import com.hjfreyer.util.Tree;
 import com.hjfreyer.util.Trees;
 
 public class GrammarFunctions {
+
   public static final NativeFunction PARSE_TEXT = new NativeFunction() {
     @Override
     public Tree<Primitive> apply(Tree<Primitive> arg) {
@@ -26,6 +29,11 @@ public class GrammarFunctions {
       return Trees.transform(grammar.getAstParser().parse(text), AS_PRIMITIVE);
     }
   };
+
+  public static final Map<String, ? extends NativeFunction> FUNCTION_MAP =
+      ImmutableMap.<String, NativeFunction> builder().put(
+          "grammar/parse",
+          PARSE_TEXT).build();
 
   private static final Function<Primitive, String> AS_STRING =
       new Function<Primitive, String>() {

@@ -4,7 +4,6 @@ import java.util.Map;
 
 import languish.base.NativeFunction;
 import languish.base.Primitive;
-import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableMap;
 import com.hjfreyer.util.Tree;
@@ -15,8 +14,7 @@ public class MathFunctions {
   public static final NativeFunction AND = new TwoArgumentNativeFunction() {
     @Override
     public Tree<Primitive> apply(Primitive arg1, Primitive arg2) {
-      return Tree.leaf(new Primitive(arg1.asBoolean()
-      && arg2.asBoolean()));
+      return Tree.leaf(new Primitive(arg1.asBoolean() && arg2.asBoolean()));
     }
   };
 
@@ -39,8 +37,7 @@ public class MathFunctions {
       new TwoArgumentNativeFunction() {
         @Override
         public Tree<Primitive> apply(Primitive arg1, Primitive arg2) {
-          return Tree.leaf(new Primitive(arg1.asInteger()
-          * arg2.asInteger()));
+          return Tree.leaf(new Primitive(arg1.asInteger() * arg2.asInteger()));
         }
       };
 
@@ -50,8 +47,7 @@ public class MathFunctions {
         @Override
         public Tree<Primitive> apply(Primitive obj) {
 
-          return Tree.leaf(new Primitive(Integer
-          .parseInt(obj.asString())));
+          return Tree.leaf(new Primitive(Integer.parseInt(obj.asString())));
         }
       };
 
