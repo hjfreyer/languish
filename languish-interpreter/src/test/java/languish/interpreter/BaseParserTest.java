@@ -10,6 +10,7 @@ import languish.util.PrimitiveTree;
 import org.jmock.Mockery;
 
 import com.hjfreyer.util.Pair;
+import com.hjfreyer.util.Tree;
 
 public class BaseParserTest extends TestCase {
   Mockery context = new Mockery();
@@ -28,7 +29,7 @@ public class BaseParserTest extends TestCase {
         BaseParser.parseFromString("#lang __BUILTIN__;; "
             + "[PRIMITIVE \"Returned as-is\" NULL]");
 
-    assertEquals(PrimitiveTree.of(new Primitive("Returned as-is")), Terms
+    assertEquals(Tree.leaf(new Primitive("Returned as-is")), Terms
         .convertTermToJavaObject(res));
   }
 

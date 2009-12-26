@@ -92,7 +92,7 @@ public class Terms {
     }
 
     if (op == Operations.PRIMITIVE) {
-      return PrimitiveTree.of((Primitive) term.getFirst());
+      return Tree.leaf(((Primitive) term.getFirst()));
     }
 
     if (op == Operations.ABS) {
@@ -105,7 +105,7 @@ public class Terms {
       result.add(car);
       result.addAll(cdr);
 
-      return PrimitiveTree.of(ImmutableList.copyOf(result));
+      return Tree.inode(ImmutableList.copyOf(result));
     }
 
     throw new IllegalArgumentException("term is not in a convertible state: "

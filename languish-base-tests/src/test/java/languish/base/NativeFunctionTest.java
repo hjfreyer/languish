@@ -14,7 +14,7 @@ import com.hjfreyer.util.Tree;
 public class NativeFunctionTest extends TestCase {
   public static NativeFunction TRIVIAL = new NativeFunction() {
     public Tree<Primitive> apply(Tree<Primitive> arg) {
-      return PrimitiveTree.copyOf(42);
+      return PrimitiveTree.from(42);
     }
   };
 
@@ -29,13 +29,13 @@ public class NativeFunctionTest extends TestCase {
         nativeApply(TRIVIAL, NULL),
         null,
         primitive(new Primitive(42)),
-        PrimitiveTree.copyOf(42)),
+        PrimitiveTree.from(42)),
 
     TRIVIAL_NATIVE_WITH_REDUCE( //
         nativeApply(TRIVIAL, app(abs(primitive(FOUR)), NULL)),
         null,
         nativeApply(TRIVIAL, primitive(FOUR)),
-        PrimitiveTree.copyOf(42)),
+        PrimitiveTree.from(42)),
 
     TRIVIAL_NATIVE_WITH_LIST( //
         Terms.nativeApply(TRIVIAL, cons(primitive(THREE), cons(
@@ -43,19 +43,19 @@ public class NativeFunctionTest extends TestCase {
             NULL))),
         null,
         Terms.primitive(new Primitive(42)),
-        PrimitiveTree.copyOf(42)),
+        PrimitiveTree.from(42)),
 
     IDENT_NATIVE_FUNC( //
         nativeApply(IDENTITY, NULL),
         null,
         NULL,
-        PrimitiveTree.copyOf(ImmutableList.of())),
+        PrimitiveTree.from(ImmutableList.of())),
 
     IDENT_NATIVE_WITH_REDUCE( //
         nativeApply(IDENTITY, app(abs(primitive(FOUR)), NULL)),
         null,
         nativeApply(IDENTITY, primitive(FOUR)),
-        PrimitiveTree.copyOf(4)),
+        PrimitiveTree.from(4)),
 
     IDENT_NATIVE_WITH_LIST( //
         Terms.nativeApply(IDENTITY, cons(primitive(THREE), cons(
@@ -63,7 +63,7 @@ public class NativeFunctionTest extends TestCase {
             NULL))),
         null,
         cons(primitive(THREE), cons(primitive(FOUR), NULL)),
-        PrimitiveTree.copyOf(ImmutableList.of(3, 4))),
+        PrimitiveTree.from(ImmutableList.of(3, 4))),
 
     ;
 

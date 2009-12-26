@@ -18,11 +18,11 @@ public class InterpreterTest extends TestCase {
   @SuppressWarnings("unchecked")
   public void testBasicValue() throws Exception {
     Term program =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "VALUE",
             5)));
 
-    TestUtil.assertReducesToData(PrimitiveTree.copyOf(5), Interpreter
+    TestUtil.assertReducesToData(PrimitiveTree.from(5), Interpreter
         .reduceModuleCompletely(program, null));
   }
 
@@ -44,7 +44,7 @@ public class InterpreterTest extends TestCase {
     replay(mockDepMan);
 
     TestUtil.assertReducesToData(
-        PrimitiveTree.copyOf(ImmutableList.of(5, 5)),
+        PrimitiveTree.from(ImmutableList.of(5, 5)),
         Interpreter.reduceModuleCompletely(program, mockDepMan));
 
     verify(mockDepMan);

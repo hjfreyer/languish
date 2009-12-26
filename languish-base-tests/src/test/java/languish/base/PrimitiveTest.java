@@ -14,12 +14,12 @@ public class PrimitiveTest extends TestCase {
     PRIMITIVE_INT(primitive(FIVE), //
         "[PRIMITIVE 5 NULL]",
         null,
-        PrimitiveTree.copyOf(5)),
+        PrimitiveTree.from(5)),
 
     PRIMITIVE_STRING(primitive(new Primitive("FOO")), //
         "[PRIMITIVE \"FOO\" NULL]",
         null,
-        PrimitiveTree.copyOf("FOO")),
+        PrimitiveTree.from("FOO")),
 
     ;
 

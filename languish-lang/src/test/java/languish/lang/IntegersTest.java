@@ -10,13 +10,13 @@ import languish.util.PrimitiveTree;
 public class IntegersTest extends TestCase {
   public void testAdd() {
     TestUtil
-        .assertReducesToData(PrimitiveTree.copyOf(7), app(app(
+        .assertReducesToData(PrimitiveTree.from(7), app(app(
             Integers.add(),
             Terms.primitive(TestUtil.FIVE)), Terms.primitive(TestUtil.TWO)));
   }
 
   public void testMultiply() {
-    TestUtil.assertReducesToData(PrimitiveTree.copyOf(10), app(app(Integers
+    TestUtil.assertReducesToData(PrimitiveTree.from(10), app(app(Integers
         .multiply(), Terms.primitive(TestUtil.FIVE)), Terms
         .primitive(TestUtil.TWO)));
   }

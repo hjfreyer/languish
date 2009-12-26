@@ -34,19 +34,19 @@ public class VisitorTest extends TestCase {
 
     Term isLeaf = abs(primObj(true));
     Term tree =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "func1",
             3)));
 
-    TestUtil.assertReducesToData(PrimitiveTree.copyOf(45), app(app(app(Visitor
+    TestUtil.assertReducesToData(PrimitiveTree.from(45), app(app(app(Visitor
         .visitTree(), functionMap), isLeaf), tree));
 
     tree =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "func1",
             -3)));
 
-    TestUtil.assertReducesToData(PrimitiveTree.copyOf(39), app(app(app(Visitor
+    TestUtil.assertReducesToData(PrimitiveTree.from(39), app(app(app(Visitor
         .visitTree(), functionMap), isLeaf), tree));
   }
 
@@ -61,7 +61,7 @@ public class VisitorTest extends TestCase {
             app(Terms.equals(Terms.primObj("num"), ref(1)), primObj(true)),
             primObj(false)));
     Term tree =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "additup", //
             ImmutableList.of(ImmutableList.of("num", 3), //
                 ImmutableList.of("num", 4),
@@ -71,7 +71,7 @@ public class VisitorTest extends TestCase {
     Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
 
-    TestUtil.assertReducesToData(PrimitiveTree.copyOf(17), visitorCall);
+    TestUtil.assertReducesToData(PrimitiveTree.from(17), visitorCall);
   }
 
   @SuppressWarnings("unchecked")
@@ -85,7 +85,7 @@ public class VisitorTest extends TestCase {
             app(Terms.equals(Terms.primObj("num"), ref(1)), primObj(true)),
             primObj(false)));
     Term tree =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "proditup", //
             ImmutableList.of(ImmutableList.of("num", 3), //
                 ImmutableList.of("num", 4),
@@ -95,7 +95,7 @@ public class VisitorTest extends TestCase {
     Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
 
-    TestUtil.assertReducesToData(PrimitiveTree.copyOf(-288), visitorCall);
+    TestUtil.assertReducesToData(PrimitiveTree.from(-288), visitorCall);
   }
 
   @SuppressWarnings("unchecked")
@@ -112,7 +112,7 @@ public class VisitorTest extends TestCase {
             primObj(false)), primObj(true)));
 
     Term tree =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "additup",
             ImmutableList.of(ImmutableList.of("add_42", 3), //
                 ImmutableList.of("num", 4),
@@ -122,7 +122,7 @@ public class VisitorTest extends TestCase {
     Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
 
-    TestUtil.assertReducesToData(PrimitiveTree.copyOf(59), visitorCall);
+    TestUtil.assertReducesToData(PrimitiveTree.from(59), visitorCall);
 
   }
 
@@ -143,18 +143,18 @@ public class VisitorTest extends TestCase {
             primObj(false)));
 
     Term branch1 =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "additup", //
             ImmutableList.of(ImmutableList.of("num", 4), //
                 ImmutableList.of("num", 12)))));
 
     Term branch2 =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "num",
             4)));
 
     Term branch3 =
-        Terms.convertJavaObjectToTerm(PrimitiveTree.copyOf(ImmutableList.of(
+        Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
             "add_42_to_car", //
             ImmutableList.of(ImmutableList.of("num", 4)))));
 
@@ -165,6 +165,6 @@ public class VisitorTest extends TestCase {
     Term visitorCall =
         app(app(app(Visitor.visitTree(), functionMap), isLeaf), tree);
 
-    TestUtil.assertReducesToData(PrimitiveTree.copyOf(2944), visitorCall);
+    TestUtil.assertReducesToData(PrimitiveTree.from(2944), visitorCall);
   }
 }

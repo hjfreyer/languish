@@ -17,20 +17,20 @@ public class ConsTest extends TestCase {
         NULL,
         "NULL",
         null,
-        PrimitiveTree.copyOf(ImmutableList.of())),
+        PrimitiveTree.from(ImmutableList.of())),
 
     CREATE_SINGLETON( //
         cons(primitive(FIVE), NULL),
         "[ABS [APP [APP [REF 1 NULL] [PRIMITIVE 5 NULL]] NULL] NULL]",
         null,
-        PrimitiveTree.copyOf(ImmutableList.of(5))),
+        PrimitiveTree.from(ImmutableList.of(5))),
 
     CAR_SINGLETON( //
         car(cons(primitive(FIVE), NULL)),
         "[APP [ABS [APP [APP [REF 1 NULL] [PRIMITIVE 5 NULL]] NULL] NULL] "
             + "[ABS [ABS [REF 2 NULL] NULL] NULL]]",
         app(app(abs(abs(ref(2))), primitive(FIVE)), Term.NULL),
-        PrimitiveTree.copyOf(5)),
+        PrimitiveTree.from(5)),
 
     GET_PAIR_WITH_SINGLE_REF( //
         app(abs(cons(ref(2), cons(ref(3), NULL))), primitive(FOUR)),
@@ -38,7 +38,7 @@ public class ConsTest extends TestCase {
             + "[REF 2 NULL]] [ABS [APP [APP [REF 1 NULL] "
             + "[REF 3 NULL]] NULL] NULL]] NULL] NULL] [PRIMITIVE 4 NULL]]",
         cons(primitive(FOUR), cons(primitive(FOUR), NULL)),
-        PrimitiveTree.copyOf(ImmutableList.of(4, 4))),
+        PrimitiveTree.from(ImmutableList.of(4, 4))),
 
     GET_PAIR_WITH_DOUBLE_REF( //
         app(
@@ -48,7 +48,7 @@ public class ConsTest extends TestCase {
             + "[ABS [APP [APP [REF 1 NULL] [REF 4 NULL]] NULL] NULL]] "
             + "NULL] NULL] NULL] [PRIMITIVE 4 NULL]] [PRIMITIVE 5 NULL]]",
         app(abs(cons(ref(2), cons(primitive(FOUR), NULL))), primitive(FIVE)),
-        PrimitiveTree.copyOf(ImmutableList.of(5, 4))),
+        PrimitiveTree.from(ImmutableList.of(5, 4))),
 
     GET_NESTED_LIST( //
         cons(cons(primitive(FIVE), NULL), cons(primitive(FOUR), NULL)),
@@ -56,7 +56,7 @@ public class ConsTest extends TestCase {
             + "[PRIMITIVE 5 NULL]] NULL] NULL]] [ABS [APP [APP [REF 1 NULL] "
             + "[PRIMITIVE 4 NULL]] NULL] NULL]] NULL]",
         null,
-        PrimitiveTree.copyOf(ImmutableList.of(ImmutableList.of(5), 4))),
+        PrimitiveTree.from(ImmutableList.of(ImmutableList.of(5), 4))),
 
     GET_LIST_WITH_UNREDUCED_CAR( //
         cons(app(IDENT, primitive(FIVE)), cons(primitive(FOUR), NULL)),
@@ -64,7 +64,7 @@ public class ConsTest extends TestCase {
             + "[PRIMITIVE 5 NULL]]] [ABS [APP [APP [REF 1 NULL] "
             + "[PRIMITIVE 4 NULL]] NULL] NULL]] NULL]",
         null,
-        PrimitiveTree.copyOf(ImmutableList.of(5, 4))),
+        PrimitiveTree.from(ImmutableList.of(5, 4))),
 
     GET_LIST_WITH_UNREDUCED_CDR( //
         cons(primitive(FIVE), app(IDENT, cons(primitive(FOUR), NULL))),
@@ -72,7 +72,7 @@ public class ConsTest extends TestCase {
             + "[APP [ABS [REF 1 NULL] NULL] [ABS [APP [APP [REF 1 NULL] "
             + "[PRIMITIVE 4 NULL]] NULL] NULL]]] NULL]",
         null,
-        PrimitiveTree.copyOf(ImmutableList.of(5, 4))),
+        PrimitiveTree.from(ImmutableList.of(5, 4))),
 
     ;
 
