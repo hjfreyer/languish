@@ -3,12 +3,23 @@ package com.hjfreyer.util;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.base.Function;
 import com.google.common.base.Functions;
 import com.google.common.base.Join;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
 public class Tree<T> implements Reprable {
+
+  public static <T> Function<Tree<T>, T> asLeafFunction() {
+    return new Function<Tree<T>, T>() {
+      @Override
+      public T apply(Tree<T> from) {
+        return from.asLeaf();
+      }
+    };
+  }
+
   private final Object node;
 
   public static <T> Tree<T> leaf(T prim) {
