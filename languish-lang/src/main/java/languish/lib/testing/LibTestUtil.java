@@ -14,6 +14,6 @@ public class LibTestUtil {
 
   public static final DependencyManager STANDARD_INCLUDE =
       new ChainedDependencyManager(ImmutableList.of(
-          StandardLib.NATIVE_INCLUDE,
+          StandardLib.DEFAULT_INCLUDE,
           LANGUISH_FOLDER));
 }
