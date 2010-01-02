@@ -1,40 +1,50 @@
 
 [CONS [PRIMITIVE "LOAD"]
+[CONS 
+  [CONS [PRIMITIVE "__BUILTIN__/grammar/parse"]
   [CONS 
-    [CONS [PRIMITIVE "lang/lists"] 
-    [CONS [PRIMITIVE "lang/visitor"] 
-    [CONS [PRIMITIVE "parser/parser_api"] 
-    NULL]]]
-    
-    [ABS                                                
-      [CONS [PRIMITIVE "VALUE"]
-        [CONS                                             // ParseStatement = [CAR *VALUE*](
-          [ABS                                            //     TokenTypes = 6,
-          [ABS                                            //     Ignored = 5,
-          [ABS                                            //     Rules = 4,
-          [ABS                                            //     StartingRule = 3,
-          [ABS                                            //     Semantic = 2,
-          [ABS                                            //     Text = 1):
-            [APP [APP [APP [CAR [CAR [CDR [REF 7]]]]      // VisitTree(
-              [REF 2]]                                    //     Semantic,
-              [ABS                                        //     Func x -> Member([token[0] for token in TokenTypes], x)
-                [APP [APP [CAR [CDR [CDR [CAR [REF 8]]]]] //       Member(
-                  [APP [APP [CAR [CAR [REF 8]]]           //         Map(
-                    [ABS [CAR [REF 1]]]]                  //           Func y -> y[0],
-                    [REF 7]]]                             //           TokenTypes),
-                [REF 1]]                                  //         x)
-              ]]                                          //     EndFunc,
-              [APP [APP [APP [APP [APP                    //
-                  [CAR [CAR [CDR [CDR [REF 7]]]]]         //     ParseText(
-                [REF 6]]                                  //         TokenTypes,
-                [REF 5]]                                  //         Ignored,
-                [REF 4]]                                  //         Rules,
-                [REF 3]]                                  //         StartingRule,
-                [REF 1]]                                  //         Text)
-            ]
-          ]]]]]]
-        NULL]
+    [ABS
+[CONS [PRIMITIVE "LOAD"]
+[CONS 
+  [CONS [PRIMITIVE "bootstrap/lists"]
+  [CONS 
+    [ABS
+[CONS [PRIMITIVE "LOAD"]
+[CONS 
+  [CONS [PRIMITIVE "bootstrap/visitor"]
+  [CONS 
+    [ABS
+[CONS [PRIMITIVE "VALUE"]
+[CONS
+  [CONS                                // ParseStatement = [CAR *VALUE*](
+    [ABS                               //     Grammar   = 3,
+    [ABS                               //     Semantic  = 2,
+    [ABS                               //     Text      = 1):
+      [APP [APP [APP [CAR [REF 7]]     //   VisitTree(
+        [REF 2]]                       //     Semantic,
+        [ABS                           //     Func x -> Member([t[0] for t in Grammar[1]], x)
+          [APP [APP 
+            [CAR [CDR [CDR [REF 13]]]] //       Member(
+            [APP [APP [CAR [REF 13]]   //         Map(
+              [ABS [CAR [REF 1]]]]     //           Func y -> y[0],
+              [CAR [CDR [REF 4]]]]]    //           Grammar[1]),
+            [REF 1]]                   //         x)
+        ]]                             //     EndFunc,
+        [APP [REF 17]                  //     ParseText(
+          [CONS [REF 4]                //       Grammar,
+          [CONS [REF 3]                //       Text)
+          NULL]]
+        ]
       ]
+    ]]]
+  NULL]
+NULL]]
     ]
-  ]
-]
+  NULL]]
+NULL]]
+    ]
+  NULL]]
+NULL]]
+    ]
+  NULL]]
+NULL]]
