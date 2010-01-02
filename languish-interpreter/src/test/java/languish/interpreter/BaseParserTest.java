@@ -5,7 +5,6 @@ import junit.framework.TestCase;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
-import languish.util.PrimitiveTree;
 
 import org.jmock.Mockery;
 
@@ -39,7 +38,7 @@ public class BaseParserTest extends TestCase {
 
     Term depName = primitive(new Primitive("fooParser"));
     Term programApplication =
-        abs(app(ref(1), primitive(new Primitive(" blah blah blah"))));
+        app(ref(3), primitive(new Primitive(" blah blah blah")));
 
     Term expected = cons(primitive(new Primitive("LOAD")), //
         cons(cons(depName, cons(programApplication, Term.NULL)), Term.NULL));
