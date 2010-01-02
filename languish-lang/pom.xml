@@ -27,8 +27,17 @@
 		</plugins>
 		
     <resources>
-      <resource>
-        <directory>target/generated-resources</directory>
+          <resource>
+        <directory>target/generated-resources/languish</directory>
+<targetPath>lish</targetPath> 
+      </resource>   
+  <resource>
+        <directory>src/main/languish</directory>
+<targetPath>lish</targetPath> 
+     </resource>
+  <resource>
+        <directory>src/test/languish</directory>
+        <targetPath>lish</targetPath> 
       </resource>
     </resources>
 	</build>
