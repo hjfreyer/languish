@@ -2,24 +2,11 @@ package languish.lib;
 
 import languish.base.Term;
 import languish.base.Terms;
-import languish.interpreter.Interpreter;
-import languish.interpreter.Modules;
-import languish.interpreter.error.DependencyUnavailableError;
 import languish.lib.testing.LibTestUtil;
 
 public class Integers {
-  private static final Term LIB;
 
-  static {
-    try {
-      LIB =
-          Interpreter.reduceModuleCompletely(
-              Modules.loadAndReturn("bootstrap/integers"),
-              LibTestUtil.STANDARD_INCLUDE);
-    } catch (DependencyUnavailableError e) {
-      throw new LanguishLoadError(e);
-    }
-  }
+  private static final Term LIB = LibTestUtil.loadLib("bootstrap/integers");
 
   public static Term add() {
     return Terms.car(LIB);
