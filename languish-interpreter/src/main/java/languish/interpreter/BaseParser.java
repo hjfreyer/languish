@@ -1,12 +1,7 @@
 package languish.interpreter;
 
-import static languish.base.Terms.*;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import languish.base.Term;
-import languish.tools.parsing.TermParser;
 
 import com.hjfreyer.util.Pair;
 
@@ -15,19 +10,15 @@ public class BaseParser {
   private static final Pattern MODULE_REGEX =
       Pattern.compile("^#lang[ ]+([^ ]+);;(.*)$", Pattern.DOTALL);
 
-  public static Term parseFromString(String string) {
-    Pair<String, String> parserAndProgram = getParserAndProgram(string);
-    String parserName = parserAndProgram.getFirst();
-    String programBody = parserAndProgram.getSecond();
-
-    if (parserName.equals("__BUILTIN__")) {
-      return TermParser.getTermParser().parse(programBody);
-    }
-
-    Term programApplication = app(ref(3), primObj(programBody));
-
-    return Modules.load(parserName, programApplication);
-  }
+  // public static Term parseFromString(String string) {
+  // Pair<String, String> parserAndProgram = getParserAndProgram(string);
+  // String parserName = parserAndProgram.getFirst();
+  // String programBody = parserAndProgram.getSecond();
+  //
+  // Term programApplication = app(ref(3), primObj(programBody));
+  //
+  // return Modules.load(parserName, programApplication);
+  // }
 
   public static Pair<String, String> getParserAndProgram(String input) {
     Matcher match = MODULE_REGEX.matcher(input.trim());

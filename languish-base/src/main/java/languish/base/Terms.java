@@ -2,8 +2,6 @@ package languish.base;
 
 import java.util.List;
 
-import languish.util.PrimitiveTree;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Tree;
@@ -110,5 +108,28 @@ public class Terms {
 
     throw new IllegalArgumentException("term is not in a convertible state: "
         + term);
+  }
+
+  public static Tree<String> convertTermToAst(Term term) {
+    return null;
+  }
+
+  public static Term compileAstToTerm(Tree<String> ast) {
+    if (ast.isLeaf() && ast.asLeaf().equals("NULL")) {
+      return Term.NULL;
+    }
+
+    String opName = ast.asList().get(0).asLeaf();
+    Operation op = Operations.fromName(opName);
+
+    Tree<String> first = ast.asList().get(1);
+    Tree<String> second = ast.asList().get(2);
+    if (op == Operations.PRIMITIVE) {
+      return Terms.primObj(first.asLeaf());
+    } else if (op == Operations.REF) {
+      return Terms.ref(Integer.parseInt(first.asLeaf()));
+    }
+
+    return new Term(op, compileAstToTerm(first), compileAstToTerm(second));
   }
 }

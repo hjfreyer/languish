@@ -9,6 +9,8 @@ import languish.interpreter.BaseParser;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.error.DependencyUnavailableError;
 
+import com.hjfreyer.util.Pair;
+
 public class FileSystemDependencyManager implements DependencyManager {
 
   private static final ClassLoader CLASS_LOADER =
@@ -37,7 +39,10 @@ public class FileSystemDependencyManager implements DependencyManager {
         doc.append(read.nextLine()).append('\n');
       }
 
-      return BaseParser.parseFromString(doc.toString());
+      Pair<String, String> parserAndProgram =
+          BaseParser.getParserAndProgram(doc.toString());
+
+      return;
     }
 
     throw new DependencyUnavailableError(resourceName);

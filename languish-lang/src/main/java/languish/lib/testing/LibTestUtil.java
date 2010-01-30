@@ -5,8 +5,6 @@ import languish.base.Term;
 import languish.depman.ChainedDependencyManager;
 import languish.depman.FileSystemDependencyManager;
 import languish.interpreter.DependencyManager;
-import languish.interpreter.Interpreter;
-import languish.interpreter.Modules;
 import languish.interpreter.error.DependencyUnavailableError;
 import languish.lib.LanguishLoadError;
 
@@ -24,9 +22,7 @@ public class LibTestUtil {
 
   public static Term loadLib(String libName) {
     try {
-      return Interpreter.reduceModuleCompletely(
-          Modules.loadAndReturn(libName),
-          LibTestUtil.STANDARD_INCLUDE);
+      return LibTestUtil.STANDARD_INCLUDE.getResource(libName);
     } catch (DependencyUnavailableError e) {
       throw new LanguishLoadError(e);
     }

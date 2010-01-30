@@ -1,6 +1,6 @@
 package languish.interpreter;
 
-import static languish.base.Terms.*;
+import static languish.base.Terms.cons;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
@@ -20,7 +20,10 @@ public class Modules {
   }
 
   public static Term loadAndReturn(String depname) {
-    return Modules.load(depname, abs(Modules.value(ref(3))));
+    Term depList = Terms.cons(Terms.primObj(depname), Term.NULL);
+    Term identity = null;// Terms.convertTermToAst(Terms.abs(Terms.car(Terms.ref(1))));
+
+    return Terms.cons(depList, Terms.cons(identity, Term.NULL));
   }
 
   public static Term reduceAndApply(Term reduce, Term function) {

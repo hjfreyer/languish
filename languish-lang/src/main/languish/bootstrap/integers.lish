@@ -1,0 +1,27 @@
+
+
+
+#lang __BUILTIN__/bootstrap/preprocessor;;
+
+#load __BUILTIN__/math/multiply, __BUILTIN__/math/add;;
+
+[ABS
+  [CONS [PRIMITIVE "VALUE"]
+  [CONS                         
+    [CONS                                     // Add = [CAR *VALUE*](
+      [ABS                              //     A = 2
+      [ABS                              //     B = 1):
+        [APP [REF 6]     //   add(
+          [CONS [REF 2] [CONS [REF 4] NULL]]  //     [A, B])
+        ]
+      ]]  
+    [CONS           // Multiply = [CAR [CDR *VALUE*]](
+      [ABS                              //     A = 2
+      [ABS                              //     B = 1):
+        [APP [REF 12]    //   muliply(
+          [CONS [REF 2] [CONS [REF 4] NULL]]  //     [A, B])
+        ]
+      ]]    
+    NULL]]
+  NULL]]
+]
