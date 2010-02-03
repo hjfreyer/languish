@@ -5,6 +5,42 @@ import junit.framework.TestCase;
 public class InterpreterTest extends TestCase {
   public void testFoo() {
   }
+  // public void testParseBuiltinParser() throws Exception {
+  // Term res =
+  // BaseParser.parseFromString("#lang __BUILTIN__;; "
+  // + "[PRIMITIVE \"Returned as-is\" NULL]");
+  // assertEquals(Tree.leaf(new Primitive("Returned as-is")), Terms
+  // .convertTermToJavaObject(res));
+  // }
+  // public void testParseNonstandardParser() throws Exception {
+  // Term res = BaseParser //
+  // .parseFromString("#lang fooParser;; blah blah blah");
+  // Term depName = primitive(new Primitive("fooParser"));
+  // Term programApplication =
+  // app(ref(3), primitive(new Primitive(" blah blah blah")));
+  // Term expected = cons(primitive(new Primitive("LOAD")), //
+  // cons(cons(depName, cons(programApplication, Term.NULL)), Term.NULL));
+  // assertEquals(expected, res);
+  // }
+
+  // public void testParseBuiltinParser() throws Exception {
+  // Term res = BaseParser.parseFromString("#lang __BUILTIN__;; "
+  // + "[PRIMITIVE \"Returned as-is\" NULL]");
+  // assertEquals(Tree.leaf(new Primitive("Returned as-is")), Terms
+  // .convertTermToJavaObject(res));
+  // }
+  //
+  // public void testParseNonstandardParser() throws Exception {
+  // Term res = BaseParser //
+  // .parseFromString("#lang fooParser;; blah blah blah");
+  // Term depName = Terms.primitive(new Primitive("fooParser"));
+  // Term programApplication = Terms.app(Terms.ref(3), Terms
+  // .primitive(new Primitive(" blah blah blah")));
+  // Term expected = Terms.cons(Terms.primitive(new Primitive("LOAD")), //
+  // Terms.cons(Terms.cons(depName, Terms
+  // .cons(programApplication, Term.NULL)), Term.NULL));
+  // assertEquals(expected, res);
+  // }
 
   // Mockery context = new Mockery();
   //
@@ -84,4 +120,5 @@ public class InterpreterTest extends TestCase {
   // res = Interpreter.interpretStatement("#lang echoParser;;" + test2, depman);
   // assertEquals(JavaWrapper.of(test2), Lambda.convertTermToJavaObject(res));
   // }
+
 }

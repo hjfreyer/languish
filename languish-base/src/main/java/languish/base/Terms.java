@@ -2,15 +2,17 @@ package languish.base;
 
 import java.util.List;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Tree;
+import com.hjfreyer.util.Trees;
 
 public class Terms {
 
-  public static final Term TRUE = abs(abs(ref(2)));
+  public static final Term TRUE = Terms.abs(Terms.abs(Terms.ref(2)));
 
-  public static final Term FALSE = abs(abs(ref(1)));
+  public static final Term FALSE = Terms.abs(Terms.abs(Terms.ref(1)));
 
   public static Term abs(Term exp) {
     return new Term(Operations.ABS, exp, Term.NULL);
@@ -33,8 +35,8 @@ public class Terms {
   }
 
   public static Term nativeApply(final NativeFunction func, Term arg) {
-    return new Term(Operations.NATIVE_APPLY, primitive(new Primitive(func)),
-        arg);
+    return new Term(Operations.NATIVE_APPLY, Terms
+        .primitive(new Primitive(func)), arg);
   }
 
   public static Term print(Term term) {
@@ -42,15 +44,15 @@ public class Terms {
   }
 
   public static Term cons(Term obj1, Term obj2) {
-    return abs(app(app(ref(1), obj1), obj2));
+    return Terms.abs(Terms.app(Terms.app(Terms.ref(1), obj1), obj2));
   }
 
   public static Term car(Term obj) {
-    return app(obj, TRUE);
+    return Terms.app(obj, Terms.TRUE);
   }
 
   public static Term cdr(Term obj) {
-    return app(obj, FALSE);
+    return Terms.app(obj, Terms.FALSE);
   }
 
   public static Term equals(Term first, Term second) {
@@ -58,7 +60,7 @@ public class Terms {
   }
 
   public static Term branch(Term condition, Term thenTerm, Term elseTerm) {
-    return app(app(condition, thenTerm), elseTerm);
+    return Terms.app(Terms.app(condition, thenTerm), elseTerm);
   }
 
   private Terms() {
@@ -70,12 +72,12 @@ public class Terms {
 
       Term result = Term.NULL;
       for (int i = list.size() - 1; i >= 0; i--) {
-        result = Terms.cons(convertJavaObjectToTerm(list.get(i)), result);
+        result = Terms.cons(Terms.convertJavaObjectToTerm(list.get(i)), result);
       }
 
       return result;
     } else if (obj.isLeaf()) {
-      return primitive(obj.asLeaf());
+      return Terms.primitive(obj.asLeaf());
     }
 
     throw new AssertionError();
@@ -94,9 +96,9 @@ public class Terms {
     }
 
     if (op == Operations.ABS) {
-      Tree<Primitive> car = convertTermToJavaObject(Terms.car(term));
-      List<Tree<Primitive>> cdr =
-          convertTermToJavaObject(Terms.cdr(term)).asList();
+      Tree<Primitive> car = Terms.convertTermToJavaObject(Terms.car(term));
+      List<Tree<Primitive>> cdr = Terms
+          .convertTermToJavaObject(Terms.cdr(term)).asList();
 
       List<Tree<Primitive>> result = Lists.newLinkedList();
 
@@ -118,10 +120,8 @@ public class Terms {
     if (ast.isLeaf() && ast.asLeaf().equals("NULL")) {
       return Term.NULL;
     }
-
     String opName = ast.asList().get(0).asLeaf();
     Operation op = Operations.fromName(opName);
-
     Tree<String> first = ast.asList().get(1);
     Tree<String> second = ast.asList().get(2);
     if (op == Operations.PRIMITIVE) {
@@ -129,7 +129,20 @@ public class Terms {
     } else if (op == Operations.REF) {
       return Terms.ref(Integer.parseInt(first.asLeaf()));
     }
+    return new Term(op, Terms.compileAstToTerm(first), Terms
+        .compileAstToTerm(second));
+  }
 
-    return new Term(op, compileAstToTerm(first), compileAstToTerm(second));
+  public static Term compileTermAstToTerm(Term astTerm) {
+    Tree<Primitive> astPrim = Terms.convertTermToJavaObject(astTerm);
+
+    Tree<String> ast = Trees.transform(astPrim,
+        new Function<Primitive, String>() {
+          @Override
+          public String apply(Primitive from) {
+            return from.toString();
+          }
+        });
+    return Terms.compileAstToTerm(ast);
   }
 }
