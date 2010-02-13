@@ -7,6 +7,7 @@ import languish.base.NativeFunction;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
+import languish.interpreter.error.DependencyUnavailableError;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -76,7 +77,13 @@ public class Interpreter {
   public static Term interpret(String doc, DependencyManager depman,
       Map<String, NativeFunction> nativeFunctions) {
     if (doc.startsWith("#nativefunction:")) {
-      String functionName = doc.replace("#nativefunction:", "");
+      String functionName = doc.replace("#nativefunction:", "").trim();
+
+      if (!nativeFunctions.containsKey(functionName)) {
+        throw new DependencyUnavailableError("Native function not available: "
+            + functionName);
+      }
+
       NativeFunction func = nativeFunctions.get(functionName);
       return Terms.abs(Terms.nativeApply(func, Terms.ref(1)));
     }

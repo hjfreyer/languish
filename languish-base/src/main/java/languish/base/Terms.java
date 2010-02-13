@@ -140,7 +140,7 @@ public class Terms {
         new Function<Primitive, String>() {
           @Override
           public String apply(Primitive from) {
-            return from.toString();
+            return from.asString();
           }
         });
     return Terms.compileAstToTerm(ast);

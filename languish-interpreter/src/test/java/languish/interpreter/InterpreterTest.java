@@ -1,26 +1,108 @@
 package languish.interpreter;
 
+import java.util.List;
+import java.util.Map;
+
 import junit.framework.TestCase;
+import languish.base.NativeFunction;
+import languish.base.Primitive;
+import languish.base.Term;
+import languish.base.Terms;
+import languish.tools.testing.TestUtil;
+import languish.util.PrimitiveTree;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.hjfreyer.util.Tree;
 
 public class InterpreterTest extends TestCase {
-  public void testFoo() {
+
+  private final Mockery mocker = new Mockery();
+
+  public void testSimpleNativeGet() throws Exception {
+
+    final NativeFunction func = mocker.mock(NativeFunction.class);
+    mocker.checking(new Expectations() {
+      {
+        oneOf(func).apply(Tree.<Primitive> empty());
+        will(Expectations.returnValue(PrimitiveTree.from("bulbasaur")));
+      }
+    });
+
+    String doc = "#nativefunction:foo/bar\n";
+    Term interpreted = Interpreter.interpret(doc, null, ImmutableMap
+        .<String, NativeFunction> of("foo/bar", func));
+
+    TestUtil.assertReducesToData(PrimitiveTree.from("bulbasaur"), Terms.app(
+        interpreted, Term.NULL));
   }
-  // public void testParseBuiltinParser() throws Exception {
-  // Term res =
-  // BaseParser.parseFromString("#lang __BUILTIN__;; "
-  // + "[PRIMITIVE \"Returned as-is\" NULL]");
-  // assertEquals(Tree.leaf(new Primitive("Returned as-is")), Terms
-  // .convertTermToJavaObject(res));
+
+  //
+  // public void testGetDepParser() throws Exception {
+  // NativeFunction func = new NativeFunction() {
+  // @SuppressWarnings("unchecked")
+  // @Override
+  // public Tree<Primitive> apply(Tree<Primitive> arg) {
+  // List<String> primTerm = ImmutableList.of("PRIMITIVE", arg.asLeaf()
+  // .asString(), "NULL");
+  // List<?> funcWrapTerm = ImmutableList.of("ABS", primTerm, "NULL");
+  // return PrimitiveTree.from(ImmutableList.of(ImmutableList.of(),
+  // funcWrapTerm));
   // }
+  // };
+  // final DependencyManager depman = mocker.mock(DependencyManager.class);
+  // mocker.checking(new Expectations() {
+  // {
+  // oneOf(depman).getResource("test/dep_get_parser");
+  // will(Expectations.returnValue("#nativefunction:test_echo_parser"));
+  // }
+  // });
+  // Map<String, NativeFunction> funcMap = ImmutableMap
+  // .<String, NativeFunction> of("test_echo_parser", func);
+  // String doc = "#lang test/echo_parser;;  foobar\nbaz";
+  // Term interpreted = Interpreter.interpret(doc, depman, funcMap);
+  // TestUtil.assertReducesToData(PrimitiveTree.from("  foobar\nbaz"),
+  // interpreted);
+  // }
+
+  public void testEchoParser() throws Exception {
+    NativeFunction func = new NativeFunction() {
+      @SuppressWarnings("unchecked")
+      @Override
+      public Tree<Primitive> apply(Tree<Primitive> arg) {
+        List<String> primTerm = ImmutableList.of("PRIMITIVE", arg.asLeaf()
+            .asString(), "NULL");
+        List<?> funcWrapTerm = ImmutableList.of("ABS", primTerm, "NULL");
+        return PrimitiveTree.from(ImmutableList.of(ImmutableList.of(),
+            funcWrapTerm));
+      }
+    };
+    final DependencyManager depman = mocker.mock(DependencyManager.class);
+    mocker.checking(new Expectations() {
+      {
+        oneOf(depman).getResource("test/echo_parser");
+        will(Expectations.returnValue("#nativefunction:test_echo_parser"));
+      }
+    });
+    Map<String, NativeFunction> funcMap = ImmutableMap
+        .<String, NativeFunction> of("test_echo_parser", func);
+    String doc = "#lang test/echo_parser;;  foobar\nbaz";
+    Term interpreted = Interpreter.interpret(doc, depman, funcMap);
+    TestUtil.assertReducesToData(PrimitiveTree.from("  foobar\nbaz"),
+        interpreted);
+  }
   // public void testParseNonstandardParser() throws Exception {
   // Term res = BaseParser //
   // .parseFromString("#lang fooParser;; blah blah blah");
   // Term depName = primitive(new Primitive("fooParser"));
-  // Term programApplication =
-  // app(ref(3), primitive(new Primitive(" blah blah blah")));
+  // Term programApplication = app(ref(3), primitive(new Primitive(
+  // " blah blah blah")));
   // Term expected = cons(primitive(new Primitive("LOAD")), //
   // cons(cons(depName, cons(programApplication, Term.NULL)), Term.NULL));
-  // assertEquals(expected, res);
+  // Assert.assertEquals(expected, res);
   // }
 
   // public void testParseBuiltinParser() throws Exception {

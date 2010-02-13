@@ -1,6 +1,6 @@
 package languish.tools.preprocessor;
 
-import com.hjfreyer.util.Tree;import languish.base.Primitive;
+import com.hjfreyer.util.Tree;
 
 public class Preprocessor {
 

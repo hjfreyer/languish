@@ -28,5 +28,4 @@ public class PrimitiveTree {
 
     return Tree.leaf(new Primitive(obj));
   }
-
 }

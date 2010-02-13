@@ -1,6 +1,6 @@
 package languish.tools.testing;
 
-import junit.framework.TestCase;
+import junit.framework.Assert;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
@@ -28,9 +28,9 @@ public class TestUtil {
   public static final Primitive FIFTEEN = new Primitive(15);
 
   public static final Term IDENT = Terms.abs(Terms.ref(1));
-  public static final Term OMEGA =
-      Terms.abs(Terms.app(Terms.ref(1), Terms.ref(1)));
-  public static final Term LOOP = Terms.app(OMEGA, OMEGA);
+  public static final Term OMEGA = Terms.abs(Terms.app(Terms.ref(1), Terms
+      .ref(1)));
+  public static final Term LOOP = Terms.app(TestUtil.OMEGA, TestUtil.OMEGA);
 
   public static void assertLanguishTestCase(LanguishTestCase testCase) {
 
@@ -42,36 +42,32 @@ public class TestUtil {
 
     if (code != null) {
       // TOSTRING
-      TestCase.assertEquals("on test " + name
+      Assert.assertEquals("on test " + name
           + " - getCodeForExpression() does not match code:", code, exp
           .toString());
 
       // PARSE
       Term parsed = TermParser.getTermParser().parse(code);
 
-      TestCase.assertEquals("on test " + name
+      Assert.assertEquals("on test " + name
           + " - code does not parse to given expression:", exp, parsed);
     }
     // REDUCE ONCE
     if (reducedOnce != null) {
-      TestCase.assertEquals(
-          "on test " + name
-              + " - expression does not reduce once to given value:",
-          reducedOnce,
+      Assert.assertEquals("on test " + name
+          + " - expression does not reduce once to given value:", reducedOnce,
           exp.reduce());
     }
 
     // REDUCE COMPLETELY
     if (reducedCompletely != null) {
-      TestCase.assertEquals(
-          "on test " + name
-              + " - expression does not ultimately reduce to given value:",
-          reducedCompletely,
-          Terms.convertTermToJavaObject(exp));
+      Assert.assertEquals("on test " + name
+          + " - expression does not ultimately reduce to given value:",
+          reducedCompletely, Terms.convertTermToJavaObject(exp));
     }
   }
 
   public static void assertReducesToData(Tree<Primitive> expected, Term actual) {
-    TestCase.assertEquals(expected, Terms.convertTermToJavaObject(actual));
+    Assert.assertEquals(expected, Terms.convertTermToJavaObject(actual));
   }
 }

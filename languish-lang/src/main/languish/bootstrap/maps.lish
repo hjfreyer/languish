@@ -1,3 +1,6 @@
+
+#lang 
+
 [CONS [PRIMITIVE "VALUE"]
 [CONS 
   [CONS                                        // PUT = [CAR *VALUE*](

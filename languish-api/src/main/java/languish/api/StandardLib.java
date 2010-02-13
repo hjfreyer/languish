@@ -9,10 +9,13 @@ import com.google.common.collect.ImmutableMap;
 
 public class StandardLib {
 
-  public static final Map<String, NativeFunction> NATIVE_FUNCTIONS = ImmutableMap
-      .<String, NativeFunction> builder().putAll(MathFunctions.FUNCTION_MAP)
-      .putAll(GrammarFunctions.FUNCTION_MAP).putAll(
-          PreprocessorFunctions.FUNCTION_MAP).build();
+  public static final Map<String, NativeFunction> NATIVE_FUNCTIONS = //
+  ImmutableMap.<String, NativeFunction> builder()
+  //
+      .putAll(MathFunctions.FUNCTION_MAP) //
+      .putAll(ParsersFunctions.FUNCTION_MAP) //
+      .putAll(GrammarFunctions.FUNCTION_MAP) //
+      .putAll(PreprocessorFunctions.FUNCTION_MAP).build();
 
   private StandardLib() {
   }
