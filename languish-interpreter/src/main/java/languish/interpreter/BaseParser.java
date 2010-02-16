@@ -7,8 +7,8 @@ import com.hjfreyer.util.Pair;
 
 public class BaseParser {
 
-  private static final Pattern MODULE_REGEX = Pattern.compile(
-      "^#lang[ ]+([^ ]+);;(.*)$", Pattern.DOTALL);
+  private static final Pattern MODULE_REGEX =
+      Pattern.compile("^#lang[ ]+([^ ]+);;(.*)$", Pattern.DOTALL);
 
   // public static Term parseFromString(String string) {
   // Pair<String, String> parserAndProgram = getParserAndProgram(string);
@@ -24,7 +24,7 @@ public class BaseParser {
     Matcher match = BaseParser.MODULE_REGEX.matcher(input.trim());
 
     if (!match.matches()) {
-      return Pair.of("native/parsers/term_parser", input);
+      return Pair.of("native/parsers/string_tree_parser", input);
     }
 
     String parser = match.group(1);

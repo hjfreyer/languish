@@ -14,7 +14,8 @@ public class BaseParserTest extends TestCase {
     Assert.assertEquals(Pair.of("foo", "\nblah blah blah"), BaseParser
         .getParserAndProgram("#lang foo;;\nblah blah blah"));
 
-    Assert.assertEquals(Pair.of("native/parsers/term_parser",
+    Assert.assertEquals(Pair.of(
+        "native/parsers/string_tree_parser",
         "#lanr; \nblah blah blah\n\n  "), BaseParser
         .getParserAndProgram("#lanr; \nblah blah blah\n\n  "));
   }
