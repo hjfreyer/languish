@@ -8,15 +8,15 @@ import org.jmock.Mockery;
 import com.hjfreyer.util.Pair;
 
 public class BaseParserTest extends TestCase {
-  Mockery context = new Mockery();
+	Mockery context = new Mockery();
 
-  public void testGetParserAndProgram() {
-    Assert.assertEquals(Pair.of("foo", "\nblah blah blah"), BaseParser
-        .getParserAndProgram("#lang foo;;\nblah blah blah"));
+	public void testGetParserAndProgram() {
+		Assert.assertEquals(Pair.of("foo", "\nblah blah blah"), BaseParser
+				.getParserAndProgram("#lang foo;;\nblah blah blah"));
 
-    Assert.assertEquals(Pair.of(
-        "native/parsers/string_tree_parser",
-        "#lanr; \nblah blah blah\n\n  "), BaseParser
-        .getParserAndProgram("#lanr; \nblah blah blah\n\n  "));
-  }
+		Assert.assertEquals(Pair.of(
+				"native/parsers/fundamental_parser",
+				"#lanr; \nblah blah blah\n\n  "), BaseParser
+				.getParserAndProgram("#lanr; \nblah blah blah\n\n  "));
+	}
 }

@@ -33,6 +33,10 @@ public class StringTreeParser {
       Sequence.of("TREE_TAIL", "TREE_END", "]"),
       Sequence.of("TREE_TAIL", "TREE_CONT", "TREE", "TREE_TAIL"));
 
+  public static final GrammarModule STRING_TREE_GRAMMAR =
+      new GrammarModule("TREE", StringTreeParser.TOKEN_PAIRS,
+          StringTreeParser.DELIM, StringTreeParser.RULES);
+
   private static final//
   ImmutableMap<String, Function<String, Object>> LEAVES =
       ImmutableMap.<String, Function<String, Object>> builder().put(
@@ -53,21 +57,18 @@ public class StringTreeParser {
             public Object apply(List<Object> arg) {
               return Tree.leaf(arg.get(0));
             }
-          })
-          .put("INODE", new Function<List<Object>, Object>() {
+          }).put("INODE", new Function<List<Object>, Object>() {
             @SuppressWarnings("unchecked")
             @Override
             public Object apply(List<Object> arg) {
               return Tree.inode((List<Tree<Object>>) arg.get(1));
             }
-          })
-          .put("TREE_END", new Function<List<Object>, Object>() {
+          }).put("TREE_END", new Function<List<Object>, Object>() {
             @Override
             public Object apply(List<Object> arg) {
               return ImmutableList.of();
             }
-          })
-          .put("TREE_CONT", new Function<List<Object>, Object>() {
+          }).put("TREE_CONT", new Function<List<Object>, Object>() {
             @SuppressWarnings("unchecked")
             @Override
             public Object apply(List<Object> arg) {
@@ -81,18 +82,13 @@ public class StringTreeParser {
 
               return ImmutableList.copyOf(result);
             }
-          })
-          .build();
+          }).build();
 
   public static final SemanticModule STRING_TREE_SEMANTIC =
       new SemanticModule(StringTreeParser.LEAVES, StringTreeParser.INODES);
 
   public static Parser<Tree<String>> getStringTreeParser() {
-    return new GrammarModule(
-        "TREE",
-        StringTreeParser.TOKEN_PAIRS,
-        StringTreeParser.DELIM,
-        StringTreeParser.RULES).getAstParser().map(
+    return STRING_TREE_GRAMMAR.getAstParser().map(
         new Map<Tree<String>, Tree<String>>() {
           @SuppressWarnings("unchecked")
           @Override
