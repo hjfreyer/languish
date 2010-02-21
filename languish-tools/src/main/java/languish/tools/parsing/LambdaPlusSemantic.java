@@ -1,4 +1,4 @@
-package languish.tools.preprocessor;
+package languish.tools.parsing;
 
 import java.util.List;
 import java.util.Map;
@@ -7,13 +7,12 @@ import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
 import languish.parsing.SemanticModule;
-import languish.tools.parsing.TermSemantic;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-public class PreprocessorSemantic {
+public class LambdaPlusSemantic {
 
   public static final Map<String, Function<String, Object>> LEAF_RULES =
       SemanticModule.getIdentityLeafRules(ImmutableList

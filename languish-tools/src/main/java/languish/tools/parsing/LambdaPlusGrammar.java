@@ -1,15 +1,14 @@
-package languish.tools.preprocessor;
+package languish.tools.parsing;
 
 import java.util.List;
 
 import languish.parsing.GrammarModule;
 import languish.parsing.Sequence;
-import languish.tools.parsing.TermParser;
 
 import com.google.common.collect.ImmutableList;
 import com.hjfreyer.util.Pair;
 
-public class PreprocessorGrammar {
+public class LambdaPlusGrammar {
 
   @SuppressWarnings("unchecked")
   public static final List<Pair<String, String>> TOKENS = ImmutableList.of( // 
