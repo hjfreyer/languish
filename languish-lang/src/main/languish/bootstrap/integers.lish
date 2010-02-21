@@ -1,7 +1,7 @@
 
 
 
-#lang __BUILTIN__/bootstrap/preprocessor;;
+#lang parsers/lambda_plus/parser;;
 
 #load __BUILTIN__/math/multiply, __BUILTIN__/math/add;;
 

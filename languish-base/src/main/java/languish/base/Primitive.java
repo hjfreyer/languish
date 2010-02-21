@@ -1,97 +1,102 @@
 package languish.base;
 
+
 public class Primitive {
-  private final Object wrapped;
 
-  public Primitive(Object wrapped) {
-    if (wrapped instanceof Boolean || wrapped instanceof Character
-        || wrapped instanceof Double || wrapped instanceof Integer
-        || wrapped instanceof String || wrapped instanceof NativeFunction) {
-      this.wrapped = wrapped;
-    } else {
-      throw new IllegalArgumentException("Object not a primitive: " + wrapped);
-    }
-  }
+	private final Object wrapped;
 
-  public boolean asBoolean() {
-    return (Boolean) wrapped;
-  }
+	public Primitive(Object wrapped) {
+		if (wrapped instanceof Boolean
+				|| wrapped instanceof Character
+				|| wrapped instanceof Double
+				|| wrapped instanceof Integer
+				|| wrapped instanceof String
+				|| wrapped instanceof NativeFunction) {
+			this.wrapped = wrapped;
+		} else {
+			throw new IllegalArgumentException("Object not a primitive: " + wrapped);
+		}
+	}
 
-  public boolean isBoolean() {
-    return wrapped instanceof Boolean;
-  }
+	public boolean asBoolean() {
+		return (Boolean) wrapped;
+	}
 
-  public char asCharacter() {
-    return (Character) wrapped;
-  }
+	public boolean isBoolean() {
+		return wrapped instanceof Boolean;
+	}
 
-  public boolean isCharacter() {
-    return wrapped instanceof Character;
-  }
+	public char asCharacter() {
+		return (Character) wrapped;
+	}
 
-  public int asInteger() {
-    return (Integer) wrapped;
-  }
+	public boolean isCharacter() {
+		return wrapped instanceof Character;
+	}
 
-  public boolean isInteger() {
-    return wrapped instanceof Integer;
-  }
+	public int asInteger() {
+		return (Integer) wrapped;
+	}
 
-  public String asString() {
-    return (String) wrapped;
-  }
+	public boolean isInteger() {
+		return wrapped instanceof Integer;
+	}
 
-  public boolean isString() {
-    return wrapped instanceof String;
-  }
+	public String asString() {
+		return (String) wrapped;
+	}
 
-  public Object getJavaObject() {
-    return wrapped;
-  }
+	public boolean isString() {
+		return wrapped instanceof String;
+	}
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((wrapped == null) ? 0 : wrapped.hashCode());
-    return result;
-  }
+	public Object getJavaObject() {
+		return wrapped;
+	}
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Primitive other = (Primitive) obj;
-    if (wrapped == null) {
-      if (other.wrapped != null)
-        return false;
-    } else if (!wrapped.equals(other.wrapped))
-      return false;
-    return true;
-  }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((wrapped == null) ? 0 : wrapped.hashCode());
+		return result;
+	}
 
-  @Override
-  public String toString() {
-    if (isBoolean()) {
-      return asBoolean() ? "TRUE" : "FALSE";
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Primitive other = (Primitive) obj;
+		if (wrapped == null) {
+			if (other.wrapped != null)
+				return false;
+		} else if (!wrapped.equals(other.wrapped))
+			return false;
+		return true;
+	}
 
-    if (isCharacter()) {
-      return "'" + asCharacter() + "'";
-    }
+	@Override
+	public String toString() {
+		if (isBoolean()) {
+			return asBoolean() ? "TRUE" : "FALSE";
+		}
 
-    if (isInteger()) {
-      return "" + asInteger();
-    }
+		if (isCharacter()) {
+			return "'" + asCharacter() + "'";
+		}
 
-    if (isString()) {
-      return '"' + asString() + '"';
-    }
-    
-    return "<UNKNOWN>";
-  }
+		if (isInteger()) {
+			return "" + asInteger();
+		}
+
+		if (isString()) {
+			return '"' + asString() + '"';
+		}
+
+		return "<UNKNOWN>";
+	}
 }

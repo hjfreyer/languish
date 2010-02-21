@@ -1,0 +1,21 @@
+
+#import "builtin/parsing/parse_text_given_grammar",
+        "parsers/lambda_plus/grammar",        
+        "parsers/lambda_plus/semantic";
+
+["ABS" 
+  ["ABS" 
+    ["APP" 
+      ["APP" ["REF" "2" "NULL"] ["ABS" ["ABS" ["REF" "2" "NULL"] "NULL"] "NULL"]]
+      ["ABS" ["APP" ["APP" ["REF" "1" "NULL"]
+        ["APP"
+          ["APP" ["APP" ["REF" "3" "NULL"] ["ABS" ["ABS" ["REF" "1" "NULL"] "NULL"] "NULL"]] 
+                                           ["ABS" ["ABS" ["REF" "2" "NULL"] "NULL"] "NULL"]]
+         "NULL"]]
+      ["ABS" ["APP" ["APP" ["REF" "1" "NULL"]
+        ["REF" "3" "NULL"]]
+      "NULL"]
+      "NULL"]] "NULL"]          
+    ]
+  "NULL"]
+"NULL"]

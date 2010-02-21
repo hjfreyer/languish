@@ -31,18 +31,19 @@ public class StringWithImportParser {
 							"StringWithImportParser.COMPILATION_UNIT",
 							"IMPORT_DIRECTIVE",
 							"TREE"),
-					Sequence.of("IMPORT_DIRECTIVE", "EMPTY_IMPORT"),
 					Sequence.of(
 							"IMPORT_DIRECTIVE",
 							"IMPORTS_LIST",
-							"STRING_LITERAL",
+							"IMPORT_STATEMENT",
+							"STRING_LIT",
 							"IMPORT_TAIL"),
+					// Sequence.of("IMPORT_DIRECTIVE", "EMPTY_IMPORT"),
 					Sequence.of("IMPORT_TAIL", "IMPORT_TAIL_END", ";"),
 					Sequence.of(
 							"IMPORT_TAIL",
 							"IMPORT_TAIL_CONT",
 							",",
-							"STRING_LITERAL",
+							"STRING_LIT",
 							"IMPORT_TAIL"));
 
 	public static final GrammarModule STRING_WITH_IMPORT_GRAMMAR =
@@ -54,15 +55,7 @@ public class StringWithImportParser {
 
 	private static final//
 	ImmutableMap<String, Function<String, Object>> LEAVES =
-			ImmutableMap.<String, Function<String, Object>> builder().put(
-					"STRING_LIT",
-					new Function<String, Object>() {
-						@Override
-						public Object apply(String arg) {
-							return arg.substring(1, arg.length() - 1) //
-									.replaceAll("\\\\(.)", "\\1");
-						}
-					}).build();
+			ImmutableMap.<String, Function<String, Object>> builder().build();
 
 	private static final//
 	ImmutableMap<String, Function<List<Object>, Object>> INODES =
@@ -89,8 +82,8 @@ public class StringWithImportParser {
 						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
-							String car = (String) arg.get(0);
-							List<String> cdr = (List<String>) arg.get(1);
+							String car = (String) arg.get(1);
+							List<String> cdr = (List<String>) arg.get(2);
 
 							List<String> result = Lists.newLinkedList();
 
