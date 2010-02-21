@@ -78,7 +78,7 @@ public class Sequence {
 		return name;
 	}
 
-	public Object getContent() {
+	public List<String> getContent() {
 		return content;
 	}
 

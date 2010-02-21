@@ -3,14 +3,40 @@ package languish.parsing;
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Pair;
 import com.hjfreyer.util.Tree;
 
 public class GrammarModules {
 
-	private static List<String> ignoredFromStringTree(List<Tree<String>> struct) {
-		return Lists.transform(struct, Tree.<String> asLeafFunction());
+	public static Tree<String> moduleToStringTree(GrammarModule module) {
+		String root = module.getRootRule();
+		List<List<String>> tokenTypesList =
+				Lists.transform(module.getTokenTypes(), Pair.<String> asList());
+		List<String> ignored = module.getIgnored();
+		List<List<String>> grammarRulesList =
+				Lists.transform(
+						module.getRules(),
+						new Function<Sequence, List<String>>() {
+							@Override
+							public List<String> apply(Sequence from) {
+								String nonterminal = from.getNonterminal();
+								String name = from.getName();
+								List<String> content = from.getContent();
+
+								return ImmutableList.copyOf(Iterables.concat( //
+										ImmutableList.of(nonterminal, name),
+										content));
+							}
+						});
+
+		return Tree.copyOf(ImmutableList.of(
+				root,
+				tokenTypesList,
+				ignored,
+				grammarRulesList));
 	}
 
 	public static GrammarModule moduleFromStringTree(Tree<String> struct) {
@@ -18,7 +44,7 @@ public class GrammarModules {
 		List<Tree<String>> tokenTypesList = struct.asList().get(1).asList();
 		List<Tree<String>> ignored = struct.asList().get(2).asList();
 		List<Tree<String>> grammarRulesList = struct.asList().get(3).asList();
-	
+
 		return new GrammarModule(
 				root,
 				tokenTypesFromStringTree(tokenTypesList),
@@ -26,19 +52,23 @@ public class GrammarModules {
 				sequencesFromStringTree(grammarRulesList));
 	}
 
+	private static List<String> ignoredFromStringTree(List<Tree<String>> struct) {
+		return Lists.transform(struct, Tree.<String> asLeafFunction());
+	}
+
 	private static List<Sequence> sequencesFromStringTree(
 			List<Tree<String>> struct) {
 		return Lists.transform(struct, new Function<Tree<String>, Sequence>() {
-	
+
 			@Override
 			public Sequence apply(Tree<String> from) {
 				List<String> args =
 						Lists.transform(from.asList(), Tree.<String> asLeafFunction());
-	
+
 				String nonterminal = args.get(0);
 				String name = args.get(1);
 				List<String> content = args.subList(2, args.size());
-	
+
 				return new Sequence(nonterminal, name, content);
 			}
 		});
@@ -59,4 +89,6 @@ public class GrammarModules {
 				});
 	}
 
+	private GrammarModules() {
+	}
 }
