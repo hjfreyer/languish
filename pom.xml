@@ -27,9 +27,6 @@
     <module>languish-interpreter</module>
     <module>languish-api</module>
     <module>languish-lang</module>
-    <module>languish-pp-plugin</module>
-    <module>languish-tools</module>
-    <module>languish-base-tests</module>
     <module>languish-parsing</module>
 	</modules>
 

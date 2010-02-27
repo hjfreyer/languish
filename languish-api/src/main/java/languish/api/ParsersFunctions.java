@@ -3,10 +3,10 @@ package languish.api;
 import java.util.List;
 import java.util.Map;
 
+import languish.api.parsing.base.StringWithImportParser;
 import languish.base.NativeFunction;
 import languish.base.Primitive;
 import languish.base.Primitives;
-import languish.tools.parsing.StringWithImportParser;
 
 import com.google.common.collect.ImmutableMap;
 import com.hjfreyer.util.Pair;

@@ -2,7 +2,7 @@ package languish.api;
 
 import java.util.Map;
 
-import languish.api.bootstrap.LambdaPlusFunctions;
+import languish.api.bootstrap.lambdaplus.LambdaPlusFunctions;
 import languish.base.NativeFunction;
 
 import com.google.common.collect.ImmutableMap;
