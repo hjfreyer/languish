@@ -11,116 +11,120 @@ import com.google.common.collect.Lists;
 
 public class Tree<T> implements Reprable {
 
-  public static <T> Function<Tree<T>, T> asLeafFunction() {
-    return new Function<Tree<T>, T>() {
-      @Override
-      public T apply(Tree<T> from) {
-        return from.asLeaf();
-      }
-    };
-  }
+	public static <T> Function<Tree<T>, T> asLeafFunction() {
+		return new Function<Tree<T>, T>() {
+			@Override
+			public T apply(Tree<T> from) {
+				return from.asLeaf();
+			}
+		};
+	}
 
-  private final Object node;
+	private final Object node;
 
-  public static <T> Tree<T> leaf(T prim) {
-    return new Tree<T>(prim);
-  }
+	public static <T> Tree<T> leaf(T prim) {
+		return new Tree<T>(prim);
+	}
 
-  public static <T> Tree<T> empty() {
-    return new Tree<T>(ImmutableList.<T> of());
-  }
+	public static <T> Tree<T> empty() {
+		return new Tree<T>(ImmutableList.<T> of());
+	}
 
-  public static <T> Tree<T> inode(List<Tree<T>> list) {
-    return new Tree<T>(list);
-  }
+	public static <T> Tree<T> inode(List<Tree<T>> list) {
+		return new Tree<T>(list);
+	}
 
-  public static <T> Tree<T> inode(Tree<T>... list) {
-    return inode(Arrays.asList(list));
-  }
+	public static <T> Tree<T> inode(Tree<T>... list) {
+		return inode(Arrays.asList(list));
+	}
 
-  @SuppressWarnings("unchecked")
-  public static <T> Tree<T> copyOf(Object obj) {
-    if (obj instanceof List<?>) {
-      List<Tree<T>> result = Lists.newLinkedList();
+	@SuppressWarnings("unchecked")
+	public static <T> Tree<T> copyOf(Object obj) {
+		if (obj instanceof List<?>) {
+			List<Tree<T>> result = Lists.newLinkedList();
 
-      for (Object child : (List<Object>) obj) {
-        result.add(Tree.<T> copyOf(child));
-      }
+			for (Object child : (List<Object>) obj) {
+				result.add(Tree.<T> copyOf(child));
+			}
 
-      return Tree.inode(ImmutableList.copyOf(result));
-    }
+			return Tree.inode(ImmutableList.copyOf(result));
+		}
 
-    return Tree.leaf((T) obj);
-  }
+		return Tree.leaf((T) obj);
+	}
 
-  private Tree(Object node) {
-    this.node = node;
-  }
+	public static <T> Tree<T> copyOfList(Object... objs) {
+		return copyOf(Arrays.asList(objs));
+	}
 
-  public boolean isLeaf() {
-    return !(node instanceof List<?>);
-  }
+	private Tree(Object node) {
+		this.node = node;
+	}
 
-  public boolean isList() {
-    return (node instanceof List<?>);
-  }
+	public boolean isLeaf() {
+		return !(node instanceof List<?>);
+	}
 
-  @SuppressWarnings("unchecked")
-  public List<Tree<T>> asList() {
-    return (List<Tree<T>>) node;
-  }
+	public boolean isList() {
+		return (node instanceof List<?>);
+	}
 
-  @SuppressWarnings("unchecked")
-  public T asLeaf() {
-    return (T) node;
-  }
+	@SuppressWarnings("unchecked")
+	public List<Tree<T>> asList() {
+		return (List<Tree<T>>) node;
+	}
 
-  public Object getNode() {
-    return node;
-  }
+	@SuppressWarnings("unchecked")
+	public T asLeaf() {
+		return (T) node;
+	}
 
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((node == null) ? 0 : node.hashCode());
-    return result;
-  }
+	public Object getNode() {
+		return node;
+	}
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    Tree<?> other = (Tree<?>) obj;
-    if (node == null) {
-      if (other.node != null)
-        return false;
-    } else if (!node.equals(other.node))
-      return false;
-    return true;
-  }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((node == null) ? 0 : node.hashCode());
+		return result;
+	}
 
-  @Override
-  public String toString() {
-    if (isLeaf()) {
-      return node.toString();
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Tree<?> other = (Tree<?>) obj;
+		if (node == null) {
+			if (other.node != null)
+				return false;
+		} else if (!node.equals(other.node))
+			return false;
+		return true;
+	}
 
-    List<String> children = Lists.transform(asList(), Functions.TO_STRING);
-    return "[" + Join.join(", ", children) + "]";
-  }
+	@Override
+	public String toString() {
+		if (isLeaf()) {
+			return node.toString();
+		}
 
-  @Override
-  public String repr() {
-    if (isLeaf()) {
-      return "Tree.leaf(" + Repr.repr(node) + ")";
-    }
+		List<String> children = Lists.transform(asList(), Functions.TO_STRING);
+		return "[" + Join.join(", ", children) + "]";
+	}
 
-    List<String> reprs = Lists.transform(asList(), Repr.TO_REPR);
-    return "Tree.inode(" + Join.join(", ", reprs) + ")";
-  }
+	@Override
+	public String repr() {
+		if (isLeaf()) {
+			return "Tree.leaf(" + Repr.repr(node) + ")";
+		}
+
+		List<String> reprs = Lists.transform(asList(), Repr.TO_REPR);
+		return "Tree.inode(" + Join.join(", ", reprs) + ")";
+	}
 }

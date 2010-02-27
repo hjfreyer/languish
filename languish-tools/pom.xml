@@ -23,9 +23,9 @@
       <version>0.0.1</version>
     </dependency>
         <dependency>
-        	<groupId>com.hjfreyer</groupId>
-        	<artifactId>languish-parsing</artifactId>
-        	<version>0.0.1</version>
-        </dependency>
+          <groupId>com.hjfreyer</groupId>
+          <artifactId>languish-parsing</artifactId>
+          <version>0.0.1</version>
+        </dependency>    
 </dependencies>
 </project>

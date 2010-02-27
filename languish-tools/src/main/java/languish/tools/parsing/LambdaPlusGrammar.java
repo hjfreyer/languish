@@ -10,58 +10,70 @@ import com.hjfreyer.util.Pair;
 
 public class LambdaPlusGrammar {
 
-  @SuppressWarnings("unchecked")
-  public static final List<Pair<String, String>> TOKENS = ImmutableList.of( // 
-      Pair.of("CONS", "CONS"),
-      Pair.of("CAR", "CAR"),
-      Pair.of("CDR", "CDR"),
-      Pair.of("IMPORT_DIRECTIVE", "#import"),
-      Pair.of("IMPORT_ID", "[a-zA-Z0-9_/]+"),
-      Pair.of(",", ","),
-      Pair.of(";;", ";;"));
+	@SuppressWarnings("unchecked")
+	public static final List<Pair<String, String>> TOKENS = ImmutableList.of( // 
+			Pair.of("[", "\\["),
+			Pair.of("]", "\\]"),
+			Pair.of("ABS", "ABS"),
+			Pair.of("APP", "APP"),
+			Pair.of("CONS", "CONS"),
+			Pair.of("CAR", "CAR"),
+			Pair.of("CDR", "CDR"),
+			Pair.of("EQUALS", "EQUALS"),
+			Pair.of("REF", "REF"),
+			Pair.of("NULL", "NULL"),
+			Pair.of("STRING_LIT", "\"(((\\\\.)|[^\"\\\\])*)\""),
+			Pair.of("INTEGER_LIT", "[0-9]+"),
+			Pair.of("IMPORT_DIRECTIVE", "#import"),
+			Pair.of("IMPORT_IDENT", "[a-zA-Z0-9_/]+"),
+			Pair.of(",", ","),
+			Pair.of(";;", ";;"));
 
-  public static final List<Sequence> RULES =
-      ImmutableList.of( //
-          // Compilation unit
-          Sequence.of("COMPILATION_UNIT", "NON_IMPORTING_UNIT", "TERM"),
-          Sequence.of(
-              "COMPILATION_UNIT",
-              "IMPORTING_UNIT",
-              "IMPORT_STATEMENT",
-              "TERM"),
-          // Import stuff
-          Sequence.of(
-              "IMPORT_STATEMENT",
-              "IMPORT_STATEMENT",
-              "IMPORT_DIRECTIVE",
-              "IMPORT_ID",
-              "IMPORT_TAIL",
-              ";;"),
-          Sequence.of("IMPORT_TAIL", "IMPORT_TAIL_END"),
-          Sequence.of(
-              "IMPORT_TAIL",
-              "IMPORT_TAIL_ITEM",
-              ",",
-              "IMPORT_ID",
-              "IMPORT_TAIL"),
-          // Term extensions
-          Sequence.of("TERM", "ABS_TERM", "[", "ABS", "TERM", "]"),
-          Sequence.of("TERM", "CONS_TERM", "[", "CONS", "TERM", "TERM", "]"),
-          Sequence.of("TERM", "CAR_TERM", "[", "CAR", "TERM", "]"),
-          Sequence.of("TERM", "CDR_TERM", "[", "CDR", "TERM", "]"),
-          Sequence.of(
-              "TERM",
-              "SHORT_PRIM_TERM",
-              "[",
-              "PRIMITIVE",
-              "PRIM_LIT",
-              "]"),
-          Sequence.of("TERM", "SHORT_REF_TERM", "[", "REF", "INTEGER_LIT", "]")
+	// TODO(hjfreyer): Add block comment
+	public static final List<String> DELIM = ImmutableList.of("(\\s|//[^\n]*)*");
 
-      );
+	public static final List<Sequence> RULES =
+			ImmutableList.of( //
+					// Compilation unit
+					Sequence.of(
+							"LambdaPlusGrammar.COMPILATION_UNIT",
+							"LambdaPlusGrammar.COMPILATION_UNIT",
+							"IMPORT_STATEMENT",
+							"TERM"),
+					// Import stuff
+					Sequence.of(
+							"IMPORT_STATEMENT",
+							"IMPORT_STATEMENT",
+							"IMPORT_DIRECTIVE",
+							"IMPORT_IDENT",
+							"IMPORT_TAIL"),
+					Sequence.of("IMPORT_STATEMENT", "EMPTY_IMPORT"),
+					Sequence.of(
+							"IMPORT_TAIL",
+							"IMPORT_TAIL_CONT",
+							",",
+							"IMPORT_IDENT",
+							"IMPORT_TAIL"),
+					Sequence.of("IMPORT_TAIL", "IMPORT_TAIL_END", ";;"),
+					// Terms
+					Sequence.of("TERM", "ABS_TERM", "[", "ABS", "TERM", "]"),
+					Sequence.of("TERM", "APP_TERM", "[", "APP", "TERM", "TERM", "]"),
+					Sequence.of("TERM", "CONS_TERM", "[", "CONS", "TERM", "TERM", "]"),
+					Sequence.of("TERM", "CAR_TERM", "[", "CAR", "TERM", "]"),
+					Sequence.of("TERM", "CDR_TERM", "[", "CDR", "TERM", "]"),
+					Sequence
+							.of("TERM", "EQUALS_TERM", "[", "EQUALS", "TERM", "TERM", "]"),
+					Sequence.of("TERM", "REF_TERM", "[", "REF", "INTEGER_LIT", "]"),
+					Sequence.of("TERM", "NULL_TERM", "NULL"),
+					Sequence.of("TERM", "STRING_LIT_TERM", "STRING_LIT")
 
-  public static final GrammarModule GRAMMAR =
-      TermParser.TERM_GRAMMAR.extend(new GrammarModule("COMPILATION_UNIT",
-          TOKENS, ImmutableList.<String> of(), RULES));
+			);
+
+	public static final GrammarModule GRAMMAR =
+			new GrammarModule(
+					"LambdaPlusGrammar.COMPILATION_UNIT",
+					TOKENS,
+					DELIM,
+					RULES);
 
 }

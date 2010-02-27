@@ -136,8 +136,9 @@ public class Operations {
       NativeFunction nativeFunc =
           (NativeFunction) funcPrimitive.getJavaObject();
 
-      Tree<Primitive> argObject = Terms.convertTermToJavaObject(arg);
-      return Terms.convertJavaObjectToTerm(nativeFunc.apply(argObject));
+      Tree<Primitive> argObject = Terms.convertTermToJavaObject(arg, 0);
+      Tree<Primitive> result = nativeFunc.apply(argObject);
+			return Terms.convertJavaObjectToTerm(result);
     }
 
     public boolean isReduced(Term term) {

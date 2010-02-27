@@ -28,8 +28,6 @@ public class TermParser {
 					Pair.of("REF", "REF"),
 					Pair.of("PRINT", "PRINT"),
 					Pair.of("NULL", "NULL"),
-					Pair.of("TRUE", "TRUE"),
-					Pair.of("FALSE", "FALSE"),
 					Pair.of("STRING_LIT", "\"(((\\\\.)|[^\"\\\\])*)\""),
 					Pair.of("INTEGER_LIT", "[0-9]+"));
 

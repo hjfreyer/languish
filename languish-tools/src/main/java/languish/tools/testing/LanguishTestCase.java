@@ -7,13 +7,11 @@ import com.hjfreyer.util.Tree;
 
 public interface LanguishTestCase {
 
-  public String name();
+	public String name();
 
-  public Term getExpression();
+	public Term getExpression();
 
-  public String getCode();
+	public Term getReducedOnce();
 
-  public Term getReducedOnce();
-
-  public Tree<Primitive> getReducedCompletely();
+	public Tree<Primitive> getReducedCompletely();
 }
