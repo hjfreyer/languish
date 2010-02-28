@@ -40,7 +40,7 @@ public class Interpreter {
 	// if (moduleCommand.equals("VALUE")) {
 	// throw new AlreadyReducedError(module);
 	// } else if (moduleCommand.equals("REDUCE_AND_APPLY")) {
-	// Term subModule = Terms.car(moduleArgument);
+	// Term subModule = Terms.car (moduleArgument);
 	// Term subFunction = Terms.car(Terms.cdr(moduleArgument));
 	//
 	// String subModuleCommand =
