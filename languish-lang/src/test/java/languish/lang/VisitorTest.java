@@ -32,7 +32,7 @@ public class VisitorTest extends TestCase {
 		Term functionMap =
 				app(app(app(Maps.put(), Term.NULL), primObj("func1")), ADD_FORTYTWO);
 
-		Term isLeaf = abs(primObj(true));
+		Term isLeaf = abs(Terms.TRUE);
 		Term tree =
 				Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
 						"func1",
@@ -56,10 +56,7 @@ public class VisitorTest extends TestCase {
 		Term func2 = cons(primObj("num"), cons(abs(ref(1)), Term.NULL));
 
 		Term functionMap = cons(func1, cons(func2, Term.NULL));
-		Term isLeaf =
-				abs(app(
-						app(Terms.equals(Terms.primObj("num"), ref(1)), primObj(true)),
-						primObj(false)));
+		Term isLeaf = abs(Terms.equals(Terms.primObj("num"), ref(1)));
 		Term tree =
 				Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
 						"additup", //
@@ -80,10 +77,7 @@ public class VisitorTest extends TestCase {
 		Term func2 = cons(primObj("num"), cons(abs(ref(1)), Term.NULL));
 
 		Term functionMap = cons(func1, cons(func2, Term.NULL));
-		Term isLeaf =
-				abs(app(
-						app(Terms.equals(Terms.primObj("num"), ref(1)), primObj(true)),
-						primObj(false)));
+		Term isLeaf = abs(Terms.equals(Terms.primObj("num"), ref(1)));
 		Term tree =
 				Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
 						"proditup", //
@@ -107,9 +101,7 @@ public class VisitorTest extends TestCase {
 		Term functionMap = cons(func1, cons(func2, cons(func3, Term.NULL)));
 
 		Term isLeaf =
-				abs(app(app(
-						Terms.equals(Terms.primObj("additup"), ref(1)),
-						primObj(false)), primObj(true)));
+				abs(app(Terms.NOT, Terms.equals(Terms.primObj("additup"), ref(1))));
 
 		Term tree =
 				Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(
@@ -137,10 +129,7 @@ public class VisitorTest extends TestCase {
 		Term functionMap =
 				cons(func1, cons(func2, cons(func3, cons(func4, Term.NULL))));
 
-		Term isLeaf =
-				abs(app(
-						app(Terms.equals(Terms.primObj("num"), ref(1)), primObj(true)),
-						primObj(false)));
+		Term isLeaf = abs(Terms.equals(Terms.primObj("num"), ref(1)));
 
 		Term branch1 =
 				Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(

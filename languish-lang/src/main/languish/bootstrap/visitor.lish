@@ -1,29 +1,23 @@
 
-[CONS [PRIMITIVE "LOAD"]
-[CONS
-  [CONS [PRIMITIVE "bootstrap/lists"]
-  [CONS
-    [ABS
-[CONS [PRIMITIVE "LOAD"]
-[CONS
-  [CONS [PRIMITIVE "bootstrap/maps"]
-  [CONS
-    [ABS
-[CONS [PRIMITIVE "VALUE"]
-[CONS
+
+#lang parsers/lambda_plus/parser;;
+
+#import bootstrap/lists, bootstrap/maps;;
+
+[ABS
   [CONS                                  // VisitTree = [CAR *REF*] (
     [APP [ABS [APP [REF 1] [REF 1]]]     //     OMEGA
     [ABS                                 //     Self        = 4
     [ABS                                 //     FunctionMap = 3
     [ABS                                 //     IsLeaf      = 2
     [ABS                                 //     Tree        = 1):
-      [APP [APP [EQUALS                  //   If IsLeaf(tree[0]):
-          [APP [REF 2] [CAR [REF 1]]]
-          [PRIMITIVE TRUE]]
+      [APP [APP 
+          [APP [REF 2] [CAR [REF 1]]]    //   If IsLeaf(tree[0]): 
                                          //   Then: FunctionMap[Tree[0]](Tree[1])
         [APP                             //     Apply:
           [APP [APP [APP                 //       MapGet(
-              [CAR [CDR [REF 8]]]        //
+              [CAR [CDR 
+                [CAR [CDR [REF 5]]]]]   
             [REF 3]]                     //         FunctionMap,
             [CAR [REF 1]]]               //         Tree[0],
             NULL]                        //         NULL),
@@ -32,12 +26,13 @@
       ]                                  //   Else: FunctionMap[Tree[0]](Map(Self, Tree[1]))
         [APP                             //     Apply:
           [APP [APP [APP                 //       MapGet(
-              [CAR [CDR [REF 8]]]        
+              [CAR [CDR 
+                [CAR [CDR [REF 5]]]]]        
             [REF 3]]                     //         FunctionMap,
             [CAR [REF 1]]]               //         Tree[0],
             NULL]                        //         NULL),
           [APP [APP                      //     To: Map(Self, Tree[1])
-            [CAR [REF 13]]               //       Map(
+            [CAR [CAR [REF 5]]]          //       Map(
             [APP [APP [APP [REF 4]       //         Self(
                 [REF 4]]                 //           Self,
                 [REF 3]]                 //           FunctionMap,
@@ -49,44 +44,4 @@
       ]
     ]]]]]
   NULL]
-NULL]]
-    ]
-  NULL]]
-NULL]]
-    ]
-  NULL]]
-NULL]]
-
-
-       //        [APP [APP [EQUALS
-       //            [APP [REF 2] [CAR [REF 1]]]
-       //	    [PRIMITIVE TRUE]]                        //
-       //       //                                                     //     Then: FunctionMap[tree[0]](tree[1])
-       // [APP                                     //       Apply
-       //              [APP [APP [APP [CAR [CAR [REF 5]]]     //         MapGet(
-       //                [REF 3]]                             //           FunctionMap,
-       //                [CAR [REF 1]]]                       //           tree[0],
-       //                NULL]                                //           Null)
-       //              [CAR [CDR [REF 1]]]]]                  //       to tree(1)
-       //       //                                                     //     Else: FunctionMap[tree[0]](
- 						     //	    	      Map(VisitTree, tree[1]))
-       //            [APP                                     //       Apply
-       //              [APP [APP [APP [CAR [CAR [REF 5]]]     //         MapGet(
-       //                [REF 3]]                             //           FunctionMap,
-       //                [CAR [REF 1]]]                       //           tree[0],
-       //                NULL                                 //           Null)
-       //              ]                                      //       to
-       //              [APP [APP [CAR [CAR [CDR [REF 5]]]]    //         Map(
-       //                [APP [APP [APP [REF 4] [REF 4]]      //           Self(Self,
-       //       //       //       //                  [REF 3]]                           //             FunctionMap,
-       //                  [REF 2]]]                          //             IsLeaf),
-       //                [CAR [CDR [REF 1]]]                  //         tree[1])
-       //              ]
-       //            ]
-       //          ]
-       //        ]]]]
-       //      ]
-       //    NULL]
-       //    ]
-       //  ]]
-       //]
+]

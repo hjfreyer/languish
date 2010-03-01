@@ -13,8 +13,10 @@ import com.hjfreyer.util.Trees;
 
 public class Terms {
 
-	public static final Term TRUE = Terms.abs(Terms.abs(Terms.ref(2)));
-	public static final Term FALSE = Terms.abs(Terms.abs(Terms.ref(1)));
+	public static final Term TRUE = abs(abs(ref(2)));
+	public static final Term FALSE = abs(abs(ref(1)));
+	public static final Term NOT =
+			abs(abs(abs(app(app(ref(3), ref(1)), ref(2)))));
 
 	public static final Term CONS =
 			abs(abs(abs(app(app(ref(1), ref(3)), ref(2)))));
