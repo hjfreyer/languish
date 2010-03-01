@@ -24,7 +24,7 @@ public class BaseParser {
 		Matcher match = BaseParser.MODULE_REGEX.matcher(input.trim());
 
 		if (!match.matches()) {
-			return Pair.of("native/parsers/fundamental_parser", input);
+			return Pair.of("builtin/parsers/fundamental_parser", input);
 		}
 
 		String parser = match.group(1);

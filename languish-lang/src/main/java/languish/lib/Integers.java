@@ -6,16 +6,16 @@ import languish.lib.testing.LibTestUtil;
 
 public class Integers {
 
-  private static final Term LIB = LibTestUtil.loadLib("bootstrap/integers");
+	private static final Term LIB = LibTestUtil.loadLib("base/integers");
 
-  public static Term add() {
-    return Terms.car(LIB);
-  }
+	public static Term add() {
+		return Terms.car(LIB);
+	}
 
-  public static Term multiply() {
-    return Terms.car(Terms.cdr(LIB));
-  }
+	public static Term multiply() {
+		return Terms.car(Terms.cdr(LIB));
+	}
 
-  private Integers() {
-  }
+	private Integers() {
+	}
 }
