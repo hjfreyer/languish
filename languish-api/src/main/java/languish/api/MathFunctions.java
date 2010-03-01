@@ -10,21 +10,6 @@ import com.hjfreyer.util.Tree;
 
 public class MathFunctions {
 
-	// BOOLEAN STUFF
-	public static final NativeFunction AND = new TwoArgumentNativeFunction() {
-		@Override
-		public Tree<Primitive> apply(Primitive arg1, Primitive arg2) {
-			return Tree.leaf(new Primitive(arg1.asBoolean() && arg2.asBoolean()));
-		}
-	};
-
-	public static final NativeFunction NOT = new SingleArgumentNativeFunction() {
-		@Override
-		public Tree<Primitive> apply(Primitive arg1) {
-			return Tree.leaf(new Primitive(!arg1.asBoolean()));
-		}
-	};
-
 	// INTEGER STUFF
 	public static final NativeFunction ADD = new TwoArgumentNativeFunction() {
 		@Override
