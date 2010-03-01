@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
+import languish.util.PrimitiveTree;
 
 import com.hjfreyer.util.Tree;
 
@@ -65,5 +66,19 @@ public class TestUtil {
 
 	public static void assertReducesToData(Tree<Primitive> expected, Term actual) {
 		Assert.assertEquals(expected, Terms.convertTermToJavaObject(actual, 0));
+	}
+
+	public static void assertReducesToTrue(Term actual) {
+		Term test =
+				Terms.app(Terms.app(actual, Terms.primObj("TRUE")), Terms
+						.primObj("FALSE"));
+		assertReducesToData(PrimitiveTree.from("TRUE"), test);
+	}
+
+	public static void assertReducesToFalse(Term actual) {
+		Term test =
+				Terms.app(Terms.app(actual, Terms.primObj("TRUE")), Terms
+						.primObj("FALSE"));
+		assertReducesToData(PrimitiveTree.from("FALSE"), test);
 	}
 }

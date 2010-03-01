@@ -22,7 +22,7 @@ public class ListsTest extends TestCase {
 	private static final Term ADD_ONE =
 			abs(nativeApply(MathFunctions.ADD, cons(
 					primitive(new Primitive(1)),
-					cons(ref(3), Term.NULL))));
+					cons(ref(1), Term.NULL))));
 
 	public void testMapEmpty() {
 		Term list = Term.NULL;
@@ -77,7 +77,7 @@ public class ListsTest extends TestCase {
 				ImmutableList.of(12),
 				ImmutableList.of(3))), app(app(
 				Lists.map(),
-				abs(cons(ref(2), Term.NULL))), list));
+				abs(cons(ref(1), Term.NULL))), list));
 	}
 
 	public void testReduceEmptyList() {
@@ -127,8 +127,9 @@ public class ListsTest extends TestCase {
 	public void testMemberEmptyList() {
 		Term list = Term.NULL;
 
-		TestUtil.assertReducesToData(PrimitiveTree.from(false), app(app(Lists
-				.member(), list), primitive(new Primitive("foo"))));
+		TestUtil.assertReducesToFalse(app(
+				app(Lists.member(), list),
+				primitive(new Primitive("foo"))));
 	}
 
 	public void testMemberOnlyElement() {
@@ -136,8 +137,9 @@ public class ListsTest extends TestCase {
 				Terms.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList
 						.of("foo")));
 
-		TestUtil.assertReducesToData(PrimitiveTree.from(true), app(app(Lists
-				.member(), list), primitive(new Primitive("foo"))));
+		TestUtil.assertReducesToTrue(app(
+				app(Lists.member(), list),
+				primitive(new Primitive("foo"))));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -148,8 +150,9 @@ public class ListsTest extends TestCase {
 						"bar",
 						5)));
 
-		TestUtil.assertReducesToData(PrimitiveTree.from(true), app(app(Lists
-				.member(), list), primitive(new Primitive("foo"))));
+		TestUtil.assertReducesToTrue(app(
+				app(Lists.member(), list),
+				primitive(new Primitive("foo"))));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -160,8 +163,9 @@ public class ListsTest extends TestCase {
 						"bar",
 						5)));
 
-		TestUtil.assertReducesToData(PrimitiveTree.from(false), app(app(Lists
-				.member(), list), primitive(new Primitive("baz"))));
+		TestUtil.assertReducesToFalse(app(
+				app(Lists.member(), list),
+				primitive(new Primitive("baz"))));
 	}
 
 	public void testMemberShouldContainEmptyList() {
@@ -171,8 +175,7 @@ public class ListsTest extends TestCase {
 						ImmutableList.of(),
 						5)));
 
-		TestUtil.assertReducesToData(PrimitiveTree.from(true), app(app(Lists
-				.member(), list), Term.NULL));
+		TestUtil.assertReducesToTrue(app(app(Lists.member(), list), Term.NULL));
 	}
 
 	public void testMemberShouldntFindInNested() {
@@ -182,8 +185,9 @@ public class ListsTest extends TestCase {
 						ImmutableList.of(3, 4),
 						5)));
 
-		TestUtil.assertReducesToData(PrimitiveTree.from(false), app(app(Lists
-				.member(), list), primitive(THREE)));
+		TestUtil.assertReducesToFalse(app(
+				app(Lists.member(), list),
+				primitive(THREE)));
 	}
 
 	public void testMemberShouldContainNonEmptyList() {
@@ -193,8 +197,7 @@ public class ListsTest extends TestCase {
 						ImmutableList.of(3, 4),
 						5)));
 
-		TestUtil.assertReducesToData(PrimitiveTree.from(true), app(app(Lists
-				.member(), list), Terms.convertJavaObjectToTerm(PrimitiveTree
-				.from(ImmutableList.of(3, 4)))));
+		TestUtil.assertReducesToTrue(app(app(Lists.member(), list), Terms
+				.convertJavaObjectToTerm(PrimitiveTree.from(ImmutableList.of(3, 4)))));
 	}
 }

@@ -1,5 +1,7 @@
-[CONS [PRIMITIVE "VALUE"]
-[CONS
+
+#lang parsers/lambda_plus/parser;;
+
+[ABS
   [CONS                                        // Map = [CAR *VALUE*](
     [APP [ABS [APP [REF 1] [REF 1]]]           //   OMGEA
       [ABS                                     //   Self = 3
@@ -9,10 +11,10 @@
           NULL]                                //     Then: Null
                                                //     Else: Function(List[0])::Map(List[1:-1])
           [CONS                                //       cons(
-            [APP [REF 3] [CAR [REF 2]]]        //         Function(List[0]),
-            [APP [APP [APP [REF 4] [REF 4]]    //         Self(Self,
-              [REF 3]]                         //           Function,
-              [CDR [REF 2]]]                   //           List[1:-1])
+            [APP [REF 2] [CAR [REF 1]]]        //         Function(List[0]),
+            [APP [APP [APP [REF 3] [REF 3]]    //         Self(Self,
+              [REF 2]]                         //           Function,
+              [CDR [REF 1]]]                   //           List[1:-1])
           ]                                    //       )
         ]                                      //     EndIf          
       ]]]
@@ -40,10 +42,10 @@
       [ABS                                         //   List = 2
       [ABS                                         //   Item = 1):
         [APP [APP [EQUALS NULL [REF 2]]            //     If List == Null
-          [PRIMITIVE FALSE]]                       //     Then: FALSE
+          [ABS [ABS [REF 1]]]]                     //     Then: FALSE
                                                    //     Else:
           [APP [APP [EQUALS [CAR [REF 2]] [REF 1]] //       If List[0] == Item
-            [PRIMITIVE TRUE]]                      //       Then: TRUE
+            [ABS [ABS [REF 2]]]]                   //       Then: TRUE
             [APP [APP [APP [REF 3] [REF 3]]        //       Else: Self(Self,
               [CDR [REF 2]]]                       //                  List[1:-1],
               [REF 1]]                             //                  Item)
@@ -51,4 +53,4 @@
         ]                                          //     EndIf                    
        ]]]]       
   NULL]]]
-NULL]]
+]
