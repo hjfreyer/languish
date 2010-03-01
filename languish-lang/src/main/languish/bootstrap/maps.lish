@@ -1,12 +1,13 @@
 
-[CONS [PRIMITIVE "VALUE"]
-[CONS 
+#lang parsers/lambda_plus/parser;;
+
+[ABS
   [CONS                                        // PUT = [CAR *VALUE*](
     [ABS                                       //     Map   = 3
     [ABS                                       //     Key   = 2
     [ABS                                       //     Value = 1):
-      [CONS [CONS [REF 4] [CONS [REF 4] NULL]]
-        [REF 4]]
+      [CONS [CONS [REF 2] [CONS [REF 1] NULL]]
+        [REF 3]]
     ]]]
   [CONS                                        // GET = [CAR [CDR *VALUE*]](
     [APP [ABS [APP [REF 1] [REF 1]]]           //     OMGEA
@@ -15,20 +16,19 @@
     [ABS                                       //     Key     = 2
     [ABS                                       //     Default = 1):
       [APP [APP [EQUALS [REF 3] NULL]          //   If Map == NULL:
-	[REF 1]]                               //   Then: Default
+        [REF 1]]                               //   Then: Default
         [APP [APP [EQUALS [CAR [CAR [REF 3]]]  //   Else: If Map[0][0] == Key
             [REF 2]]                           
           [CAR [CDR [CAR [REF 3]]]]]           //     Then: Map[0][1]
-   	  [APP [APP [APP [APP [REF 4] [REF 4]] //     Else: Self(Self,
-	      [CDR [REF 3]]]                   //                Map[1,],
-	      [REF 2]]                         //                Key,
-	      [REF 1]]                         //                Default)
+   	      [APP [APP [APP [APP [REF 4] [REF 4]] //     Else: Self(Self,
+	            [CDR [REF 3]]]                   //                Map[1,],
+	            [REF 2]]                         //                Key,
+	            [REF 1]]                         //                Default)
         ]
       ]
     ]]]]]
   NULL]]
-NULL]]
-
+]
 //[CONS [PRIMITIVE "VALUE"]
 //  // MAP_GET = [CAR *VALUE*]
 //  [CONS
