@@ -1,13 +1,11 @@
 package languish.base;
 
-
 public class Primitive {
 
 	private final Object wrapped;
 
 	public Primitive(Object wrapped) {
-		if (wrapped instanceof Boolean
-				|| wrapped instanceof Character
+		if (wrapped instanceof Character
 				|| wrapped instanceof Double
 				|| wrapped instanceof Integer
 				|| wrapped instanceof String
@@ -16,14 +14,6 @@ public class Primitive {
 		} else {
 			throw new IllegalArgumentException("Object not a primitive: " + wrapped);
 		}
-	}
-
-	public boolean asBoolean() {
-		return (Boolean) wrapped;
-	}
-
-	public boolean isBoolean() {
-		return wrapped instanceof Boolean;
 	}
 
 	public char asCharacter() {
@@ -81,10 +71,6 @@ public class Primitive {
 
 	@Override
 	public String toString() {
-		if (isBoolean()) {
-			return asBoolean() ? "TRUE" : "FALSE";
-		}
-
 		if (isCharacter()) {
 			return "'" + asCharacter() + "'";
 		}
