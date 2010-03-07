@@ -37,7 +37,7 @@ public class StringWithImportParser {
 							"IMPORT_STATEMENT",
 							"STRING_LIT",
 							"IMPORT_TAIL"),
-					// Sequence.of("IMPORT_DIRECTIVE", "EMPTY_IMPORT"),
+					Sequence.of("IMPORT_DIRECTIVE", "EMPTY_IMPORT"),
 					Sequence.of("IMPORT_TAIL", "IMPORT_TAIL_END", ";"),
 					Sequence.of(
 							"IMPORT_TAIL",
