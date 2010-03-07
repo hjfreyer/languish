@@ -1,18 +1,18 @@
 package languish.interpreter;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Scanner;
 
 import languish.interpreter.error.DependencyUnavailableError;
 
-public class FileSystemDependencyManager implements DependencyManager {
+public class ResourceDependencyManager implements DependencyManager {
 
+	private static final ClassLoader CLASS_LOADER =
+			ResourceDependencyManager.class.getClassLoader();
 	private final List<String> paths;
 
-	public FileSystemDependencyManager(List<String> paths) {
+	public ResourceDependencyManager(List<String> paths) {
 		this.paths = paths;
 	}
 
@@ -25,25 +25,15 @@ public class FileSystemDependencyManager implements DependencyManager {
 	public String getResource(String resourceName) {
 		for (String path : paths) {
 			String docPath = path + '/' + resourceName + ".lish";
-			File f = new File(docPath);
-
-			if (!f.exists()) {
+			InputStream stream =
+					ResourceDependencyManager.CLASS_LOADER.getResourceAsStream(docPath);
+			if (stream == null) {
 				continue;
 			}
-
 			StringBuilder doc = new StringBuilder();
-
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(f));
-				while (true) {
-					String line = br.readLine();
-					if (line == null) {
-						break;
-					}
-					doc.append(line).append('\n');
-				}
-			} catch (IOException ioe) {
-				throw new DependencyUnavailableError(ioe);
+			Scanner read = new Scanner(stream);
+			while (read.hasNextLine()) {
+				doc.append(read.nextLine()).append('\n');
 			}
 
 			return doc.toString();
@@ -58,13 +48,9 @@ public class FileSystemDependencyManager implements DependencyManager {
 	 * languish.interpreter.fooDependencyManager#hasResource(java.lang.String)
 	 */
 	public boolean hasResource(String resourceName) {
-
-		System.out.println("hasResources");
 		for (String path : paths) {
 			String docPath = path + '/' + resourceName + ".lish";
-			File f = new File(docPath);
-
-			if (f.exists()) {
+			if (ResourceDependencyManager.CLASS_LOADER.getResource(docPath) != null) {
 				return true;
 			}
 		}

@@ -136,7 +136,7 @@ public class Operations {
       NativeFunction nativeFunc =
           (NativeFunction) funcPrimitive.getJavaObject();
 
-      Tree<Primitive> argObject = Terms.convertTermToJavaObject(arg, 0);
+      Tree<Primitive> argObject = Terms.convertTermToJavaObject(arg);
       Tree<Primitive> result = nativeFunc.apply(argObject);
 			return Terms.convertJavaObjectToTerm(result);
     }

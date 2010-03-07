@@ -128,7 +128,7 @@ public class Interpreter {
 	public static Pair<List<String>, Term> getDepsAndTermFromModuleTerm(
 			Term module) {
 		Tree<String> structure =
-				Trees.transform(Terms.convertTermToJavaObject(module, 0), Primitives
+				Trees.transform(Terms.convertTermToJavaObject(module), Primitives
 						.asString());
 
 		return getDepsAndTermFromModule(structure);

@@ -47,7 +47,7 @@ public class TestUtil {
 								+ name
 								+ " - expression does not ultimately reduce to given value:",
 						reducedCompletely,
-						Terms.convertTermToJavaObject(exp, 0));
+						Terms.convertTermToJavaObject(exp));
 			}
 
 			// REDUCE ONCE
@@ -65,7 +65,7 @@ public class TestUtil {
 	}
 
 	public static void assertReducesToData(Tree<Primitive> expected, Term actual) {
-		Assert.assertEquals(expected, Terms.convertTermToJavaObject(actual, 0));
+		Assert.assertEquals(expected, Terms.convertTermToJavaObject(actual));
 	}
 
 	public static void assertReducesToTrue(Term actual) {

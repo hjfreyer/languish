@@ -16,7 +16,6 @@ public class MapsTest extends TestCase {
 
 	public void testGetFromEmpty() {
 		Term map = Term.NULL;
-
 		Term actual =
 				app(app(app(Maps.get(), map), Terms.primObj("key")), Terms.primObj(4));
 

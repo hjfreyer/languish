@@ -97,15 +97,7 @@ public class Terms {
 		return convertJavaObjectToTerm(PrimitiveTree.from(Arrays.asList(objs)));
 	}
 
-	/**
-	 * @deprecated Use {@link #convertTermToJavaObject(Term,int)} instead
-	 */
-	@Deprecated
 	public static Tree<Primitive> convertTermToJavaObject(Term term) {
-		return convertTermToJavaObject(term, 0);
-	}
-
-	public static Tree<Primitive> convertTermToJavaObject(Term term, int depth) {
 		term = term.reduceCompletely();
 
 		// System.out.println(depth);
@@ -120,10 +112,8 @@ public class Terms {
 
 		if (op == Operations.ABS) {
 			// System.out.println(term);
-			Tree<Primitive> car =
-					Terms.convertTermToJavaObject(Terms.car(term), depth + 1);
-			Tree<Primitive> cdr =
-					Terms.convertTermToJavaObject(Terms.cdr(term), depth + 1);
+			Tree<Primitive> car = Terms.convertTermToJavaObject(Terms.car(term));
+			Tree<Primitive> cdr = Terms.convertTermToJavaObject(Terms.cdr(term));
 
 			List<Tree<Primitive>> result = Lists.newLinkedList();
 
@@ -176,7 +166,7 @@ public class Terms {
 	}
 
 	public static Term compileTermAstToTerm(Term astTerm) {
-		Tree<Primitive> astPrim = Terms.convertTermToJavaObject(astTerm, 0);
+		Tree<Primitive> astPrim = Terms.convertTermToJavaObject(astTerm);
 
 		Tree<String> ast =
 				Trees.transform(astPrim, new Function<Primitive, String>() {
