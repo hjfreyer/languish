@@ -26,7 +26,7 @@ public class Main {
 
 		CommandLine cli = new GnuParser().parse(opt, main_args);
 
-		List<String> paths = Arrays.asList(cli.getOptionValues("lp"));
+		List<String> paths = Arrays.asList(cli.getOptionValue("lp").split(","));
 
 		System.out.println(paths);
 
