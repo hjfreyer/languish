@@ -6,6 +6,8 @@ import com.hjfreyer.util.Trees;
 
 public class Primitives {
 
+	public static Primitive NULL = new Primitive(null);
+
 	public static <T> Function<T, Primitive> asPrimitve() {
 		return new Function<T, Primitive>() {
 			public Primitive apply(T from) {
@@ -27,5 +29,18 @@ public class Primitives {
 	}
 
 	private Primitives() {
+	}
+
+	public static Primitive parse(String string) {
+		if (string.equals("NULL")) {
+			return new Primitive(null);
+		} else if (string.startsWith("\"") && string.endsWith("\"")) {
+			return new Primitive(string.substring(1, string.length() - 1) //
+					.replaceAll("\\\\(.)", "\\1"));
+		} else if (string.matches("[0-9]+")) {
+
+		}
+		throw new IllegalArgumentException("String cannot be parsed to primitive: "
+				+ string);
 	}
 }

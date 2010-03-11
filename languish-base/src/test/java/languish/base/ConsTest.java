@@ -1,6 +1,5 @@
 package languish.base;
 
-import static languish.base.Term.NULL;
 import static languish.base.Terms.*;
 import static languish.base.testing.TestUtil.*;
 import junit.framework.TestCase;

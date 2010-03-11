@@ -1,9 +1,10 @@
 package languish.base;
 
-public interface Operation {
-  public Term reduce(Term term);
-
-  public boolean isReduced(Term term);
-
-  public Term replaceAllReferencesToParam(Term term, int id, Term with);
+public enum Operation {
+    ABS,
+	APP,
+	NATIVE_APPLY,
+	PRIMITIVE,
+	IS_PRIMITIVE,
+	REF;
 }

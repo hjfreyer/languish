@@ -5,7 +5,8 @@ public class Primitive {
 	private final Object wrapped;
 
 	public Primitive(Object wrapped) {
-		if (wrapped instanceof Character
+		if (wrapped == null
+				|| wrapped instanceof Character
 				|| wrapped instanceof Double
 				|| wrapped instanceof Integer
 				|| wrapped instanceof String
@@ -71,6 +72,10 @@ public class Primitive {
 
 	@Override
 	public String toString() {
+		if (wrapped == null) {
+			return "NULL";
+		}
+
 		if (isCharacter()) {
 			return "'" + asCharacter() + "'";
 		}
@@ -84,5 +89,9 @@ public class Primitive {
 		}
 
 		return "<UNKNOWN>";
+	}
+
+	public boolean isNull() {
+		return wrapped == null;
 	}
 }

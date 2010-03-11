@@ -10,22 +10,29 @@ import com.hjfreyer.util.Tree;
 
 public class PrimitiveTree {
 
-  @SuppressWarnings("unchecked")
-  public static Tree<Primitive> from(Object obj) {
-    if (obj instanceof Tree<?>) {
-      return (Tree<Primitive>) obj;
-    } else if (obj instanceof List<?>) {
-      List<Tree<Primitive>> result = Lists.newLinkedList();
+	@SuppressWarnings("unchecked")
+	public static Tree<Primitive> from(Object obj) {
+		if (obj == null) {
+			return Tree.<Primitive> empty();
+		}
+		if (obj instanceof Tree<?>) {
+			return (Tree<Primitive>) obj;
+		}
 
-      for (Object child : (List<Object>) obj) {
-        result.add(PrimitiveTree.from(child));
-      }
+		if (obj instanceof List<?>) {
+			List<Tree<Primitive>> result = Lists.newLinkedList();
 
-      return Tree.inode(ImmutableList.copyOf(result));
-    } else if (obj instanceof Primitive) {
-      return Tree.leaf((Primitive) obj);
-    }
+			for (Object child : (List<Object>) obj) {
+				result.add(PrimitiveTree.from(child));
+			}
 
-    return Tree.leaf(new Primitive(obj));
-  }
+			return Tree.inode(ImmutableList.copyOf(result));
+		}
+
+		if (obj instanceof Primitive) {
+			return Tree.leaf((Primitive) obj);
+		}
+
+		return Tree.leaf(new Primitive(obj));
+	}
 }

@@ -1,14 +1,17 @@
 package languish.base;
 
-import static languish.base.Term.NULL;
 import static languish.base.Terms.*;
 import static languish.base.testing.TestUtil.*;
+
+import java.util.Map;
+
 import junit.framework.TestCase;
 import languish.base.testing.LanguishTestCase;
 import languish.base.testing.TestUtil;
 import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.hjfreyer.util.Tree;
 
 public class NativeFunctionTest extends TestCase {
@@ -24,21 +27,24 @@ public class NativeFunctionTest extends TestCase {
 		}
 	};
 
+	public static Map<String, NativeFunction> FUNCTIONS =
+			ImmutableMap.of("TRIVIAL", TRIVIAL, "IDENTITY", IDENTITY);
+
 	public enum Tests implements LanguishTestCase {
 		TRIVIAL_NATIVE_FUNC( //
-				nativeApply(TRIVIAL, NULL),
+				nativeApply("TRIVIAL", NULL),
 				null,
 				primitive(new Primitive(42)),
 				PrimitiveTree.from(42)),
 
 		TRIVIAL_NATIVE_WITH_REDUCE( //
-				nativeApply(TRIVIAL, app(abs(primitive(FOUR)), NULL)),
+				nativeApply("TRIVIAL", app(abs(primitive(FOUR)), NULL)),
 				null,
-				nativeApply(TRIVIAL, primitive(FOUR)),
+				nativeApply("TRIVIAL", primitive(FOUR)),
 				PrimitiveTree.from(42)),
 
 		TRIVIAL_NATIVE_WITH_LIST( //
-				Terms.nativeApply(TRIVIAL, cons(primitive(THREE), cons(
+				Terms.nativeApply("TRIVIAL", cons(primitive(THREE), cons(
 						primitive(FOUR),
 						NULL))),
 				null,
@@ -46,19 +52,19 @@ public class NativeFunctionTest extends TestCase {
 				PrimitiveTree.from(42)),
 
 		IDENT_NATIVE_FUNC( //
-				nativeApply(IDENTITY, NULL),
+				nativeApply("IDENTITY", NULL),
 				null,
 				NULL,
 				PrimitiveTree.from(ImmutableList.of())),
 
 		IDENT_NATIVE_WITH_REDUCE( //
-				nativeApply(IDENTITY, app(abs(primitive(FOUR)), NULL)),
+				nativeApply("IDENTITY", app(abs(primitive(FOUR)), NULL)),
 				null,
-				nativeApply(IDENTITY, primitive(FOUR)),
+				nativeApply("IDENTITY", primitive(FOUR)),
 				PrimitiveTree.from(4)),
 
 		IDENT_NATIVE_WITH_LIST( //
-				Terms.nativeApply(IDENTITY, cons(primitive(THREE), cons(
+				Terms.nativeApply("IDENTITY", cons(primitive(THREE), cons(
 						primitive(FOUR),
 						NULL))),
 				null,
