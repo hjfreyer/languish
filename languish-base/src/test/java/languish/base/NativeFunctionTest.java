@@ -15,20 +15,22 @@ import com.google.common.collect.ImmutableMap;
 import com.hjfreyer.util.Tree;
 
 public class NativeFunctionTest extends TestCase {
-	public static NativeFunction TRIVIAL = new NativeFunction() {
+	public static final NativeFunction TRIVIAL = new NativeFunction() {
 		public Tree<Primitive> apply(Tree<Primitive> arg) {
 			return PrimitiveTree.from(42);
 		}
 	};
 
-	public static NativeFunction IDENTITY = new NativeFunction() {
+	public static final NativeFunction IDENTITY = new NativeFunction() {
 		public Tree<Primitive> apply(Tree<Primitive> arg) {
 			return arg;
 		}
 	};
 
-	public static Map<String, NativeFunction> FUNCTIONS =
+	public static final Map<String, NativeFunction> FUNCTIONS =
 			ImmutableMap.of("TRIVIAL", TRIVIAL, "IDENTITY", IDENTITY);
+
+	public static final Reducer REDUCER = new Reducer(FUNCTIONS);
 
 	public enum Tests implements LanguishTestCase {
 		TRIVIAL_NATIVE_FUNC( //
@@ -108,7 +110,7 @@ public class NativeFunctionTest extends TestCase {
 
 	public void test() {
 		for (LanguishTestCase test : Tests.values()) {
-			TestUtil.assertLanguishTestCase(test);
+			TestUtil.assertLanguishTestCase(REDUCER, test);
 		}
 	}
 }

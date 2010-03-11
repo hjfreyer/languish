@@ -39,7 +39,12 @@ public class TestUtil {
 	public static final Term LOOP = Terms.app(TestUtil.OMEGA, TestUtil.OMEGA);
 
 	public static void assertLanguishTestCase(LanguishTestCase testCase) {
+		assertLanguishTestCase(BASIC_REDUCER, testCase);
+	}
 
+	public static void assertLanguishTestCase(
+			Reducer reducer,
+			LanguishTestCase testCase) {
 		String name = testCase.name();
 		Term term = testCase.getExpression();
 		Term reducedOnce = testCase.getReducedOnce();
@@ -53,7 +58,7 @@ public class TestUtil {
 								+ name
 								+ " - expression does not ultimately reduce to given value:",
 						reducedCompletely,
-						convertTermToJavaObject(term));
+						reducer.convertTermToJavaObject(term));
 			}
 
 			// REDUCE ONCE
@@ -63,11 +68,12 @@ public class TestUtil {
 								+ name
 								+ " - expression does not reduce once to given value:",
 						reducedOnce,
-						BASIC_REDUCER.reduce(term));
+						reducer.reduce(term));
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Test " + name + " failed.", e);
 		}
+
 	}
 
 	public static void assertReducesToData(Tree<Primitive> expected, Term actual) {
@@ -91,4 +97,5 @@ public class TestUtil {
 	public static Tree<Primitive> convertTermToJavaObject(Term term) {
 		return BASIC_REDUCER.convertTermToJavaObject(term);
 	}
+
 }
