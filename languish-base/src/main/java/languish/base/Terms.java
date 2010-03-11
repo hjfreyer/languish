@@ -1,5 +1,12 @@
 package languish.base;
 
+import java.util.Arrays;
+import java.util.List;
+
+import languish.util.PrimitiveTree;
+
+import com.hjfreyer.util.Tree;
+
 public class Terms {
 
 	public static final Term NULL = primitive(Primitives.NULL);
@@ -60,5 +67,30 @@ public class Terms {
 	}
 
 	private Terms() {
+	}
+
+	public static Term fromJavaObject(Object obj) {
+		return fromPrimitiveTree(PrimitiveTree.from(obj));
+	}
+
+	public static Term fromJavaList(Object... objs) {
+		return fromPrimitiveTree(PrimitiveTree.from(Arrays.asList(objs)));
+	}
+
+	public static Term fromPrimitiveTree(Tree<Primitive> obj) {
+		if (obj.isList()) {
+			List<Tree<Primitive>> list = obj.asList();
+
+			Term result = Terms.NULL;
+			for (int i = list.size() - 1; i >= 0; i--) {
+				result = Terms.cons(fromPrimitiveTree(list.get(i)), result);
+			}
+
+			return result;
+		} else if (obj.isLeaf()) {
+			return Terms.primitive(obj.asLeaf());
+		}
+
+		throw new AssertionError();
 	}
 }

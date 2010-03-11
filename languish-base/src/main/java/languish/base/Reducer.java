@@ -58,7 +58,7 @@ public class Reducer {
 			Tree<Primitive> argObject = convertTermToJavaObject(arg);
 			Tree<Primitive> result = nativeFunc.apply(argObject);
 
-			return convertJavaObjectToTerm(result);
+			return Terms.fromPrimitiveTree(result);
 		}
 
 		case IS_PRIMITIVE: {
@@ -173,20 +173,4 @@ public class Reducer {
 				+ term);
 	}
 
-	public Term convertJavaObjectToTerm(Tree<Primitive> obj) {
-		if (obj.isList()) {
-			List<Tree<Primitive>> list = obj.asList();
-
-			Term result = Terms.NULL;
-			for (int i = list.size() - 1; i >= 0; i--) {
-				result = Terms.cons(convertJavaObjectToTerm(list.get(i)), result);
-			}
-
-			return result;
-		} else if (obj.isLeaf()) {
-			return Terms.primitive(obj.asLeaf());
-		}
-
-		throw new AssertionError();
-	}
 }
