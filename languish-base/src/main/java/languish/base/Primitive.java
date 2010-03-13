@@ -5,24 +5,11 @@ public class Primitive {
 	private final Object wrapped;
 
 	public Primitive(Object wrapped) {
-		if (wrapped == null
-				|| wrapped instanceof Character
-				|| wrapped instanceof Double
-				|| wrapped instanceof Integer
-				|| wrapped instanceof String
-				|| wrapped instanceof NativeFunction) {
+		if (wrapped instanceof Integer || wrapped instanceof String) {
 			this.wrapped = wrapped;
 		} else {
 			throw new IllegalArgumentException("Object not a primitive: " + wrapped);
 		}
-	}
-
-	public char asCharacter() {
-		return (Character) wrapped;
-	}
-
-	public boolean isCharacter() {
-		return wrapped instanceof Character;
 	}
 
 	public int asInteger() {
@@ -34,7 +21,7 @@ public class Primitive {
 	}
 
 	public String asString() {
-		return (String) wrapped;
+		return ((String) wrapped).replace("\"", "\\\"");
 	}
 
 	public boolean isString() {
@@ -72,26 +59,14 @@ public class Primitive {
 
 	@Override
 	public String toString() {
-		if (wrapped == null) {
-			return "NULL";
-		}
-
-		if (isCharacter()) {
-			return "'" + asCharacter() + "'";
-		}
-
 		if (isInteger()) {
-			return "" + asInteger();
+			return "i" + asInteger();
 		}
 
 		if (isString()) {
-			return '"' + asString() + '"';
+			return "s" + asString();
 		}
 
-		return "<UNKNOWN>";
-	}
-
-	public boolean isNull() {
-		return wrapped == null;
+		throw new AssertionError();
 	}
 }

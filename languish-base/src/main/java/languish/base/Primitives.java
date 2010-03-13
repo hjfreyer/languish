@@ -6,7 +6,7 @@ import com.hjfreyer.util.Trees;
 
 public class Primitives {
 
-	public static Primitive NULL = new Primitive(null);
+	public static Primitive NULL = new Primitive(0);
 
 	public static <T> Function<T, Primitive> asPrimitve() {
 		return new Function<T, Primitive>() {
@@ -32,13 +32,10 @@ public class Primitives {
 	}
 
 	public static Primitive parse(String string) {
-		if (string.equals("NULL")) {
-			return new Primitive(null);
-		} else if (string.startsWith("\"") && string.endsWith("\"")) {
-			return new Primitive(string.substring(1, string.length() - 1) //
-					.replaceAll("\\\\(.)", "\\1"));
-		} else if (string.matches("[0-9]+")) {
-
+		if (string.startsWith("s")) {
+			return new Primitive(string.substring(1).replaceAll("\\\\(.)", "\\1"));
+		} else if (string.startsWith("i")) {
+			return new Primitive(Integer.parseInt(string.substring(1)));
 		}
 		throw new IllegalArgumentException("String cannot be parsed to primitive: "
 				+ string);

@@ -31,7 +31,7 @@ public class Terms {
 	}
 
 	public static Term primitive(Primitive prim) {
-		return new Term(Operation.PRIMITIVE, prim, NULL);
+		return new Term(Operation.PRIMITIVE, prim, Primitives.NULL);
 	}
 
 	public static Term isPrimitive(Term term) {
@@ -39,7 +39,7 @@ public class Terms {
 	}
 
 	public static Term primObj(Object obj) {
-		return new Term(Operation.PRIMITIVE, new Primitive(obj), NULL);
+		return primitive(new Primitive(obj));
 	}
 
 	public static Term ref(int i) {

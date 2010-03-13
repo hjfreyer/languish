@@ -152,9 +152,10 @@ public class Reducer {
 		case PRIMITIVE: {
 			Primitive prim = (Primitive) term.getFirst();
 
-			if (prim.isNull()) {
+			if (prim.getJavaObject().equals(0)) {
 				return Tree.<Primitive> empty();
 			}
+
 			return Tree.leaf(prim);
 		}
 		case ABS:
