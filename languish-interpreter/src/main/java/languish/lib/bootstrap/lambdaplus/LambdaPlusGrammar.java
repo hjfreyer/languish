@@ -1,4 +1,4 @@
-package languish.api.bootstrap.lambdaplus;
+package languish.lib.bootstrap.lambdaplus;
 
 import java.util.List;
 

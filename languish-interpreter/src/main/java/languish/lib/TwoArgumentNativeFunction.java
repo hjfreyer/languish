@@ -1,4 +1,4 @@
-package languish.api;
+package languish.lib;
 
 import languish.base.NativeFunction;
 import languish.base.Primitive;

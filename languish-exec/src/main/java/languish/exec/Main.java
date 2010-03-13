@@ -3,12 +3,12 @@ package languish.exec;
 import java.util.Arrays;
 import java.util.List;
 
-import languish.api.StandardLib;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
 import languish.interpreter.FileSystemDependencyManager;
 import languish.interpreter.Interpreter;
+import languish.interpreter.StandardLib;
 import languish.util.PrimitiveTree;
 
 import org.apache.commons.cli.CommandLine;

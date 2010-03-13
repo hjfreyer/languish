@@ -1,9 +1,12 @@
-package languish.api;
+package languish.interpreter;
 
 import java.util.Map;
 
-import languish.api.bootstrap.lambdaplus.LambdaPlusFunctions;
 import languish.base.NativeFunction;
+import languish.lib.GrammarFunctions;
+import languish.lib.MathFunctions;
+import languish.lib.ParsersFunctions;
+import languish.lib.bootstrap.lambdaplus.LambdaPlusFunctions;
 
 import com.google.common.collect.ImmutableMap;
 

@@ -25,10 +25,10 @@
 	<modules>
     <module>languish-base</module>
     <module>languish-interpreter</module>
-    <module>languish-api</module>
     <module>languish-lang</module>
     <module>languish-parsing</module>
     <module>languish-exec</module>
+    <module>languish-compiler</module>
 	</modules>
 
 </project>

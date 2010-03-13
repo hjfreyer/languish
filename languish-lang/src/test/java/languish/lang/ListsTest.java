@@ -3,13 +3,13 @@ package languish.lang;
 import static languish.base.Terms.*;
 import static languish.base.testing.TestUtil.*;
 import junit.framework.TestCase;
-import languish.api.MathFunctions;
 import languish.base.Primitive;
 import languish.base.Term;
 import languish.base.Terms;
 import languish.base.testing.TestUtil;
 import languish.lib.Integers;
 import languish.lib.Lists;
+import languish.lib.MathFunctions;
 import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableList;

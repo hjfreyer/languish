@@ -1,9 +1,10 @@
-package languish.api.bootstrap.lambdaplus;
+package languish.lib.bootstrap.lambdaplus;
 
 import java.util.List;
 import java.util.Map;
 
 import languish.base.Terms;
+import languish.parsing.ParserUtil;
 import languish.parsing.SemanticModule;
 
 import com.google.common.base.Function;
@@ -36,8 +37,7 @@ public class LambdaPlusSemantic {
 					.put("STRING_LIT", new Function<String, Object>() {
 						@Override
 						public Object apply(String arg) {
-							return arg.substring(1, arg.length() - 1) //
-									.replaceAll("\\\\(.)", "\\1");
+							return arg.substring(1, arg.length() - 1);
 						}
 					})
 					.build();
@@ -124,7 +124,7 @@ public class LambdaPlusSemantic {
 						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
-							Tree<String> cons_func = Terms.convertTermToAst(Terms.CONS);
+							Tree<String> cons_func = ParserUtil.convertTermToAst(Terms.CONS);
 
 							Tree<String> app = Tree.leaf("APP");
 							Tree<String> arg1 = (Tree<String>) arg.get(2);
@@ -137,7 +137,7 @@ public class LambdaPlusSemantic {
 						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
-							Tree<String> car_func = Terms.convertTermToAst(Terms.CAR);
+							Tree<String> car_func = ParserUtil.convertTermToAst(Terms.CAR);
 
 							Tree<String> app = Tree.leaf("APP");
 							Tree<String> cons = (Tree<String>) arg.get(2);
@@ -149,7 +149,7 @@ public class LambdaPlusSemantic {
 						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
-							Tree<String> cdr_func = Terms.convertTermToAst(Terms.CDR);
+							Tree<String> cdr_func = ParserUtil.convertTermToAst(Terms.CDR);
 
 							Tree<String> app = Tree.leaf("APP");
 							Tree<String> cons = (Tree<String>) arg.get(2);
@@ -182,7 +182,7 @@ public class LambdaPlusSemantic {
 					.put("NULL_TERM", new Function<List<Object>, Object>() {
 						@Override
 						public Object apply(List<Object> arg) {
-							return Tree.leaf("NULL");
+							return ParserUtil.convertTermToAst(Terms.NULL);
 						}
 					})
 					.put("STRING_LIT_TERM", new Function<List<Object>, Object>() {
@@ -190,7 +190,7 @@ public class LambdaPlusSemantic {
 						@Override
 						public Object apply(List<Object> arg) {
 							Tree<String> op = Tree.leaf("PRIMITIVE");
-							Tree<String> arg1 = Tree.leaf((String) arg.get(0));
+							Tree<String> arg1 = Tree.leaf("s" + arg.get(0));
 							Tree<String> arg2 = Tree.leaf("NULL");
 
 							return Tree.inode(op, arg1, arg2);

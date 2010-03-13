@@ -1,12 +1,11 @@
-package languish.api.bootstrap.lambdaplus;
+package languish.lib.bootstrap.lambdaplus;
 
 import java.util.List;
 
 import junit.framework.TestCase;
-import languish.api.bootstrap.lambdaplus.LambdaPlusGrammar;
-import languish.api.bootstrap.lambdaplus.LambdaPlusSemantic;
 import languish.base.Term;
 import languish.base.Terms;
+import languish.parsing.ParserUtil;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -33,7 +32,7 @@ public class LambdaPlusTest extends TestCase {
 
 		List<String> depList =
 				Lists.transform(deps.asList(), Tree.<String> asLeafFunction());
-		Term term = Terms.compileAstToTerm(termAst);
+		Term term = ParserUtil.compileAstToTerm(termAst);
 
 		return Pair.of(depList, term);
 	}
@@ -50,7 +49,7 @@ public class LambdaPlusTest extends TestCase {
 	}
 
 	public void testNull() {
-		a(Term.NULL, "NULL");
+		a(Terms.NULL, "NULL");
 	}
 
 	public void testString() {
@@ -58,18 +57,16 @@ public class LambdaPlusTest extends TestCase {
 	}
 
 	public void testCons() {
-		a(Terms.convertListToTerm("foo"), "[CONS \"foo\" NULL]");
+		a(Terms.fromJavaList("foo"), "[CONS \"foo\" NULL]");
 	}
 
 	public void testCons2() {
-		a(
-				Terms.convertListToTerm("foo", "bar"),
-				"[CONS \"foo\" [CONS \"bar\" NULL]]");
+		a(Terms.fromJavaList("foo", "bar"), "[CONS \"foo\" [CONS \"bar\" NULL]]");
 	}
 
 	public void testCar() {
 		a(
-				Terms.car(Terms.convertListToTerm("foo", "bar")),
+				Terms.car(Terms.fromJavaList("foo", "bar")),
 				"[CAR [CONS \"foo\" [CONS \"bar\" NULL]]]");
 	}
 

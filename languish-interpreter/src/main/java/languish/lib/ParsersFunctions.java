@@ -1,12 +1,12 @@
-package languish.api;
+package languish.lib;
 
 import java.util.List;
 import java.util.Map;
 
-import languish.api.parsing.base.StringWithImportParser;
 import languish.base.NativeFunction;
 import languish.base.Primitive;
 import languish.base.Primitives;
+import languish.lib.parsing.base.StringWithImportParser;
 
 import com.google.common.collect.ImmutableMap;
 import com.hjfreyer.util.Pair;

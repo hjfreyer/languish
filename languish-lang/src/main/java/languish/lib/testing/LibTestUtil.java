@@ -1,10 +1,10 @@
 package languish.lib.testing;
 
-import languish.api.StandardLib;
 import languish.base.Term;
 import languish.interpreter.DependencyManager;
 import languish.interpreter.Interpreter;
 import languish.interpreter.ResourceDependencyManager;
+import languish.interpreter.StandardLib;
 import languish.interpreter.error.DependencyUnavailableError;
 import languish.lib.LanguishLoadError;
 
