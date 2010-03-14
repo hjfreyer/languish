@@ -97,8 +97,9 @@ public class Reducer {
 			return (ref_id == id) ? with : term;
 
 		case NATIVE_APPLY:
-			return Terms.nativeApply((String) term.getFirst(), (Term) term
-					.getSecond());
+			return Terms.nativeApply(
+					(String) term.getFirst(),
+					replaceAllReferencesToParam((Term) term.getSecond(), id, with));
 
 		case APP:
 		case IS_PRIMITIVE:

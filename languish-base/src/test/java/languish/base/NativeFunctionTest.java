@@ -73,6 +73,12 @@ public class NativeFunctionTest extends TestCase {
 				null,// cons(primitive(THREE), cons(primitive(FOUR), NULL)),
 				PrimitiveTree.from(ImmutableList.of(3, 4))),
 
+		IDENT_NATIVE_WITH_REFERENCE( //
+				app(abs(nativeApply("IDENTITY", ref(1))), primitive(THREE)),
+				null,
+				null,// cons(primitive(THREE), cons(primitive(FOUR), NULL)),
+				PrimitiveTree.from(3)),
+
 		;
 
 		private final Term expression;
