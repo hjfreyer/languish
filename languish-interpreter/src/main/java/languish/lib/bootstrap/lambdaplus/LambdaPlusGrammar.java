@@ -19,7 +19,7 @@ public class LambdaPlusGrammar {
 			Pair.of("CONS", "CONS"),
 			Pair.of("CAR", "CAR"),
 			Pair.of("CDR", "CDR"),
-			Pair.of("EQUALS", "EQUALS"),
+			Pair.of("NATIVE_APPLY", "NATIVE_APPLY"),
 			Pair.of("REF", "REF"),
 			Pair.of("NULL", "NULL"),
 			Pair.of("STRING_LIT", "\"(((\\\\.)|[^\"\\\\])*)\""),
@@ -61,8 +61,14 @@ public class LambdaPlusGrammar {
 					Sequence.of("TERM", "CONS_TERM", "[", "CONS", "TERM", "TERM", "]"),
 					Sequence.of("TERM", "CAR_TERM", "[", "CAR", "TERM", "]"),
 					Sequence.of("TERM", "CDR_TERM", "[", "CDR", "TERM", "]"),
-					Sequence
-							.of("TERM", "EQUALS_TERM", "[", "EQUALS", "TERM", "TERM", "]"),
+					Sequence.of(
+							"TERM",
+							"NATIVE_APPLY_TERM",
+							"[",
+							"NATIVE_APPLY",
+							"STRING_LIT",
+							"TERM",
+							"]"),
 					Sequence.of("TERM", "REF_TERM", "[", "REF", "INTEGER_LIT", "]"),
 					Sequence.of("TERM", "NULL_TERM", "NULL"),
 					Sequence.of("TERM", "STRING_LIT_TERM", "STRING_LIT")

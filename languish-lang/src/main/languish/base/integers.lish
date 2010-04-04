@@ -1,20 +1,18 @@
 
 #lang parsers/lambda_plus/parser;;
 
-#import builtin/math/add, builtin/math/multiply;;
-
 [ABS
   [CONS                                     // Add = [CAR *VALUE*](
     [ABS                                    //     A = 2
     [ABS                                    //     B = 1):
-      [APP [CAR [REF 3]]                    //   add(
+      [NATIVE_APPLY "builtin/math/add"      //   add(
         [CONS [REF 2] [CONS [REF 1] NULL]]  //     [A, B])
       ]
     ]]
   [CONS                                     // Multiply = [CAR [CDR *VALUE*]](
     [ABS                                    //     A = 2
     [ABS                                    //     B = 1):
-      [APP [CAR [CDR [REF 3]]]              //   multiply(
+      [NATIVE_APPLY "builtin/math/multiply" //   multiply(
         [CONS [REF 2] [CONS [REF 1] NULL]]  //     [A, B])
       ]
     ]]  

@@ -11,8 +11,8 @@ public class StringTreeSerializer {
 	@SuppressWarnings("unchecked")
 	public static Tree<String> serialize(Term term) {
 		if (term.getOperation() == Operation.REF) {
-			return Tree.copyOfList("REF", //
-					term.getFirst().toString(),
+			return Tree.inode(Tree.leaf("REF"), //
+					Tree.leaf(term.getFirst().toString()),
 					serialize((Term) term.getSecond()));
 		}
 
@@ -23,8 +23,8 @@ public class StringTreeSerializer {
 		}
 
 		if (term.getOperation() == Operation.NATIVE_APPLY) {
-			return Tree.copyOfList("NATIVE_APPLY", //
-					term.getFirst().toString(),
+			return Tree.inode(Tree.leaf("NATIVE_APPLY"), //
+					Tree.leaf(term.getFirst().toString()),
 					serialize((Term) term.getFirst()));
 		}
 
@@ -63,6 +63,8 @@ public class StringTreeSerializer {
 			return Terms.primitive(deserializePrimitive(first.asLeaf()));
 		} else if (op == Operation.REF) {
 			return Terms.ref(Integer.parseInt(first.asLeaf()));
+		} else if (op == Operation.NATIVE_APPLY) {
+			return Terms.nativeApply(first.asLeaf(), deserialize(second));
 		}
 		return new Term(op, deserialize(first), deserialize(second));
 	}

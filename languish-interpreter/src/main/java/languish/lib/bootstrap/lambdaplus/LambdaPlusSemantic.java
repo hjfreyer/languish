@@ -104,7 +104,7 @@ public class LambdaPlusSemantic {
 						public Object apply(List<Object> arg) {
 							Tree<String> op = Tree.leaf("ABS");
 							Tree<String> arg1 = (Tree<String>) arg.get(2);
-							Tree<String> arg2 = Tree.leaf("NULL");
+							Tree<String> arg2 = StringTreeSerializer.serialize(Terms.NULL);
 
 							return Tree.inode(op, arg1, arg2);
 						}
@@ -157,12 +157,12 @@ public class LambdaPlusSemantic {
 							return Tree.inode(app, cdr_func, cons);
 						}
 					})
-					.put("EQUALS_TERM", new Function<List<Object>, Object>() {
+					.put("NATIVE_APPLY_TERM", new Function<List<Object>, Object>() {
 						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
-							Tree<String> op = Tree.leaf("EQUALS");
-							Tree<String> arg1 = (Tree<String>) arg.get(2);
+							Tree<String> op = Tree.leaf("NATIVE_APPLY");
+							Tree<String> arg1 = Tree.leaf((String) arg.get(2));
 							Tree<String> arg2 = (Tree<String>) arg.get(3);
 
 							return Tree.inode(op, arg1, arg2);
@@ -174,7 +174,7 @@ public class LambdaPlusSemantic {
 						public Object apply(List<Object> arg) {
 							Tree<String> op = Tree.leaf("REF");
 							Tree<String> arg1 = Tree.leaf((String) arg.get(2));
-							Tree<String> arg2 = Tree.leaf("NULL");
+							Tree<String> arg2 = StringTreeSerializer.serialize(Terms.NULL);
 
 							return Tree.inode(op, arg1, arg2);
 						}
@@ -191,7 +191,7 @@ public class LambdaPlusSemantic {
 						public Object apply(List<Object> arg) {
 							Tree<String> op = Tree.leaf("PRIMITIVE");
 							Tree<String> arg1 = Tree.leaf("s" + arg.get(0));
-							Tree<String> arg2 = Tree.leaf("NULL");
+							Tree<String> arg2 = StringTreeSerializer.serialize(Terms.NULL);
 
 							return Tree.inode(op, arg1, arg2);
 						}
