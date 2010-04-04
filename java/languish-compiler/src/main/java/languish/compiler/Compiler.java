@@ -4,6 +4,7 @@ import java.util.List;
 
 import languish.base.Term;
 import languish.base.Terms;
+import languish.compiler.error.CompilationError;
 import languish.parsing.stringparser.StringTreeParser;
 import languish.serialization.StringTreeSerializer;
 
@@ -19,26 +20,32 @@ public class Compiler {
 	}
 
 	public Term compileResource(String resourceName) {
-		String document = dependencyManager.getResource(resourceName);
+		try {
+			String document = dependencyManager.getResource(resourceName);
 
-		Pair<String, String> parserAndProgram =
-				BaseParser.getParserAndProgram(document);
+			Pair<String, String> parserAndProgram =
+					BaseParser.getParserAndProgram(document);
 
-		String parserName = parserAndProgram.getFirst();
-		String program = parserAndProgram.getSecond();
+			String parserName = parserAndProgram.getFirst();
+			String program = parserAndProgram.getSecond();
 
-		if (parserName == null) {
-			Tree<String> ast = StringTreeParser.getStringTreeParser().parse(program);
-			Term body = StringTreeSerializer.deserialize(ast);
+			if (parserName == null) {
+				Tree<String> ast =
+						StringTreeParser.getStringTreeParser().parse(program);
+				Term body = StringTreeSerializer.deserialize(ast);
 
-			// Make sure you pass in an empty dependency list
-			return Terms.app(body, Terms.NULL);
+				// Make sure you pass in an empty dependency list
+				return Terms.app(body, Terms.NULL);
+			}
+
+			Term parser = compileResource(parserName);
+			Module module = Modules.fromParserAndDocument(parser, program);
+
+			return compileModule(module);
+		} catch (Exception e) {
+			throw new CompilationError("Error encountered compiling module "
+					+ resourceName, e);
 		}
-
-		Term parser = compileResource(parserName);
-		Module module = Modules.fromParserAndDocument(parser, program);
-
-		return compileModule(module);
 	}
 
 	public Term compileModule(Module module) {
