@@ -4,6 +4,7 @@
     <groupId>com.hjfreyer</groupId>
     <version>0.0.1</version>
   </parent>
+  <name>Languish Compiler</name>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.hjfreyer</groupId>
   <artifactId>languish-compiler</artifactId>
