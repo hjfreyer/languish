@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import languish.base.Terms;
-import languish.parsing.ParserUtil;
-import languish.parsing.SemanticModule;
+import languish.parsing.api.SemanticModule;
+import languish.serialization.StringTreeSerializer;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
@@ -124,7 +124,8 @@ public class LambdaPlusSemantic {
 						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
-							Tree<String> cons_func = ParserUtil.convertTermToAst(Terms.CONS);
+							Tree<String> cons_func =
+									StringTreeSerializer.serialize(Terms.CONS);
 
 							Tree<String> app = Tree.leaf("APP");
 							Tree<String> arg1 = (Tree<String>) arg.get(2);
@@ -137,8 +138,7 @@ public class LambdaPlusSemantic {
 						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
-							Tree<String> car_func = ParserUtil.convertTermToAst(Terms.CAR);
-
+							Tree<String> car_func = StringTreeSerializer.serialize(Terms.CAR);
 							Tree<String> app = Tree.leaf("APP");
 							Tree<String> cons = (Tree<String>) arg.get(2);
 
@@ -149,7 +149,7 @@ public class LambdaPlusSemantic {
 						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
-							Tree<String> cdr_func = ParserUtil.convertTermToAst(Terms.CDR);
+							Tree<String> cdr_func = StringTreeSerializer.serialize(Terms.CDR);
 
 							Tree<String> app = Tree.leaf("APP");
 							Tree<String> cons = (Tree<String>) arg.get(2);
@@ -182,7 +182,7 @@ public class LambdaPlusSemantic {
 					.put("NULL_TERM", new Function<List<Object>, Object>() {
 						@Override
 						public Object apply(List<Object> arg) {
-							return ParserUtil.convertTermToAst(Terms.NULL);
+							return StringTreeSerializer.serialize(Terms.NULL);
 						}
 					})
 					.put("STRING_LIT_TERM", new Function<List<Object>, Object>() {

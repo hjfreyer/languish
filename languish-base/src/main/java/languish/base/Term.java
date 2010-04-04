@@ -1,6 +1,8 @@
 package languish.base;
 
-public final class Term {
+import java.io.Serializable;
+
+public final class Term implements Serializable {
 
 	// public static final Term NULL = Terms.primitive(new Primitive(null));
 

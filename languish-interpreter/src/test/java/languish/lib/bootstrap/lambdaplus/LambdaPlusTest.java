@@ -5,7 +5,7 @@ import java.util.List;
 import junit.framework.TestCase;
 import languish.base.Term;
 import languish.base.Terms;
-import languish.parsing.ParserUtil;
+import languish.serialization.StringTreeSerializer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -32,7 +32,7 @@ public class LambdaPlusTest extends TestCase {
 
 		List<String> depList =
 				Lists.transform(deps.asList(), Tree.<String> asLeafFunction());
-		Term term = ParserUtil.compileAstToTerm(termAst);
+		Term term = StringTreeSerializer.deserialize(termAst);
 
 		return Pair.of(depList, term);
 	}

@@ -5,8 +5,9 @@ import java.util.Map;
 import languish.base.NativeFunction;
 import languish.base.Primitive;
 import languish.base.Primitives;
-import languish.parsing.GrammarModule;
-import languish.parsing.GrammarModules;
+import languish.parsing.api.GrammarModule;
+import languish.parsing.api.GrammarModules;
+import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableMap;
 import com.hjfreyer.util.Tree;
@@ -25,7 +26,7 @@ public class GrammarFunctions {
 							grammarTree,
 							Primitives.asString()));
 
-			return Primitives.treeToPrimitiveTree(grammar.getAstParser().parse(text));
+			return PrimitiveTree.fromTree(grammar.getAstParser().parse(text));
 		}
 	};
 

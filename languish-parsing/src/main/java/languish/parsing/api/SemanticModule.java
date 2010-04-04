@@ -1,4 +1,4 @@
-package languish.parsing;
+package languish.parsing.api;
 
 import java.util.List;
 import java.util.Map;

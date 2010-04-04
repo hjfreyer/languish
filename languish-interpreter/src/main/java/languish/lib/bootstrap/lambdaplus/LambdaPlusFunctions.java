@@ -5,7 +5,8 @@ import java.util.Map;
 import languish.base.NativeFunction;
 import languish.base.Primitive;
 import languish.base.Primitives;
-import languish.parsing.GrammarModules;
+import languish.parsing.api.GrammarModules;
+import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableMap;
 import com.hjfreyer.util.Tree;
@@ -17,7 +18,7 @@ public class LambdaPlusFunctions {
 		public Tree<Primitive> apply(Tree<Primitive> arg) {
 			Tree<String> moduleTree =
 					GrammarModules.moduleToStringTree(LambdaPlusGrammar.GRAMMAR);
-			return Primitives.treeToPrimitiveTree(moduleTree);
+			return PrimitiveTree.fromTree(moduleTree);
 		}
 	};
 
@@ -27,8 +28,8 @@ public class LambdaPlusFunctions {
 		public Tree<Primitive> apply(Tree<Primitive> arg) {
 			Tree<String> ast = Trees.transform(arg, Primitives.asString());
 
-			return Primitives
-					.treeToPrimitiveTree((Tree<String>) LambdaPlusSemantic.LAMBDA_PLUS_SEMANTIC
+			return PrimitiveTree
+					.fromTree((Tree<String>) LambdaPlusSemantic.LAMBDA_PLUS_SEMANTIC
 							.process(ast));
 		}
 	};

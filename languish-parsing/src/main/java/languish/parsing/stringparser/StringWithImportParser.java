@@ -1,10 +1,11 @@
-package languish.lib.parsing.base;
+package languish.parsing.stringparser;
 
 import java.util.List;
 
-import languish.parsing.GrammarModule;
-import languish.parsing.SemanticModule;
-import languish.parsing.Sequence;
+import languish.parsing.api.GrammarModule;
+import languish.parsing.api.SemanticModule;
+import languish.parsing.api.Sequence;
+import languish.serialization.StringTreeSerializer;
 
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.functors.Map;
@@ -30,7 +31,7 @@ public class StringWithImportParser {
 							"StringWithImportParser.COMPILATION_UNIT",
 							"StringWithImportParser.COMPILATION_UNIT",
 							"IMPORT_DIRECTIVE",
-							"TREE"),
+							"CONTENT"),
 					Sequence.of(
 							"IMPORT_DIRECTIVE",
 							"IMPORTS_LIST",
@@ -44,7 +45,8 @@ public class StringWithImportParser {
 							"IMPORT_TAIL_CONT",
 							",",
 							"STRING_LIT",
-							"IMPORT_TAIL"));
+							"IMPORT_TAIL"),
+					Sequence.of("CONTENT", "CONTENT", "TREE"));
 
 	public static final GrammarModule STRING_WITH_IMPORT_GRAMMAR =
 			StringTreeParser.STRING_TREE_GRAMMAR.extend(new GrammarModule(
@@ -112,6 +114,15 @@ public class StringWithImportParser {
 							result.addAll(cdr);
 
 							return ImmutableList.copyOf(result);
+						}
+					})
+					.put("CONTENT", new Function<List<Object>, Object>() {
+						@SuppressWarnings("unchecked")
+						@Override
+						public Object apply(List<Object> arg) {
+							Tree<String> ast = (Tree<String>) arg.get(0);
+
+							return StringTreeSerializer.deserialize(ast);
 						}
 					})
 					.build();

@@ -1,8 +1,10 @@
-package languish.parsing;
+package languish.parsing.api;
 
 import java.util.List;
 
 import junit.framework.TestCase;
+import languish.parsing.api.GrammarModule;
+import languish.parsing.api.Sequence;
 
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Token;

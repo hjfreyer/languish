@@ -1,10 +1,9 @@
 package languish.lib.testing;
 
 import languish.base.Term;
-import languish.interpreter.DependencyManager;
-import languish.interpreter.Interpreter;
-import languish.interpreter.ResourceDependencyManager;
-import languish.interpreter.StandardLib;
+import languish.compiler.DependencyManager;
+import languish.compiler.Compiler;
+import languish.compiler.ResourceDependencyManager;
 import languish.interpreter.error.DependencyUnavailableError;
 import languish.lib.LanguishLoadError;
 
@@ -17,10 +16,9 @@ public class LibTestUtil {
 
 	public static Term loadLib(String libName) {
 		try {
-			return Interpreter.loadAndInterpret(
+			return Compiler.compileDependency(
 					libName,
-					LibTestUtil.LANGUISH_FOLDER,
-					StandardLib.NATIVE_FUNCTIONS);
+					LibTestUtil.LANGUISH_FOLDER);
 		} catch (DependencyUnavailableError e) {
 			throw new LanguishLoadError(e);
 		}

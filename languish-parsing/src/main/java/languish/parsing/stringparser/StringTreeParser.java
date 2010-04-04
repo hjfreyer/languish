@@ -1,10 +1,10 @@
-package languish.lib.parsing.base;
+package languish.parsing.stringparser;
 
 import java.util.List;
 
-import languish.parsing.GrammarModule;
-import languish.parsing.SemanticModule;
-import languish.parsing.Sequence;
+import languish.parsing.api.GrammarModule;
+import languish.parsing.api.SemanticModule;
+import languish.parsing.api.Sequence;
 
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.functors.Map;

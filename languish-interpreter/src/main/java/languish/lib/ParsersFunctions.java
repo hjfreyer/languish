@@ -5,8 +5,8 @@ import java.util.Map;
 
 import languish.base.NativeFunction;
 import languish.base.Primitive;
-import languish.base.Primitives;
-import languish.lib.parsing.base.StringWithImportParser;
+import languish.parsing.stringparser.StringWithImportParser;
+import languish.util.PrimitiveTree;
 
 import com.google.common.collect.ImmutableMap;
 import com.hjfreyer.util.Pair;
@@ -28,8 +28,7 @@ public class ParsersFunctions {
 					Tree<String> importTree = Tree.copyOf(parsed.getFirst());
 					Tree<String> codeTree = parsed.getSecond();
 
-					return Primitives.treeToPrimitiveTree(Tree
-							.inode(importTree, codeTree));
+					return PrimitiveTree.fromTree(Tree.inode(importTree, codeTree));
 				}
 			};
 

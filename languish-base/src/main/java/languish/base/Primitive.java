@@ -1,6 +1,8 @@
 package languish.base;
 
-public class Primitive {
+import java.io.Serializable;
+
+public class Primitive implements Serializable {
 
 	private final Object wrapped;
 
@@ -21,7 +23,7 @@ public class Primitive {
 	}
 
 	public String asString() {
-		return ((String) wrapped).replace("\"", "\\\"");
+		return ((String) wrapped);
 	}
 
 	public boolean isString() {
@@ -59,14 +61,6 @@ public class Primitive {
 
 	@Override
 	public String toString() {
-		if (isInteger()) {
-			return "i" + asInteger();
-		}
-
-		if (isString()) {
-			return "s" + asString();
-		}
-
-		throw new AssertionError();
+		return "prim: " + wrapped;
 	}
 }

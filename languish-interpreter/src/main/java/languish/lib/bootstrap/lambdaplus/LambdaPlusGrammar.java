@@ -2,8 +2,8 @@ package languish.lib.bootstrap.lambdaplus;
 
 import java.util.List;
 
-import languish.parsing.GrammarModule;
-import languish.parsing.Sequence;
+import languish.parsing.api.GrammarModule;
+import languish.parsing.api.Sequence;
 
 import com.google.common.collect.ImmutableList;
 import com.hjfreyer.util.Pair;

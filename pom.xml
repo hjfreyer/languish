@@ -29,6 +29,7 @@
     <module>languish-parsing</module>
     <module>languish-exec</module>
     <module>languish-compiler</module>
+    <module>languish-util</module>
 	</modules>
 
 </project>
