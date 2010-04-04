@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import languish.interpreter.error.DependencyUnavailableError;
+import languish.compiler.error.DependencyUnavailableError;
 
 public class FileSystemDependencyManager implements DependencyManager {
 

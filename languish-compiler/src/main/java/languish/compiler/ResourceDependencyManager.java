@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
-import languish.interpreter.error.DependencyUnavailableError;
+import languish.compiler.error.DependencyUnavailableError;
 
 @Deprecated
 public class ResourceDependencyManager implements DependencyManager {
