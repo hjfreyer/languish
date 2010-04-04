@@ -1,8 +1,7 @@
 package languish.base;
 
-import java.io.Serializable;
 
-public class Primitive implements Serializable {
+public class Primitive {
 
 	private final Object wrapped;
 
