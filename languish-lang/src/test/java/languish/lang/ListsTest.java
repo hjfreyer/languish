@@ -3,6 +3,9 @@ package languish.lang;
 import junit.framework.TestCase;
 
 public class ListsTest extends TestCase {
+
+	public void test() {
+	}
 	//
 	// private static final Term SUM_REDUCE = app(Lists.reduce(), Integers.add());
 	//

@@ -3,6 +3,9 @@ package languish.lang;
 import junit.framework.TestCase;
 
 public class VisitorTest extends TestCase {
+
+	public void test() {
+	}
 	//
 	// private static final Term ADD_FORTYTWO =
 	// abs(app(app(Integers.add(), primObj(42)), ref(1)));

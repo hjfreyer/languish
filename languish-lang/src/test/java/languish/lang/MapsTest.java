@@ -3,6 +3,9 @@ package languish.lang;
 import junit.framework.TestCase;
 
 public class MapsTest extends TestCase {
+
+	public void test() {
+	}
 	//
 	// public void testGetFromEmpty() {
 	// Term map = Term.NULL;
