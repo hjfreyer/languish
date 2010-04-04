@@ -23,9 +23,7 @@ public class CompilerUtil {
 
 	public static List<String> convertTermToStringList(Term term) {
 		Tree<Primitive> prims = Interpreter.convertTermToJavaObject(term);
-		Tree<String> tree =
-				Trees.transform(Interpreter.convertTermToJavaObject(term), //
-						Primitives.asString());
+		Tree<String> tree = Trees.transform(prims, Primitives.asString());
 		List<String> strList =
 				Lists.transform(tree.asList(), Tree.<String> asLeafFunction());
 
