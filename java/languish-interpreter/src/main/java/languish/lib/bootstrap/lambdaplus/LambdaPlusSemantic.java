@@ -157,6 +157,17 @@ public class LambdaPlusSemantic {
 							return Tree.inode(app, cdr_func, cons);
 						}
 					})
+					.put("IS_PRIMITIVE_TERM", new Function<List<Object>, Object>() {
+						@SuppressWarnings("unchecked")
+						@Override
+						public Object apply(List<Object> arg) {
+							Tree<String> op = Tree.leaf("IS_PRIMITIVE");
+							Tree<String> arg1 = (Tree<String>) arg.get(2);
+							Tree<String> arg2 = StringTreeSerializer.serialize(Terms.NULL);
+
+							return Tree.inode(op, arg1, arg2);
+						}
+					})
 					.put("NATIVE_APPLY_TERM", new Function<List<Object>, Object>() {
 						@SuppressWarnings("unchecked")
 						@Override
@@ -191,6 +202,17 @@ public class LambdaPlusSemantic {
 						public Object apply(List<Object> arg) {
 							Tree<String> op = Tree.leaf("PRIMITIVE");
 							Tree<String> arg1 = Tree.leaf("s" + arg.get(0));
+							Tree<String> arg2 = StringTreeSerializer.serialize(Terms.NULL);
+
+							return Tree.inode(op, arg1, arg2);
+						}
+					})
+					.put("INT_LIT_TERM", new Function<List<Object>, Object>() {
+						@SuppressWarnings("unchecked")
+						@Override
+						public Object apply(List<Object> arg) {
+							Tree<String> op = Tree.leaf("PRIMITIVE");
+							Tree<String> arg1 = Tree.leaf("i" + arg.get(0));
 							Tree<String> arg2 = StringTreeSerializer.serialize(Terms.NULL);
 
 							return Tree.inode(op, arg1, arg2);

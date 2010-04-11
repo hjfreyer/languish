@@ -1,7 +1,6 @@
 
-#lang parsers/lambda_plus/parser;;
 
-#import base/equals;;
+#lang parsers/lambda_plus/parser;;
 
 [ABS
   [CONS                                        // Map = [CAR *VALUE*](
@@ -9,10 +8,9 @@
       [ABS                                     //   Self = 3
       [ABS                                     //   Function = 2
       [ABS                                     //   List = 1):
-        [APP [APP [APP [APP [CAR [REF 4]]      //     If Equals(
-            [REF 1]] NULL]                     //         List, NULL)
-          NULL                                 //     Then: Null
-        ]                                      //     Else: Function(List[0])::Map(List[1:-1])
+        [APP [APP [IS_PRIMITIVE [REF 1]]       //     If List == Null
+          NULL]                                //     Then: Null
+                                               //     Else: Function(List[0])::Map(List[1:-1])
           [CONS                                //       cons(
             [APP [REF 2] [CAR [REF 1]]]        //         Function(List[0]),
             [APP [APP [APP [REF 3] [REF 3]]    //         Self(Self,
@@ -20,7 +18,7 @@
               [CDR [REF 1]]]                   //           List[1:-1])
           ]                                    //       )
         ]                                      //     EndIf          
-      ]]] 
+      ]]]
     ]  
   [CONS                                            // Reduce = [CAR [CDR *VALUE*]]<
     [APP [ABS [APP [REF 1] [REF 1]]]               //   OMGEA
@@ -28,10 +26,8 @@
       [ABS                                         //   Function = 3
       [ABS                                         //   List = 2
       [ABS                                         //   StartingValue = 1>:
-        [APP [APP [APP [APP [CAR [REF 5]]          //     If Equals(
-            [REF 2]] NULL]                         //         List, NULL)
-          [REF 1]                                  //     Then: StartingValue
-        ]
+        [APP [APP [IS_PRIMITIVE [REF 2]]           //     If List == Null
+          [REF 1]]                                 //     Then: StartingValue
           [APP [APP [REF 3] [CAR [REF 2]]]         //     Else: Function(List[0], 
             [APP [APP [APP [APP [REF 4] [REF 4]]   //                    Self(Self, 
               [REF 3]]                             //                         Function, 
@@ -46,14 +42,11 @@
       [ABS                                         //   Self = 3
       [ABS                                         //   List = 2
       [ABS                                         //   Item = 1):
-        [APP [APP [APP [APP [CAR [REF 4]]          //     If Equals(
-            [REF 2]] NULL]                         //         List, NULL)
-          [ABS [ABS [REF 1]]]                      //     Then: FALSE
-        ]                                          //     Else:
-          [APP [APP [APP [APP [CAR [REF 4]]        //       If Equals(
-              [CAR [REF 2]]] [REF 1]]              //         List[0], Item)
-            [ABS [ABS [REF 2]]]                    //       Then: TRUE
-          ] 
+        [APP [APP [IS_PRIMITIVE [REF 2]]           //     If List == Null
+          [ABS [ABS [REF 1]]]]                     //     Then: FALSE
+                                                   //     Else:
+          [APP [APP [EQUALS [CAR [REF 2]] [REF 1]] //       If List[0] == Item
+            [ABS [ABS [REF 2]]]]                   //       Then: TRUE
             [APP [APP [APP [REF 3] [REF 3]]        //       Else: Self(Self,
               [CDR [REF 2]]]                       //                  List[1:-1],
               [REF 1]]                             //                  Item)

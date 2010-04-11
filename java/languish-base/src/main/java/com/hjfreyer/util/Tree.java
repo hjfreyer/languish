@@ -69,6 +69,10 @@ public class Tree<T> implements Reprable {
 		return (node instanceof List<?>);
 	}
 
+	public boolean isEmpty() {
+		return isList() && ((List<?>) node).isEmpty();
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<Tree<T>> asList() {
 		return (List<Tree<T>>) node;

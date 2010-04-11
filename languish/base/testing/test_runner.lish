@@ -1,0 +1,10 @@
+
+#lang parsers/lambda_plus/parser;;
+
+[ABS 
+  [ABS                                                      // ProcessTests
+    [NATIVE_APPLY "builtin/testing/test_runner" 
+      [REF 1]
+    ]
+  ]
+]

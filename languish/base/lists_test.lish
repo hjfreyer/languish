@@ -1,0 +1,216 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import base/lists, base/integers, base/testing/test_runner;;
+
+[ABS 
+  [ABS 
+    [APP [CAR [CDR [CDR [REF 2]]]]                              // Call test runner on tests:
+      [APP [ABS 
+[CONS
+  [CONS
+    "MapEmpty"
+  [CONS
+    NULL
+  [CONS
+    [APP [APP [CAR [CAR [REF 3]]] [CAR [REF 1]]] 
+      NULL
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "MapSingleElement"
+  [CONS
+    [CONS 45 NULL]
+  [CONS
+    [APP [APP [CAR [CAR [REF 3]]] [CAR [REF 1]]] 
+      [CONS 3 NULL]
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "MapSeveralInts"
+  [CONS
+    [CONS 46 [CONS 52 [CONS 54 [CONS 45 NULL]]]]
+  [CONS
+    [APP [APP [CAR [CAR [REF 3]]] [CAR [REF 1]]] 
+      [CONS 4 [CONS 10 [CONS 12 [CONS 3 NULL]]]]
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "MapSingleton"
+  [CONS
+    [CONS [CONS 4 NULL] [CONS [CONS [CONS 10 NULL] NULL] 
+        [CONS [CONS 12 NULL] [CONS [CONS 3 NULL] NULL]]]]
+  [CONS
+    [APP [APP [CAR [CAR [REF 3]]] [CAR [CDR [REF 1]]]] 
+      [CONS 4 [CONS [CONS 10 NULL] [CONS 12 [CONS 3 NULL]]]]
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "ReduceEmpty"
+  [CONS
+    1
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 3]]]] 
+      NULL
+    ] 
+      NULL
+    ]
+      1
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "ReduceSumOneElement"
+  [CONS
+    5
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 3]]]]
+      [CAR [CAR [CDR [REF 3]]]]
+    ] 
+      [CONS 4 NULL]
+    ]
+      1
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "ReduceSumSeveralElements"
+  [CONS
+    23
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 3]]]]
+      [CAR [CAR [CDR [REF 3]]]]
+    ] 
+      [CONS 4 [CONS 5 [CONS 6 [CONS 7 NULL]]]] 
+    ]
+      1
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "ReduceNonCommutativeFirst"
+  [CONS
+    4
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 3]]]]
+      [ABS [ABS [REF 2]]]
+    ] 
+      [CONS 4 [CONS 5 [CONS 6 [CONS 7 NULL]]]] 
+    ]
+      1
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "ReduceNonCommutativeLast"
+  [CONS
+    1
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 3]]]]
+      [ABS [ABS [REF 1]]]
+    ] 
+      [CONS 4 [CONS 5 [CONS 6 [CONS 7 NULL]]]] 
+    ]
+      1
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "MemberEmpty"
+  [CONS
+    "F"
+  [CONS
+    [APP [APP [APP [APP [CAR [CDR [CDR [CAR [REF 3]]]]]
+      NULL
+    ]
+      1
+    ] "T"] "F"]
+  NULL]]]
+[CONS
+  [CONS
+    "MemberOnlyElement"
+  [CONS
+    "T"
+  [CONS
+    [APP [APP [APP [APP [CAR [CDR [CDR [CAR [REF 3]]]]]
+      [CONS 1 NULL]
+    ]
+      1
+    ] "T"] "F"]
+  NULL]]]
+[CONS
+  [CONS
+    "MemberShouldReturnTrue"
+  [CONS
+    "T"
+  [CONS
+    [APP [APP [APP [APP [CAR [CDR [CDR [CAR [REF 3]]]]]
+      [CONS "foo" [CONS "bar" [CONS 5 NULL]]]
+    ]
+      "bar"
+    ] "T"] "F"]
+  NULL]]]
+[CONS
+  [CONS
+    "MemberShouldReturnFalse"
+  [CONS
+    "F"
+  [CONS
+    [APP [APP [APP [APP [CAR [CDR [CDR [CAR [REF 3]]]]]
+      [CONS "foo" [CONS "bar" [CONS 5 NULL]]]
+    ]
+      "baz"
+    ] "T"] "F"]
+  NULL]]]
+[CONS
+  [CONS
+    "MemberShouldContainNull"
+  [CONS
+    "T"
+  [CONS
+    [APP [APP [APP [APP [CAR [CDR [CDR [CAR [REF 3]]]]]
+      [CONS "foo" [CONS NULL [CONS 5 NULL]]]
+    ]
+      NULL
+    ] "T"] "F"]
+  NULL]]]
+[CONS
+  [CONS
+    "MemberShouldntFindInNested"
+  [CONS
+    "F"
+  [CONS
+    [APP [APP [APP [APP [CAR [CDR [CDR [CAR [REF 3]]]]]
+      [CONS "foo" [CONS [CONS 3 [CONS 4 NULL]] [CONS 5 NULL]]]
+    ]
+      3
+    ] "T"] "F"]
+  NULL]]]
+[CONS
+  [CONS
+    "MemberShouldContainNonemptyList"
+  [CONS
+    "T"
+  [CONS
+    [APP [APP [APP [APP [CAR [CDR [CDR [CAR [REF 3]]]]]
+      [CONS "foo" [CONS [CONS 3 [CONS 4 NULL]] [CONS 5 NULL]]]
+    ]
+      [CONS 3 [CONS 4 NULL]]
+    ] "T"] "F"]
+  NULL]]]
+NULL]]]]]]]]]]]]]]]]
+      ]
+        // Functions for testing
+        [CONS // Add 42
+          [ABS [APP [APP [CAR [CAR [CDR [REF 3]]]] 42] [REF 1]]]
+        [CONS // Singleton Wrapper
+          [ABS [CONS [REF 1] NULL]]
+        NULL]]
+      ]
+    ]
+  ]
+]

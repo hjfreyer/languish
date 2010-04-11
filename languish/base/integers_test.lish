@@ -1,0 +1,44 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import base/integers, base/testing/test_runner;;
+
+[ABS 
+  [ABS 
+    [APP [CAR [CDR [REF 2]]]                              // Call test runner on tests:
+      [CONS
+        [CONS
+          "TestAdd"
+        [CONS
+          8
+        [CONS
+          [APP [APP [CAR [CAR [REF 2]]] 3 ] 5]
+        NULL]]]
+      [CONS
+        [CONS
+          "TestAdd.2"
+        [CONS
+          12
+        [CONS
+          [APP [APP [CAR [CAR [REF 2]]] 7 ] 5]
+        NULL]]]
+      [CONS
+        [CONS
+          "TestMultiply"
+        [CONS
+          15
+        [CONS
+          [APP [APP [CAR [CDR [CAR [REF 2]]]] 3 ] 5]
+        NULL]]]
+      [CONS
+        [CONS
+          "TestMultiply.2"
+        [CONS
+          42
+        [CONS
+          [APP [APP [CAR [CDR [CAR [REF 2]]]] 7 ] 6]
+        NULL]]]
+      NULL]]]]
+    ]
+  ]
+]

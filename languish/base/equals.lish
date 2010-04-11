@@ -1,0 +1,37 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import base/bool;;
+
+[ABS                                         // EQUALS (
+  [APP [ABS [APP [REF 1] [REF 1]]]           //   OMGEA
+    [ABS                                     //   Self = 3
+    [ABS                                     //   A = 2
+    [ABS                                     //   B = 1):
+      [APP [APP [APP [APP [CAR [CAR [REF 4]]]//     If And(
+          [IS_PRIMITIVE [REF 2]]]            //         A is primitive,
+          [IS_PRIMITIVE [REF 1]]]            //         B is primitive):
+        [IS_PRIMITIVE                        //       DataEquals(A, B)
+            [NATIVE_APPLY "builtin/equals" 
+                [CONS [REF 2] 
+                [CONS [REF 1] NULL]]]]
+      ]                                      //     Else:
+        [APP [APP [APP [APP [CAR [CDR [CAR [REF 4]]]] //    If Or(
+            [IS_PRIMITIVE [REF 2]]]          //           A is primitive,
+            [IS_PRIMITIVE [REF 1]]]          //           B is primitive):
+          [ABS [ABS [REF 1]]]                //         False
+        ]                                    //       Else:        
+          [APP [APP [CAR [CAR [REF 4]]]      //         And(
+            [APP [APP [APP [REF 3] [REF 3]]  //           Self(Self,
+                [CAR [REF 2]]]               //                CAR(A),
+                [CAR [REF 1]]]               //                CAR(B)),
+          ]
+            [APP [APP [APP [REF 3] [REF 3]]  //           Self(Self,
+                [CDR [REF 2]]]               //                CDR(A),
+                [CDR [REF 1]]]               //                CDR(B)),
+          ]
+        ]
+      ]                              
+    ]]]
+  ]  
+]

@@ -1,0 +1,108 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import base/equals, base/testing/test_runner;;
+
+[ABS 
+  [ABS 
+    [APP [CAR [CDR [REF 2]]]                              // Call test runner on tests:
+      [CONS
+        [CONS
+          "Primitive.1"
+        [CONS
+          0
+        [CONS
+          [APP [APP [APP [APP [CAR [REF 2]] 
+            8
+          ] 
+            8
+          ] 0] 1]
+        NULL]]]
+      [CONS
+        [CONS
+          "Primitive.2"
+        [CONS
+          1
+        [CONS
+          [APP [APP [APP [APP [CAR [REF 2]] 
+            8
+          ] 
+            9
+          ] 0] 1]
+        NULL]]]
+      [CONS
+        [CONS
+          "PrimitiveString.1"
+        [CONS
+          1
+        [CONS
+          [APP [APP [APP [APP [CAR [REF 2]] 
+            "foobar"
+          ] 
+            "fooo"
+          ] 0] 1]
+        NULL]]]
+      [CONS
+        [CONS
+          "PrimitiveString.2"
+        [CONS
+          0
+        [CONS
+          [APP [APP [APP [APP [CAR [REF 2]] 
+            "fooo"
+          ] 
+            "fooo"
+          ] 0] 1]
+        NULL]]]
+      [CONS
+        [CONS
+          "PrimitiveAndNot.1"
+        [CONS
+          1
+        [CONS
+          [APP [APP [APP [APP [CAR [REF 2]] 
+            "fooo"
+          ] 
+            [CONS "fooo" NULL]
+          ] 0] 1]
+        NULL]]]
+      [CONS
+        [CONS
+          "PrimitiveAndNot.2"
+        [CONS
+          1
+        [CONS
+          [APP [APP [APP [APP [CAR [REF 2]] 
+            [CONS "fooo" NULL]
+          ] 
+            "fooo"
+          ] 0] 1]
+        NULL]]]
+      [CONS
+        [CONS
+          "PrimitiveAndNot.3"
+        [CONS
+          1
+        [CONS
+          [APP [APP [APP [APP [CAR [REF 2]] 
+            [CONS "fooo" NULL]
+          ] 
+            [CONS [CONS "fooo" NULL] NULL]
+          ] 0] 1]
+        NULL]]]
+      [CONS
+        [CONS
+          "ActualStructure.1"
+        [CONS
+          1
+        [CONS
+          [APP [APP [APP [APP [CAR [REF 2]] 
+            [CONS [CONS "foo" NULL] [CONS 3 NULL]]
+          ] 
+            [CONS [CONS 3 NULL] [CONS "foo" NULL]]
+          ] 0] 1]
+        NULL]]]
+      NULL]]]]]]]]
+    ]
+  ]
+]

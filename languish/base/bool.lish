@@ -1,0 +1,32 @@
+
+#lang parsers/lambda_plus/parser;;
+
+[ABS
+  [CONS                                        // AND = [CAR *VALUE*](
+    [ABS                                       //     A = 2
+    [ABS                                       //     B = 1):
+      [APP [APP [REF 2]                        //   If A:
+        [REF 1]                                //     B
+      ]                                        //   Else:
+        [ABS [ABS [REF 1]]]                    //     False
+      ]
+    ]]
+  [CONS                                        // OR = [CAR [CDR *VALUE*]](
+    [ABS                                       //     A = 2
+    [ABS                                       //     B = 1):
+      [APP [APP [REF 2]                        //   If A:
+        [ABS [ABS [REF 2]]]                    //     True
+      ]                                        //   Else:
+        [REF 1]                                //     B
+      ]
+    ]]
+  [CONS                                        // NOT = [CAR [CDR [CDR *VALUE*]]](
+    [ABS                                       //     A = 1):
+      [APP [APP [REF 1]                        //   If A:
+        [ABS [ABS [REF 1]]]                    //     False
+      ]                                        //   Else:
+        [ABS [ABS [REF 2]]]                    //     True
+      ]
+    ]
+  NULL]]]
+]

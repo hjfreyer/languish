@@ -1,12 +1,13 @@
 
-all:
-	echo "nothing to see here"
+all: test
 
 clean:
 	rm -rf target
 	(cd java && mvn clean)
 
-TESTFILES = target/results/base/integers_test.result
+TESTFILES = target/results/base/integers_test.result \
+	target/results/base/lists_test.result \
+	target/results/base/equals_test.result
 test: $(TESTFILES)
 
 COPY=mkdir -p `echo $@ | sed 's/\/[^/]*$$//' ` && cp -f $< $@
@@ -21,7 +22,28 @@ target/languish/base/integers_test.lish: languish/base/integers_test.lish \
 		target/languish/parsers/lambda_plus/parser.lish
 	$(COPY)
 
+target/languish/base/equals.lish: languish/base/equals.lish \
+		target/languish/base/bool.lish \
+		target/languish/parsers/lambda_plus/parser.lish
+	$(COPY)
+
+target/languish/base/equals_test.lish: languish/base/equals_test.lish \
+		target/languish/base/equals.lish \
+		target/languish/base/testing/test_runner.lish \
+		target/languish/parsers/lambda_plus/parser.lish
+	$(COPY)
+
+target/languish/base/bool.lish: languish/base/bool.lish \
+		target/languish/parsers/lambda_plus/parser.lish
+	$(COPY)
+
 target/languish/base/lists.lish: languish/base/lists.lish \
+		target/languish/parsers/lambda_plus/parser.lish
+	$(COPY)
+
+target/languish/base/lists_test.lish: languish/base/lists_test.lish \
+		target/languish/base/lists.lish \
+		target/languish/base/testing/test_runner.lish \
 		target/languish/parsers/lambda_plus/parser.lish
 	$(COPY)
 
