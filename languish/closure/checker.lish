@@ -1,0 +1,7 @@
+
+#lang parsers/lambda_plus/parser;;
+
+[ABS 
+[ABS 
+  [ABS [ABS [REF 2]]]
+]]

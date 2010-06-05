@@ -1,0 +1,13 @@
+
+#lang parsers/lambda_plus/parser;;
+
+[ABS                                         // EVALUATE_CLOSURE (
+  [ABS                                       //     Closure = 2
+  [ABS                                       //     Argv = 1):
+    [CAR [CDR [CDR [CDR [CDR                 //   ToString(
+      [APP [CAR [REF 2]]                     //       Evaluate(Closure, abs(argv)))
+        [ABS [REF 2]]
+      ]
+    ]]]]]
+  ]]
+] 

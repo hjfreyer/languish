@@ -1,0 +1,21 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import base/lists;;
+
+[ABS                                         // GENERIC_DRIVER (
+  [ABS                                       //     Evaluator = 4
+  [ABS                                       //     Checker = 3
+  [ABS                                       //     Expression = 2
+  [ABS                                       //     Argv = 1):
+    [APP [APP                                //   If Member(Argv, "--check") 
+        [APP [APP [CAR [CDR [CDR [CAR [REF 5]]]]]
+            [REF 1]] "--check"]
+      [APP [APP [APP [REF 3] [REF 2]]        //     If Check(Expression) 
+        "CHECK = SUCCESSFUL"]                //       Then: Success
+        "CHECK = FAILURE"]                   //       Else: Failure
+    ]                                        //
+      [APP [APP [REF 4] [REF 2]] [REF 1]]
+    ]
+  ]]]]
+]

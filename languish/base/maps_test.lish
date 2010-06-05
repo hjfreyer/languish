@@ -1,0 +1,86 @@
+
+
+#lang parsers/lambda_plus/parser;;
+
+#import base/maps, base/testing/test_runner;;
+
+[ABS 
+  [ABS 
+    [APP [CAR [CDR [REF 2]]]                              // Call test runner on tests:
+[CONS
+  [CONS
+    "GetFromEmpty"
+  [CONS
+    "default"
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 2]]]]
+      NULL
+    ]
+      "key"
+    ]
+      "default"
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "GetFromEmptyWithNullKey"
+  [CONS
+    "default"
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 2]]]]
+      NULL
+    ]
+      NULL
+    ]
+      "default"
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "GetDefaultIsAFunction"
+  [CONS
+    "wrapped"
+  [CONS
+    [APP
+      [APP [APP [APP [CAR [CDR [CAR [REF 2]]]]
+        NULL
+      ]
+        NULL
+      ]
+        [ABS "wrapped"]
+      ]
+      NULL
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "GetSingleElementSuccess"
+  [CONS
+    "bar"
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 2]]]]
+      [APP [APP [APP [CAR [CAR [REF 2]]] NULL] "foo"] "bar"]
+    ]
+      "foo"
+    ]
+      "default"
+    ]
+  NULL]]]
+[CONS
+  [CONS
+    "GetSingleElementFailure"
+  [CONS
+    "default"
+  [CONS
+    [APP [APP [APP [CAR [CDR [CAR [REF 2]]]]
+      [APP [APP [APP [CAR [CAR [REF 2]]] NULL] "foo"] "bar"]
+    ]
+      "bar"
+    ]
+      "default"
+    ]
+  NULL]]]
+NULL]]]]]
+    ]
+  ]
+]

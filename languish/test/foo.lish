@@ -1,0 +1,94 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import closure/driver;;
+
+module {
+  x = Function(ns) {3};
+  y = Function(ns) {4};
+  sum = Function(ns) {x + y};
+}
+
+module.sum
+
+list_class = Bind(
+  "base", 
+  3,
+  ScopedObject({
+    "Size" : Bind (
+        "one",
+        1,
+        Function(one, base, Size, Add) {
+          Add(one, Size(base.cdr))
+        }
+      ),
+
+    "SizeSquared" : Function(base, Size) {
+      Size(base) * Size(base)
+    }
+  })
+)
+
+
+ScopedObject.__getattr__(map, attr) {
+  BindAll(map.get(attr), map)
+}
+
+Bind("base", blah, list_class)
+
+
+[ABS
+  [APP [CAR [REF 1]]
+      [CONS 
+        [ABS 
+          [CONS 
+            NULL
+          [CONS 
+            NULL
+          [CONS 
+            NULL
+          [CONS 
+            NULL
+          [CONS 
+            [REF 1]
+          NULL]]]]]
+        ]
+      [CONS 
+        NULL
+      [CONS 
+        NULL
+      [CONS 
+        NULL
+      [CONS 
+      "fooobar"
+      NULL]]]]]
+  ]
+]
+
+scoped_ns({
+  "SimpleList" : scoped_ns({
+    "__type__" : ...
+    "__instance__" : evaluate(function,
+                              return_type=__type__,
+                              arg_type=ns_type
+                              
+  })
+})
+
+type Iterator {
+  id car;
+  Iterator? cdr;
+}
+
+type Map {
+  Iterator keys;
+  id get(id key);
+}
+
+"List" : ns({
+  __
+
+  __instance(self)__ {
+
+  }
+})

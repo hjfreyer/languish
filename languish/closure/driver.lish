@@ -1,0 +1,13 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import base/generic_driver, closure/evaluator, closure/checker;;
+
+[ABS                                        // CLOSURE_DRIVER (
+  [ABS                                      //     CLOSURE = 1):
+    [APP [APP [APP [CAR [REF 2]]
+         [CAR [CDR [REF 2]]]]
+         [CAR [CDR [CDR [REF 2]]]]]
+         [REF 1]]
+  ]
+]

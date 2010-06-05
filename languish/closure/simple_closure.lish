@@ -1,0 +1,19 @@
+
+#lang parsers/lambda_plus/parser;;
+
+[ABS                                         // SIMPLE_CLOSURE (
+  [ABS                                       //     eval = 2
+  [ABS                                       //     to_string = 1):
+    [CONS 
+      [REF 2]
+    [CONS 
+      NULL
+    [CONS 
+      NULL
+    [CONS 
+      NULL
+    [CONS 
+      [REF 1]
+    NULL]]]]]
+  ]]
+] 

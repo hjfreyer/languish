@@ -1,0 +1,19 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import base/maps, closure/simple_closure;;
+
+[ABS                                         // SIMPLE_NS_CLOSURE (
+  [ABS                                       //     map = 1):
+    [APP [APP [CAR [CDR [REF 2]]]            //   SimpleClosure(
+      [ABS                                   //       func(ns) 
+        [APP [APP [APP 
+            [CAR [CDR [CAR [REF 3]]]]        //     Maps.Get(
+            [REF 2]]                         //         map,
+            [APP [REF 1] "name"]]            //         ns("name"),
+            NULL]                            //         NULL) 
+      ]]
+      "Simple NS Closure"
+    ]
+  ]
+] 
