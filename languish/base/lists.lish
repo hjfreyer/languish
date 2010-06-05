@@ -40,7 +40,7 @@
           ]                                        //
         ]                                          //     EndIf  
       ]]]] 
-    ] 
+    ]  
   [CONS                                            // Member = [CAR [CDR [CDR *VALUE*]]](
     [APP [ABS [APP [REF 1] [REF 1]]]               //   OMGEA
       [ABS                                         //   Self = 3
