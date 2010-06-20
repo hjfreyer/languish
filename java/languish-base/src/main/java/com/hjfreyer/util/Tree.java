@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
-import com.google.common.base.Join;
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
@@ -118,8 +118,9 @@ public class Tree<T> implements Reprable {
 			return node.toString();
 		}
 
-		List<String> children = Lists.transform(asList(), Functions.TO_STRING);
-		return "[" + Join.join(", ", children) + "]";
+		List<String> children =
+				Lists.transform(asList(), Functions.toStringFunction());
+		return "[" + Joiner.on(", ").join(children) + "]";
 	}
 
 	@Override
@@ -129,6 +130,6 @@ public class Tree<T> implements Reprable {
 		}
 
 		List<String> reprs = Lists.transform(asList(), Repr.TO_REPR);
-		return "Tree.inode(" + Join.join(", ", reprs) + ")";
+		return "Tree.inode(" + Joiner.on(", ").join(reprs) + ")";
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import languish.base.Terms;
 import languish.parsing.api.SemanticModule;
+import languish.parsing.api.SemanticModules;
 import languish.serialization.StringTreeSerializer;
 
 import com.google.common.base.Function;
@@ -16,7 +17,7 @@ import com.hjfreyer.util.Tree;
 public class LambdaPlusSemantic {
 
 	public static final Map<String, Function<String, Object>> IDENTITY_LEAF_RULES =
-			SemanticModule.getIdentityLeafRules(ImmutableList.of(
+			SemanticModules.getIdentityLeafRules(ImmutableList.of(
 					"ABS",
 					"APP",
 					"CONS",

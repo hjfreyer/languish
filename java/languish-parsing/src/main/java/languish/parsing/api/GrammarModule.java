@@ -14,9 +14,9 @@ import org.codehaus.jparsec.pattern.Patterns;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
 import com.hjfreyer.util.Pair;
 import com.hjfreyer.util.Tree;
 
@@ -96,8 +96,8 @@ public class GrammarModule {
 			List<String> tokenNames,
 			List<Sequence> rules) {
 
-		Multimap<String, Sequence> rulesMap = Multimaps.newLinkedListMultimap();
-
+		Multimap<String, Sequence> rulesMap =
+				LinkedListMultimap.<String, Sequence> create();
 		for (Sequence rule : rules) {
 			rulesMap.put(rule.getNonterminal(), rule);
 		}
