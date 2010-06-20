@@ -25,7 +25,7 @@ public class StringTreeSerializer {
 		if (term.getOperation() == Operation.NATIVE_APPLY) {
 			return Tree.inode(Tree.leaf("NATIVE_APPLY"), //
 					Tree.leaf(term.getFirst().toString()),
-					serialize((Term) term.getFirst()));
+					serialize((Term) term.getSecond()));
 		}
 
 		Tree<String> op = Tree.leaf(term.getOperation().toString());
