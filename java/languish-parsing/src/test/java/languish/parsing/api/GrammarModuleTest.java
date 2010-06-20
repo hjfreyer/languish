@@ -186,7 +186,6 @@ public class GrammarModuleTest extends TestCase {
 				"2"), actual);
 	}
 
-	@SuppressWarnings("unchecked")
 	public static final List<Pair<String, String>> CALC_TOKENS =
 			ImmutableList.of( //
 					Pair.of("INT", "[0-9]+"),
