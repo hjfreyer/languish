@@ -5,47 +5,47 @@ import java.util.Map;
 
 import languish.base.Terms;
 import languish.parsing.api.SemanticModule;
+import languish.parsing.api.SemanticModules;
 import languish.serialization.StringTreeSerializer;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 import com.hjfreyer.util.Tree;
 
 public class NamespaceSemantic {
 
+	// public static class Selector {
+	// enum Type {
+	// GET_ATTR, CALL_METHOD
+	// };
+	//
+	// Type type;
+	// Tree<String> arg;
+	// }
+
 	public static final Map<String, Function<String, Object>> IDENTITY_LEAF_RULES =
-			SemanticModule.getIdentityLeafRules(ImmutableList.of(
-					"ABS",
-					"APP",
-					"CONS",
-					"CAR",
-					"CDR",
-					"EQUALS",
-					"REF",
-					"NULL",
-					"IMPORT_DIRECTIVE",
-					"IMPORT_IDENT",
-					"INTEGER_LIT",
-					",",
-					";;"));
+			SemanticModules.getIdentityLeafRules(ImmutableList.of(
+					"Namespaces.LAMBDA_KEYWORD",
+					"DOT",
+					"IDENT",
+					"(",
+					")"));
 
 	public static final Map<String, Function<String, Object>> LEAF_RULES =
 			ImmutableMap.<String, Function<String, Object>> builder() //
 					.putAll(IDENTITY_LEAF_RULES)
-					.put("STRING_LIT", new Function<String, Object>() {
-						@Override
-						public Object apply(String arg) {
-							return arg.substring(1, arg.length() - 1);
-						}
-					})
 					.build();
+
+	public static final Map<String, Function<List<Object>, Object>> EMPTY_RULES =
+			SemanticModules.getEmptyListLeafRules(ImmutableList
+					.of("Namespaces.EXPRESSION.SELECTORS.Empty"));
 
 	public static final Map<String, Function<List<Object>, Object>> INODE_RULES =
 			ImmutableMap.<String, Function<List<Object>, Object>> builder() //
+					.putAll(EMPTY_RULES)
 					.put(
-							"LambdaPlusGrammar.COMPILATION_UNIT",
+							"Namespaces.COMPILATION_UNIT",
 							new Function<List<Object>, Object>() {
 								@SuppressWarnings("unchecked")
 								@Override
@@ -56,59 +56,19 @@ public class NamespaceSemantic {
 									return Tree.inode(Tree.<String> copyOf(imports), code);
 								}
 							})
-					.put("EMPTY_IMPORT", new Function<List<Object>, Object>() {
-						@Override
-						public Object apply(List<Object> arg) {
-							return ImmutableList.of();
-						}
-					})
-					.put("IMPORT_STATEMENT", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
-						@Override
-						public Object apply(List<Object> arg) {
-							String car = (String) arg.get(1);
-							List<String> cdr = (List<String>) arg.get(2);
 
-							List<String> result = Lists.newLinkedList();
+					.put(
+							"Namespaces.EXPRESSION.SELECTORS.CALL_METHOD",
+							new Function<List<Object>, Object>() {
+								@SuppressWarnings("unchecked")
+								@Override
+								public Object apply(List<Object> arg) {
+									Tree<String> call_arg = (Tree<String>) arg.get(1);
+									List<Tree<String>> rest = (List<Tree<String>>) arg.get(3);
 
-							result.add(car);
-							result.addAll(cdr);
-
-							return ImmutableList.copyOf(result);
-						}
-					})
-					.put("IMPORT_TAIL_END", new Function<List<Object>, Object>() {
-						@Override
-						public Object apply(List<Object> arg) {
-							return ImmutableList.of();
-						}
-					})
-					.put("IMPORT_TAIL_CONT", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
-						@Override
-						public Object apply(List<Object> arg) {
-							String car = (String) arg.get(1);
-							List<String> cdr = (List<String>) arg.get(2);
-
-							List<String> result = Lists.newLinkedList();
-
-							result.add(car);
-							result.addAll(cdr);
-
-							return ImmutableList.copyOf(result);
-						}
-					})
-					.put("ABS_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
-						@Override
-						public Object apply(List<Object> arg) {
-							Tree<String> op = Tree.leaf("ABS");
-							Tree<String> arg1 = (Tree<String>) arg.get(2);
-							Tree<String> arg2 = StringTreeSerializer.serialize(Terms.NULL);
-
-							return Tree.inode(op, arg1, arg2);
-						}
-					})
+									return ImmutableList.builder().build();
+								}
+							})
 					.put("APP_TERM", new Function<List<Object>, Object>() {
 						@SuppressWarnings("unchecked")
 						@Override

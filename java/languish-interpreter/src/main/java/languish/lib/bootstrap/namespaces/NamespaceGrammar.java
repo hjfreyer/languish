@@ -13,29 +13,49 @@ public class NamespaceGrammar {
 
 	@SuppressWarnings("unchecked")
 	public static final List<Pair<String, String>> TOKENS = ImmutableList.of( // 
+			Pair.of("Namespaces.NATIVE_KEYWORD", "___NATIVE___"),
+			Pair.of("DOT", "."),
+			Pair.of("IDENT", "[a-zA-Z_][a-zA-Z0-9_]*"),
 			Pair.of("(", "("),
 			Pair.of(")", ")"));
 
 	public static final List<Sequence> RULES =
-			ImmutableList.of( //
-					// Compilation unit
+			ImmutableList.of(
+			// Compilation unit
 					Sequence.of(
-							"NamespaceGrammar.COMPILATION_UNIT",
-							"NamespaceGrammar.COMPILATION_UNIT",
+							"Namespaces.COMPILATION_UNIT",
+							"Namespaces.COMPILATION_UNIT",
 							"IMPORT_STATEMENT",
 							"TERM"),
 					// Terms
-					Sequence.of("TERM", "TERM", "(", "TERM", ")"),
 					Sequence.of(
+							"Namespaces.EXPRESSION.BASE",
+							"NATIVE_TERM",
+							"Namespaces.NATIVE_KEYWORD",
+							"(",
 							"TERM",
-							"SET_TERM",
-							"[",
-							"SET",
-							"TERM",
-							"TERM",
-							"TERM",
-							"]"),
-					Sequence.of("TERM", "SELF_TERM", "SELF"));
+							")"),
+					// Sequence.of(
+					// "Namespaces.EXPRESSION.SELECTORS",
+					// "Namespaces.EXPRESSION.SELECTORS.GET_ATTR",
+					// "DOT",
+					// "IDENT",
+					// "Namespaces.EXPRESSION.SELECTORS"),
+					Sequence.of(
+							"Namespaces.EXPRESSION.SELECTORS",
+							"Namespaces.EXPRESSION.SELECTORS.CALL_METHOD",
+							"(",
+							"Namespaces.EXPRESSION",
+							")",
+							"Namespaces.EXPRESSION.SELECTORS"),
+					Sequence.of(
+							"Namespaces.EXPRESSION.SELECTORS",
+							"Namespaces.EXPRESSION.SELECTORS.Empty"),
+					Sequence.of(
+							"Namespaces.EXPRESSION",
+							"Namespaces.EXPRESSION",
+							"Namespaces.EXPRESSION.BASE",
+							"Namespaces.EXPRESSION.SELECTORS"));
 
 	public static final GrammarModule GRAMMAR =
 			LambdaPlusGrammar.GRAMMAR.extend(new GrammarModule(
