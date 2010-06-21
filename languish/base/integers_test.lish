@@ -1,7 +1,7 @@
 
 #lang parsers/lambda_plus/parser;;
 
-#import base/integers, base/testing/test_runner;;
+#import "base/integers", "base/testing/test_runner";;
 
 [ABS 
   [ABS 

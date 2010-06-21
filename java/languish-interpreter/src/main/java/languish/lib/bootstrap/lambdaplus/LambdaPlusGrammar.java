@@ -26,7 +26,6 @@ public class LambdaPlusGrammar {
 			Pair.of("STRING_LIT", "\"(((\\\\.)|[^\"\\\\])*)\""),
 			Pair.of("INTEGER_LIT", "[0-9]+"),
 			Pair.of("IMPORT_DIRECTIVE", "#import"),
-			Pair.of("IMPORT_IDENT", "[a-zA-Z0-9_/]+"),
 			Pair.of(",", ","),
 			Pair.of(";;", ";;"));
 
@@ -46,14 +45,14 @@ public class LambdaPlusGrammar {
 							"IMPORT_STATEMENT",
 							"IMPORT_STATEMENT",
 							"IMPORT_DIRECTIVE",
-							"IMPORT_IDENT",
+							"STRING_LIT",
 							"IMPORT_TAIL"),
 					Sequence.of("IMPORT_STATEMENT", "EMPTY_IMPORT"),
 					Sequence.of(
 							"IMPORT_TAIL",
 							"IMPORT_TAIL_CONT",
 							",",
-							"IMPORT_IDENT",
+							"STRING_LIT",
 							"IMPORT_TAIL"),
 					Sequence.of("IMPORT_TAIL", "IMPORT_TAIL_END", ";;"),
 					// Terms

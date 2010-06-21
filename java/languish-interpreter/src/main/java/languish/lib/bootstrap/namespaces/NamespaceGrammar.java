@@ -11,13 +11,12 @@ import com.hjfreyer.util.Pair;
 
 public class NamespaceGrammar {
 
-	@SuppressWarnings("unchecked")
 	public static final List<Pair<String, String>> TOKENS = ImmutableList.of( // 
 			Pair.of("Namespaces.NATIVE_KEYWORD", "___NATIVE___"),
-			Pair.of("DOT", "."),
+			Pair.of("DOT", "[.]"),
 			Pair.of("IDENT", "[a-zA-Z_][a-zA-Z0-9_]*"),
-			Pair.of("(", "("),
-			Pair.of(")", ")"));
+			Pair.of("(", "[(]"),
+			Pair.of(")", "[)]"));
 
 	public static final List<Sequence> RULES =
 			ImmutableList.of(
@@ -26,11 +25,11 @@ public class NamespaceGrammar {
 							"Namespaces.COMPILATION_UNIT",
 							"Namespaces.COMPILATION_UNIT",
 							"IMPORT_STATEMENT",
-							"TERM"),
+							"Namespaces.EXPRESSION"),
 					// Terms
 					Sequence.of(
 							"Namespaces.EXPRESSION.BASE",
-							"NATIVE_TERM",
+							"Namespaces.NATIVE_TERM",
 							"Namespaces.NATIVE_KEYWORD",
 							"(",
 							"TERM",
@@ -59,7 +58,7 @@ public class NamespaceGrammar {
 
 	public static final GrammarModule GRAMMAR =
 			LambdaPlusGrammar.GRAMMAR.extend(new GrammarModule(
-					"NamespaceGrammar.COMPILATION_UNIT",
+					"Namespaces.COMPILATION_UNIT",
 					TOKENS,
 					ImmutableList.<String> of(),
 					RULES));

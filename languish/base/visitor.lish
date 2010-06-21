@@ -2,7 +2,7 @@
 
 #lang parsers/lambda_plus/parser;;
 
-#import base/lists, base/maps;;
+#import "base/lists", "base/maps";;
 
 [ABS
   [CONS                                  // VisitTree = [CAR *REF*] (

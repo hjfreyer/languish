@@ -1,0 +1,10 @@
+
+
+["ABS" 
+  ["ABS" 
+    ["NATIVE_APPLY" 
+      "builtin/parsers/namespace/native_parse"
+      ["REF" "1" ["PRIMITIVE" "i0" "i0"]]
+    ]
+  ["PRIMITIVE" "i0" "i0"]]
+["PRIMITIVE" "i0" "i0"]]

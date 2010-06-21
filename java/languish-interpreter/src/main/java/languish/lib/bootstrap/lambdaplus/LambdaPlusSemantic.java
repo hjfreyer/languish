@@ -27,7 +27,6 @@ public class LambdaPlusSemantic {
 					"REF",
 					"NULL",
 					"IMPORT_DIRECTIVE",
-					"IMPORT_IDENT",
 					"INTEGER_LIT",
 					",",
 					";;"));

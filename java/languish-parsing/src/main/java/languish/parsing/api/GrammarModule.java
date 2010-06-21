@@ -3,6 +3,8 @@ package languish.parsing.api;
 import java.util.HashMap;
 import java.util.List;
 
+import languish.parsing.error.InternalParsingError;
+
 import org.codehaus.jparsec.Parser;
 import org.codehaus.jparsec.Parsers;
 import org.codehaus.jparsec.Scanners;
@@ -134,6 +136,10 @@ public class GrammarModule {
 
 		for (String type : nontermParsers.keySet()) {
 			parserRefs.get(type).set(nontermParsers.get(type));
+		}
+
+		if (!nontermParsers.containsKey(rootRule)) {
+			throw new InternalParsingError("rootRule not a rule");
 		}
 
 		return nontermParsers.get(rootRule);

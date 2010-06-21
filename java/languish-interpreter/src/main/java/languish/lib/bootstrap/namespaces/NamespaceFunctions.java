@@ -15,8 +15,9 @@ public class NamespaceFunctions {
 		@Override
 		public Tree<Primitive> apply(Tree<Primitive> arg) {
 			Tree<String> ast =
-					NamespaceGrammar.GRAMMAR.getAstParser().parse(
-							arg.asLeaf().asString());
+					NamespaceGrammar.GRAMMAR
+							.getAstParser()
+							.parse(arg.asLeaf().asString());
 			Tree<String> module =
 					(Tree<String>) NamespaceSemantic.LAMBDA_PLUS_SEMANTIC.process(ast);
 
@@ -28,6 +29,6 @@ public class NamespaceFunctions {
 
 	public static final Map<String, ? extends NativeFunction> FUNCTION_MAP =
 			ImmutableMap.<String, NativeFunction> builder()//
-					.put("builtin/parsers/lambda_plus/native_parse", PARSE)
+					.put("builtin/parsers/namespace/native_parse", PARSE)
 					.build();
 }

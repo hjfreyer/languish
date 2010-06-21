@@ -9,6 +9,7 @@ import languish.lib.MathFunctions;
 import languish.lib.ParsersFunctions;
 import languish.lib.TestingFunctions;
 import languish.lib.bootstrap.lambdaplus.LambdaPlusFunctions;
+import languish.lib.bootstrap.namespaces.NamespaceFunctions;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -21,6 +22,7 @@ public class StandardLib {
 					.putAll(ParsersFunctions.FUNCTION_MAP)
 					.putAll(GrammarFunctions.FUNCTION_MAP)
 					.putAll(LambdaPlusFunctions.FUNCTION_MAP)
+					.putAll(NamespaceFunctions.FUNCTION_MAP)
 					.putAll(TestingFunctions.FUNCTION_MAP)
 					.putAll(DataFunctions.FUNCTION_MAP)
 					.build();

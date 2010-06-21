@@ -1,7 +1,7 @@
 
 #lang parsers/lambda_plus/parser;;
 
-#import base/lists;;
+#import "base/lists";;
 
 [ABS                                         // GENERIC_DRIVER (
   [ABS                                       //     Evaluator = 4

@@ -1,7 +1,7 @@
 
 #lang parsers/lambda_plus/parser;;
 
-#import base/bool;;
+#import "base/bool";;
 
 [ABS                                         // EQUALS (
   [APP [ABS [APP [REF 1] [REF 1]]]           //   OMGEA
