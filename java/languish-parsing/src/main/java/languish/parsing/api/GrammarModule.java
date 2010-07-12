@@ -67,8 +67,11 @@ public class GrammarModule {
 			final String regex = tokenType.getSecond();
 
 			Parser<Fragment> token =
-					Scanners.pattern(Patterns.regex(regex), tag).source().map(
-							new Map<String, Fragment>() {
+					Scanners
+							.pattern(Patterns.regex(regex), tag)
+							.source()
+							.map(new Map<String, Fragment>() {
+								@Override
 								public Fragment map(String from) {
 									return Tokens.fragment(from, tag);
 								}
@@ -115,14 +118,17 @@ public class GrammarModule {
 		}
 
 		for (final String tokenName : tokenNames) {
-			nontermParsers.put(tokenName, Terminals.fragment(tokenName.intern()).map(
-					new Map<String, Tree<String>>() {
+			nontermParsers.put(
+					tokenName,
+					Terminals.fragment(tokenName.intern()).map(
+							new Map<String, Tree<String>>() {
 
-						@SuppressWarnings("unchecked")
-						public Tree<String> map(String from) {
-							return Tree.inode(Tree.leaf(tokenName), Tree.leaf(from));
-						}
-					}));
+								@Override
+								@SuppressWarnings("unchecked")
+								public Tree<String> map(String from) {
+									return Tree.inode(Tree.leaf(tokenName), Tree.leaf(from));
+								}
+							}));
 
 			parserRefs.put(tokenName, Parser.<Tree<String>> newReference());
 		}

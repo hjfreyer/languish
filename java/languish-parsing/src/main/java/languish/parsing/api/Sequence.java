@@ -32,6 +32,7 @@ public class Sequence {
 				Lists.transform(
 						subExpressions,
 						new Function<String, Parser<Tree<String>>>() {
+							@Override
 							public Parser<Tree<String>> apply(String from) {
 								if (!refs.containsKey(from)) {
 									throw new IllegalArgumentException(
