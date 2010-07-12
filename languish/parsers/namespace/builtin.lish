@@ -1,0 +1,27 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import "base/maps";;
+
+[ABS  // Imports
+  [ABS  // Name
+    [APP [APP [APP [CAR [CDR [CAR [REF 2]]]] // MapGet 
+      [APP [CAR [CDR [CDR [CAR [REF 2]]]]]   // MapFromList
+[CONS 
+  "echo"
+[CONS
+  [CONS "echo func" 
+  [CONS 
+    [ABS // env
+      [APP [REF 1] "arg"]
+    ]
+  NULL]]
+NULL]]
+      ]
+    ]
+      [REF 1]
+    ] 
+      "no builtin"
+    ]
+  ]
+]

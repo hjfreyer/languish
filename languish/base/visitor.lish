@@ -5,7 +5,7 @@
 #import "base/lists", "base/maps";;
 
 [ABS
-  [CONS                                  // VisitTree = [CAR *REF*] (
+                                         // VisitTree = [CAR *REF*] (
     [APP [ABS [APP [REF 1] [REF 1]]]     //     OMEGA
     [ABS                                 //     Self        = 4
     [ABS                                 //     FunctionMap = 3
@@ -20,7 +20,7 @@
                 [CAR [CDR [REF 5]]]]]   
             [REF 3]]                     //         FunctionMap,
             [CAR [REF 1]]]               //         Tree[0],
-            NULL]                        //         NULL),
+            "no leaf"]                   //         NULL),
           [CAR [CDR [REF 1]]]            //     To: Tree[1]
         ]
       ]                                  //   Else: FunctionMap[Tree[0]](Map(Self, Tree[1]))
@@ -30,7 +30,7 @@
                 [CAR [CDR [REF 5]]]]]        
             [REF 3]]                     //         FunctionMap,
             [CAR [REF 1]]]               //         Tree[0],
-            NULL]                        //         NULL),
+            "no inode"]                  //         NULL),
           [APP [APP                      //     To: Map(Self, Tree[1])
             [CAR [CAR [REF 5]]]          //       Map(
             [APP [APP [APP [REF 4]       //         Self(
@@ -43,5 +43,4 @@
         ]
       ]
     ]]]]]
-  NULL]
 ]

@@ -11,6 +11,7 @@
       [CONS [CONS [REF 2] [CONS [REF 1] NULL]]
         [REF 3]]
     ]]]
+
   [CONS                                        // GET = [CAR [CDR *VALUE*]](
     [APP [ABS [APP [REF 1] [REF 1]]]           //     OMGEA
     [ABS                                       //     Self    = 4
@@ -32,8 +33,27 @@
         ]
       ]
     ]]]]]
-  NULL]]
+
+  [CONS                                        // FROM_LIST = [CAR [CDR [CDR *VALUE*]]](
+    [APP [ABS [APP [REF 1] [REF 1]]]           //     OMGEA
+    [ABS                                       //     Self    = 2
+    [ABS                                       //     List    = 1):
+      [APP [APP [APP [APP [CAR [REF 3]]        //   If Equals(
+            [REF 1]] NULL]                     //       List, Null):
+        NULL                                   //     NULL
+      ]                                        //   Else: 
+        [CONS                                  //     [ 
+          [CONS [CAR [REF 1]]                  //       [ List[0],
+          [CONS [CAR [CDR [REF 1]]] NULL]]     //         List[1] ] ] +
+
+          [APP [APP [REF 2] [REF 2]]           //       Self(Self,
+              [CDR [CDR [REF 1]]]]             //            List[2:])
+        ]
+      ]
+    ]]]
+  NULL]]]
 ]
+
 //[CONS [PRIMITIVE "VALUE"]
 //  // MAP_GET = [CAR *VALUE*]
 //  [CONS

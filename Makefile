@@ -10,6 +10,7 @@ TESTFILES = \
 	target/results/base/lists_test.result \
 	target/results/base/maps_test.result \
 	target/results/base/equals_test.result \
+	target/results/base/visitor_test.result \
 
 test: $(TESTFILES)
 
@@ -64,6 +65,12 @@ target/languish/base/visitor.lish: languish/base/lists.lish \
 		target/languish/parsers/lambda_plus/parser.lish \
 		target/languish/base/lists.lish \
 		target/languish/base/maps.lish
+	$(COPY)
+
+target/languish/base/visitor_test.lish: languish/base/visitor_test.lish \
+		target/languish/base/visitor.lish \
+		target/languish/base/testing/test_runner.lish \
+		target/languish/parsers/lambda_plus/parser.lish
 	$(COPY)
 
 target/languish/base/testing/test_runner.lish: languish/base/testing/test_runner.lish \

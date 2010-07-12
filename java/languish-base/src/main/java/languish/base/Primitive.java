@@ -1,6 +1,5 @@
 package languish.base;
 
-
 public class Primitive {
 
 	private final Object wrapped;
@@ -60,6 +59,6 @@ public class Primitive {
 
 	@Override
 	public String toString() {
-		return "prim: " + wrapped;
+		return wrapped.toString();
 	}
 }

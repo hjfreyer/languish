@@ -6,12 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import languish.base.error.AlreadyReducedError;
+import languish.base.error.InvalidApplicationException;
+
+import org.apache.log4j.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.hjfreyer.util.Tree;
 
 public class Reducer {
+	static Logger log = Logger.getLogger(Reducer.class);
 
 	private final Map<String, NativeFunction> nativeFunctions;
 
@@ -28,7 +32,11 @@ public class Reducer {
 			Term arg = (Term) term.getSecond();
 
 			if (func.getOperation() != ABS) {
-				return Terms.app(reduce(func), arg);
+				try {
+					return Terms.app(reduce(func), arg);
+				} catch (AlreadyReducedError e) {
+					throw new InvalidApplicationException(term);
+				}
 			}
 
 			assert !hasReferencesGreaterThan(arg, 0);
@@ -53,10 +61,15 @@ public class Reducer {
 				throw new RuntimeException("Function not supported: " + funcName);
 			}
 
+			log.info("Calling native function: " + funcName);
+
 			NativeFunction nativeFunc = nativeFunctions.get(funcName);
 
 			Tree<Primitive> argObject = convertTermToJavaObject(arg);
+			log.debug("With argument: " + argObject);
+
 			Tree<Primitive> result = nativeFunc.apply(argObject);
+			log.debug("Result is: " + result);
 
 			return Terms.fromPrimitiveTree(result);
 		}
@@ -140,9 +153,15 @@ public class Reducer {
 	}
 
 	public Term reduceCompletely(Term term) {
+		// log.debug("Reducing: " + term);
+		int count = 0;
 		while (term.getOperation() != ABS && term.getOperation() != PRIMITIVE) {
 			term = reduce(term);
+
+			++count;
 		}
+
+		log.info("Reduced in " + count + " steps.", new Throwable());
 		return term;
 	}
 

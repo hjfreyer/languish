@@ -1,0 +1,84 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import "base/lists", "base/maps", "base/visitor", "parsers/namespace/builtin";;
+
+[ABS
+  [ABS                                               // Import names  = 4
+  [ABS                                               // Imports       = 3
+  [ABS                                               // AST           = 2
+  [ABS                                               // argv          = 1
+  
+  [APP  // Apply Builtin
+    [APP [APP [APP [CAR [CDR [CDR [REF 5]]]]  // Visit
+      [APP [CAR [CDR [CDR [CAR [CDR [REF 5]]]]]] // MapFromList
+        [CONS
+          "IDENTIFIER_GET"
+        [CONS
+          [ABS   // [identifier]
+            [ABS // env
+              [APP [REF 1] [CAR [REF 2]]]
+            ]
+          ]
+
+        [CONS
+          "IDENTIFIER"
+        [CONS
+          [ABS [REF 1]]
+
+        [CONS
+          "STRING_LITERAL"
+        [CONS
+          [ABS [CONS [REF 1] [CONS [REF 1] NULL]]]
+
+        [CONS
+          "ARG_PAIRS"
+        [CONS
+          [ABS [REF 1]]
+
+        [CONS
+          "ARG_PAIR"
+        [CONS
+          [ABS [REF 1]]
+
+        [CONS
+          "FUNCTION_CALL"
+        [CONS
+          [ABS    // func, map<name, value>
+            [ABS  // env 
+              [APP 
+                [CAR [CDR // Get native function for
+                  [APP [CAR [REF 2]] [REF 1]] // Bound expression func
+                ]]
+                [ABS // name
+                  [APP [APP [APP
+                    [CAR [CDR [CAR [CDR [REF 8]]]]] // Map get
+                    [CAR [CDR [REF 3]]] // map<name, value>
+                  ]
+                    [REF 1]
+                  ]
+                    NULL
+                  ]
+                ]
+              ]
+            ]
+          ]
+        NULL]]]]]]]]]]]]
+      ]
+    ]
+      [APP [CAR [CDR [CDR [CAR [REF 5]]]]] 
+        [CONS 
+          "IDENTIFIER"
+        [CONS 
+          "STRING_LITERAL"
+        NULL]]
+      ]
+    ]
+      [REF 2]
+    ]    
+//[CONS NULL [CONS  [REF 2] NULL]]
+
+  [CAR [CDR [CDR [CDR [REF 5]]]]] // builtin
+  ]
+  ]]]]
+]

@@ -15,6 +15,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
+import org.apache.log4j.BasicConfigurator;
 
 import com.hjfreyer.util.Tree;
 
@@ -32,6 +33,8 @@ public class Main {
 	}
 
 	public static void main(String[] main_args) throws Exception {
+		BasicConfigurator.configure();
+
 		CommandLine cli = getCommandLine(main_args);
 
 		List<String> paths = Arrays.asList(cli.getOptionValue("lp").split(","));
@@ -45,9 +48,28 @@ public class Main {
 		Term module = compiler.compileResource(moduleName);
 		Term argsTerm = Terms.fromPrimitiveTree(PrimitiveTree.from(args));
 
-		Tree<Primitive> result =
-				Interpreter.convertTermToJavaObject(Terms.app(module, argsTerm));
+		Term application = Terms.app(module, argsTerm);
 
-		System.out.println(result);
+		// Try toString
+		try {
+			Term toString = Terms.car(application);
+			Tree<Primitive> result = Interpreter.convertTermToJavaObject(toString);
+			String stringValue = result.asLeaf().asString();
+			System.out.println(stringValue);
+			return;
+		} catch (Exception e) {
+		}
+
+		System.err.println("No toString, trying reduction...");
+
+		try {
+			System.out.println(Interpreter.convertTermToJavaObject(application));
+			return;
+		} catch (Exception e) {
+		}
+
+		System.err.println("Reduction failed, doing what we can...");
+
+		System.out.println(Interpreter.reduceCompletely(application));
 	}
 }

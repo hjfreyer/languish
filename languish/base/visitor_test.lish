@@ -1,0 +1,66 @@
+
+#lang parsers/lambda_plus/parser;;
+
+#import "base/visitor", "base/testing/test_runner", "base/maps", "base/lists";;
+
+[ABS 
+  [ABS 
+    [APP [CAR [CDR [REF 2]]]                              // Call test runner on tests:
+[CONS
+  [CONS
+    "VisitTrivial"
+  [CONS
+    [CONS "check it" [CONS "foo" NULL]]
+  [CONS
+    [APP [APP [APP [CAR [REF 2]]
+      [APP [CAR [CDR [CDR [CAR [CDR [CDR [REF 2]]]]]]]
+        [CONS 
+          "LEAF" 
+        [CONS        
+          [ABS [CONS "check it" [CONS [REF 1] NULL]]]
+        NULL]]
+      ]
+    ]
+      [ABS [ABS [ABS [REF 2]]]]
+    ]
+      [CONS "LEAF" [CONS "foo" NULL]]
+    ]
+  NULL]]]
+
+[CONS
+  [CONS
+    "VisitThreeNode"
+  [CONS
+    [CONS "wrapped" [CONS "two" NULL]]
+  [CONS
+    [APP [APP [APP [CAR [REF 2]]
+      [APP [CAR [CDR [CDR [CAR [CDR [CDR [REF 2]]]]]]]
+        [CONS 
+          "LEAF" 
+        [CONS        
+          [ABS [CONS "wrapped" [CONS [REF 1] NULL]]]
+        [CONS 
+          "SELECT_SECOND" 
+        [CONS        
+          [ABS [CAR [CDR [REF 1]]]]
+        NULL]]]]
+      ]
+    ]
+      [APP [CAR [CDR [CDR [CAR [CDR [CDR [CDR [REF 2]]]]]]]]
+        [CONS "LEAF" NULL]
+      ]
+    ]
+      [CONS "SELECT_SECOND" 
+      [CONS 
+        [CONS
+          [CONS "LEAF" [CONS "one" NULL]]
+        [CONS 
+          [CONS "LEAF" [CONS "two" NULL]]
+        NULL]]
+      NULL]]
+    ]
+  NULL]]]
+NULL]]
+    ]
+  ]
+]

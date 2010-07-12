@@ -80,7 +80,28 @@
       "default"
     ]
   NULL]]]
-NULL]]]]]
+
+[CONS
+  [CONS
+    "ConstructFromEmptyList"
+  [CONS
+    NULL
+  [CONS
+    [APP [CAR [CDR [CDR [CAR [REF 2]]]]]
+        NULL]
+  NULL]]]
+
+[CONS
+  [CONS
+    "ConstructFromList"
+  [CONS
+    [APP [APP [APP [CAR [CAR [REF 2]]] NULL] "foo"] "bar"]
+  [CONS
+    [APP [CAR [CDR [CDR [CAR [REF 2]]]]]
+        [CONS "foo" [CONS "bar" NULL]]]
+  NULL]]]
+
+NULL]]]]]]]
     ]
   ]
 ]

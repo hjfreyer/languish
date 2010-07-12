@@ -1,4 +1,4 @@
 
 #lang parsers/namespace/parser;;
 
-___NATIVE___ ([CONS [ABS [ABS [ABS [REF 3]]]] NULL])(___NATIVE___("bar"))
+echo(arg="hey")
