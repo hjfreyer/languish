@@ -7,6 +7,7 @@ import com.hjfreyer.util.Tree;
 
 public abstract class TwoPrimitiveNativeFunction implements NativeFunction {
 
+	@Override
 	public final Tree<Primitive> apply(Tree<Primitive> arg) {
 		Tree<Primitive> first = arg.asList().get(0);
 		Tree<Primitive> second = arg.asList().get(1);

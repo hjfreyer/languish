@@ -85,7 +85,6 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("ABS_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							Term arg1 = (Term) arg.get(2);
@@ -94,7 +93,6 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("APP_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							Term arg1 = (Term) arg.get(2);
@@ -104,7 +102,6 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("CONS_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							Term arg1 = (Term) arg.get(2);
@@ -114,7 +111,6 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("CAR_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							Term cons = (Term) arg.get(2);
@@ -123,7 +119,6 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("CDR_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							Term cons = (Term) arg.get(2);
@@ -132,7 +127,6 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("IS_PRIMITIVE_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							Term arg1 = (Term) arg.get(2);
@@ -141,7 +135,6 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("NATIVE_APPLY_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							String name = (String) arg.get(2);
@@ -151,7 +144,6 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("REF_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							int ref = Integer.parseInt((String) arg.get(2));
@@ -166,14 +158,12 @@ public class LambdaPlusSemantic {
 						}
 					})
 					.put("STRING_LIT_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							return Terms.primObj(arg.get(0));
 						}
 					})
 					.put("INT_LIT_TERM", new Function<List<Object>, Object>() {
-						@SuppressWarnings("unchecked")
 						@Override
 						public Object apply(List<Object> arg) {
 							return Terms.primObj(Integer.parseInt((String) arg.get(0)));
@@ -181,7 +171,8 @@ public class LambdaPlusSemantic {
 					})
 					.build();
 
-	public static final SemanticModule LAMBDA_PLUS_SEMANTIC =
-			new SemanticModule(LEAF_RULES, INODE_RULES);
+	public static final SemanticModule LAMBDA_PLUS_SEMANTIC = new SemanticModule(
+			LEAF_RULES,
+			INODE_RULES);
 
 }
