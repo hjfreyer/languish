@@ -59,7 +59,6 @@ public class Pair<A, B> {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -68,7 +67,8 @@ public class Pair<A, B> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pair other = (Pair) obj;
+		@SuppressWarnings("unchecked")
+		Pair<A, B> other = (Pair<A, B>) obj;
 		if (first == null) {
 			if (other.first != null)
 				return false;
@@ -84,7 +84,6 @@ public class Pair<A, B> {
 
 	public static <T> Function<Pair<T, T>, List<T>> asList() {
 		return new Function<Pair<T, T>, List<T>>() {
-			@SuppressWarnings("unchecked")
 			@Override
 			public List<T> apply(Pair<T, T> from) {
 				return ImmutableList.of(from.getFirst(), from.getSecond());

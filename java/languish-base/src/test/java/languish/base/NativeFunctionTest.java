@@ -16,19 +16,24 @@ import com.hjfreyer.util.Tree;
 
 public class NativeFunctionTest extends TestCase {
 	public static final NativeFunction TRIVIAL = new NativeFunction() {
+		@Override
 		public Tree<Primitive> apply(Tree<Primitive> arg) {
 			return PrimitiveTree.from(42);
 		}
 	};
 
 	public static final NativeFunction IDENTITY = new NativeFunction() {
+		@Override
 		public Tree<Primitive> apply(Tree<Primitive> arg) {
 			return arg;
 		}
 	};
 
-	public static final Map<String, NativeFunction> FUNCTIONS =
-			ImmutableMap.of("TRIVIAL", TRIVIAL, "IDENTITY", IDENTITY);
+	public static final Map<String, NativeFunction> FUNCTIONS = ImmutableMap.of(
+			"TRIVIAL",
+			TRIVIAL,
+			"IDENTITY",
+			IDENTITY);
 
 	public static final Reducer REDUCER = new Reducer(FUNCTIONS);
 
@@ -46,9 +51,9 @@ public class NativeFunctionTest extends TestCase {
 				PrimitiveTree.from(42)),
 
 		TRIVIAL_NATIVE_WITH_LIST( //
-				Terms.nativeApply("TRIVIAL", cons(primitive(THREE), cons(
-						primitive(FOUR),
-						NULL))),
+				Terms.nativeApply(
+						"TRIVIAL",
+						cons(primitive(THREE), cons(primitive(FOUR), NULL))),
 				null,
 				null,// Terms.primitive(new Primitive(42)),
 				PrimitiveTree.from(42)),
@@ -66,9 +71,9 @@ public class NativeFunctionTest extends TestCase {
 				PrimitiveTree.from(4)),
 
 		IDENT_NATIVE_WITH_LIST( //
-				Terms.nativeApply("IDENTITY", cons(primitive(THREE), cons(
-						primitive(FOUR),
-						NULL))),
+				Terms.nativeApply(
+						"IDENTITY",
+						cons(primitive(THREE), cons(primitive(FOUR), NULL))),
 				null,
 				null,// cons(primitive(THREE), cons(primitive(FOUR), NULL)),
 				PrimitiveTree.from(ImmutableList.of(3, 4))),
@@ -97,6 +102,7 @@ public class NativeFunctionTest extends TestCase {
 			this.reducedCompletely = reducedCompletely;
 		}
 
+		@Override
 		public Term getExpression() {
 			return expression;
 		}
@@ -105,10 +111,12 @@ public class NativeFunctionTest extends TestCase {
 			return code;
 		}
 
+		@Override
 		public Term getReducedOnce() {
 			return reducedOnce;
 		}
 
+		@Override
 		public Tree<Primitive> getReducedCompletely() {
 			return reducedCompletely;
 		}

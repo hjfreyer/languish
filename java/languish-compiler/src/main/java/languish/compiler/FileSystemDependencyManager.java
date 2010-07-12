@@ -22,6 +22,7 @@ public class FileSystemDependencyManager implements DependencyManager {
 	 * @see
 	 * languish.interpreter.fooDependencyManager#getResource(java.lang.String)
 	 */
+	@Override
 	public String getResource(String resourceName) {
 		for (String path : paths) {
 			String docPath = path + '/' + resourceName + ".lish";

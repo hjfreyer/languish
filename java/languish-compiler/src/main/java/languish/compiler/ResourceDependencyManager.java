@@ -23,6 +23,7 @@ public class ResourceDependencyManager implements DependencyManager {
 	 * @see
 	 * languish.interpreter.fooDependencyManager#getResource(java.lang.String)
 	 */
+	@Override
 	public String getResource(String resourceName) {
 		for (String path : paths) {
 			String docPath = path + '/' + resourceName + ".lish";
@@ -48,6 +49,7 @@ public class ResourceDependencyManager implements DependencyManager {
 	 * @see
 	 * languish.interpreter.fooDependencyManager#hasResource(java.lang.String)
 	 */
+	@Override
 	public boolean hasResource(String resourceName) {
 		for (String path : paths) {
 			String docPath = path + '/' + resourceName + ".lish";

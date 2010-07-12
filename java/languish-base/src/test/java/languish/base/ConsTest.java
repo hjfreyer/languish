@@ -45,9 +45,9 @@ public class ConsTest extends TestCase {
 		GET_PAIR_WITH_DOUBLE_REF( //
 				app(
 						app(abs(abs(cons(ref(1), cons(ref(2), NULL)))), primitive(FOUR)),
-						primitive(FIVE)),
-				app(abs(cons(ref(1), cons(primitive(FOUR), NULL))), primitive(FIVE)),
-				PrimitiveTree.from(ImmutableList.of(5, 4))),
+						primitive(FIVE)), app(
+						abs(cons(ref(1), cons(primitive(FOUR), NULL))),
+						primitive(FIVE)), PrimitiveTree.from(ImmutableList.of(5, 4))),
 
 		GET_NESTED_LIST( //
 				cons(cons(primitive(FIVE), NULL), cons(primitive(FOUR), NULL)),
@@ -79,14 +79,17 @@ public class ConsTest extends TestCase {
 			this.reducedCompletely = reducedCompletely;
 		}
 
+		@Override
 		public Term getExpression() {
 			return expression;
 		}
 
+		@Override
 		public Term getReducedOnce() {
 			return reducedOnce;
 		}
 
+		@Override
 		public Tree<Primitive> getReducedCompletely() {
 			return reducedCompletely;
 		}

@@ -10,7 +10,7 @@ import com.hjfreyer.util.Tree;
 
 public class AbstractionTest extends TestCase {
 	public enum Tests implements LanguishTestCase {
-		BASIC_APPLY( // 
+		BASIC_APPLY( //
 				app(IDENT, primObj(5)),
 				"[APP [ABS [REF 1 NULL] NULL] [PRIMITIVE 5 NULL]]",
 				primObj(5),
@@ -63,6 +63,7 @@ public class AbstractionTest extends TestCase {
 			this.reducedCompletely = reducedCompletely;
 		}
 
+		@Override
 		public Term getExpression() {
 			return expression;
 		}
@@ -71,10 +72,12 @@ public class AbstractionTest extends TestCase {
 			return code;
 		}
 
+		@Override
 		public Term getReducedOnce() {
 			return reducedOnce;
 		}
 
+		@Override
 		public Tree<Primitive> getReducedCompletely() {
 			return reducedCompletely;
 		}
